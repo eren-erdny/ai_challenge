@@ -1,0 +1,8 @@
+*.exe
+.env
+.gocache/
+.gomodcache/
+config.json
+config/config.json
+/deepseek-chat
+/deepseek-chat-*
