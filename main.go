@@ -11,14 +11,17 @@ import (
 	"os"
 	"strings"
 	"time"
+	"unicode/utf8"
 )
 
 const deepSeekAPIURL = "https://api.deepseek.com/chat/completions"
 
 type chatRequest struct {
-	Model    string        `json:"model"`
-	Messages []chatMessage `json:"messages"`
-	Stream   bool          `json:"stream"`
+	Model     string        `json:"model"`
+	Messages  []chatMessage `json:"messages"`
+	Stream    bool          `json:"stream"`
+	MaxTokens int           `json:"max_tokens,omitempty"`
+	Stop      []string      `json:"stop,omitempty"`
 }
 
 type chatMessage struct {
@@ -28,46 +31,71 @@ type chatMessage struct {
 
 type chatResponse struct {
 	Choices []struct {
-		Message chatMessage `json:"message"`
+		Message      chatMessage `json:"message"`
+		FinishReason string      `json:"finish_reason"`
 	} `json:"choices"`
+	Usage struct {
+		PromptTokens     int `json:"prompt_tokens"`
+		CompletionTokens int `json:"completion_tokens"`
+		TotalTokens      int `json:"total_tokens"`
+	} `json:"usage"`
 	Error *struct {
 		Message string `json:"message"`
 		Type    string `json:"type"`
 	} `json:"error,omitempty"`
 }
 
+type responseControl struct {
+	Format       string
+	SystemPrompt string
+	MaxWords     int
+	MaxTokens    int
+	Stop         []string
+}
+
+type completionResult struct {
+	Content          string
+	FinishReason     string
+	PromptTokens     int
+	CompletionTokens int
+	TotalTokens      int
+}
+
 func main() {
+	if handled, exitCode := handleCommand(os.Args[1:], os.Stdout, os.Stderr); handled {
+		os.Exit(exitCode)
+	}
+
 	input := bufio.NewReader(os.Stdin)
 	exitCode := run(input)
-	waitForEnter(input, os.Stdout)
+	if exitCode != 0 {
+		waitForEnter(input, os.Stdout)
+	}
 	os.Exit(exitCode)
 }
 
 func run(input *bufio.Reader) int {
-	token, err := resolveToken(input, os.Stdin, os.Stdout)
+	config, err := resolveConfig(input, os.Stdin, os.Stdout)
 	if err != nil {
-		fmt.Fprintf(os.Stderr, "не удалось получить токен DeepSeek: %v\n", err)
+		fmt.Fprintf(os.Stderr, "не удалось загрузить конфигурацию: %v\n", err)
 		return 1
 	}
 
-	fmt.Println("Добрый день! Спросите у меня!")
-	fmt.Print("Ваш вопрос: ")
+	return runInteractiveSession(input, os.Stdout, os.Stderr, config, askDeepSeek)
+}
 
-	prompt, err := readPrompt(input)
-	if err != nil {
-		fmt.Fprintf(os.Stderr, "не удалось прочитать запрос: %v\n", err)
-		return 1
+func handleCommand(args []string, output io.Writer, errorOutput io.Writer) (bool, int) {
+	if len(args) == 0 {
+		return false, 0
+	}
+	if len(args) == 1 && args[0] == "--list-formats" {
+		printFormatCatalog(output)
+		return true, 0
 	}
 
-	fmt.Println("\nОбрабатываю запрос...")
-	answer, err := askDeepSeek(token, prompt)
-	if err != nil {
-		fmt.Fprintf(os.Stderr, "ошибка запроса: %v\n", err)
-		return 1
-	}
-
-	printAnswer(answer)
-	return 0
+	fmt.Fprintf(errorOutput, "неизвестные аргументы: %s\n", strings.Join(args, " "))
+	fmt.Fprintln(errorOutput, "Доступная команда: --list-formats")
+	return true, 2
 }
 
 func readPrompt(input *bufio.Reader) (string, error) {
@@ -89,29 +117,16 @@ func waitForEnter(input *bufio.Reader, output io.Writer) {
 	_, _ = input.ReadString('\n')
 }
 
-func askDeepSeek(token string, prompt string) (string, error) {
-	payload := chatRequest{
-		Model: "deepseek-chat",
-		Messages: []chatMessage{
-			{
-				Role: "system",
-				Content: "Отвечай на русском языке в Markdown. Делай ответ удобным для чтения: " +
-					"используй короткие абзацы, заголовки, списки и блоки кода только там, где они уместны. " +
-					"Не добавляй лишнее вступление.",
-			},
-			{Role: "user", Content: prompt},
-		},
-		Stream: false,
-	}
-
+func askDeepSeek(token string, prompt string, control *responseControl) (completionResult, error) {
+	payload := buildChatRequest(prompt, control)
 	body, err := json.Marshal(payload)
 	if err != nil {
-		return "", fmt.Errorf("encode request: %w", err)
+		return completionResult{}, fmt.Errorf("encode request: %w", err)
 	}
 
 	req, err := http.NewRequest(http.MethodPost, deepSeekAPIURL, bytes.NewReader(body))
 	if err != nil {
-		return "", fmt.Errorf("create request: %w", err)
+		return completionResult{}, fmt.Errorf("create request: %w", err)
 	}
 
 	req.Header.Set("Authorization", "Bearer "+token)
@@ -120,38 +135,92 @@ func askDeepSeek(token string, prompt string) (string, error) {
 	client := &http.Client{Timeout: 30 * time.Second}
 	resp, err := client.Do(req)
 	if err != nil {
-		return "", fmt.Errorf("send request: %w", err)
+		return completionResult{}, fmt.Errorf("send request: %w", err)
 	}
 	defer resp.Body.Close()
 
 	respBody, err := io.ReadAll(resp.Body)
 	if err != nil {
-		return "", fmt.Errorf("read response: %w", err)
+		return completionResult{}, fmt.Errorf("read response: %w", err)
 	}
 
 	var parsed chatResponse
 	if err := json.Unmarshal(respBody, &parsed); err != nil {
-		return "", fmt.Errorf("decode response: %w; raw response: %s", err, string(respBody))
+		return completionResult{}, fmt.Errorf("decode response: %w; raw response: %s", err, string(respBody))
 	}
 
 	if resp.StatusCode < 200 || resp.StatusCode >= 300 {
 		if parsed.Error != nil {
-			return "", fmt.Errorf("deepseek api error: status=%d type=%s message=%s", resp.StatusCode, parsed.Error.Type, parsed.Error.Message)
+			return completionResult{}, fmt.Errorf("deepseek api error: status=%d type=%s message=%s", resp.StatusCode, parsed.Error.Type, parsed.Error.Message)
 		}
-		return "", fmt.Errorf("deepseek api error: status=%d response=%s", resp.StatusCode, string(respBody))
+		return completionResult{}, fmt.Errorf("deepseek api error: status=%d response=%s", resp.StatusCode, string(respBody))
 	}
 
 	if len(parsed.Choices) == 0 {
-		return "", fmt.Errorf("deepseek api returned no choices")
+		return completionResult{}, fmt.Errorf("deepseek api returned no choices")
 	}
 
-	return parsed.Choices[0].Message.Content, nil
+	return completionResult{
+		Content:          parsed.Choices[0].Message.Content,
+		FinishReason:     parsed.Choices[0].FinishReason,
+		PromptTokens:     parsed.Usage.PromptTokens,
+		CompletionTokens: parsed.Usage.CompletionTokens,
+		TotalTokens:      parsed.Usage.TotalTokens,
+	}, nil
 }
 
-func printAnswer(answer string) {
-	fmt.Println("\nОтвет DeepSeek")
-	fmt.Println("--------------")
-	fmt.Println(formatAnswer(answer))
+func buildChatRequest(prompt string, control *responseControl) chatRequest {
+	payload := chatRequest{
+		Model:    "deepseek-chat",
+		Messages: []chatMessage{{Role: "user", Content: prompt}},
+		Stream:   false,
+	}
+
+	if control != nil {
+		payload.Messages = append([]chatMessage{{Role: "system", Content: control.SystemPrompt}}, payload.Messages...)
+		payload.MaxTokens = control.MaxTokens
+		payload.Stop = control.Stop
+	}
+
+	return payload
+}
+
+func printComparison(output io.Writer, uncontrolled completionResult, controlled completionResult, control *responseControl) {
+	fmt.Fprintln(output, "\n========================================")
+	fmt.Fprintln(output, "ОТВЕТ 1: БЕЗ ОГРАНИЧЕНИЙ")
+	fmt.Fprintln(output, "========================================")
+	fmt.Fprintln(output, formatAnswer(uncontrolled.Content))
+
+	fmt.Fprintln(output, "\n========================================")
+	if control == nil {
+		fmt.Fprintln(output, "ОТВЕТ 2: КОНТРОЛЬ ОТКЛЮЧЁН")
+	} else {
+		fmt.Fprintln(output, "ОТВЕТ 2: С ОГРАНИЧЕНИЯМИ")
+		fmt.Fprintf(output, "Формат: %s\n", control.Format)
+		fmt.Fprintf(output, "Лимит: не более %d слов, max_tokens=%d\n", control.MaxWords, control.MaxTokens)
+		fmt.Fprintf(output, "Условия завершения: stop=%q\n", control.Stop)
+	}
+	fmt.Fprintln(output, "========================================")
+	fmt.Fprintln(output, formatAnswer(controlled.Content))
+
+	printValidation(output, validateAnswer(controlled, control))
+	printMetrics(output, uncontrolled, controlled)
+}
+
+func printMetrics(output io.Writer, uncontrolled completionResult, controlled completionResult) {
+	fmt.Fprintln(output, "\n========================================")
+	fmt.Fprintln(output, "СРАВНЕНИЕ")
+	fmt.Fprintln(output, "========================================")
+	fmt.Fprintf(output, "Без ограничений: %d слов, %d символов, %d токенов, finish_reason=%s\n",
+		wordCount(uncontrolled.Content), utf8.RuneCountInString(uncontrolled.Content),
+		uncontrolled.CompletionTokens, uncontrolled.FinishReason)
+	fmt.Fprintf(output, "С ограничениями: %d слов, %d символов, %d токенов, finish_reason=%s\n",
+		wordCount(controlled.Content), utf8.RuneCountInString(controlled.Content),
+		controlled.CompletionTokens, controlled.FinishReason)
+}
+
+func wordCount(text string) int {
+	return len(strings.Fields(text))
 }
 
 func formatAnswer(answer string) string {

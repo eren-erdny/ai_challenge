@@ -1,0 +1,12 @@
+{
+  "deepseek_api_token": "",
+  "response_control": {
+    "enabled": true,
+    "format": "structured_markdown",
+    "max_words": 80,
+    "max_tokens": 200,
+    "stop_sequences": [
+      "<END>"
+    ]
+  }
+}
