@@ -2,6 +2,7 @@
 .env
 .gocache/
 .gomodcache/
+/bin/
 config.json
 config/config.json
 /deepseek-chat

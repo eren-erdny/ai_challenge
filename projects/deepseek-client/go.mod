@@ -1,4 +1,4 @@
-module ai_challenge
+module github.com/eren-erdny/ai_challenge/projects/deepseek-client
 
 go 1.27
 
