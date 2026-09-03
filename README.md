@@ -9,6 +9,7 @@
 | Проект | Описание |
 |---|---|
 | [`deepseek-client`](projects/deepseek-client) | Интерактивный клиент DeepSeek с форматами, ограничениями и локальным судьёй |
+| [`prompt-strategy-lab`](projects/prompt-strategy-lab) | Сравнение четырёх стратегий решения одной задачи через DeepSeek API |
 
 ## DeepSeek Client
 
@@ -33,6 +34,23 @@ go build -o bin/deepseek-chat.exe ./projects/deepseek-client
 
 Подробная документация находится в
 [`projects/deepseek-client/README.md`](projects/deepseek-client/README.md).
+
+## Prompt Strategy Lab
+
+Запуск эксперимента из корня репозитория:
+
+```powershell
+go run ./projects/prompt-strategy-lab
+```
+
+Тесты без API-запросов:
+
+```powershell
+go test ./projects/prompt-strategy-lab/...
+```
+
+Подробная документация находится в
+[`projects/prompt-strategy-lab/README.md`](projects/prompt-strategy-lab/README.md).
 
 ## Новый проект
 

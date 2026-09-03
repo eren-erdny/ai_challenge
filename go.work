@@ -1,3 +1,6 @@
 go 1.27
 
-use ./projects/deepseek-client
+use (
+	./projects/deepseek-client
+	./projects/prompt-strategy-lab
+)
