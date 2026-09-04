@@ -7,6 +7,7 @@ import (
 	"fmt"
 	"io"
 	"io/fs"
+	"math"
 	"os"
 	"path/filepath"
 	"runtime"
@@ -19,11 +20,29 @@ const (
 	configDirectoryName = "deepseek-client"
 	configFileName      = "config.json"
 	defaultFormatName   = "structured_markdown"
+	defaultModelName    = "deepseek-v4-flash"
 )
 
 type appConfig struct {
 	APIToken        string                `json:"deepseek_api_token"`
+	Generation      generationConfig      `json:"generation"`
 	ResponseControl responseControlConfig `json:"response_control"`
+}
+
+type generationConfig struct {
+	Model       string         `json:"model"`
+	Temperature float64        `json:"temperature"`
+	Strategy    promptStrategy `json:"strategy"`
+}
+
+type modelDefinition struct {
+	Name        string
+	Description string
+}
+
+var modelCatalog = []modelDefinition{
+	{Name: "deepseek-v4-flash", Description: "быстрая универсальная текстовая модель"},
+	{Name: "deepseek-v4-pro", Description: "более мощная модель для сложных задач"},
 }
 
 type responseControlConfig struct {
@@ -77,6 +96,11 @@ var formatCatalog = []formatDefinition{
 
 func defaultAppConfig() appConfig {
 	return appConfig{
+		Generation: generationConfig{
+			Model:       defaultModelName,
+			Temperature: 0.7,
+			Strategy:    strategyStandard,
+		},
 		ResponseControl: responseControlConfig{
 			Enabled:       true,
 			Format:        defaultFormatName,
@@ -154,6 +178,9 @@ func loadConfig(configPath string) (appConfig, error) {
 	if err := validateResponseControl(config.ResponseControl); err != nil {
 		return appConfig{}, fmt.Errorf("некорректный response_control: %w", err)
 	}
+	if err := validateGeneration(config.Generation); err != nil {
+		return appConfig{}, fmt.Errorf("некорректный generation: %w", err)
+	}
 
 	if err := restrictPermissions(configPath, 0o600); err != nil {
 		return appConfig{}, fmt.Errorf("ограничить права конфигурации: %w", err)
@@ -162,7 +189,23 @@ func loadConfig(configPath string) (appConfig, error) {
 	return config, nil
 }
 
+func loadConfigForReload(configPath string, currentToken string, environmentToken string) (appConfig, error) {
+	config, err := loadConfig(configPath)
+	if err != nil {
+		return appConfig{}, err
+	}
+	if token := strings.TrimSpace(environmentToken); token != "" {
+		config.APIToken = token
+	} else if strings.TrimSpace(config.APIToken) == "" {
+		config.APIToken = currentToken
+	}
+	return config, nil
+}
+
 func saveConfig(configPath string, config appConfig) error {
+	if err := validateGeneration(config.Generation); err != nil {
+		return fmt.Errorf("некорректный generation: %w", err)
+	}
 	if err := validateResponseControl(config.ResponseControl); err != nil {
 		return fmt.Errorf("некорректный response_control: %w", err)
 	}
@@ -205,6 +248,38 @@ func saveConfig(configPath string, config appConfig) error {
 	}
 
 	return nil
+}
+
+func validateGeneration(config generationConfig) error {
+	if !isKnownModel(config.Model) {
+		return fmt.Errorf("неизвестная model %q; используйте /models для просмотра доступных моделей", config.Model)
+	}
+	if math.IsNaN(config.Temperature) || math.IsInf(config.Temperature, 0) ||
+		config.Temperature < 0 || config.Temperature > 2 {
+		return errors.New("temperature должна быть в диапазоне от 0 до 2")
+	}
+	switch config.Strategy {
+	case strategyStandard, strategyStepByStep, strategyExperts:
+		return nil
+	default:
+		return fmt.Errorf("неизвестная strategy %q; доступны standard, step_by_step, experts", config.Strategy)
+	}
+}
+
+func isKnownModel(name string) bool {
+	for _, model := range modelCatalog {
+		if model.Name == name {
+			return true
+		}
+	}
+	return false
+}
+
+func printModelCatalog(output io.Writer) {
+	fmt.Fprintln(output, "Доступные текстовые модели DeepSeek:")
+	for _, model := range modelCatalog {
+		fmt.Fprintf(output, "  %-22s %s\n", model.Name, model.Description)
+	}
 }
 
 func replaceConfigFile(tempPath string, configPath string) error {

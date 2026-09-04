@@ -1,5 +1,10 @@
 {
   "deepseek_api_token": "",
+  "generation": {
+    "model": "deepseek-v4-flash",
+    "temperature": 0.7,
+    "strategy": "standard"
+  },
   "response_control": {
     "enabled": true,
     "format": "structured_markdown",

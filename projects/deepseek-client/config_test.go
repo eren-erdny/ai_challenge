@@ -1,6 +1,7 @@
 package main
 
 import (
+	"math"
 	"os"
 	"path/filepath"
 	"runtime"
@@ -14,6 +15,8 @@ func TestSaveAndLoadConfig(t *testing.T) {
 	want.APIToken = "test-token"
 	want.ResponseControl.Format = "json"
 	want.ResponseControl.MaxWords = 120
+	want.Generation.Temperature = 1.2
+	want.Generation.Strategy = strategyExperts
 
 	if err := saveConfig(configPath, want); err != nil {
 		t.Fatalf("saveConfig() returned error: %v", err)
@@ -28,6 +31,9 @@ func TestSaveAndLoadConfig(t *testing.T) {
 	}
 	if got.ResponseControl.Format != "json" || got.ResponseControl.MaxWords != 120 {
 		t.Fatalf("loaded response control = %#v", got.ResponseControl)
+	}
+	if got.Generation != want.Generation {
+		t.Fatalf("loaded generation = %#v, want %#v", got.Generation, want.Generation)
 	}
 
 	if runtime.GOOS != "windows" {
@@ -56,6 +62,48 @@ func TestLoadConfigAppliesDefaultsToLegacyFile(t *testing.T) {
 	}
 	if config.ResponseControl.MaxTokens != 200 {
 		t.Fatalf("default max_tokens = %d, want 200", config.ResponseControl.MaxTokens)
+	}
+	if config.Generation.Model != defaultModelName || config.Generation.Temperature != 0.7 || config.Generation.Strategy != strategyStandard {
+		t.Fatalf("default generation = %#v", config.Generation)
+	}
+}
+
+func TestLoadConfigForReloadPreservesOrOverridesToken(t *testing.T) {
+	configPath := filepath.Join(t.TempDir(), "config.json")
+	config := defaultAppConfig()
+	config.APIToken = ""
+	if err := saveConfig(configPath, config); err != nil {
+		t.Fatalf("saveConfig() returned error: %v", err)
+	}
+
+	preserved, err := loadConfigForReload(configPath, "current-token", "")
+	if err != nil {
+		t.Fatalf("loadConfigForReload() returned error: %v", err)
+	}
+	if preserved.APIToken != "current-token" {
+		t.Fatalf("preserved token = %q", preserved.APIToken)
+	}
+
+	overridden, err := loadConfigForReload(configPath, "current-token", "environment-token")
+	if err != nil {
+		t.Fatalf("loadConfigForReload() returned error: %v", err)
+	}
+	if overridden.APIToken != "environment-token" {
+		t.Fatalf("overridden token = %q", overridden.APIToken)
+	}
+}
+
+func TestValidateGeneration(t *testing.T) {
+	for _, temperature := range []float64{-0.1, 2.1, math.NaN(), math.Inf(1)} {
+		if err := validateGeneration(generationConfig{Model: defaultModelName, Temperature: temperature, Strategy: strategyStandard}); err == nil {
+			t.Fatalf("temperature %g must be rejected", temperature)
+		}
+	}
+	if err := validateGeneration(generationConfig{Model: defaultModelName, Temperature: 0.7, Strategy: "unknown"}); err == nil {
+		t.Fatal("unknown strategy must be rejected")
+	}
+	if err := validateGeneration(generationConfig{Model: "unknown", Temperature: 0.7, Strategy: strategyStandard}); err == nil {
+		t.Fatal("unknown model must be rejected")
 	}
 }
 

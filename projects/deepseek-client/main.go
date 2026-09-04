@@ -17,11 +17,17 @@ import (
 const deepSeekAPIURL = "https://api.deepseek.com/chat/completions"
 
 type chatRequest struct {
-	Model     string        `json:"model"`
-	Messages  []chatMessage `json:"messages"`
-	Stream    bool          `json:"stream"`
-	MaxTokens int           `json:"max_tokens,omitempty"`
-	Stop      []string      `json:"stop,omitempty"`
+	Model       string        `json:"model"`
+	Messages    []chatMessage `json:"messages"`
+	Thinking    thinkingMode  `json:"thinking"`
+	Temperature float64       `json:"temperature"`
+	Stream      bool          `json:"stream"`
+	MaxTokens   int           `json:"max_tokens,omitempty"`
+	Stop        []string      `json:"stop,omitempty"`
+}
+
+type thinkingMode struct {
+	Type string `json:"type"`
 }
 
 type chatMessage struct {
@@ -30,6 +36,7 @@ type chatMessage struct {
 }
 
 type chatResponse struct {
+	Model   string `json:"model"`
 	Choices []struct {
 		Message      chatMessage `json:"message"`
 		FinishReason string      `json:"finish_reason"`
@@ -55,10 +62,12 @@ type responseControl struct {
 
 type completionResult struct {
 	Content          string
+	Model            string
 	FinishReason     string
 	PromptTokens     int
 	CompletionTokens int
 	TotalTokens      int
+	Duration         time.Duration
 }
 
 func main() {
@@ -81,6 +90,9 @@ func run(input *bufio.Reader) int {
 		return 1
 	}
 
+	if isInteractiveTerminal(os.Stdin, os.Stdout) {
+		return runTUI(config, askDeepSeek)
+	}
 	return runInteractiveSession(input, os.Stdout, os.Stderr, config, askDeepSeek)
 }
 
@@ -88,13 +100,19 @@ func handleCommand(args []string, output io.Writer, errorOutput io.Writer) (bool
 	if len(args) == 0 {
 		return false, 0
 	}
-	if len(args) == 1 && args[0] == "--list-formats" {
-		printFormatCatalog(output)
-		return true, 0
+	if len(args) == 1 {
+		switch args[0] {
+		case "--list-formats":
+			printFormatCatalog(output)
+			return true, 0
+		case "--list-models":
+			printModelCatalog(output)
+			return true, 0
+		}
 	}
 
 	fmt.Fprintf(errorOutput, "неизвестные аргументы: %s\n", strings.Join(args, " "))
-	fmt.Fprintln(errorOutput, "Доступная команда: --list-formats")
+	fmt.Fprintln(errorOutput, "Доступные команды: --list-formats, --list-models")
 	return true, 2
 }
 
@@ -117,8 +135,8 @@ func waitForEnter(input *bufio.Reader, output io.Writer) {
 	_, _ = input.ReadString('\n')
 }
 
-func askDeepSeek(token string, prompt string, control *responseControl) (completionResult, error) {
-	payload := buildChatRequest(prompt, control)
+func askDeepSeek(token string, prompt string, settings requestSettings) (completionResult, error) {
+	payload := buildChatRequest(prompt, settings)
 	body, err := json.Marshal(payload)
 	if err != nil {
 		return completionResult{}, fmt.Errorf("encode request: %w", err)
@@ -133,6 +151,7 @@ func askDeepSeek(token string, prompt string, control *responseControl) (complet
 	req.Header.Set("Content-Type", "application/json")
 
 	client := &http.Client{Timeout: 30 * time.Second}
+	startedAt := time.Now()
 	resp, err := client.Do(req)
 	if err != nil {
 		return completionResult{}, fmt.Errorf("send request: %w", err)
@@ -159,27 +178,51 @@ func askDeepSeek(token string, prompt string, control *responseControl) (complet
 	if len(parsed.Choices) == 0 {
 		return completionResult{}, fmt.Errorf("deepseek api returned no choices")
 	}
+	if strings.TrimSpace(parsed.Choices[0].Message.Content) == "" {
+		return completionResult{}, fmt.Errorf(
+			"deepseek api returned empty content: completion_tokens=%d finish_reason=%s",
+			parsed.Usage.CompletionTokens,
+			parsed.Choices[0].FinishReason,
+		)
+	}
+	model := parsed.Model
+	if model == "" {
+		model = settings.Model
+	}
 
 	return completionResult{
 		Content:          parsed.Choices[0].Message.Content,
+		Model:            model,
 		FinishReason:     parsed.Choices[0].FinishReason,
 		PromptTokens:     parsed.Usage.PromptTokens,
 		CompletionTokens: parsed.Usage.CompletionTokens,
 		TotalTokens:      parsed.Usage.TotalTokens,
+		Duration:         time.Since(startedAt),
 	}, nil
 }
 
-func buildChatRequest(prompt string, control *responseControl) chatRequest {
+func buildChatRequest(prompt string, settings requestSettings) chatRequest {
 	payload := chatRequest{
-		Model:    "deepseek-chat",
-		Messages: []chatMessage{{Role: "user", Content: prompt}},
-		Stream:   false,
+		Model:       settings.Model,
+		Messages:    []chatMessage{{Role: "user", Content: prompt}},
+		Thinking:    thinkingMode{Type: "disabled"},
+		Temperature: settings.Temperature,
+		Stream:      false,
 	}
 
-	if control != nil {
-		payload.Messages = append([]chatMessage{{Role: "system", Content: control.SystemPrompt}}, payload.Messages...)
-		payload.MaxTokens = control.MaxTokens
-		payload.Stop = control.Stop
+	var systemInstructions []string
+	if instruction := strategyInstruction(settings.Strategy); instruction != "" {
+		systemInstructions = append(systemInstructions, instruction)
+	}
+	if settings.Control != nil {
+		systemInstructions = append(systemInstructions, settings.Control.SystemPrompt)
+		payload.MaxTokens = settings.Control.MaxTokens
+		payload.Stop = settings.Control.Stop
+	}
+	if len(systemInstructions) > 0 {
+		payload.Messages = append([]chatMessage{{
+			Role: "system", Content: strings.Join(systemInstructions, "\n\n"),
+		}}, payload.Messages...)
 	}
 
 	return payload
@@ -211,12 +254,28 @@ func printMetrics(output io.Writer, uncontrolled completionResult, controlled co
 	fmt.Fprintln(output, "\n========================================")
 	fmt.Fprintln(output, "СРАВНЕНИЕ")
 	fmt.Fprintln(output, "========================================")
-	fmt.Fprintf(output, "Без ограничений: %d слов, %d символов, %d токенов, finish_reason=%s\n",
+	fmt.Fprintf(output, "Без ограничений: model=%s, %d слов, %d символов, %d токенов, %.1f ток/с, finish_reason=%s\n",
+		resultModel(uncontrolled),
 		wordCount(uncontrolled.Content), utf8.RuneCountInString(uncontrolled.Content),
-		uncontrolled.CompletionTokens, uncontrolled.FinishReason)
-	fmt.Fprintf(output, "С ограничениями: %d слов, %d символов, %d токенов, finish_reason=%s\n",
+		uncontrolled.CompletionTokens, tokensPerSecond(uncontrolled), uncontrolled.FinishReason)
+	fmt.Fprintf(output, "С ограничениями: model=%s, %d слов, %d символов, %d токенов, %.1f ток/с, finish_reason=%s\n",
+		resultModel(controlled),
 		wordCount(controlled.Content), utf8.RuneCountInString(controlled.Content),
-		controlled.CompletionTokens, controlled.FinishReason)
+		controlled.CompletionTokens, tokensPerSecond(controlled), controlled.FinishReason)
+}
+
+func tokensPerSecond(result completionResult) float64 {
+	if result.Duration <= 0 {
+		return 0
+	}
+	return float64(result.CompletionTokens) / result.Duration.Seconds()
+}
+
+func resultModel(result completionResult) string {
+	if result.Model == "" {
+		return "unknown"
+	}
+	return result.Model
 }
 
 func wordCount(text string) int {

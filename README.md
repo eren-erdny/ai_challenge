@@ -8,8 +8,9 @@
 
 | Проект | Описание |
 |---|---|
-| [`deepseek-client`](projects/deepseek-client) | Интерактивный клиент DeepSeek с форматами, ограничениями и локальным судьёй |
+| [`deepseek-client`](projects/deepseek-client) | TUI-клиент DeepSeek с температурой, стратегиями, форматами и локальным судьёй |
 | [`prompt-strategy-lab`](projects/prompt-strategy-lab) | Сравнение четырёх стратегий решения одной задачи через DeepSeek API |
+| [`temperature-lab`](projects/temperature-lab) | Сравнение точности и креативности ответов при разных значениях temperature |
 
 ## DeepSeek Client
 
@@ -51,6 +52,23 @@ go test ./projects/prompt-strategy-lab/...
 
 Подробная документация находится в
 [`projects/prompt-strategy-lab/README.md`](projects/prompt-strategy-lab/README.md).
+
+## Temperature Lab
+
+Запуск эксперимента из корня репозитория:
+
+```powershell
+go run ./projects/temperature-lab
+```
+
+Тесты без API-запросов:
+
+```powershell
+go test ./projects/temperature-lab/...
+```
+
+Подробная документация находится в
+[`projects/temperature-lab/README.md`](projects/temperature-lab/README.md).
 
 ## Новый проект
 
