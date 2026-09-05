@@ -3,7 +3,9 @@ package main
 import (
 	"fmt"
 	"os"
+	"sort"
 	"strings"
+	"time"
 
 	"charm.land/bubbles/v2/cursor"
 	"charm.land/bubbles/v2/textarea"
@@ -14,7 +16,17 @@ import (
 )
 
 type answerMessage struct {
-	text string
+	text       string
+	lastStatus *requestStatus
+}
+
+type modelListMessage struct {
+	models []string
+	err    error
+}
+
+type activityTickMessage struct {
+	generation int
 }
 
 type autocompleteSuggestion struct {
@@ -30,13 +42,15 @@ type tuiModel struct {
 	textarea        textarea.Model
 	viewport        viewport.Model
 	state           sessionState
-	token           string
 	ask             askFunction
 	history         []string
 	busy            bool
 	width           int
 	height          int
 	suggestionIndex int
+	availableModels []string
+	activityFrame   int
+	activityGen     int
 }
 
 var (
@@ -59,12 +73,15 @@ var (
 var commandSuggestions = []autocompleteSuggestion{
 	{value: "/model "},
 	{value: "/models"},
+	{value: "/profile "},
+	{value: "/profiles"},
 	{value: "/mode "},
 	{value: "/strategy "},
 	{value: "/temperature "},
 	{value: "/format "},
 	{value: "/formats"},
 	{value: "/settings"},
+	{value: "/status"},
 	{value: "/reload"},
 	{value: "/clear"},
 	{value: "/help"},
@@ -89,12 +106,17 @@ func newTUIModel(config appConfig, ask askFunction) tuiModel {
 	if !config.ResponseControl.Enabled {
 		mode = modeFree
 	}
+	profile, _ := config.activeAPIProfile()
 	state := sessionState{
-		Mode:        mode,
-		Model:       config.Generation.Model,
-		Temperature: config.Generation.Temperature,
-		Strategy:    config.Generation.Strategy,
-		Control:     config.ResponseControl,
+		Mode:          mode,
+		ActiveProfile: config.ActiveProfile,
+		Profiles:      config.Profiles,
+		API:           profile,
+		APIToken:      config.APIToken,
+		Model:         profile.Model,
+		Temperature:   config.Generation.Temperature,
+		Strategy:      config.Generation.Strategy,
+		Control:       config.ResponseControl,
 	}
 
 	input := textarea.New()
@@ -118,7 +140,6 @@ func newTUIModel(config appConfig, ask askFunction) tuiModel {
 		textarea: input,
 		viewport: view,
 		state:    state,
-		token:    config.APIToken,
 		ask:      ask,
 		history:  history,
 	}
@@ -135,9 +156,30 @@ func (model tuiModel) Update(message tea.Msg) (tea.Model, tea.Cmd) {
 		return model, nil
 	case answerMessage:
 		model.busy = false
+		model.activityFrame = 0
+		if message.lastStatus != nil {
+			model.state.LastRequest = message.lastStatus
+		}
 		model.history = append(model.history, titleStyle.Render("DeepSeek")+"\n"+message.text)
 		model.refreshHistory()
 		return model, nil
+	case modelListMessage:
+		model.busy = false
+		model.activityFrame = 0
+		if message.err != nil {
+			model.history = append(model.history, errorStyle.Render("Не удалось получить модели: "+message.err.Error()))
+		} else {
+			model.availableModels = message.models
+			model.history = append(model.history, statusStyle.Render("Модели активного API:\n"+strings.Join(message.models, "\n")))
+		}
+		model.refreshHistory()
+		return model, nil
+	case activityTickMessage:
+		if !model.busy || message.generation != model.activityGen {
+			return model, nil
+		}
+		model.activityFrame = (model.activityFrame + 1) % 4
+		return model, activityTickCommand(model.activityGen)
 	case tea.MouseWheelMsg:
 		mouse := message.Mouse()
 		if model.mouseInsideDialog(mouse.X, mouse.Y) {
@@ -211,19 +253,31 @@ func (model tuiModel) submit() (tea.Model, tea.Cmd) {
 		return model, nil
 	}
 	if text == "/reload" {
-		newToken, configPath, err := reloadSessionConfig(model.token, &model.state)
+		newToken, configPath, err := reloadSessionConfig(model.state.APIToken, &model.state)
 		if err != nil {
 			model.history = append(model.history, errorStyle.Render("Не удалось перезагрузить конфигурацию: "+err.Error()))
 		} else {
-			model.token = newToken
+			model.state.APIToken = newToken
 			model.history = append(model.history, statusStyle.Render("Конфигурация перезагружена: "+configPath))
 		}
 		model.refreshHistory()
 		return model, nil
 	}
+	if text == "/models" {
+		model.busy = true
+		model.activityFrame = 0
+		model.activityGen++
+		model.history = append(model.history, statusStyle.Render("Получаю список моделей..."))
+		model.refreshHistory()
+		return model, tea.Batch(fetchModelsCommand(model.state.APIToken, model.state.API), activityTickCommand(model.activityGen))
+	}
 	if strings.HasPrefix(text, "/") {
 		var output strings.Builder
+		previousProfile := model.state.ActiveProfile
 		handleSessionCommand(text, &model.state, &output)
+		if model.state.ActiveProfile != previousProfile {
+			model.availableModels = nil
+		}
 		model.history = append(model.history, statusStyle.Render(output.String()))
 		model.refreshHistory()
 		return model, nil
@@ -231,15 +285,33 @@ func (model tuiModel) submit() (tea.Model, tea.Cmd) {
 
 	model.history = append(model.history, userStyle.Render("Вы")+"\n"+text)
 	model.busy = true
+	model.activityFrame = 0
+	model.activityGen++
 	model.refreshHistory()
-	return model, executeQuestionCommand(model.token, text, model.state, model.ask)
+	return model, tea.Batch(
+		executeQuestionCommand(model.state.APIToken, text, model.state, model.ask),
+		activityTickCommand(model.activityGen),
+	)
+}
+
+func activityTickCommand(generation int) tea.Cmd {
+	return tea.Tick(350*time.Millisecond, func(time.Time) tea.Msg {
+		return activityTickMessage{generation: generation}
+	})
+}
+
+func fetchModelsCommand(token string, profile apiProfile) tea.Cmd {
+	return func() tea.Msg {
+		models, err := fetchModels(token, profile)
+		return modelListMessage{models: models, err: err}
+	}
 }
 
 func executeQuestionCommand(token string, prompt string, state sessionState, ask askFunction) tea.Cmd {
 	return func() tea.Msg {
 		var output strings.Builder
 		var errorOutput strings.Builder
-		executeQuestion(token, prompt, state, &output, &errorOutput, ask)
+		lastStatus := executeQuestion(token, prompt, state, &output, &errorOutput, ask)
 		text := strings.TrimSpace(output.String())
 		if errorOutput.Len() > 0 {
 			errorText := errorStyle.Render(strings.TrimSpace(errorOutput.String()))
@@ -249,7 +321,7 @@ func executeQuestionCommand(token string, prompt string, state sessionState, ask
 				text += "\n\n" + errorText
 			}
 		}
-		return answerMessage{text: text}
+		return answerMessage{text: text, lastStatus: lastStatus}
 	}
 }
 
@@ -259,7 +331,7 @@ func (model *tuiModel) resize(width, height int) {
 	contentWidth := max(30, width-panelFrameWidth)
 	model.textarea.SetWidth(contentWidth)
 	model.viewport.SetWidth(contentWidth)
-	availableHeight := max(4, height-model.textarea.Height()-11)
+	availableHeight := max(4, height-model.textarea.Height()-12)
 	model.viewport.SetHeight(min(historyViewportHeight, availableHeight))
 	model.refreshHistory()
 }
@@ -329,15 +401,24 @@ func (model tuiModel) autocompleteSuggestions() []autocompleteSuggestion {
 	var values []string
 	switch command {
 	case "/model":
-		for _, definition := range modelCatalog {
-			values = append(values, definition.Name)
+		if len(model.availableModels) > 0 {
+			values = append(values, model.availableModels...)
+		} else {
+			for _, definition := range modelCatalog {
+				values = append(values, definition.Name)
+			}
 		}
 	case "/mode":
-		values = []string{string(modeFree), string(modeControlled), string(modeCompare), string(modeTemperatureBenchmark)}
+		values = []string{string(modeFree), string(modeControlled), string(modeCompare), string(modeTemperatureBenchmark), string(modeModelBenchmark)}
 	case "/strategy":
 		values = []string{string(strategyStandard), string(strategyStepByStep), string(strategyExperts)}
 	case "/temperature":
 		values = []string{"0", "0.7", "1.2"}
+	case "/profile":
+		for name := range model.state.Profiles {
+			values = append(values, name)
+		}
+		sort.Strings(values)
 	case "/format":
 		for _, definition := range formatCatalog {
 			values = append(values, definition.Name)
@@ -398,7 +479,7 @@ func (model tuiModel) mouseInsideDialog(x, y int) bool {
 func (model tuiModel) activityText() string {
 	activity := "готов"
 	if model.busy {
-		activity = "обрабатываю запрос..."
+		activity = fmt.Sprintf("обрабатываю запрос%-3s", strings.Repeat(".", model.activityFrame))
 	}
 	return activity
 }
@@ -408,17 +489,22 @@ func (model tuiModel) compactSettings(activity string) string {
 	if model.busy {
 		activityStyle = busyStyle
 	}
-	firstLine := strings.Join([]string{
+	format := model.state.Control.Format
+	if !model.state.Control.Enabled {
+		format = "off"
+	}
+	firstLine := modeStyle.Render(fmt.Sprintf("profile=%s", model.state.ActiveProfile))
+	secondLine := strings.Join([]string{
 		modelStyle.Render(fmt.Sprintf("model=%s", model.state.Model)),
 		modeStyle.Render(fmt.Sprintf("mode=%s", model.state.Mode)),
 		strategyStyle.Render(fmt.Sprintf("strategy=%s", model.state.Strategy)),
 	}, "  |  ")
-	secondLine := strings.Join([]string{
+	thirdLine := strings.Join([]string{
 		temperatureStyle.Render(fmt.Sprintf("temperature=%g", model.state.Temperature)),
-		formatStyle.Render(fmt.Sprintf("format=%s", model.state.Control.Format)),
+		formatStyle.Render(fmt.Sprintf("format=%s", format)),
 		activityStyle.Render(activity),
 	}, "  |  ")
-	return firstLine + "\n" + secondLine
+	return firstLine + "\n" + secondLine + "\n" + thirdLine
 }
 
 func normalizePastedText(value string) string {

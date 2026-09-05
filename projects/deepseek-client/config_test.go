@@ -12,7 +12,6 @@ import (
 func TestSaveAndLoadConfig(t *testing.T) {
 	configPath := filepath.Join(t.TempDir(), "deepseek-client", "config.json")
 	want := defaultAppConfig()
-	want.APIToken = "test-token"
 	want.ResponseControl.Format = "json"
 	want.ResponseControl.MaxWords = 120
 	want.Generation.Temperature = 1.2
@@ -26,14 +25,21 @@ func TestSaveAndLoadConfig(t *testing.T) {
 	if err != nil {
 		t.Fatalf("loadConfig() returned error: %v", err)
 	}
-	if got.APIToken != want.APIToken {
-		t.Fatalf("loaded token = %q, want %q", got.APIToken, want.APIToken)
-	}
 	if got.ResponseControl.Format != "json" || got.ResponseControl.MaxWords != 120 {
 		t.Fatalf("loaded response control = %#v", got.ResponseControl)
 	}
 	if got.Generation != want.Generation {
 		t.Fatalf("loaded generation = %#v, want %#v", got.Generation, want.Generation)
+	}
+	if got.ActiveProfile != want.ActiveProfile || len(got.Profiles) != len(want.Profiles) {
+		t.Fatalf("loaded profiles = %#v, want %#v", got.Profiles, want.Profiles)
+	}
+	data, err := os.ReadFile(configPath)
+	if err != nil {
+		t.Fatalf("read saved config: %v", err)
+	}
+	if strings.Contains(string(data), "api_token") || strings.Contains(string(data), "test-token") {
+		t.Fatalf("saved config must not contain a token: %s", data)
 	}
 
 	if runtime.GOOS != "windows" {
@@ -76,7 +82,8 @@ func TestLoadConfigForReloadPreservesOrOverridesToken(t *testing.T) {
 		t.Fatalf("saveConfig() returned error: %v", err)
 	}
 
-	preserved, err := loadConfigForReload(configPath, "current-token", "")
+	baseURL := config.Profiles[config.ActiveProfile].BaseURL
+	preserved, err := loadConfigForReload(configPath, "current-token", baseURL)
 	if err != nil {
 		t.Fatalf("loadConfigForReload() returned error: %v", err)
 	}
@@ -84,7 +91,8 @@ func TestLoadConfigForReloadPreservesOrOverridesToken(t *testing.T) {
 		t.Fatalf("preserved token = %q", preserved.APIToken)
 	}
 
-	overridden, err := loadConfigForReload(configPath, "current-token", "environment-token")
+	t.Setenv("DEEPSEEK_API_KEY", "environment-token")
+	overridden, err := loadConfigForReload(configPath, "current-token", baseURL)
 	if err != nil {
 		t.Fatalf("loadConfigForReload() returned error: %v", err)
 	}
@@ -102,8 +110,68 @@ func TestValidateGeneration(t *testing.T) {
 	if err := validateGeneration(generationConfig{Model: defaultModelName, Temperature: 0.7, Strategy: "unknown"}); err == nil {
 		t.Fatal("unknown strategy must be rejected")
 	}
-	if err := validateGeneration(generationConfig{Model: "unknown", Temperature: 0.7, Strategy: strategyStandard}); err == nil {
-		t.Fatal("unknown model must be rejected")
+	if err := validateGeneration(generationConfig{Model: "local/model-name", Temperature: 0.7, Strategy: strategyStandard}); err != nil {
+		t.Fatalf("custom OpenAI-compatible model must be accepted: %v", err)
+	}
+	if err := validateGeneration(generationConfig{Model: "", Temperature: 0.7, Strategy: strategyStandard}); err == nil {
+		t.Fatal("empty model must be rejected")
+	}
+}
+
+func TestLoadLocalAPIConfigWithoutToken(t *testing.T) {
+	configPath := filepath.Join(t.TempDir(), "config.json")
+	data := []byte(`{
+  "active_profile": "local",
+  "profiles": {
+    "local": {
+      "base_url": "http://127.0.0.1:1234/v1",
+      "api_key_env": "",
+      "model": "local-model"
+    }
+  },
+  "generation": {"temperature": 0.7, "strategy": "standard"}
+}`)
+	if err := os.WriteFile(configPath, data, 0o600); err != nil {
+		t.Fatalf("write config: %v", err)
+	}
+
+	config, err := loadConfig(configPath)
+	if err != nil {
+		t.Fatalf("loadConfig() returned error: %v", err)
+	}
+	profile, ok := config.activeAPIProfile()
+	if !ok || profile.APIKeyEnv != "" || config.Generation.Model != "local-model" {
+		t.Fatalf("local config = %#v", config)
+	}
+}
+
+func TestReloadDoesNotSendDeepSeekTokenToDifferentAPI(t *testing.T) {
+	t.Setenv("OPENAI_API_KEY", "")
+	t.Setenv("DEEPSEEK_API_KEY", "deepseek-secret")
+	configPath := filepath.Join(t.TempDir(), "config.json")
+	data := []byte(`{
+  "active_profile":"local",
+  "profiles":{"local":{"base_url":"http://127.0.0.1:1234/v1","api_key_env":"","model":"local-model"}},
+  "generation":{"temperature":0.7,"strategy":"standard"}
+}`)
+	if err := os.WriteFile(configPath, data, 0o600); err != nil {
+		t.Fatalf("write config: %v", err)
+	}
+
+	config, err := loadConfigForReload(configPath, "current-deepseek-token", defaultAPIBaseURL)
+	if err != nil {
+		t.Fatalf("loadConfigForReload() returned error: %v", err)
+	}
+	if config.APIToken != "" {
+		t.Fatal("token from a different endpoint must not be reused")
+	}
+}
+
+func TestValidateAPIRejectsInvalidOrCredentialedURL(t *testing.T) {
+	for _, baseURL := range []string{"localhost:1234/v1", "ftp://localhost/v1", "http://user:pass@localhost/v1"} {
+		if err := validateAPIProfile(apiProfile{BaseURL: baseURL, Model: "test-model"}); err == nil {
+			t.Fatalf("base URL %q must be rejected", baseURL)
+		}
 	}
 }
 

@@ -126,6 +126,17 @@ func TestTUIAutocompleteIncludesBenchmarkMode(t *testing.T) {
 	}
 }
 
+func TestTUIAutocompleteIncludesModelBenchmarkMode(t *testing.T) {
+	model := newTUIModel(defaultAppConfig(), nil)
+	model.textarea.SetValue("/mode m")
+
+	updated, _ := model.Update(keyPress(tea.KeyTab))
+	model = updated.(tuiModel)
+	if got := model.textarea.Value(); got != "/mode model_benchmark" {
+		t.Fatalf("model benchmark completion = %q, want /mode model_benchmark", got)
+	}
+}
+
 func TestTUIAutocompleteIncludesReload(t *testing.T) {
 	model := newTUIModel(defaultAppConfig(), nil)
 	model.textarea.SetValue("/rel")
@@ -134,6 +145,78 @@ func TestTUIAutocompleteIncludesReload(t *testing.T) {
 	model = updated.(tuiModel)
 	if got := model.textarea.Value(); got != "/reload" {
 		t.Fatalf("reload completion = %q, want /reload", got)
+	}
+}
+
+func TestTUIAutocompleteIncludesStatus(t *testing.T) {
+	model := newTUIModel(defaultAppConfig(), nil)
+	model.textarea.SetValue("/sta")
+
+	updated, _ := model.Update(keyPress(tea.KeyTab))
+	model = updated.(tuiModel)
+	if got := model.textarea.Value(); got != "/status" {
+		t.Fatalf("status completion = %q, want /status", got)
+	}
+}
+
+func TestTUICompactSettingsHideAPIEndpoint(t *testing.T) {
+	model := newTUIModel(defaultAppConfig(), nil)
+	settings := model.compactSettings("готов")
+	if strings.Contains(settings, "api=") || strings.Contains(settings, "api.deepseek.com") {
+		t.Fatalf("compact settings expose API endpoint: %q", settings)
+	}
+}
+
+func TestTUICompactSettingsShowDisabledResponseControl(t *testing.T) {
+	config := defaultAppConfig()
+	config.ResponseControl.Enabled = false
+	model := newTUIModel(config, nil)
+	settings := model.compactSettings("готов")
+	if !strings.Contains(settings, "format=off") {
+		t.Fatalf("disabled response control is not visible: %q", settings)
+	}
+}
+
+func TestTUIActivityIndicatorAnimatesWhileBusy(t *testing.T) {
+	model := newTUIModel(defaultAppConfig(), nil)
+	model.busy = true
+	model.activityGen = 7
+	before := model.activityText()
+
+	updated, command := model.Update(activityTickMessage{generation: 7})
+	model = updated.(tuiModel)
+	after := model.activityText()
+
+	if before == after || !strings.Contains(after, "обрабатываю запрос.") {
+		t.Fatalf("activity did not animate: before=%q after=%q", before, after)
+	}
+	if command == nil {
+		t.Fatal("busy activity must schedule the next frame")
+	}
+}
+
+func TestTUIActivityIndicatorIgnoresStaleTicks(t *testing.T) {
+	model := newTUIModel(defaultAppConfig(), nil)
+	model.busy = true
+	model.activityGen = 2
+
+	updated, command := model.Update(activityTickMessage{generation: 1})
+	model = updated.(tuiModel)
+	if model.activityFrame != 0 || command != nil {
+		t.Fatalf("stale tick changed activity: frame=%d command=%v", model.activityFrame, command)
+	}
+}
+
+func TestTUIAutocompleteIncludesProfiles(t *testing.T) {
+	config := defaultAppConfig()
+	config.Profiles["local"] = apiProfile{BaseURL: "http://127.0.0.1:1234/v1", Model: "local-model"}
+	model := newTUIModel(config, nil)
+	model.textarea.SetValue("/profile l")
+
+	updated, _ := model.Update(keyPress(tea.KeyTab))
+	model = updated.(tuiModel)
+	if got := model.textarea.Value(); got != "/profile local" {
+		t.Fatalf("profile completion = %q, want /profile local", got)
 	}
 }
 

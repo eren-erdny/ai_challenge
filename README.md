@@ -8,7 +8,7 @@
 
 | Проект | Описание |
 |---|---|
-| [`deepseek-client`](projects/deepseek-client) | TUI-клиент DeepSeek с температурой, стратегиями, форматами и локальным судьёй |
+| [`deepseek-client`](projects/deepseek-client) | TUI-клиент DeepSeek и OpenAI-compatible API с температурой, стратегиями, форматами и локальным судьёй |
 | [`prompt-strategy-lab`](projects/prompt-strategy-lab) | Сравнение четырёх стратегий решения одной задачи через DeepSeek API |
 | [`temperature-lab`](projects/temperature-lab) | Сравнение точности и креативности ответов при разных значениях temperature |
 

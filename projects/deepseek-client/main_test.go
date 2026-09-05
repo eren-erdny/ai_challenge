@@ -3,6 +3,8 @@ package main
 import (
 	"bufio"
 	"encoding/json"
+	"net/http"
+	"net/http/httptest"
 	"strings"
 	"testing"
 	"time"
@@ -56,9 +58,10 @@ func TestBuildChatRequestAppliesControlsOnlyToSecondRequest(t *testing.T) {
 
 func TestBuildChatRequestAppliesTemperatureAndStrategy(t *testing.T) {
 	request := buildChatRequest("test", requestSettings{
-		Model:       "deepseek-v4-pro",
-		Temperature: 1.2,
-		Strategy:    strategyExperts,
+		Model:                "deepseek-v4-pro",
+		SendThinkingDisabled: true,
+		Temperature:          1.2,
+		Strategy:             strategyExperts,
 	})
 	if request.Temperature != 1.2 {
 		t.Fatalf("temperature = %g, want 1.2", request.Temperature)
@@ -66,12 +69,90 @@ func TestBuildChatRequestAppliesTemperatureAndStrategy(t *testing.T) {
 	if request.Model != "deepseek-v4-pro" {
 		t.Fatalf("model = %q, want deepseek-v4-pro", request.Model)
 	}
-	if request.Thinking.Type != "disabled" {
+	if request.Thinking == nil || request.Thinking.Type != "disabled" {
 		t.Fatalf("thinking = %q, want disabled", request.Thinking.Type)
 	}
 	if len(request.Messages) != 2 || !strings.Contains(request.Messages[0].Content, "Аналитик") ||
 		!strings.Contains(request.Messages[0].Content, "Инженер") || !strings.Contains(request.Messages[0].Content, "Критик") {
 		t.Fatalf("expert strategy system message is incomplete: %#v", request.Messages)
+	}
+}
+
+func TestBuildChatRequestOmitsThinkingForGenericAPI(t *testing.T) {
+	request := buildChatRequest("test", requestSettings{Model: "local-model", Temperature: 0.7})
+	encoded, err := json.Marshal(request)
+	if err != nil {
+		t.Fatalf("marshal request: %v", err)
+	}
+	if strings.Contains(string(encoded), `"thinking"`) {
+		t.Fatalf("generic request contains DeepSeek-specific thinking: %s", encoded)
+	}
+}
+
+func TestChatCompletionsURL(t *testing.T) {
+	for input, want := range map[string]string{
+		"http://127.0.0.1:1234/v1":             "http://127.0.0.1:1234/v1/chat/completions",
+		"https://api.deepseek.com/":            "https://api.deepseek.com/chat/completions",
+		"http://localhost/v1/chat/completions": "http://localhost/v1/chat/completions",
+	} {
+		if got := chatCompletionsURL(input); got != want {
+			t.Fatalf("chatCompletionsURL(%q) = %q, want %q", input, got, want)
+		}
+	}
+}
+
+func TestAskDeepSeekSupportsLocalAPIWithoutToken(t *testing.T) {
+	server := httptest.NewServer(http.HandlerFunc(func(response http.ResponseWriter, request *http.Request) {
+		if request.URL.Path != "/v1/chat/completions" {
+			t.Errorf("request path = %q", request.URL.Path)
+		}
+		if authorization := request.Header.Get("Authorization"); authorization != "" {
+			t.Errorf("unexpected Authorization header: %q", authorization)
+		}
+		var payload map[string]any
+		if err := json.NewDecoder(request.Body).Decode(&payload); err != nil {
+			t.Errorf("decode request: %v", err)
+		}
+		if _, exists := payload["thinking"]; exists {
+			t.Errorf("local request contains thinking: %#v", payload)
+		}
+		response.Header().Set("Content-Type", "application/json")
+		_, _ = response.Write([]byte(`{"model":"local-model","choices":[{"message":{"role":"assistant","content":"Локальный ответ"},"finish_reason":"stop"}],"usage":{"completion_tokens":2}}`))
+	}))
+	defer server.Close()
+
+	result, err := askDeepSeek("", "Привет", requestSettings{
+		Model:       "local-model",
+		BaseURL:     server.URL + "/v1",
+		Temperature: 0.7,
+	})
+	if err != nil {
+		t.Fatalf("askDeepSeek() returned error: %v", err)
+	}
+	if result.Content != "Локальный ответ" || result.Model != "local-model" {
+		t.Fatalf("result = %#v", result)
+	}
+}
+
+func TestFetchModelsUsesOpenAICompatibleEndpoint(t *testing.T) {
+	server := httptest.NewServer(http.HandlerFunc(func(response http.ResponseWriter, request *http.Request) {
+		if request.Method != http.MethodGet || request.URL.Path != "/v1/models" {
+			t.Errorf("request = %s %s", request.Method, request.URL.Path)
+		}
+		if authorization := request.Header.Get("Authorization"); authorization != "Bearer test-key" {
+			t.Errorf("Authorization = %q", authorization)
+		}
+		response.Header().Set("Content-Type", "application/json")
+		_, _ = response.Write([]byte(`{"data":[{"id":"qwen-local"},{"id":"llama-local"}]}`))
+	}))
+	defer server.Close()
+
+	models, err := fetchModels("test-key", apiProfile{BaseURL: server.URL + "/v1", Model: "qwen-local"})
+	if err != nil {
+		t.Fatalf("fetchModels() returned error: %v", err)
+	}
+	if got := strings.Join(models, ","); got != "llama-local,qwen-local" {
+		t.Fatalf("models = %q", got)
 	}
 }
 
