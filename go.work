@@ -1,0 +1,7 @@
+go 1.27
+
+use (
+	./projects/deepseek-client
+	./projects/prompt-strategy-lab
+	./projects/temperature-lab
+)

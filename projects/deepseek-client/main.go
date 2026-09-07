@@ -1,0 +1,390 @@
+package main
+
+import (
+	"bufio"
+	"bytes"
+	"encoding/json"
+	"errors"
+	"fmt"
+	"io"
+	"net/http"
+	"os"
+	"sort"
+	"strings"
+	"time"
+	"unicode/utf8"
+)
+
+type chatRequest struct {
+	Model       string        `json:"model"`
+	Messages    []chatMessage `json:"messages"`
+	Thinking    *thinkingMode `json:"thinking,omitempty"`
+	Temperature float64       `json:"temperature"`
+	Stream      bool          `json:"stream"`
+	MaxTokens   int           `json:"max_tokens,omitempty"`
+	Stop        []string      `json:"stop,omitempty"`
+}
+
+type thinkingMode struct {
+	Type string `json:"type"`
+}
+
+type chatMessage struct {
+	Role    string `json:"role"`
+	Content string `json:"content"`
+}
+
+type chatResponse struct {
+	Model   string `json:"model"`
+	Choices []struct {
+		Message      chatMessage `json:"message"`
+		FinishReason string      `json:"finish_reason"`
+	} `json:"choices"`
+	Usage struct {
+		PromptTokens          int `json:"prompt_tokens"`
+		CompletionTokens      int `json:"completion_tokens"`
+		TotalTokens           int `json:"total_tokens"`
+		PromptCacheHitTokens  int `json:"prompt_cache_hit_tokens"`
+		PromptCacheMissTokens int `json:"prompt_cache_miss_tokens"`
+		PromptTokensDetails   struct {
+			CachedTokens int `json:"cached_tokens"`
+		} `json:"prompt_tokens_details"`
+	} `json:"usage"`
+	Error *struct {
+		Message string `json:"message"`
+		Type    string `json:"type"`
+	} `json:"error,omitempty"`
+}
+
+type modelsResponse struct {
+	Data []struct {
+		ID string `json:"id"`
+	} `json:"data"`
+	Error *struct {
+		Message string `json:"message"`
+		Type    string `json:"type"`
+	} `json:"error,omitempty"`
+}
+
+type responseControl struct {
+	Format       string
+	SystemPrompt string
+	MaxWords     int
+	MaxTokens    int
+	Stop         []string
+}
+
+type completionResult struct {
+	Content           string
+	Model             string
+	FinishReason      string
+	PromptTokens      int
+	CachedInputTokens int
+	CompletionTokens  int
+	TotalTokens       int
+	Duration          time.Duration
+}
+
+func main() {
+	if handled, exitCode := handleCommand(os.Args[1:], os.Stdout, os.Stderr); handled {
+		os.Exit(exitCode)
+	}
+
+	input := bufio.NewReader(os.Stdin)
+	exitCode := run(input)
+	if exitCode != 0 {
+		waitForEnter(input, os.Stdout)
+	}
+	os.Exit(exitCode)
+}
+
+func run(input *bufio.Reader) int {
+	config, err := resolveConfig(input, os.Stdin, os.Stdout)
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "не удалось загрузить конфигурацию: %v\n", err)
+		return 1
+	}
+
+	if isInteractiveTerminal(os.Stdin, os.Stdout) {
+		return runTUI(config, askDeepSeek)
+	}
+	return runInteractiveSession(input, os.Stdout, os.Stderr, config, askDeepSeek)
+}
+
+func handleCommand(args []string, output io.Writer, errorOutput io.Writer) (bool, int) {
+	if len(args) == 0 {
+		return false, 0
+	}
+	if len(args) == 1 {
+		switch args[0] {
+		case "--list-formats":
+			printFormatCatalog(output)
+			return true, 0
+		case "--list-models":
+			printModelCatalog(output)
+			return true, 0
+		}
+	}
+
+	fmt.Fprintf(errorOutput, "неизвестные аргументы: %s\n", strings.Join(args, " "))
+	fmt.Fprintln(errorOutput, "Доступные команды: --list-formats, --list-models")
+	return true, 2
+}
+
+func readPrompt(input *bufio.Reader) (string, error) {
+	prompt, err := input.ReadString('\n')
+	if err != nil && !errors.Is(err, io.EOF) {
+		return "", err
+	}
+
+	prompt = strings.TrimSpace(prompt)
+	if prompt == "" {
+		return "", errors.New("запрос не может быть пустым")
+	}
+
+	return prompt, nil
+}
+
+func waitForEnter(input *bufio.Reader, output io.Writer) {
+	fmt.Fprint(output, "\nНажмите Enter, чтобы закрыть программу...")
+	_, _ = input.ReadString('\n')
+}
+
+func askDeepSeek(token string, prompt string, settings requestSettings) (completionResult, error) {
+	payload := buildChatRequest(prompt, settings)
+	body, err := json.Marshal(payload)
+	if err != nil {
+		return completionResult{}, fmt.Errorf("encode request: %w", err)
+	}
+
+	req, err := http.NewRequest(http.MethodPost, chatCompletionsURL(settings.BaseURL), bytes.NewReader(body))
+	if err != nil {
+		return completionResult{}, fmt.Errorf("create request: %w", err)
+	}
+
+	if token = strings.TrimSpace(token); token != "" {
+		req.Header.Set("Authorization", "Bearer "+token)
+	}
+	req.Header.Set("Content-Type", "application/json")
+
+	client := &http.Client{Timeout: 30 * time.Second}
+	startedAt := time.Now()
+	resp, err := client.Do(req)
+	if err != nil {
+		return completionResult{}, fmt.Errorf("send request: %w", err)
+	}
+	defer resp.Body.Close()
+
+	respBody, err := io.ReadAll(resp.Body)
+	if err != nil {
+		return completionResult{}, fmt.Errorf("read response: %w", err)
+	}
+
+	var parsed chatResponse
+	if err := json.Unmarshal(respBody, &parsed); err != nil {
+		return completionResult{}, fmt.Errorf("decode response: %w; raw response: %s", err, string(respBody))
+	}
+
+	if resp.StatusCode < 200 || resp.StatusCode >= 300 {
+		if parsed.Error != nil {
+			return completionResult{}, fmt.Errorf("api error: status=%d type=%s message=%s", resp.StatusCode, parsed.Error.Type, parsed.Error.Message)
+		}
+		return completionResult{}, fmt.Errorf("api error: status=%d response=%s", resp.StatusCode, string(respBody))
+	}
+
+	if len(parsed.Choices) == 0 {
+		return completionResult{}, fmt.Errorf("api returned no choices")
+	}
+	if strings.TrimSpace(parsed.Choices[0].Message.Content) == "" {
+		return completionResult{}, fmt.Errorf(
+			"api returned empty content: completion_tokens=%d finish_reason=%s",
+			parsed.Usage.CompletionTokens,
+			parsed.Choices[0].FinishReason,
+		)
+	}
+	model := parsed.Model
+	if model == "" {
+		model = settings.Model
+	}
+	totalTokens := parsed.Usage.TotalTokens
+	if totalTokens == 0 {
+		totalTokens = parsed.Usage.PromptTokens + parsed.Usage.CompletionTokens
+	}
+
+	cachedInputTokens := parsed.Usage.PromptCacheHitTokens
+	if cachedInputTokens == 0 {
+		cachedInputTokens = parsed.Usage.PromptTokensDetails.CachedTokens
+	}
+
+	return completionResult{
+		Content:           parsed.Choices[0].Message.Content,
+		Model:             model,
+		FinishReason:      parsed.Choices[0].FinishReason,
+		PromptTokens:      parsed.Usage.PromptTokens,
+		CachedInputTokens: cachedInputTokens,
+		CompletionTokens:  parsed.Usage.CompletionTokens,
+		TotalTokens:       totalTokens,
+		Duration:          time.Since(startedAt),
+	}, nil
+}
+
+func buildChatRequest(prompt string, settings requestSettings) chatRequest {
+	payload := chatRequest{
+		Model:       settings.Model,
+		Messages:    []chatMessage{{Role: "user", Content: prompt}},
+		Temperature: settings.Temperature,
+		Stream:      false,
+	}
+	if settings.SendThinkingDisabled {
+		payload.Thinking = &thinkingMode{Type: "disabled"}
+	}
+
+	var systemInstructions []string
+	if instruction := strategyInstruction(settings.Strategy); instruction != "" {
+		systemInstructions = append(systemInstructions, instruction)
+	}
+	if settings.Control != nil {
+		systemInstructions = append(systemInstructions, settings.Control.SystemPrompt)
+		payload.MaxTokens = settings.Control.MaxTokens
+		payload.Stop = settings.Control.Stop
+	}
+	if len(systemInstructions) > 0 {
+		payload.Messages = append([]chatMessage{{
+			Role: "system", Content: strings.Join(systemInstructions, "\n\n"),
+		}}, payload.Messages...)
+	}
+
+	return payload
+}
+
+func chatCompletionsURL(baseURL string) string {
+	baseURL = strings.TrimRight(strings.TrimSpace(baseURL), "/")
+	if strings.HasSuffix(baseURL, "/chat/completions") {
+		return baseURL
+	}
+	return baseURL + "/chat/completions"
+}
+
+func modelsURL(baseURL string) string {
+	baseURL = strings.TrimRight(strings.TrimSpace(baseURL), "/")
+	baseURL = strings.TrimSuffix(baseURL, "/chat/completions")
+	return baseURL + "/models"
+}
+
+func fetchModels(token string, profile apiProfile) ([]string, error) {
+	req, err := http.NewRequest(http.MethodGet, modelsURL(profile.BaseURL), nil)
+	if err != nil {
+		return nil, fmt.Errorf("create models request: %w", err)
+	}
+	if token = strings.TrimSpace(token); token != "" {
+		req.Header.Set("Authorization", "Bearer "+token)
+	}
+
+	client := &http.Client{Timeout: 30 * time.Second}
+	resp, err := client.Do(req)
+	if err != nil {
+		return nil, fmt.Errorf("send models request: %w", err)
+	}
+	defer resp.Body.Close()
+	body, err := io.ReadAll(resp.Body)
+	if err != nil {
+		return nil, fmt.Errorf("read models response: %w", err)
+	}
+	var parsed modelsResponse
+	if err := json.Unmarshal(body, &parsed); err != nil {
+		return nil, fmt.Errorf("decode models response: %w", err)
+	}
+	if resp.StatusCode < 200 || resp.StatusCode >= 300 {
+		if parsed.Error != nil {
+			return nil, fmt.Errorf("api error: status=%d type=%s message=%s", resp.StatusCode, parsed.Error.Type, parsed.Error.Message)
+		}
+		return nil, fmt.Errorf("api error: status=%d response=%s", resp.StatusCode, string(body))
+	}
+	models := make([]string, 0, len(parsed.Data))
+	for _, model := range parsed.Data {
+		if id := strings.TrimSpace(model.ID); id != "" {
+			models = append(models, id)
+		}
+	}
+	if len(models) == 0 {
+		return nil, errors.New("api returned an empty model list")
+	}
+	sort.Strings(models)
+	return models, nil
+}
+
+func printComparison(output io.Writer, uncontrolled completionResult, controlled completionResult, control *responseControl) {
+	fmt.Fprintln(output, "\n========================================")
+	fmt.Fprintln(output, "ОТВЕТ 1: БЕЗ ОГРАНИЧЕНИЙ")
+	fmt.Fprintln(output, "========================================")
+	fmt.Fprintln(output, formatAnswer(uncontrolled.Content))
+
+	fmt.Fprintln(output, "\n========================================")
+	if control == nil {
+		fmt.Fprintln(output, "ОТВЕТ 2: КОНТРОЛЬ ОТКЛЮЧЁН")
+	} else {
+		fmt.Fprintln(output, "ОТВЕТ 2: С ОГРАНИЧЕНИЯМИ")
+		fmt.Fprintf(output, "Формат: %s\n", control.Format)
+		fmt.Fprintf(output, "Лимит: не более %d слов, max_tokens=%d\n", control.MaxWords, control.MaxTokens)
+		fmt.Fprintf(output, "Условия завершения: stop=%q\n", control.Stop)
+	}
+	fmt.Fprintln(output, "========================================")
+	fmt.Fprintln(output, formatAnswer(controlled.Content))
+
+	printValidation(output, validateAnswer(controlled, control))
+	printMetrics(output, uncontrolled, controlled)
+}
+
+func printMetrics(output io.Writer, uncontrolled completionResult, controlled completionResult) {
+	fmt.Fprintln(output, "\n========================================")
+	fmt.Fprintln(output, "СРАВНЕНИЕ")
+	fmt.Fprintln(output, "========================================")
+	fmt.Fprintf(output, "Без ограничений: model=%s, %d слов, %d символов, %d токенов, %.1f ток/с, finish_reason=%s\n",
+		resultModel(uncontrolled),
+		wordCount(uncontrolled.Content), utf8.RuneCountInString(uncontrolled.Content),
+		uncontrolled.CompletionTokens, tokensPerSecond(uncontrolled), uncontrolled.FinishReason)
+	fmt.Fprintf(output, "С ограничениями: model=%s, %d слов, %d символов, %d токенов, %.1f ток/с, finish_reason=%s\n",
+		resultModel(controlled),
+		wordCount(controlled.Content), utf8.RuneCountInString(controlled.Content),
+		controlled.CompletionTokens, tokensPerSecond(controlled), controlled.FinishReason)
+}
+
+func tokensPerSecond(result completionResult) float64 {
+	if result.Duration <= 0 {
+		return 0
+	}
+	return float64(result.CompletionTokens) / result.Duration.Seconds()
+}
+
+func resultModel(result completionResult) string {
+	if result.Model == "" {
+		return "unknown"
+	}
+	return result.Model
+}
+
+func wordCount(text string) int {
+	return len(strings.Fields(text))
+}
+
+func formatAnswer(answer string) string {
+	normalized := strings.ReplaceAll(answer, "\r\n", "\n")
+	normalized = strings.ReplaceAll(normalized, "\r", "\n")
+
+	lines := strings.Split(strings.TrimSpace(normalized), "\n")
+	result := make([]string, 0, len(lines))
+	previousLineWasEmpty := false
+
+	for _, line := range lines {
+		line = strings.TrimRight(line, " \t")
+		isEmpty := strings.TrimSpace(line) == ""
+		if isEmpty && previousLineWasEmpty {
+			continue
+		}
+
+		result = append(result, line)
+		previousLineWasEmpty = isEmpty
+	}
+
+	return strings.Join(result, "\n")
+}
