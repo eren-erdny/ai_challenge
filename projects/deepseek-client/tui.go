@@ -74,6 +74,8 @@ var (
 )
 
 var commandSuggestions = []autocompleteSuggestion{
+	{value: "/new"},
+	{value: "/conversation"},
 	{value: "/model "},
 	{value: "/models"},
 	{value: "/profile "},
@@ -101,7 +103,11 @@ func runTUI(config appConfig, ask askFunction) int {
 	model := newTUIModel(config, ask)
 	model.ctx, model.cancel = ctx, cancel
 	program := tea.NewProgram(model)
-	if _, err := program.Run(); err != nil {
+	final, err := program.Run()
+	if closed, ok := final.(tuiModel); ok {
+		printConversationExit(os.Stdout, closed.state)
+	}
+	if err != nil {
 		fmt.Fprintf(os.Stderr, "ошибка TUI: %v\n", err)
 		return 1
 	}
@@ -115,16 +121,17 @@ func newTUIModel(config appConfig, ask askFunction) tuiModel {
 	}
 	profile, _ := config.activeAPIProfile()
 	state := sessionState{
-		History:       config.History,
-		Mode:          mode,
-		ActiveProfile: config.ActiveProfile,
-		Profiles:      config.Profiles,
-		API:           profile,
-		APIToken:      config.APIToken,
-		Model:         profile.Model,
-		Temperature:   config.Generation.Temperature,
-		Strategy:      config.Generation.Strategy,
-		Control:       config.ResponseControl,
+		ConversationID: conversationID(config.ConversationID),
+		History:        config.History,
+		Mode:           mode,
+		ActiveProfile:  config.ActiveProfile,
+		Profiles:       config.Profiles,
+		API:            profile,
+		APIToken:       config.APIToken,
+		Model:          profile.Model,
+		Temperature:    config.Generation.Temperature,
+		Strategy:       config.Generation.Strategy,
+		Control:        config.ResponseControl,
 	}
 
 	input := textarea.New()
@@ -139,9 +146,13 @@ func newTUIModel(config appConfig, ask askFunction) tuiModel {
 
 	history := []string{
 		titleStyle.Render("DeepSeek Client"),
+		statusStyle.Render("Conversation ID: " + state.ConversationID),
 		"Вставьте многострочный запрос и нажмите Enter. Команда /help покажет настройки.",
 	}
 	view := viewport.New(viewport.WithWidth(80), viewport.WithHeight(16))
+	if config.HistoryNotice != "" {
+		history = append(history, statusStyle.Render(config.HistoryNotice))
+	}
 	for _, message := range config.InitialMessages {
 		label := userStyle.Render("Вы")
 		if message.Role == "assistant" {
@@ -266,6 +277,22 @@ func (model tuiModel) submit() (tea.Model, tea.Cmd) {
 
 	if text == "/exit" || strings.EqualFold(text, "exit") || strings.EqualFold(text, "выход") {
 		return model, tea.Quit
+	}
+	var conversationOutput strings.Builder
+	if handled, changed, messages := handleConversationCommand(model.ctx, text, &model.state, &conversationOutput); handled {
+		if changed {
+			model.history = nil
+			for _, message := range messages {
+				label := userStyle.Render("Вы")
+				if message.Role == "assistant" {
+					label = titleStyle.Render("Ассистент")
+				}
+				model.history = append(model.history, label+"\n"+message.Content)
+			}
+		}
+		model.history = append(model.history, statusStyle.Render(conversationOutput.String()))
+		model.refreshHistory()
+		return model, nil
 	}
 	if text == "/clear" {
 		model.history = nil

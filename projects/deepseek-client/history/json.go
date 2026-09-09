@@ -103,6 +103,10 @@ func (s *JSON) Save(ctx context.Context, id string, messages []agent.Message) er
 	if len(data) > maxBytes {
 		return errors.New("conversation exceeds 16 MiB; history was not saved")
 	}
+	return s.write(ctx, path, data)
+}
+
+func (s *JSON) write(ctx context.Context, path string, data []byte) error {
 	if err := os.MkdirAll(s.Dir, 0o700); err != nil {
 		return err
 	}

@@ -59,11 +59,19 @@ func run(input *bufio.Reader) int {
 		fmt.Fprintln(os.Stderr, err)
 		return 1
 	}
-	config.History = &history.JSON{Dir: filepath.Join(filepath.Dir(configPath), "conversations")}
-	config.InitialMessages, err = config.History.Load(context.Background(), "default")
+	store := &history.JSON{Dir: filepath.Join(filepath.Dir(configPath), "conversations")}
+	config.History = store
+	config.ConversationID, config.InitialMessages, err = store.Active(context.Background())
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "Не удалось восстановить историю: %v\n", err)
 		return 1
+	}
+	removed, cleanupErr := store.Prune(context.Background(), config.ConversationID, config.HistoryPolicy.RetentionDays, time.Now())
+	if removed > 0 {
+		config.HistoryNotice = fmt.Sprintf("Удалено старых диалогов: %d", removed)
+	}
+	if cleanupErr != nil {
+		config.HistoryNotice += fmt.Sprintf("\nНе удалось полностью очистить историю: %v", cleanupErr)
 	}
 	if isInteractiveTerminal(os.Stdin, os.Stdout) {
 		return runTUI(config, askDeepSeek)

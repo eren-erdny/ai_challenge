@@ -28,7 +28,7 @@ func executeQuestion(ctx context.Context, token, prompt string, state sessionSta
 	client := agent.ClientFunc(func(ctx context.Context, target agent.Target, prompt string, settings agent.Settings) (agent.Completion, error) {
 		return ask(ctx, credentials[target.Profile], prompt, settings)
 	})
-	request.ConversationID = "default"
+	request.ConversationID = conversationID(state.ConversationID)
 	runner := agent.NewWithHistory(client, state.History)
 	result, err := runner.Run(ctx, request)
 	renderAgentResult(output, result)

@@ -27,9 +27,10 @@ func TestMemoryProcessHelper(t *testing.T) {
 	profile := config.Profiles[config.ActiveProfile]
 	profile.BaseURL = os.Getenv("DEEPSEEK_TEST_URL")
 	config.Profiles[config.ActiveProfile] = profile
-	config.History = &history.JSON{Dir: os.Getenv("DEEPSEEK_TEST_HISTORY")}
+	store := &history.JSON{Dir: os.Getenv("DEEPSEEK_TEST_HISTORY")}
+	config.History = store
 	var err error
-	config.InitialMessages, err = config.History.Load(context.Background(), "default")
+	config.ConversationID, config.InitialMessages, err = store.Active(context.Background())
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -61,7 +62,7 @@ func TestConversationSurvivesProcessRestart(t *testing.T) {
 	}))
 	defer server.Close()
 	dir := t.TempDir()
-	for i, prompt := range []string{"Project North has budget 75000.", "What is my project and budget?"} {
+	for i, prompt := range []string{"/new\nProject North has budget 75000.", "What is my project and budget?"} {
 		ctx, cancel := context.WithTimeout(context.Background(), 10_000_000_000)
 		cmd := exec.CommandContext(ctx, os.Args[0], "-test.run=^TestMemoryProcessHelper$")
 		cmd.Env = append(os.Environ(), "DEEPSEEK_MEMORY_HELPER=1", "DEEPSEEK_TEST_URL="+server.URL, "DEEPSEEK_TEST_HISTORY="+dir, "DEEPSEEK_TEST_INPUT="+prompt)
@@ -78,8 +79,8 @@ func TestConversationSurvivesProcessRestart(t *testing.T) {
 	if len(first) != 1 || len(second) != 3 || second[1].Role != "assistant" || second[2].Content != "What is my project and budget?" {
 		t.Fatalf("unexpected HTTP messages: %#v / %#v", first, second)
 	}
-	messages, err := (&history.JSON{Dir: dir}).Load(context.Background(), "default")
-	if err != nil || len(messages) != 4 {
+	id, messages, err := (&history.JSON{Dir: dir}).Active(context.Background())
+	if err != nil || id == "default" || len(messages) != 4 {
 		t.Fatalf("history after restart: %#v, %v", messages, err)
 	}
 }

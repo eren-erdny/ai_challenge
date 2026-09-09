@@ -27,6 +27,9 @@ const (
 )
 
 type appConfig struct {
+	HistoryPolicy   historyConfig         `json:"history"`
+	HistoryNotice   string                `json:"-"`
+	ConversationID  string                `json:"-"`
 	History         agent.HistoryStore    `json:"-"`
 	InitialMessages []agent.Message       `json:"-"`
 	ActiveProfile   string                `json:"active_profile"`
@@ -34,6 +37,17 @@ type appConfig struct {
 	APIToken        string                `json:"-"`
 	Generation      generationConfig      `json:"generation"`
 	ResponseControl responseControlConfig `json:"response_control"`
+}
+
+type historyConfig struct {
+	RetentionDays int `json:"retention_days"`
+}
+
+func validateHistory(config historyConfig) error {
+	if config.RetentionDays < 0 || config.RetentionDays > 106751 {
+		return errors.New("history.retention_days должен быть от 0 до 106751")
+	}
+	return nil
 }
 
 type apiProfile struct {
@@ -66,6 +80,7 @@ var formatCatalog = agent.Formats()
 
 func defaultAppConfig() appConfig {
 	return appConfig{
+		HistoryPolicy: historyConfig{RetentionDays: 30},
 		ActiveProfile: "deepseek",
 		Profiles: map[string]apiProfile{
 			"deepseek": {
@@ -154,6 +169,7 @@ func loadConfig(configPath string) (appConfig, error) {
 
 	config := defaultAppConfig()
 	var raw struct {
+		History        json.RawMessage       `json:"history"`
 		ActiveProfile  string                `json:"active_profile"`
 		Profiles       map[string]apiProfile `json:"profiles"`
 		APIToken       string                `json:"api_token"`
@@ -182,6 +198,14 @@ func loadConfig(configPath string) (appConfig, error) {
 		config.Generation = generationConfig{
 			Model: legacyGeneration.Model, Temperature: legacyGeneration.Temperature, Strategy: legacyGeneration.Strategy,
 		}
+	}
+	if len(raw.History) > 0 {
+		if err := json.Unmarshal(raw.History, &config.HistoryPolicy); err != nil {
+			return appConfig{}, fmt.Errorf("некорректный history: %w", err)
+		}
+	}
+	if err := validateHistory(config.HistoryPolicy); err != nil {
+		return appConfig{}, err
 	}
 	if len(raw.ResponseControl) > 0 {
 		if err := json.Unmarshal(raw.ResponseControl, &config.ResponseControl); err != nil {
@@ -246,6 +270,9 @@ func loadConfigForReload(configPath string, currentToken string, currentBaseURL 
 }
 
 func saveConfig(configPath string, config appConfig) error {
+	if err := validateHistory(config.HistoryPolicy); err != nil {
+		return err
+	}
 	if err := config.normalizeAndValidateProfiles(); err != nil {
 		return fmt.Errorf("некорректные profiles: %w", err)
 	}
@@ -265,6 +292,7 @@ func saveConfig(configPath string, config appConfig) error {
 	}
 
 	fileConfig := struct {
+		History       historyConfig         `json:"history"`
 		ActiveProfile string                `json:"active_profile"`
 		Profiles      map[string]apiProfile `json:"profiles"`
 		Generation    struct {
@@ -273,6 +301,7 @@ func saveConfig(configPath string, config appConfig) error {
 		} `json:"generation"`
 		ResponseControl responseControlConfig `json:"response_control"`
 	}{
+		History:       config.HistoryPolicy,
 		ActiveProfile: config.ActiveProfile, Profiles: config.Profiles, ResponseControl: config.ResponseControl,
 	}
 	fileConfig.Generation.Temperature = config.Generation.Temperature

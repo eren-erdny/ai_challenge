@@ -38,17 +38,18 @@ type requestSettings = agent.Settings
 type askFunction func(context.Context, string, string, requestSettings) (completionResult, error)
 
 type sessionState struct {
-	History       agent.HistoryStore
-	Mode          sessionMode
-	ActiveProfile string
-	Profiles      map[string]apiProfile
-	API           apiProfile
-	APIToken      string
-	Model         string
-	Temperature   float64
-	Strategy      promptStrategy
-	Control       responseControlConfig
-	LastRequest   *requestStatus
+	ConversationID string
+	History        agent.HistoryStore
+	Mode           sessionMode
+	ActiveProfile  string
+	Profiles       map[string]apiProfile
+	API            apiProfile
+	APIToken       string
+	Model          string
+	Temperature    float64
+	Strategy       promptStrategy
+	Control        responseControlConfig
+	LastRequest    *requestStatus
 }
 
 type requestStatus struct {
@@ -70,26 +71,25 @@ func runInteractiveSession(
 	}
 	profile, _ := config.activeAPIProfile()
 	state := sessionState{
-		History:       config.History,
-		Mode:          mode,
-		ActiveProfile: config.ActiveProfile,
-		Profiles:      config.Profiles,
-		API:           profile,
-		APIToken:      config.APIToken,
-		Model:         profile.Model,
-		Temperature:   config.Generation.Temperature,
-		Strategy:      config.Generation.Strategy,
-		Control:       config.ResponseControl,
+		ConversationID: conversationID(config.ConversationID),
+		History:        config.History,
+		Mode:           mode,
+		ActiveProfile:  config.ActiveProfile,
+		Profiles:       config.Profiles,
+		API:            profile,
+		APIToken:       config.APIToken,
+		Model:          profile.Model,
+		Temperature:    config.Generation.Temperature,
+		Strategy:       config.Generation.Strategy,
+		Control:        config.ResponseControl,
 	}
 
+	defer func() { printConversationExit(output, state) }()
 	printSessionWelcome(output, state)
-	for _, message := range config.InitialMessages {
-		label := "Вы"
-		if message.Role == "assistant" {
-			label = "Ассистент"
-		}
-		fmt.Fprintf(output, "\n%s: %s\n", label, message.Content)
+	if config.HistoryNotice != "" {
+		fmt.Fprintln(output, config.HistoryNotice)
 	}
+	printConversationMessages(output, config.InitialMessages)
 	for {
 		fmt.Fprint(output, "\nВы: ")
 		line, err := input.ReadString('\n')
@@ -111,6 +111,15 @@ func runInteractiveSession(
 			return 0
 		}
 		if strings.HasPrefix(text, "/") {
+			if handled, changed, messages := handleConversationCommand(context.Background(), text, &state, output); handled {
+				if changed {
+					printConversationMessages(output, messages)
+				}
+				if errors.Is(err, io.EOF) {
+					return 0
+				}
+				continue
+			}
 			if text == "/models" {
 				ctx, cancel := signal.NotifyContext(context.Background(), os.Interrupt)
 				models, modelsErr := fetchModels(ctx, state.APIToken, state.API)
@@ -162,16 +171,18 @@ func runInteractiveSession(
 
 func printSessionWelcome(output io.Writer, state sessionState) {
 	fmt.Fprintln(output, "Добрый день! Интерактивный клиент DeepSeek запущен.")
-	fmt.Fprintln(output, "Каждый вопрос отправляется независимо от предыдущих.")
+	printConversationExit(output, state)
 	fmt.Fprintf(output, "Профиль: %s; модель: %s; режим: %s; стратегия: %s; temperature: %g; формат: %s\n",
 		state.ActiveProfile, state.Model, state.Mode, state.Strategy, state.Temperature, state.Control.Format)
-	fmt.Fprintln(output, "Команды: /profile, /profiles, /model, /models, /mode, /strategy, /temperature, /format, /status, /reload, /settings, /help, /exit")
+	fmt.Fprintln(output, "Команды: /new, /conversation, /profile, /profiles, /model, /models, /mode, /strategy, /temperature, /format, /status, /reload, /settings, /help, /exit")
 }
 
 func handleSessionCommand(command string, state *sessionState, output io.Writer) {
 	parts := strings.Fields(command)
 	switch parts[0] {
 	case "/help":
+		fmt.Fprintln(output, "/new              — начать новый чистый диалог")
+		fmt.Fprintln(output, "/conversation [ID] — показать ID или открыть сохранённый диалог")
 		fmt.Fprintln(output, "/mode free        — один запрос без ограничений")
 		fmt.Fprintln(output, "/mode controlled  — один запрос с настройками и локальным судьёй")
 		fmt.Fprintln(output, "/mode compare     — два запроса и сравнение")
