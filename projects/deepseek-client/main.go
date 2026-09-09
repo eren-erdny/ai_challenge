@@ -9,12 +9,14 @@ import (
 	"io"
 	"net/http"
 	"os"
+	"path/filepath"
 	"sort"
 	"strings"
 	"time"
 	"unicode/utf8"
 
 	"github.com/eren-erdny/ai_challenge/projects/deepseek-client/agent"
+	"github.com/eren-erdny/ai_challenge/projects/deepseek-client/history"
 	"github.com/eren-erdny/ai_challenge/projects/deepseek-client/llm"
 )
 
@@ -52,6 +54,17 @@ func run(input *bufio.Reader) int {
 		return 1
 	}
 
+	configPath, err := defaultConfigPath()
+	if err != nil {
+		fmt.Fprintln(os.Stderr, err)
+		return 1
+	}
+	config.History = &history.JSON{Dir: filepath.Join(filepath.Dir(configPath), "conversations")}
+	config.InitialMessages, err = config.History.Load(context.Background(), "default")
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "Не удалось восстановить историю: %v\n", err)
+		return 1
+	}
 	if isInteractiveTerminal(os.Stdin, os.Stdout) {
 		return runTUI(config, askDeepSeek)
 	}

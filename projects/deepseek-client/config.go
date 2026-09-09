@@ -27,6 +27,8 @@ const (
 )
 
 type appConfig struct {
+	History         agent.HistoryStore    `json:"-"`
+	InitialMessages []agent.Message       `json:"-"`
 	ActiveProfile   string                `json:"active_profile"`
 	Profiles        map[string]apiProfile `json:"profiles"`
 	APIToken        string                `json:"-"`

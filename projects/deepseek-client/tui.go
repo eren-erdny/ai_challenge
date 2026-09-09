@@ -115,6 +115,7 @@ func newTUIModel(config appConfig, ask askFunction) tuiModel {
 	}
 	profile, _ := config.activeAPIProfile()
 	state := sessionState{
+		History:       config.History,
 		Mode:          mode,
 		ActiveProfile: config.ActiveProfile,
 		Profiles:      config.Profiles,
@@ -141,7 +142,15 @@ func newTUIModel(config appConfig, ask askFunction) tuiModel {
 		"Вставьте многострочный запрос и нажмите Enter. Команда /help покажет настройки.",
 	}
 	view := viewport.New(viewport.WithWidth(80), viewport.WithHeight(16))
+	for _, message := range config.InitialMessages {
+		label := userStyle.Render("Вы")
+		if message.Role == "assistant" {
+			label = titleStyle.Render("Ассистент")
+		}
+		history = append(history, label+"\n"+message.Content)
+	}
 	view.SetContent(strings.Join(history, "\n\n"))
+	view.GotoBottom()
 
 	return tuiModel{
 		ctx:      context.Background(),

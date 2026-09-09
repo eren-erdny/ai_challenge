@@ -38,6 +38,7 @@ type requestSettings = agent.Settings
 type askFunction func(context.Context, string, string, requestSettings) (completionResult, error)
 
 type sessionState struct {
+	History       agent.HistoryStore
 	Mode          sessionMode
 	ActiveProfile string
 	Profiles      map[string]apiProfile
@@ -69,6 +70,7 @@ func runInteractiveSession(
 	}
 	profile, _ := config.activeAPIProfile()
 	state := sessionState{
+		History:       config.History,
 		Mode:          mode,
 		ActiveProfile: config.ActiveProfile,
 		Profiles:      config.Profiles,
@@ -81,6 +83,13 @@ func runInteractiveSession(
 	}
 
 	printSessionWelcome(output, state)
+	for _, message := range config.InitialMessages {
+		label := "Вы"
+		if message.Role == "assistant" {
+			label = "Ассистент"
+		}
+		fmt.Fprintf(output, "\n%s: %s\n", label, message.Content)
+	}
 	for {
 		fmt.Fprint(output, "\nВы: ")
 		line, err := input.ReadString('\n')

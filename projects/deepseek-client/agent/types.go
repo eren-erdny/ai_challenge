@@ -51,6 +51,12 @@ type Client interface {
 	Complete(context.Context, Target, string, Settings) (Completion, error)
 }
 
+// HistoryStore persists completed turns, without system instructions or credentials.
+type HistoryStore interface {
+	Load(context.Context, string) ([]Message, error)
+	Save(context.Context, string, []Message) error
+}
+
 type ClientFunc func(context.Context, Target, string, Settings) (Completion, error)
 
 func (f ClientFunc) Complete(ctx context.Context, target Target, prompt string, settings Settings) (Completion, error) {

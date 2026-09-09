@@ -10,10 +10,17 @@ import (
 )
 
 // Agent owns request preparation, scenario execution and output validation.
-// It is stateless: ConversationID is returned for future history integration.
-type Agent struct{ client Client }
+// History is optional and supplied independently of the transport and UI.
+type Agent struct {
+	client  Client
+	history HistoryStore
+}
 
 func New(client Client) *Agent { return &Agent{client: client} }
+
+func NewWithHistory(client Client, history HistoryStore) *Agent {
+	return &Agent{client: client, history: history}
+}
 
 type invocation struct {
 	target      Target
@@ -21,6 +28,7 @@ type invocation struct {
 	strategy    Strategy
 	control     *Control
 	validate    bool
+	messages    []Message
 }
 
 // Run returns completed responses even when a later model or judge fails.
@@ -57,12 +65,30 @@ func (a *Agent) Run(ctx context.Context, request Request) (Result, error) {
 	if err != nil {
 		return result, err
 	}
+	remember := a.history != nil && (request.Mode == Free || request.Mode == Controlled)
+	var history []Message
+	if remember {
+		if strings.TrimSpace(request.ConversationID) == "" {
+			return result, errors.New("conversation ID is required for history")
+		}
+		history, err = a.history.Load(ctx, request.ConversationID)
+		if err != nil {
+			return result, fmt.Errorf("load conversation: %w", err)
+		}
+		plan[0].messages = append([]Message(nil), history...)
+	}
 	for _, step := range plan {
 		response, err := a.invoke(ctx, request.Prompt, step)
 		if err != nil {
 			return result, fmt.Errorf("model %s: %w", step.target.Model, err)
 		}
 		result.Responses = append(result.Responses, response)
+	}
+	if remember {
+		history = append(history, Message{Role: "user", Content: request.Prompt}, Message{Role: "assistant", Content: result.Responses[0].Answer.Content})
+		if err := a.history.Save(ctx, request.ConversationID, history); err != nil {
+			return result, fmt.Errorf("answer received but conversation was not saved: %w", err)
+		}
 	}
 	if judge != nil {
 		analysis, err := a.invoke(ctx, analysisPrompt(request, result.Responses), *judge)
@@ -145,6 +171,9 @@ func (a *Agent) invoke(ctx context.Context, prompt string, step invocation) (Res
 	settings := Settings{Model: step.target.Model, BaseURL: step.target.BaseURL, SendThinkingDisabled: step.target.SendThinkingDisabled,
 		Temperature: step.temperature, Strategy: step.strategy, Control: cloneControl(step.control)}
 	settings.Messages = PrepareMessages(prompt, settings)
+	// Current policies precede history; the new user message always comes last.
+	last := len(settings.Messages) - 1
+	settings.Messages = append(settings.Messages[:last], append(append([]Message(nil), step.messages...), settings.Messages[last])...)
 	started := time.Now()
 	answer, err := a.client.Complete(ctx, step.target, prompt, settings)
 	if err != nil {
