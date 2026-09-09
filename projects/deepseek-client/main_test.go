@@ -2,13 +2,88 @@ package main
 
 import (
 	"bufio"
+	"context"
 	"encoding/json"
+	"errors"
+	"io"
 	"net/http"
 	"net/http/httptest"
 	"strings"
 	"testing"
 	"time"
+
+	"github.com/eren-erdny/ai_challenge/projects/deepseek-client/agent"
 )
+
+func TestAgentCallsHTTPClientWithPreparedMessages(t *testing.T) {
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		if r.Method != http.MethodPost || r.URL.Path != "/v1/chat/completions" || r.Header.Get("Authorization") != "Bearer test-secret" {
+			t.Error("incorrect HTTP request or authentication")
+		}
+		var payload chatRequest
+		if err := json.NewDecoder(r.Body).Decode(&payload); err != nil {
+			t.Error(err)
+		}
+		if payload.Model != "test-model" || len(payload.Messages) != 2 || payload.Messages[1].Content != "question" || payload.MaxTokens != 200 || len(payload.Stop) != 1 {
+			t.Errorf("incorrect payload: %+v", payload)
+		}
+		_, _ = io.WriteString(w, `{"choices":[{"message":{"content":"{\"summary\":\"ok\",\"points\":[\"one\"]}"},"finish_reason":"stop"}],"usage":{"prompt_tokens":10,"completion_tokens":5,"prompt_tokens_details":{"cached_tokens":4}}}`)
+	}))
+	defer server.Close()
+	runner := agent.New(agent.ClientFunc(func(ctx context.Context, _ agent.Target, prompt string, settings agent.Settings) (agent.Completion, error) {
+		return askDeepSeek(ctx, "test-secret", prompt, settings)
+	}))
+	result, err := runner.Run(context.Background(), agent.Request{Prompt: "question", Mode: agent.Controlled,
+		Target:  agent.Target{Model: "test-model", BaseURL: server.URL + "/v1"},
+		Control: agent.ControlConfig{Enabled: true, Format: "json", MaxWords: 80, MaxTokens: 200, StopSequences: []string{"<END>"}},
+	})
+	if err != nil {
+		t.Fatal(err)
+	}
+	answer := result.Responses[0]
+	if answer.Validation == nil || !answer.Validation.Passed || answer.Answer.TotalTokens != 15 || answer.Answer.CachedInputTokens != 4 {
+		t.Fatalf("unexpected result: %+v", answer)
+	}
+}
+
+func TestAgentCancellationReachesHTTP(t *testing.T) {
+	started := make(chan struct{})
+	release := make(chan struct{})
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		_, _ = io.Copy(io.Discard, r.Body)
+		close(started)
+		select {
+		case <-r.Context().Done():
+		case <-release:
+		}
+	}))
+	defer server.Close()
+	defer close(release)
+	ctx, cancel := context.WithCancel(context.Background())
+	defer cancel()
+	runner := agent.New(agent.ClientFunc(func(ctx context.Context, _ agent.Target, prompt string, settings agent.Settings) (agent.Completion, error) {
+		return askDeepSeek(ctx, "", prompt, settings)
+	}))
+	done := make(chan error, 1)
+	go func() {
+		_, err := runner.Run(ctx, agent.Request{Prompt: "question", Target: agent.Target{Model: "test-model", BaseURL: server.URL + "/v1"}})
+		done <- err
+	}()
+	select {
+	case <-started:
+	case <-time.After(3 * time.Second):
+		t.Fatal("request never reached server")
+	}
+	cancel()
+	select {
+	case err := <-done:
+		if !errors.Is(err, context.Canceled) {
+			t.Fatalf("expected cancellation, got %v", err)
+		}
+	case <-time.After(3 * time.Second):
+		t.Fatal("HTTP request did not stop after cancellation")
+	}
+}
 
 func TestBuildChatRequestsUseSameUserPrompt(t *testing.T) {
 	const prompt = "Объясни преимущества языка Go"
@@ -121,13 +196,13 @@ func TestAskDeepSeekSupportsLocalAPIWithoutToken(t *testing.T) {
 	}))
 	defer server.Close()
 
-	result, err := askDeepSeek("", "Привет", requestSettings{
+	result, err := askDeepSeek(context.Background(), "", "Привет", requestSettings{
 		Model:       "local-model",
 		BaseURL:     server.URL + "/v1",
 		Temperature: 0.7,
 	})
 	if err != nil {
-		t.Fatalf("askDeepSeek() returned error: %v", err)
+		t.Fatalf("askDeepSeek returned error: %v", err)
 	}
 	if result.Content != "Локальный ответ" || result.Model != "local-model" {
 		t.Fatalf("result = %#v", result)
@@ -147,7 +222,7 @@ func TestFetchModelsUsesOpenAICompatibleEndpoint(t *testing.T) {
 	}))
 	defer server.Close()
 
-	models, err := fetchModels("test-key", apiProfile{BaseURL: server.URL + "/v1", Model: "qwen-local"})
+	models, err := fetchModels(context.Background(), "test-key", apiProfile{BaseURL: server.URL + "/v1", Model: "qwen-local"})
 	if err != nil {
 		t.Fatalf("fetchModels() returned error: %v", err)
 	}
@@ -240,15 +315,12 @@ func TestFormatAnswer(t *testing.T) {
 
 func TestPrintSingleAnswerUsesCompactQuestionAnswerFormat(t *testing.T) {
 	var output strings.Builder
-	control, err := buildResponseControl(defaultAppConfig().ResponseControl)
-	if err != nil {
-		t.Fatalf("buildResponseControl() returned error: %v", err)
-	}
+	validation := validationResult{Passed: true}
 	printSingleAnswer(&output, completionResult{
 		Content:          "Короткий ответ",
 		CompletionTokens: 3,
 		FinishReason:     "stop",
-	}, control)
+	}, &validation)
 
 	got := output.String()
 	if !strings.Contains(got, "Короткий ответ") || !strings.Contains(got, "Метрики:") {

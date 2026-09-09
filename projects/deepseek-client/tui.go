@@ -1,6 +1,7 @@
 package main
 
 import (
+	"context"
 	"fmt"
 	"os"
 	"sort"
@@ -39,6 +40,8 @@ const (
 )
 
 type tuiModel struct {
+	ctx             context.Context
+	cancel          context.CancelFunc
 	textarea        textarea.Model
 	viewport        viewport.Model
 	state           sessionState
@@ -93,7 +96,11 @@ func isInteractiveTerminal(input *os.File, output *os.File) bool {
 }
 
 func runTUI(config appConfig, ask askFunction) int {
-	program := tea.NewProgram(newTUIModel(config, ask))
+	ctx, cancel := context.WithCancel(context.Background())
+	defer cancel()
+	model := newTUIModel(config, ask)
+	model.ctx, model.cancel = ctx, cancel
+	program := tea.NewProgram(model)
 	if _, err := program.Run(); err != nil {
 		fmt.Fprintf(os.Stderr, "ошибка TUI: %v\n", err)
 		return 1
@@ -137,6 +144,7 @@ func newTUIModel(config appConfig, ask askFunction) tuiModel {
 	view.SetContent(strings.Join(history, "\n\n"))
 
 	return tuiModel{
+		ctx:      context.Background(),
 		textarea: input,
 		viewport: view,
 		state:    state,
@@ -191,6 +199,9 @@ func (model tuiModel) Update(message tea.Msg) (tea.Model, tea.Cmd) {
 	case tea.KeyPressMsg:
 		switch message.String() {
 		case "ctrl+c", "esc":
+			if model.cancel != nil {
+				model.cancel()
+			}
 			return model, tea.Quit
 		case "up", "down":
 			suggestions := model.autocompleteSuggestions()
@@ -269,7 +280,7 @@ func (model tuiModel) submit() (tea.Model, tea.Cmd) {
 		model.activityGen++
 		model.history = append(model.history, statusStyle.Render("Получаю список моделей..."))
 		model.refreshHistory()
-		return model, tea.Batch(fetchModelsCommand(model.state.APIToken, model.state.API), activityTickCommand(model.activityGen))
+		return model, tea.Batch(fetchModelsCommand(model.ctx, model.state.APIToken, model.state.API), activityTickCommand(model.activityGen))
 	}
 	if strings.HasPrefix(text, "/") {
 		var output strings.Builder
@@ -289,7 +300,7 @@ func (model tuiModel) submit() (tea.Model, tea.Cmd) {
 	model.activityGen++
 	model.refreshHistory()
 	return model, tea.Batch(
-		executeQuestionCommand(model.state.APIToken, text, model.state, model.ask),
+		executeQuestionCommand(model.ctx, model.state.APIToken, text, model.state, model.ask),
 		activityTickCommand(model.activityGen),
 	)
 }
@@ -300,18 +311,18 @@ func activityTickCommand(generation int) tea.Cmd {
 	})
 }
 
-func fetchModelsCommand(token string, profile apiProfile) tea.Cmd {
+func fetchModelsCommand(ctx context.Context, token string, profile apiProfile) tea.Cmd {
 	return func() tea.Msg {
-		models, err := fetchModels(token, profile)
+		models, err := fetchModels(ctx, token, profile)
 		return modelListMessage{models: models, err: err}
 	}
 }
 
-func executeQuestionCommand(token string, prompt string, state sessionState, ask askFunction) tea.Cmd {
+func executeQuestionCommand(ctx context.Context, token string, prompt string, state sessionState, ask askFunction) tea.Cmd {
 	return func() tea.Msg {
 		var output strings.Builder
 		var errorOutput strings.Builder
-		lastStatus := executeQuestion(token, prompt, state, &output, &errorOutput, ask)
+		lastStatus := executeQuestion(ctx, token, prompt, state, &output, &errorOutput, ask)
 		text := strings.TrimSpace(output.String())
 		if errorOutput.Len() > 0 {
 			errorText := errorStyle.Render(strings.TrimSpace(errorOutput.String()))

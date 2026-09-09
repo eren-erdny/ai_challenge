@@ -14,6 +14,7 @@ import (
 	"runtime"
 	"strings"
 
+	"github.com/eren-erdny/ai_challenge/projects/deepseek-client/agent"
 	"golang.org/x/term"
 )
 
@@ -55,54 +56,11 @@ var modelCatalog = []modelDefinition{
 	{Name: "deepseek-v4-pro", Description: "более мощная модель для сложных задач"},
 }
 
-type responseControlConfig struct {
-	Enabled           bool     `json:"enabled"`
-	Format            string   `json:"format"`
-	CustomInstruction string   `json:"custom_instruction,omitempty"`
-	MaxWords          int      `json:"max_words"`
-	MaxTokens         int      `json:"max_tokens"`
-	StopSequences     []string `json:"stop_sequences"`
-}
+type responseControlConfig = agent.ControlConfig
 
-type formatDefinition struct {
-	Name        string
-	Description string
-	Instruction string
-}
+type formatDefinition = agent.FormatDefinition
 
-var formatCatalog = []formatDefinition{
-	{
-		Name:        "plain_text",
-		Description: "обычный связный текст с короткими абзацами",
-		Instruction: "Используй обычный связный текст и короткие абзацы без Markdown-заголовков.",
-	},
-	{
-		Name:        "short_answer",
-		Description: "один короткий абзац без вступления",
-		Instruction: "Дай один короткий содержательный абзац без заголовка и вступления.",
-	},
-	{
-		Name:        "bullet_list",
-		Description: "краткий маркированный список",
-		Instruction: "Верни только краткий маркированный Markdown-список без вступления и заключения.",
-	},
-	{
-		Name:        "structured_markdown",
-		Description: "краткий ответ с заголовком и тремя пунктами",
-		Instruction: "Используй Markdown: раздел «## Краткий ответ» с одним абзацем, " +
-			"затем раздел «## Ключевые пункты» ровно с тремя пунктами маркированного списка.",
-	},
-	{
-		Name:        "json",
-		Description: "валидный JSON с полями summary и points",
-		Instruction: "Верни валидный JSON без Markdown-обёртки: объект с полем summary типа string " +
-			"и полем points типа array of strings.",
-	},
-	{
-		Name:        "custom",
-		Description: "пользовательская инструкция из custom_instruction",
-	},
-}
+var formatCatalog = agent.Formats()
 
 func defaultAppConfig() appConfig {
 	return appConfig{
@@ -474,77 +432,11 @@ func replaceConfigFile(tempPath string, configPath string) error {
 }
 
 func validateResponseControl(config responseControlConfig) error {
-	if !config.Enabled {
-		return nil
-	}
-	if config.MaxWords <= 0 {
-		return errors.New("max_words должен быть больше нуля")
-	}
-	if config.MaxTokens <= 0 {
-		return errors.New("max_tokens должен быть больше нуля")
-	}
-	if len(config.StopSequences) > 16 {
-		return errors.New("stop_sequences может содержать не более 16 значений")
-	}
-	for _, sequence := range config.StopSequences {
-		if strings.TrimSpace(sequence) == "" {
-			return errors.New("stop_sequences не может содержать пустые значения")
-		}
-	}
-
-	definition, ok := findFormat(config.Format)
-	if !ok {
-		return fmt.Errorf("неизвестный формат %q; используйте --list-formats", config.Format)
-	}
-	if definition.Name == "custom" && strings.TrimSpace(config.CustomInstruction) == "" {
-		return errors.New("для формата custom заполните custom_instruction")
-	}
-
-	return nil
-}
-
-func findFormat(name string) (formatDefinition, bool) {
-	for _, definition := range formatCatalog {
-		if definition.Name == name {
-			return definition, true
-		}
-	}
-	return formatDefinition{}, false
+	return agent.ValidateControlConfig(config)
 }
 
 func buildResponseControl(config responseControlConfig) (*responseControl, error) {
-	if !config.Enabled {
-		return nil, nil
-	}
-	if err := validateResponseControl(config); err != nil {
-		return nil, err
-	}
-
-	definition, _ := findFormat(config.Format)
-	formatInstruction := definition.Instruction
-	if definition.Name == "custom" {
-		formatInstruction = strings.TrimSpace(config.CustomInstruction)
-	}
-
-	systemPrompt := fmt.Sprintf(
-		"Ответь на русском языке. %s Общий объём ответа — не более %d слов.",
-		formatInstruction,
-		config.MaxWords,
-	)
-	if len(config.StopSequences) > 0 {
-		systemPrompt += fmt.Sprintf(
-			" После содержательной части выведи отдельной строкой %s и сразу заверши ответ.",
-			config.StopSequences[0],
-		)
-	}
-
-	return &responseControl{
-		Format:       config.Format,
-		SystemPrompt: systemPrompt,
-		MaxWords:     config.MaxWords,
-		MaxTokens:    config.MaxTokens,
-		Stop:         append([]string(nil), config.StopSequences...),
-	}, nil
+	return agent.BuildControl(config)
 }
 
 func printFormatCatalog(output io.Writer) {

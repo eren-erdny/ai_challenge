@@ -1,0 +1,177 @@
+package agent
+
+import (
+	"context"
+	"errors"
+	"fmt"
+	"math"
+	"strings"
+	"time"
+)
+
+// Agent owns request preparation, scenario execution and output validation.
+// It is stateless: ConversationID is returned for future history integration.
+type Agent struct{ client Client }
+
+func New(client Client) *Agent { return &Agent{client: client} }
+
+type invocation struct {
+	target      Target
+	temperature float64
+	strategy    Strategy
+	control     *Control
+	validate    bool
+}
+
+// Run returns completed responses even when a later model or judge fails.
+func (a *Agent) Run(ctx context.Context, request Request) (Result, error) {
+	result := Result{ConversationID: request.ConversationID, Mode: request.Mode}
+	if err := ctx.Err(); err != nil {
+		return result, err
+	}
+	if a == nil || a.client == nil {
+		return result, errors.New("LLM client is required")
+	}
+	if strings.TrimSpace(request.Prompt) == "" {
+		return result, errors.New("request must not be empty")
+	}
+	if math.IsNaN(request.Temperature) || math.IsInf(request.Temperature, 0) || request.Temperature < 0 || request.Temperature > 2 {
+		return result, errors.New("temperature must be between 0 and 2")
+	}
+	if request.Strategy == "" {
+		request.Strategy = Standard
+	}
+	switch request.Strategy {
+	case Standard, StepByStep, Experts:
+	default:
+		return result, fmt.Errorf("unknown strategy %q", request.Strategy)
+	}
+	if request.Mode == "" {
+		request.Mode = Free
+		result.Mode = Free
+	}
+	// Copy mutable input before invoking dependencies.
+	request.Control.StopSequences = append([]string(nil), request.Control.StopSequences...)
+	request.Targets = append([]Target(nil), request.Targets...)
+	plan, judge, err := makePlan(request)
+	if err != nil {
+		return result, err
+	}
+	for _, step := range plan {
+		response, err := a.invoke(ctx, request.Prompt, step)
+		if err != nil {
+			return result, fmt.Errorf("model %s: %w", step.target.Model, err)
+		}
+		result.Responses = append(result.Responses, response)
+	}
+	if judge != nil {
+		analysis, err := a.invoke(ctx, analysisPrompt(request, result.Responses), *judge)
+		if err != nil {
+			return result, fmt.Errorf("judge %s: %w", judge.target.Model, err)
+		}
+		result.Analysis = &analysis
+	}
+	return result, nil
+}
+
+func makePlan(request Request) ([]invocation, *invocation, error) {
+	var control *Control
+	var err error
+	switch request.Mode {
+	case Controlled, Compare:
+		request.Control.Enabled = true
+		control, err = BuildControl(request.Control)
+	case ModelBenchmark:
+		control, err = BuildControl(request.Control)
+	case Free, TemperatureBenchmark:
+	default:
+		return nil, nil, fmt.Errorf("unknown mode %q", request.Mode)
+	}
+	if err != nil {
+		return nil, nil, err
+	}
+	base := invocation{target: request.Target, temperature: request.Temperature, strategy: request.Strategy, control: control, validate: control != nil}
+	var plan []invocation
+	var judge *invocation
+	switch request.Mode {
+	case Free, Controlled:
+		plan = append(plan, base)
+	case Compare:
+		free := base
+		free.control = nil
+		free.validate = false
+		plan = append(plan, free, base)
+	case TemperatureBenchmark:
+		base.control = temperatureBenchmarkControl()
+		base.validate = false
+		for _, temperature := range []float64{0, 1.2, 2} {
+			step := base
+			step.temperature = temperature
+			plan = append(plan, step)
+		}
+		judge = &invocation{target: request.Target, temperature: 0, strategy: Standard, control: temperatureAnalysisControl()}
+	case ModelBenchmark:
+		if len(request.Targets) != 3 {
+			return nil, nil, errors.New("model benchmark requires three targets")
+		}
+		for _, target := range request.Targets {
+			step := base
+			step.target = target
+			plan = append(plan, step)
+		}
+		judge = &invocation{target: request.Targets[1], temperature: 0, strategy: Standard, control: modelBenchmarkAnalysisControl()}
+	}
+	for _, step := range plan {
+		if strings.TrimSpace(step.target.Model) == "" {
+			return nil, nil, errors.New("model is required")
+		}
+	}
+	return plan, judge, nil
+}
+
+func cloneControl(control *Control) *Control {
+	if control == nil {
+		return nil
+	}
+	copy := *control
+	copy.Stop = append([]string(nil), control.Stop...)
+	return &copy
+}
+
+func (a *Agent) invoke(ctx context.Context, prompt string, step invocation) (Response, error) {
+	if err := ctx.Err(); err != nil {
+		return Response{}, err
+	}
+	settings := Settings{Model: step.target.Model, BaseURL: step.target.BaseURL, SendThinkingDisabled: step.target.SendThinkingDisabled,
+		Temperature: step.temperature, Strategy: step.strategy, Control: cloneControl(step.control)}
+	settings.Messages = PrepareMessages(prompt, settings)
+	started := time.Now()
+	answer, err := a.client.Complete(ctx, step.target, prompt, settings)
+	if err != nil {
+		return Response{}, err
+	}
+	if err := ctx.Err(); err != nil {
+		return Response{}, err
+	}
+	if strings.TrimSpace(answer.Content) == "" {
+		return Response{}, errors.New("LLM returned empty content")
+	}
+	if answer.Model == "" {
+		answer.Model = step.target.Model
+	}
+	if answer.TotalTokens == 0 {
+		answer.TotalTokens = answer.PromptTokens + answer.CompletionTokens
+	}
+	if answer.Duration <= 0 {
+		answer.Duration = time.Since(started)
+	}
+	response := Response{Target: step.target, Answer: answer, Temperature: step.temperature, Control: cloneControl(step.control)}
+	if step.validate {
+		validation := ValidateAnswer(answer, step.control)
+		response.Validation = &validation
+	}
+	if cost, known := EstimateCost(step.target.BaseURL, answer); known {
+		response.CostUSD = &cost
+	}
+	return response, nil
+}

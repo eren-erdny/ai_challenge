@@ -1,12 +1,38 @@
 package main
 
 import (
+	"context"
 	"strings"
 	"testing"
 
 	tea "charm.land/bubbletea/v2"
 	"charm.land/lipgloss/v2"
 )
+
+func TestTUIReceivesAgentResultAndCancelsOnExit(t *testing.T) {
+	config := defaultAppConfig()
+	config.ResponseControl.Enabled = false
+	model := newTUIModel(config, nil)
+	ctx, cancel := context.WithCancel(context.Background())
+	defer cancel()
+	model.ctx, model.cancel = ctx, cancel
+	command := executeQuestionCommand(ctx, "test-token", "question", model.state,
+		func(_ context.Context, token, prompt string, settings requestSettings) (completionResult, error) {
+			if token != "test-token" || prompt != "question" || len(settings.Messages) != 1 {
+				t.Fatal("request was not prepared by agent")
+			}
+			return completionResult{Content: "answer", CompletionTokens: 7}, nil
+		})
+	updated, _ := model.Update(command())
+	model = updated.(tuiModel)
+	if model.state.LastRequest == nil || model.state.LastRequest.Result.CompletionTokens != 7 || !strings.Contains(strings.Join(model.history, "\n"), "answer") {
+		t.Fatal("agent response did not reach TUI and status")
+	}
+	_, _ = model.Update(keyPress(tea.KeyEscape))
+	if ctx.Err() != context.Canceled {
+		t.Fatal("exit did not cancel active work")
+	}
+}
 
 func TestNormalizePastedText(t *testing.T) {
 	input := "first\n\nsecond&#xA0;line"

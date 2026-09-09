@@ -2,12 +2,33 @@ package main
 
 import (
 	"bufio"
+	"context"
 	"fmt"
 	"runtime"
 	"strings"
 	"testing"
 	"time"
 )
+
+func TestPartialBenchmarkIsRenderedBeforeError(t *testing.T) {
+	t.Setenv("OLLAMA_API_KEY", "test-ollama-key")
+	config := defaultAppConfig()
+	profile, _ := config.activeAPIProfile()
+	state := sessionState{Mode: modeModelBenchmark, ActiveProfile: config.ActiveProfile, Profiles: config.Profiles, API: profile, Model: profile.Model, Strategy: strategyStandard}
+	calls := 0
+	var output, errorOutput strings.Builder
+	status := executeQuestion(context.Background(), "test-secret", "question", state, &output, &errorOutput,
+		func(context.Context, string, string, requestSettings) (completionResult, error) {
+			calls++
+			if calls == 2 {
+				return completionResult{}, fmt.Errorf("failed with test-secret")
+			}
+			return completionResult{Content: "preserved first answer"}, nil
+		})
+	if status == nil || !strings.Contains(output.String(), "preserved first answer") || !strings.Contains(errorOutput.String(), "failed") || strings.Contains(errorOutput.String(), "test-secret") {
+		t.Fatalf("partial result or sanitized error missing: output=%q err=%q", output.String(), errorOutput.String())
+	}
+}
 
 func TestInteractiveSessionSwitchesModesAndFormats(t *testing.T) {
 	input := bufio.NewReader(strings.NewReader(strings.Join([]string{
@@ -34,7 +55,7 @@ func TestInteractiveSessionSwitchesModesAndFormats(t *testing.T) {
 		Settings requestSettings
 	}
 	var calls []call
-	fakeAsk := func(_ string, prompt string, settings requestSettings) (completionResult, error) {
+	fakeAsk := func(_ context.Context, _ string, prompt string, settings requestSettings) (completionResult, error) {
 		calls = append(calls, call{Prompt: prompt, Settings: settings})
 		content := "Свободный ответ"
 		if settings.Control != nil && settings.Control.Format == "json" {
@@ -94,7 +115,7 @@ func TestInteractiveSessionContinuesAfterAPIError(t *testing.T) {
 	config := defaultAppConfig()
 	config.APIToken = "test-token"
 	calls := 0
-	fakeAsk := func(_ string, _ string, _ requestSettings) (completionResult, error) {
+	fakeAsk := func(_ context.Context, _ string, _ string, _ requestSettings) (completionResult, error) {
 		calls++
 		if calls == 1 {
 			return completionResult{}, fmt.Errorf("temporary error")
@@ -136,7 +157,7 @@ func TestTemperatureBenchmarkUsesOnlyRequestedTemperatures(t *testing.T) {
 	}
 
 	var calls []requestSettings
-	fakeAsk := func(_ string, prompt string, settings requestSettings) (completionResult, error) {
+	fakeAsk := func(_ context.Context, _ string, prompt string, settings requestSettings) (completionResult, error) {
 		calls = append(calls, settings)
 		if settings.Model != defaultModelName || settings.Strategy != strategyStandard {
 			t.Fatalf("benchmark changed non-temperature settings: %#v", settings)
@@ -165,7 +186,7 @@ func TestTemperatureBenchmarkUsesOnlyRequestedTemperatures(t *testing.T) {
 
 	var output strings.Builder
 	var errorOutput strings.Builder
-	executeQuestion("test-token", "Один и тот же запрос", state, &output, &errorOutput, fakeAsk)
+	executeQuestion(context.Background(), "test-token", "Один и тот же запрос", state, &output, &errorOutput, fakeAsk)
 
 	if errorOutput.Len() != 0 {
 		t.Fatalf("benchmark stderr = %q", errorOutput.String())
@@ -206,7 +227,7 @@ func TestModelBenchmarkComparesThreeModelsAndRunsJudge(t *testing.T) {
 		Settings requestSettings
 	}
 	var calls []call
-	fakeAsk := func(token string, prompt string, settings requestSettings) (completionResult, error) {
+	fakeAsk := func(_ context.Context, token string, prompt string, settings requestSettings) (completionResult, error) {
 		calls = append(calls, call{Token: token, Prompt: prompt, Settings: settings})
 		return completionResult{
 			Content: fmt.Sprintf("Ответ %s", settings.Model), Model: settings.Model,
@@ -217,7 +238,7 @@ func TestModelBenchmarkComparesThreeModelsAndRunsJudge(t *testing.T) {
 
 	var output strings.Builder
 	var errorOutput strings.Builder
-	status := executeQuestion("deepseek-token", "Одинаковая задача", state, &output, &errorOutput, fakeAsk)
+	status := executeQuestion(context.Background(), "deepseek-token", "Одинаковая задача", state, &output, &errorOutput, fakeAsk)
 
 	if errorOutput.Len() != 0 {
 		t.Fatalf("model benchmark stderr = %q", errorOutput.String())
@@ -273,13 +294,13 @@ func TestModelBenchmarkRunsModelRequestsWithoutControlsAfterFreeMode(t *testing.
 	handleSessionCommand("/mode model_benchmark", &state, &commandOutput)
 
 	var calls []requestSettings
-	fakeAsk := func(_ string, _ string, settings requestSettings) (completionResult, error) {
+	fakeAsk := func(_ context.Context, _ string, _ string, settings requestSettings) (completionResult, error) {
 		calls = append(calls, settings)
 		return completionResult{Content: "Ответ", Model: settings.Model}, nil
 	}
 	var output strings.Builder
 	var errorOutput strings.Builder
-	executeQuestion("deepseek-token", "Задача", state, &output, &errorOutput, fakeAsk)
+	executeQuestion(context.Background(), "deepseek-token", "Задача", state, &output, &errorOutput, fakeAsk)
 
 	if errorOutput.Len() != 0 || len(calls) != 4 {
 		t.Fatalf("stderr=%q calls=%d", errorOutput.String(), len(calls))
@@ -304,7 +325,7 @@ func TestModelBenchmarkRequiresOllamaToken(t *testing.T) {
 	}
 	var output strings.Builder
 	var errorOutput strings.Builder
-	executeQuestion("deepseek-token", "Задача", state, &output, &errorOutput, func(string, string, requestSettings) (completionResult, error) {
+	executeQuestion(context.Background(), "deepseek-token", "Задача", state, &output, &errorOutput, func(context.Context, string, string, requestSettings) (completionResult, error) {
 		t.Fatal("API must not be called without all required tokens")
 		return completionResult{}, nil
 	})
