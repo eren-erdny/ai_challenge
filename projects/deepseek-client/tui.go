@@ -13,6 +13,7 @@ import (
 	"charm.land/bubbles/v2/viewport"
 	tea "charm.land/bubbletea/v2"
 	"charm.land/lipgloss/v2"
+	"github.com/eren-erdny/ai_challenge/projects/deepseek-client/agent"
 	"golang.org/x/term"
 )
 
@@ -74,6 +75,11 @@ var (
 )
 
 var commandSuggestions = []autocompleteSuggestion{
+	{value: "/compress"},
+	{value: "/memory "},
+	{value: "/checkpoint "},
+	{value: "/branch "},
+	{value: "/branches"},
 	{value: "/tools"},
 	{value: "/context "},
 	{value: "/new"},
@@ -123,7 +129,8 @@ func newTUIModel(config appConfig, ask askFunction) tuiModel {
 	}
 	profile, _ := config.activeAPIProfile()
 	state := sessionState{
-		Tools: config.Tools, DocumentsDirectory: config.DocumentsDirectory,
+		Compression: config.HistoryPolicy.CompressionConfig,
+		Tools:       config.Tools, DocumentsDirectory: config.DocumentsDirectory,
 		ConversationID: conversationID(config.ConversationID),
 		History:        config.History,
 		Mode:           mode,
@@ -297,6 +304,21 @@ func (model tuiModel) submit() (tea.Model, tea.Cmd) {
 		model.refreshHistory()
 		return model, nil
 	}
+	if handled, changed, messages := handleBranchCommand(model.ctx, text, &model.state, &conversationOutput); handled {
+		if changed {
+			model.history = nil
+			for _, message := range messages {
+				label := userStyle.Render("Вы")
+				if message.Role == "assistant" {
+					label = titleStyle.Render("Ассистент")
+				}
+				model.history = append(model.history, label+"\n"+message.Content)
+			}
+		}
+		model.history = append(model.history, statusStyle.Render(conversationOutput.String()))
+		model.refreshHistory()
+		return model, nil
+	}
 	if text == "/clear" {
 		model.history = nil
 		model.refreshHistory()
@@ -321,7 +343,7 @@ func (model tuiModel) submit() (tea.Model, tea.Cmd) {
 		model.refreshHistory()
 		return model, tea.Batch(fetchModelsCommand(model.ctx, model.state.APIToken, model.state.API), activityTickCommand(model.activityGen))
 	}
-	if strings.HasPrefix(text, "/") {
+	if strings.HasPrefix(text, "/") && text != "/compress" {
 		var output strings.Builder
 		previousProfile := model.state.ActiveProfile
 		handleSessionCommand(text, &model.state, &output)
@@ -460,6 +482,8 @@ func (model tuiModel) autocompleteSuggestions() []autocompleteSuggestion {
 		}
 	case "/mode":
 		values = []string{string(modeFree), string(modeControlled), string(modeCompare), string(modeTemperatureBenchmark), string(modeModelBenchmark)}
+	case "/memory":
+		values = []string{string(agent.MemoryFull), string(agent.MemorySummary), string(agent.MemorySliding), string(agent.MemoryFacts), string(agent.MemoryBranching)}
 	case "/strategy":
 		values = []string{string(strategyStandard), string(strategyStepByStep), string(strategyExperts)}
 	case "/temperature":

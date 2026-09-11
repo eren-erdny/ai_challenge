@@ -2,6 +2,7 @@ package agent
 
 import (
 	"context"
+	"encoding/json"
 	"errors"
 	"fmt"
 	"math"
@@ -69,6 +70,10 @@ func (a *Agent) Run(ctx context.Context, request Request) (Result, error) {
 		return result, err
 	}
 	remember := a.history != nil && (request.Mode == Free || request.Mode == Controlled)
+	memoryStrategy := request.Compression.Memory()
+	if !ValidMemoryStrategy(memoryStrategy) {
+		return result, fmt.Errorf("unknown memory strategy %q", memoryStrategy)
+	}
 	var history []Message
 	if remember {
 		if strings.TrimSpace(request.ConversationID) == "" {
@@ -78,7 +83,67 @@ func (a *Agent) Run(ctx context.Context, request Request) (Result, error) {
 		if err != nil {
 			return result, fmt.Errorf("load conversation: %w", err)
 		}
-		plan[0].messages = append([]Message(nil), history...)
+		effective := append([]Message(nil), history...)
+		switch memoryStrategy {
+		case MemoryFull, MemoryBranching:
+		case MemorySliding:
+			effective = RecentHistory(history, request.Compression.Keep())
+		case MemoryFacts:
+			factsResult, factsErr := a.RefreshFacts(ctx, request.ConversationID, request.Target)
+			result.Facts = &factsResult
+			if factsErr != nil {
+				return result, fmt.Errorf("refresh facts: %w", factsErr)
+			}
+			store, ok := a.history.(FactStore)
+			if !ok {
+				return result, errors.New("history does not support facts memory")
+			}
+			facts, factsErr := store.LoadFacts(ctx, request.ConversationID)
+			if factsErr != nil {
+				return result, factsErr
+			}
+			effective, err = EffectiveFactsHistory(history, facts, request.Compression.Keep())
+			if err != nil {
+				return result, err
+			}
+		case MemorySummary:
+			store, ok := a.history.(CompressionStore)
+			if !ok {
+				break
+			}
+			summary, loadErr := store.LoadSummary(ctx, request.ConversationID)
+			if loadErr != nil {
+				return result, loadErr
+			}
+			effective, err = EffectiveHistory(history, summary)
+			if err != nil {
+				return result, err
+			}
+			step := plan[0]
+			step.messages = effective
+			prepared, reserve := a.prepare(request.Prompt, step)
+			estimate := a.historySize(prepared.Messages) + reserve
+			if step.allowTools && a.tools != nil {
+				schema, _ := json.Marshal(a.tools.Definitions())
+				estimate += a.count().Count(string(schema)) + a.count().Count(toolInstruction) + 4
+			}
+			if request.Compression.Automatic() && request.Target.ContextWindow > 0 && float64(estimate) >= float64(request.Target.ContextWindow)*0.8 {
+				compressed, compressErr := a.Compress(ctx, request.ConversationID, request.Target, request.Compression)
+				result.Compression = &compressed
+				if compressErr != nil {
+					return result, fmt.Errorf("automatic compression: %w", compressErr)
+				}
+				summary, err = store.LoadSummary(ctx, request.ConversationID)
+				if err != nil {
+					return result, err
+				}
+				effective, err = EffectiveHistory(history, summary)
+				if err != nil {
+					return result, err
+				}
+			}
+		}
+		plan[0].messages = append([]Message(nil), effective...)
 	}
 	for _, step := range plan {
 		response, err := a.invoke(ctx, request.Prompt, step)
@@ -99,6 +164,13 @@ func (a *Agent) Run(ctx context.Context, request Request) (Result, error) {
 		}
 		if err := saveErr; err != nil {
 			return result, fmt.Errorf("answer received but conversation was not saved: %w", err)
+		}
+		if memoryStrategy == MemoryFacts {
+			factsResult, factsErr := a.RefreshFacts(ctx, request.ConversationID, request.Target)
+			result.Facts = &factsResult
+			if factsErr != nil {
+				return result, fmt.Errorf("answer saved but facts were not updated: %w", factsErr)
+			}
 		}
 	}
 	if judge != nil {
@@ -180,10 +252,7 @@ func cloneControl(control *Control) *Control {
 	return &copy
 }
 
-func (a *Agent) invoke(ctx context.Context, prompt string, step invocation) (Response, error) {
-	if err := ctx.Err(); err != nil {
-		return Response{}, err
-	}
+func (a *Agent) prepare(prompt string, step invocation) (Settings, int) {
 	settings := Settings{Model: step.target.Model, BaseURL: step.target.BaseURL, SendThinkingDisabled: step.target.SendThinkingDisabled,
 		Temperature: step.temperature, Strategy: step.strategy, Control: cloneControl(step.control)}
 	settings.Messages = PrepareMessages(prompt, settings)
@@ -198,6 +267,14 @@ func (a *Agent) invoke(ctx context.Context, prompt string, step invocation) (Res
 	if step.control != nil && step.control.MaxTokens > 0 {
 		settings.MaxOutputTokens = step.control.MaxTokens
 	}
+	return settings, settings.MaxOutputTokens
+}
+
+func (a *Agent) invoke(ctx context.Context, prompt string, step invocation) (Response, error) {
+	if err := ctx.Err(); err != nil {
+		return Response{}, err
+	}
+	settings, _ := a.prepare(prompt, step)
 	counter := a.counter
 	if counter == nil {
 		counter = ApproximateCounter{}

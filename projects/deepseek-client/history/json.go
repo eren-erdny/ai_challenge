@@ -19,10 +19,61 @@ type JSON struct{ Dir string }
 var validID = regexp.MustCompile(`^[a-zA-Z0-9_-]{1,100}$`)
 
 type document struct {
-	Usage          []agent.TurnUsage `json:"usage,omitempty"`
-	Version        int               `json:"version"`
-	ConversationID string            `json:"conversation_id"`
-	Messages       []agent.Message   `json:"messages"`
+	Facts            agent.FactMemory      `json:"facts,omitempty"`
+	FactsUsage       []agent.TurnUsage     `json:"facts_usage,omitempty"`
+	Summaries        []agent.Summary       `json:"summaries,omitempty"`
+	CompressionUsage []agent.TurnUsage     `json:"compression_usage,omitempty"`
+	Usage            []agent.TurnUsage     `json:"usage,omitempty"`
+	Branches         map[string]branchData `json:"branches,omitempty"`
+	ActiveBranch     string                `json:"active_branch,omitempty"`
+	Checkpoints      map[string]checkpoint `json:"checkpoints,omitempty"`
+	Version          int                   `json:"version"`
+	ConversationID   string                `json:"conversation_id"`
+	Messages         []agent.Message       `json:"messages"`
+}
+
+type branchData struct {
+	Messages         []agent.Message   `json:"messages"`
+	Usage            []agent.TurnUsage `json:"usage,omitempty"`
+	Facts            agent.FactMemory  `json:"facts,omitempty"`
+	FactsUsage       []agent.TurnUsage `json:"facts_usage,omitempty"`
+	Summaries        []agent.Summary   `json:"summaries,omitempty"`
+	CompressionUsage []agent.TurnUsage `json:"compression_usage,omitempty"`
+}
+
+type checkpoint struct {
+	SourceBranch string            `json:"source_branch"`
+	Messages     []agent.Message   `json:"messages"`
+	Usage        []agent.TurnUsage `json:"usage,omitempty"`
+}
+
+const mainBranch = "main"
+
+func activeBranch(doc document) string {
+	if doc.ActiveBranch == "" {
+		return mainBranch
+	}
+	return doc.ActiveBranch
+}
+
+func activeData(doc document) branchData {
+	if activeBranch(doc) == mainBranch {
+		return branchData{Messages: doc.Messages, Usage: doc.Usage, Facts: doc.Facts, FactsUsage: doc.FactsUsage, Summaries: doc.Summaries, CompressionUsage: doc.CompressionUsage}
+	}
+	return doc.Branches[activeBranch(doc)]
+}
+
+func setActiveData(doc *document, data branchData) {
+	if activeBranch(*doc) == mainBranch {
+		doc.Messages, doc.Usage = data.Messages, data.Usage
+		doc.Facts, doc.FactsUsage = data.Facts, data.FactsUsage
+		doc.Summaries, doc.CompressionUsage = data.Summaries, data.CompressionUsage
+		return
+	}
+	if doc.Branches == nil {
+		doc.Branches = map[string]branchData{}
+	}
+	doc.Branches[activeBranch(*doc)] = data
 }
 
 const maxBytes = 16 << 20
@@ -52,7 +103,7 @@ func validate(messages []agent.Message) error {
 
 func (s *JSON) Load(ctx context.Context, id string) ([]agent.Message, error) {
 	doc, err := s.loadDocument(ctx, id)
-	return doc.Messages, err
+	return activeData(doc).Messages, err
 }
 
 func (s *JSON) loadDocument(ctx context.Context, id string) (document, error) {
@@ -85,11 +136,47 @@ func (s *JSON) loadDocument(ctx context.Context, id string) (document, error) {
 	if doc.Version != 1 || doc.ConversationID != id {
 		return document{}, errors.New("unsupported conversation version or ID")
 	}
-	if err := validate(doc.Messages); err != nil {
-		return document{}, err
+	if doc.ActiveBranch != "" && doc.ActiveBranch != mainBranch {
+		if _, ok := doc.Branches[doc.ActiveBranch]; !ok {
+			return document{}, errors.New("active branch does not exist")
+		}
 	}
-	if len(doc.Usage) > len(doc.Messages)/2 {
-		return document{}, errors.New("invalid conversation accounting")
+	all := map[string]branchData{mainBranch: {Messages: doc.Messages, Usage: doc.Usage, Facts: doc.Facts, FactsUsage: doc.FactsUsage, Summaries: doc.Summaries, CompressionUsage: doc.CompressionUsage}}
+	for name, data := range doc.Branches {
+		if !validID.MatchString(name) || name == mainBranch {
+			return document{}, errors.New("invalid branch name")
+		}
+		all[name] = data
+	}
+	for _, data := range all {
+		if err := validate(data.Messages); err != nil {
+			return document{}, err
+		}
+		if len(data.Usage) > len(data.Messages)/2 {
+			return document{}, errors.New("invalid conversation accounting")
+		}
+		if data.Facts.Processed < 0 || data.Facts.Processed > len(data.Messages) || data.Facts.Processed%2 != 0 {
+			return document{}, errors.New("invalid facts progress")
+		}
+		if data.Facts.Version > 0 && data.Facts.PrefixHash != agent.HistoryHash(data.Messages[:data.Facts.Processed]) {
+			return document{}, errors.New("invalid facts boundary or history fingerprint")
+		}
+		for i, summary := range data.Summaries {
+			if summary.Version != i+1 {
+				return document{}, errors.New("invalid summary version")
+			}
+			if _, err := agent.EffectiveHistory(data.Messages, summary); err != nil {
+				return document{}, err
+			}
+		}
+	}
+	for name, checkpoint := range doc.Checkpoints {
+		if !validID.MatchString(name) || !validID.MatchString(checkpoint.SourceBranch) || validate(checkpoint.Messages) != nil || len(checkpoint.Usage) > len(checkpoint.Messages)/2 {
+			return document{}, errors.New("invalid checkpoint")
+		}
+		if _, ok := all[checkpoint.SourceBranch]; !ok {
+			return document{}, errors.New("checkpoint source branch does not exist")
+		}
 	}
 	return doc, ctx.Err()
 }

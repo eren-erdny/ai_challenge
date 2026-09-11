@@ -71,6 +71,7 @@ func (f ClientFunc) Complete(ctx context.Context, target Target, prompt string, 
 }
 
 type Request struct {
+	Compression    CompressionConfig
 	ConversationID string
 	Prompt         string
 	Mode           Mode
@@ -93,6 +94,8 @@ type Response struct {
 }
 
 type Result struct {
+	Compression    *CompressionResult
+	Facts          *FactsResult
 	Failed         *Response
 	ConversationID string
 	Mode           Mode

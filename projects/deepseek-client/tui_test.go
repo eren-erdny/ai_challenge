@@ -152,6 +152,16 @@ func TestTUIAutocompleteIncludesBenchmarkMode(t *testing.T) {
 	}
 }
 
+func TestTUIAutocompleteIncludesMemoryStrategy(t *testing.T) {
+	model := newTUIModel(defaultAppConfig(), nil)
+	model.textarea.SetValue("/memory f")
+	updated, _ := model.Update(keyPress(tea.KeyTab))
+	model = updated.(tuiModel)
+	if got := model.textarea.Value(); got != "/memory full" {
+		t.Fatalf("memory completion = %q, want /memory full", got)
+	}
+}
+
 func TestTUIAutocompleteIncludesModelBenchmarkMode(t *testing.T) {
 	model := newTUIModel(defaultAppConfig(), nil)
 	model.textarea.SetValue("/mode m")

@@ -42,10 +42,17 @@ type appConfig struct {
 }
 
 type historyConfig struct {
+	agent.CompressionConfig
 	RetentionDays int `json:"retention_days"`
 }
 
 func validateHistory(config historyConfig) error {
+	if !agent.ValidMemoryStrategy(config.Memory()) {
+		return fmt.Errorf("history.strategy unknown: %q", config.Memory())
+	}
+	if config.KeepLast < 0 {
+		return errors.New("history.keep_last must not be negative")
+	}
 	if config.RetentionDays < 0 || config.RetentionDays > 106751 {
 		return errors.New("history.retention_days должен быть от 0 до 106751")
 	}
@@ -83,8 +90,9 @@ type formatDefinition = agent.FormatDefinition
 var formatCatalog = agent.Formats()
 
 func defaultAppConfig() appConfig {
+	autoCompress := true
 	return appConfig{
-		HistoryPolicy: historyConfig{RetentionDays: 30},
+		HistoryPolicy: historyConfig{CompressionConfig: agent.CompressionConfig{Strategy: agent.MemorySummary, KeepLast: 10, AutoCompress: &autoCompress}, RetentionDays: 30},
 		ActiveProfile: "deepseek",
 		Profiles: map[string]apiProfile{
 			"deepseek": {

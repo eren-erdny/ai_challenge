@@ -37,6 +37,7 @@ type requestSettings = agent.Settings
 type askFunction func(context.Context, string, string, requestSettings) (completionResult, error)
 
 type sessionState struct {
+	Compression        agent.CompressionConfig
 	Tools              agent.ToolExecutor
 	DocumentsDirectory string
 	ToolsDisabled      bool
@@ -74,7 +75,8 @@ func runInteractiveSession(
 	}
 	profile, _ := config.activeAPIProfile()
 	state := sessionState{
-		Tools: config.Tools, DocumentsDirectory: config.DocumentsDirectory,
+		Compression: config.HistoryPolicy.CompressionConfig,
+		Tools:       config.Tools, DocumentsDirectory: config.DocumentsDirectory,
 		ConversationID: conversationID(config.ConversationID),
 		History:        config.History,
 		Mode:           mode,
@@ -114,13 +116,19 @@ func runInteractiveSession(
 			fmt.Fprintln(output, "Сеанс завершён.")
 			return 0
 		}
-		if strings.HasPrefix(text, "/") {
+		if strings.HasPrefix(text, "/") && text != "/compress" {
 			if handled, changed, messages := handleConversationCommand(context.Background(), text, &state, output); handled {
 				if changed {
 					printConversationMessages(output, messages)
 				}
 				if errors.Is(err, io.EOF) {
 					return 0
+				}
+				continue
+			}
+			if handled, changed, messages := handleBranchCommand(context.Background(), text, &state, output); handled {
+				if changed {
+					printConversationMessages(output, messages)
 				}
 				continue
 			}
@@ -178,13 +186,18 @@ func printSessionWelcome(output io.Writer, state sessionState) {
 	printConversationExit(output, state)
 	fmt.Fprintf(output, "Профиль: %s; модель: %s; режим: %s; стратегия: %s; temperature: %g; формат: %s\n",
 		state.ActiveProfile, state.Model, state.Mode, state.Strategy, state.Temperature, state.Control.Format)
-	fmt.Fprintln(output, "Команды: /new, /conversation, /profile, /profiles, /model, /models, /mode, /strategy, /temperature, /format, /status, /reload, /settings, /help, /exit")
+	fmt.Fprintln(output, "Команды: /new, /conversation, /memory, /compress, /checkpoint, /branch, /branches, /profile, /model, /mode, /status, /settings, /help, /exit")
 }
 
 func handleSessionCommand(command string, state *sessionState, output io.Writer) {
 	parts := strings.Fields(command)
 	switch parts[0] {
 	case "/help":
+		fmt.Fprintln(output, "/memory STRATEGY   — full|summary|sliding|facts|branching")
+		fmt.Fprintln(output, "/checkpoint NAME  — сохранить точку ветвления")
+		fmt.Fprintln(output, "/branch create NAME CHECKPOINT | /branch switch NAME")
+		fmt.Fprintln(output, "/branches          — показать ветки и checkpoints")
+		fmt.Fprintln(output, "/compress         — сжать старую историю текущего диалога через модель")
 		fmt.Fprintln(output, "/tools [on|off]   — папка документов и управление чтением .txt")
 		fmt.Fprintln(output, "/context N        — задать лимит контекста для локальной оценки (0 отключает проверку)")
 		fmt.Fprintln(output, "/new              — начать новый чистый диалог")
@@ -216,6 +229,17 @@ func handleSessionCommand(command string, state *sessionState, output io.Writer)
 			state.ToolsDisabled = parts[1] == "off"
 		}
 		fmt.Fprintf(output, "Чтение .txt: %t\nПапка: %s\n", state.Tools != nil && !state.ToolsDisabled, state.DocumentsDirectory)
+	case "/memory":
+		if len(parts) == 1 {
+			fmt.Fprintf(output, "Стратегия памяти: %s\n", state.Compression.Memory())
+			return
+		}
+		if len(parts) != 2 || !agent.ValidMemoryStrategy(agent.MemoryStrategy(parts[1])) {
+			fmt.Fprintln(output, "Использование: /memory full|summary|sliding|facts|branching")
+			return
+		}
+		state.Compression.Strategy = agent.MemoryStrategy(parts[1])
+		fmt.Fprintf(output, "Стратегия памяти: %s\n", state.Compression.Memory())
 	case "/context":
 		if len(parts) != 2 {
 			fmt.Fprintf(output, "Лимит контекста: %d; использование /context N\n", state.API.ContextWindow)
@@ -382,10 +406,13 @@ func reloadSessionConfig(currentToken string, state *sessionState) (string, stri
 	state.Temperature = config.Generation.Temperature
 	state.Strategy = config.Generation.Strategy
 	state.Control = config.ResponseControl
+	state.Compression = config.HistoryPolicy.CompressionConfig
 	return config.APIToken, configPath, nil
 }
 
 func printSessionSettings(output io.Writer, state sessionState) {
+	fmt.Fprintf(output, "Стратегия памяти: %s\n", state.Compression.Memory())
+	fmt.Fprintf(output, "Память: последние N=%d. Summary: auto_compress=%t; порог=80%% (при context_window=0 отключено)\n", state.Compression.Keep(), state.Compression.Automatic())
 	fmt.Fprintf(output, "Активный профиль: %s\n", state.ActiveProfile)
 	fmt.Fprintf(output, "Модель: %s\n", state.Model)
 	fmt.Fprintf(output, "Режим: %s\n", state.Mode)

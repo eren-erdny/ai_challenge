@@ -14,14 +14,16 @@ func (s *JSON) SaveTurn(ctx context.Context, id string, messages []agent.Message
 	if err != nil {
 		return err
 	}
-	if len(messages) != len(doc.Messages)+2 || !slices.Equal(messages[:len(doc.Messages)], doc.Messages) {
+	branch := activeData(doc)
+	if len(messages) != len(branch.Messages)+2 || !slices.Equal(messages[:len(branch.Messages)], branch.Messages) {
 		return errors.New("conversation changed before turn was saved")
 	}
 	if err := validate(messages); err != nil {
 		return err
 	}
-	doc.Messages = messages
-	doc.Usage = append(doc.Usage, usage)
+	branch.Messages = messages
+	branch.Usage = append(branch.Usage, usage)
+	setActiveData(&doc, branch)
 	data, err := json.MarshalIndent(doc, "", "  ")
 	if err != nil {
 		return err
@@ -41,10 +43,28 @@ func (s *JSON) Usage(ctx context.Context, id string) (agent.ConversationUsage, e
 	if err != nil {
 		return agent.ConversationUsage{}, err
 	}
-	result := agent.ConversationUsage{Turns: len(doc.Messages) / 2}
-	result.UnknownUsageTurns = result.Turns - len(doc.Usage)
+	data := activeData(doc)
+	result := agent.ConversationUsage{Turns: len(data.Messages) / 2}
+	result.UnknownUsageTurns = result.Turns - len(data.Usage)
 	result.UnknownCostTurns = result.UnknownUsageTurns
-	for _, r := range doc.Usage {
+	result.CompressionCalls = len(data.CompressionUsage)
+	if len(data.Summaries) > 0 {
+		current := data.Summaries[len(data.Summaries)-1]
+		result.SummaryVersion = current.Version
+		result.SummaryCoveredMessages = current.Covered
+	}
+	for _, r := range data.CompressionUsage {
+		if r.UsageKnown {
+			result.CompressionInput += r.Input
+			result.CompressionOutput += r.Output
+			result.CompressionTotal += r.Total
+		}
+		if r.CostUSD != nil {
+			result.CompressionCostUSD += *r.CostUSD
+		}
+	}
+	records := append(append(append([]agent.TurnUsage(nil), data.Usage...), data.CompressionUsage...), data.FactsUsage...)
+	for _, r := range records {
 		if r.UsageKnown {
 			result.Input += r.Input
 			result.CachedInput += r.CachedInput
@@ -57,6 +77,19 @@ func (s *JSON) Usage(ctx context.Context, id string) (agent.ConversationUsage, e
 			result.CostUSD += *r.CostUSD
 		} else {
 			result.UnknownCostTurns++
+		}
+	}
+	result.FactsCalls = len(data.FactsUsage)
+	result.FactVersion = data.Facts.Version
+	result.FactKeys = len(data.Facts.Values)
+	for _, r := range data.FactsUsage {
+		if r.UsageKnown {
+			result.FactsInput += r.Input
+			result.FactsOutput += r.Output
+			result.FactsTotal += r.Total
+		}
+		if r.CostUSD != nil {
+			result.FactsCostUSD += *r.CostUSD
 		}
 	}
 	return result, nil

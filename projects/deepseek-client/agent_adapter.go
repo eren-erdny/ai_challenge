@@ -15,7 +15,7 @@ func executeQuestion(ctx context.Context, token, prompt string, state sessionSta
 	target.ContextWindow, target.MaxOutputTokens = state.API.ContextWindow, state.API.MaxOutputTokens
 	request := agent.Request{Prompt: prompt, Mode: state.Mode, Target: target, Temperature: state.Temperature, Strategy: state.Strategy, Control: state.Control}
 	credentials := map[string]string{target.Profile: token}
-	if state.Mode == modeModelBenchmark {
+	if state.Mode == modeModelBenchmark && prompt != "/compress" {
 		targets, err := buildModelBenchmarkTargets(state, token)
 		if err != nil {
 			fmt.Fprintf(errorOutput, "не удалось запустить benchmark моделей: %v\n", err)
@@ -30,11 +30,23 @@ func executeQuestion(ctx context.Context, token, prompt string, state sessionSta
 		return ask(ctx, credentials[target.Profile], prompt, settings)
 	})
 	request.ConversationID = conversationID(state.ConversationID)
+	request.Compression = state.Compression
 	runner := agent.NewWithHistory(client, state.History)
 	if !state.ToolsDisabled {
 		runner = runner.WithTools(state.Tools)
 	}
-	result, err := runner.Run(ctx, request)
+	var result agent.Result
+	var err error
+	if prompt == "/compress" {
+		compressed, compressErr := runner.Compress(ctx, request.ConversationID, target, state.Compression)
+		result.Compression = &compressed
+		err = compressErr
+		if compressErr == nil && state.Compression.Memory() != agent.MemorySummary {
+			fmt.Fprintf(output, "Summary сохранено, но текущая стратегия %s его не отправляет. Переключение: /memory summary.\n", state.Compression.Memory())
+		}
+	} else {
+		result, err = runner.Run(ctx, request)
+	}
 	renderAgentResult(output, result)
 	if err != nil {
 		message := err.Error()
@@ -52,6 +64,9 @@ func executeQuestion(ctx context.Context, token, prompt string, state sessionSta
 }
 
 func renderAgentResult(output io.Writer, result agent.Result) {
+	if c := result.Compression; c != nil {
+		fmt.Fprintf(output, "Сжатие: применено=%t; оценка истории до=%d, после=%d токенов; API-вызовов=%d (без usage=%d), сообщённый вход=%d, выход=%d. Полный учёт: /status.\n", c.Changed, c.Before, c.After, c.Calls, c.UnknownUsageCalls, c.Input, c.Output)
+	}
 	switch result.Mode {
 	case agent.ModelBenchmark:
 		printModelBenchmark(output, result.Responses)

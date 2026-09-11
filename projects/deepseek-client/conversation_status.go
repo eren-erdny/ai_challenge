@@ -21,6 +21,8 @@ func printConversationStatus(output io.Writer, state sessionState) {
 		fmt.Fprintf(output, "Не удалось загрузить статистику: %v\n", err)
 		return
 	}
+	fmt.Fprintf(output, "Компрессия: summary v%d покрывает %d сообщений; вызовов=%d, известные токены: вход=%d, выход=%d, всего=%d; оценочная стоимость=$%.8f USD. Эти расходы включены в общие суммы.\n", u.SummaryVersion, u.SummaryCoveredMessages, u.CompressionCalls, u.CompressionInput, u.CompressionOutput, u.CompressionTotal, u.CompressionCostUSD)
+	fmt.Fprintf(output, "Facts: v%d, ключей=%d; вызовов=%d, известные токены: вход=%d, выход=%d, всего=%d; оценочная стоимость=$%.8f USD. Эти расходы включены в общие суммы.\n", u.FactVersion, u.FactKeys, u.FactsCalls, u.FactsInput, u.FactsOutput, u.FactsTotal, u.FactsCostUSD)
 	fmt.Fprintf(output, "Завершённых запросов: %d\n", u.Turns)
 	fmt.Fprintf(output, "Сумма известных токенов API: вход=%d (кэш=%d), выход=%d, всего=%d\n", u.Input, u.CachedInput, u.Output, u.Total)
 	fmt.Fprintf(output, "Сумма известных оценок стоимости: $%.8f USD\n", u.CostUSD)
@@ -30,5 +32,5 @@ func printConversationStatus(output io.Writer, state sessionState) {
 	if u.UnknownCostTurns > 0 {
 		fmt.Fprintf(output, "Запросов без оценки стоимости: %d; итог стоимости неполный\n", u.UnknownCostTurns)
 	}
-	fmt.Fprintln(output, "Учтены сохранённые ответы free/controlled; бенчмарки и неудачные вызовы не включены. Стоимость зависит от справочника тарифов, это не счёт провайдера.")
+	fmt.Fprintln(output, "Учтены сохранённые ответы free/controlled и попытки компрессии; бенчмарки и неудачные обычные вызовы не включены. Стоимость зависит от справочника тарифов, это не счёт провайдера.")
 }

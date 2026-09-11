@@ -7,6 +7,8 @@ import (
 	"runtime"
 	"strings"
 	"testing"
+
+	"github.com/eren-erdny/ai_challenge/projects/deepseek-client/agent"
 )
 
 func TestSaveAndLoadConfig(t *testing.T) {
@@ -33,6 +35,9 @@ func TestSaveAndLoadConfig(t *testing.T) {
 	}
 	if got.ActiveProfile != want.ActiveProfile || len(got.Profiles) != len(want.Profiles) {
 		t.Fatalf("loaded profiles = %#v, want %#v", got.Profiles, want.Profiles)
+	}
+	if got.HistoryPolicy.Memory() != agent.MemorySummary || got.HistoryPolicy.Keep() != 10 {
+		t.Fatalf("loaded memory policy = %#v", got.HistoryPolicy)
 	}
 	data, err := os.ReadFile(configPath)
 	if err != nil {

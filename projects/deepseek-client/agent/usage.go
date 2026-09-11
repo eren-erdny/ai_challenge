@@ -23,14 +23,28 @@ type TurnStore interface {
 }
 
 type ConversationUsage struct {
-	Turns             int
-	UnknownUsageTurns int
-	UnknownCostTurns  int
-	Input             int
-	CachedInput       int
-	Output            int
-	Total             int
-	CostUSD           float64
+	CompressionCalls       int
+	CompressionInput       int
+	CompressionOutput      int
+	CompressionTotal       int
+	CompressionCostUSD     float64
+	SummaryVersion         int
+	SummaryCoveredMessages int
+	FactsCalls             int
+	FactsInput             int
+	FactsOutput            int
+	FactsTotal             int
+	FactsCostUSD           float64
+	FactVersion            int
+	FactKeys               int
+	Turns                  int
+	UnknownUsageTurns      int
+	UnknownCostTurns       int
+	Input                  int
+	CachedInput            int
+	Output                 int
+	Total                  int
+	CostUSD                float64
 }
 
 type UsageStore interface {
