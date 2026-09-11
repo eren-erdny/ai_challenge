@@ -27,16 +27,18 @@ const (
 )
 
 type appConfig struct {
-	HistoryPolicy   historyConfig         `json:"history"`
-	HistoryNotice   string                `json:"-"`
-	ConversationID  string                `json:"-"`
-	History         agent.HistoryStore    `json:"-"`
-	InitialMessages []agent.Message       `json:"-"`
-	ActiveProfile   string                `json:"active_profile"`
-	Profiles        map[string]apiProfile `json:"profiles"`
-	APIToken        string                `json:"-"`
-	Generation      generationConfig      `json:"generation"`
-	ResponseControl responseControlConfig `json:"response_control"`
+	Tools              agent.ToolExecutor    `json:"-"`
+	DocumentsDirectory string                `json:"-"`
+	HistoryPolicy      historyConfig         `json:"history"`
+	HistoryNotice      string                `json:"-"`
+	ConversationID     string                `json:"-"`
+	History            agent.HistoryStore    `json:"-"`
+	InitialMessages    []agent.Message       `json:"-"`
+	ActiveProfile      string                `json:"active_profile"`
+	Profiles           map[string]apiProfile `json:"profiles"`
+	APIToken           string                `json:"-"`
+	Generation         generationConfig      `json:"generation"`
+	ResponseControl    responseControlConfig `json:"response_control"`
 }
 
 type historyConfig struct {
@@ -51,9 +53,11 @@ func validateHistory(config historyConfig) error {
 }
 
 type apiProfile struct {
-	BaseURL   string `json:"base_url"`
-	APIKeyEnv string `json:"api_key_env"`
-	Model     string `json:"model"`
+	ContextWindow   int    `json:"context_window,omitempty"`
+	MaxOutputTokens int    `json:"max_output_tokens,omitempty"`
+	BaseURL         string `json:"base_url"`
+	APIKeyEnv       string `json:"api_key_env"`
+	Model           string `json:"model"`
 }
 
 type generationConfig struct {
@@ -363,6 +367,9 @@ func printModelCatalog(output io.Writer) {
 }
 
 func validateAPIProfile(profile apiProfile) error {
+	if profile.ContextWindow < 0 || profile.MaxOutputTokens < 0 {
+		return errors.New("context_window и max_output_tokens не могут быть отрицательными")
+	}
 	parsed, err := url.Parse(strings.TrimSpace(profile.BaseURL))
 	if err != nil || parsed.Host == "" || (parsed.Scheme != "http" && parsed.Scheme != "https") {
 		return errors.New("base_url должен быть корректным http:// или https:// URL")

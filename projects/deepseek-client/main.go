@@ -16,6 +16,7 @@ import (
 	"unicode/utf8"
 
 	"github.com/eren-erdny/ai_challenge/projects/deepseek-client/agent"
+	"github.com/eren-erdny/ai_challenge/projects/deepseek-client/filetools"
 	"github.com/eren-erdny/ai_challenge/projects/deepseek-client/history"
 	"github.com/eren-erdny/ai_challenge/projects/deepseek-client/llm"
 )
@@ -60,6 +61,12 @@ func run(input *bufio.Reader) int {
 		return 1
 	}
 	store := &history.JSON{Dir: filepath.Join(filepath.Dir(configPath), "conversations")}
+	config.DocumentsDirectory = filepath.Join(filepath.Dir(configPath), "documents")
+	if err := os.MkdirAll(config.DocumentsDirectory, 0700); err != nil {
+		fmt.Fprintln(os.Stderr, "Не удалось создать папку документов")
+		return 1
+	}
+	config.Tools = &filetools.Documents{Dir: config.DocumentsDirectory}
 	config.History = store
 	config.ConversationID, config.InitialMessages, err = store.Active(context.Background())
 	if err != nil {
@@ -85,6 +92,8 @@ func handleCommand(args []string, output io.Writer, errorOutput io.Writer) (bool
 	}
 	if len(args) == 1 {
 		switch args[0] {
+		case "--token-demo":
+			return true, runTokenDemo(output)
 		case "--list-formats":
 			printFormatCatalog(output)
 			return true, 0
@@ -95,7 +104,7 @@ func handleCommand(args []string, output io.Writer, errorOutput io.Writer) (bool
 	}
 
 	fmt.Fprintf(errorOutput, "неизвестные аргументы: %s\n", strings.Join(args, " "))
-	fmt.Fprintln(errorOutput, "Доступные команды: --list-formats, --list-models")
+	fmt.Fprintln(errorOutput, "Доступные команды: --list-formats, --list-models, --token-demo")
 	return true, 2
 }
 

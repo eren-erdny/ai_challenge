@@ -137,7 +137,7 @@ func TestInteractiveSessionContinuesAfterAPIError(t *testing.T) {
 	if !strings.Contains(errorOutput.String(), "temporary error") {
 		t.Fatalf("stderr does not contain API error: %q", errorOutput.String())
 	}
-	if !strings.Contains(output.String(), "Метрики:") {
+	if !strings.Contains(output.String(), "Краткий ответ") {
 		t.Fatalf("second answer was not printed: %q", output.String())
 	}
 }
@@ -350,7 +350,7 @@ func TestStatusShowsLastRequestUsageCostAndSpeed(t *testing.T) {
 		},
 	}}
 	var output strings.Builder
-	handleSessionCommand("/status", &state, &output)
+	handleSessionCommand("/status last", &state, &output)
 
 	for _, expected := range []string{
 		"Последний API-запрос",
@@ -366,7 +366,7 @@ func TestStatusShowsLastRequestUsageCostAndSpeed(t *testing.T) {
 
 func TestStatusBeforeFirstRequest(t *testing.T) {
 	var output strings.Builder
-	handleSessionCommand("/status", &sessionState{}, &output)
+	handleSessionCommand("/status last", &sessionState{}, &output)
 	if !strings.Contains(output.String(), "сначала отправьте запрос") {
 		t.Fatalf("empty status output = %q", output.String())
 	}

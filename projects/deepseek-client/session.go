@@ -11,7 +11,6 @@ import (
 	"sort"
 	"strconv"
 	"strings"
-	"unicode/utf8"
 
 	"github.com/eren-erdny/ai_challenge/projects/deepseek-client/agent"
 )
@@ -38,21 +37,25 @@ type requestSettings = agent.Settings
 type askFunction func(context.Context, string, string, requestSettings) (completionResult, error)
 
 type sessionState struct {
-	ConversationID string
-	History        agent.HistoryStore
-	Mode           sessionMode
-	ActiveProfile  string
-	Profiles       map[string]apiProfile
-	API            apiProfile
-	APIToken       string
-	Model          string
-	Temperature    float64
-	Strategy       promptStrategy
-	Control        responseControlConfig
-	LastRequest    *requestStatus
+	Tools              agent.ToolExecutor
+	DocumentsDirectory string
+	ToolsDisabled      bool
+	ConversationID     string
+	History            agent.HistoryStore
+	Mode               sessionMode
+	ActiveProfile      string
+	Profiles           map[string]apiProfile
+	API                apiProfile
+	APIToken           string
+	Model              string
+	Temperature        float64
+	Strategy           promptStrategy
+	Control            responseControlConfig
+	LastRequest        *requestStatus
 }
 
 type requestStatus struct {
+	Tokens  *agent.TokenReport
 	Profile string
 	BaseURL string
 	Result  completionResult
@@ -71,6 +74,7 @@ func runInteractiveSession(
 	}
 	profile, _ := config.activeAPIProfile()
 	state := sessionState{
+		Tools: config.Tools, DocumentsDirectory: config.DocumentsDirectory,
 		ConversationID: conversationID(config.ConversationID),
 		History:        config.History,
 		Mode:           mode,
@@ -181,6 +185,8 @@ func handleSessionCommand(command string, state *sessionState, output io.Writer)
 	parts := strings.Fields(command)
 	switch parts[0] {
 	case "/help":
+		fmt.Fprintln(output, "/tools [on|off]   — папка документов и управление чтением .txt")
+		fmt.Fprintln(output, "/context N        — задать лимит контекста для локальной оценки (0 отключает проверку)")
 		fmt.Fprintln(output, "/new              — начать новый чистый диалог")
 		fmt.Fprintln(output, "/conversation [ID] — показать ID или открыть сохранённый диалог")
 		fmt.Fprintln(output, "/mode free        — один запрос без ограничений")
@@ -197,10 +203,31 @@ func handleSessionCommand(command string, state *sessionState, output io.Writer)
 		fmt.Fprintln(output, "/format NAME      — сменить формат в памяти до закрытия программы")
 		fmt.Fprintln(output, "/formats          — показать справочник форматов")
 		fmt.Fprintln(output, "/settings         — показать текущие настройки")
-		fmt.Fprintln(output, "/status           — токены, стоимость и скорость последнего API-запроса")
+		fmt.Fprintln(output, "/status           — суммарный расход текущего диалога; /status last — последний вызов")
 		fmt.Fprintln(output, "/reload           — перечитать пользовательский config.json")
 		fmt.Fprintln(output, "/clear            — очистить историю TUI")
 		fmt.Fprintln(output, "/exit             — завершить программу")
+	case "/tools":
+		if len(parts) > 2 || (len(parts) == 2 && parts[1] != "on" && parts[1] != "off") {
+			fmt.Fprintln(output, "Использование: /tools [on|off]")
+			return
+		}
+		if len(parts) == 2 {
+			state.ToolsDisabled = parts[1] == "off"
+		}
+		fmt.Fprintf(output, "Чтение .txt: %t\nПапка: %s\n", state.Tools != nil && !state.ToolsDisabled, state.DocumentsDirectory)
+	case "/context":
+		if len(parts) != 2 {
+			fmt.Fprintf(output, "Лимит контекста: %d; использование /context N\n", state.API.ContextWindow)
+			return
+		}
+		n, err := strconv.Atoi(parts[1])
+		if err != nil || n < 0 {
+			fmt.Fprintln(output, "Лимит должен быть целым неотрицательным числом")
+			return
+		}
+		state.API.ContextWindow = n
+		fmt.Fprintf(output, "Лимит контекста: %d (проверка приблизительная)\n", n)
 	case "/mode":
 		if len(parts) == 1 {
 			fmt.Fprintf(output, "Текущий режим: %s\n", state.Mode)
@@ -317,7 +344,13 @@ func handleSessionCommand(command string, state *sessionState, output io.Writer)
 	case "/settings":
 		printSessionSettings(output, *state)
 	case "/status":
-		printRequestStatus(output, state.LastRequest)
+		if len(parts) == 1 {
+			printConversationStatus(output, *state)
+		} else if len(parts) == 2 && parts[1] == "last" {
+			printRequestStatus(output, state.LastRequest)
+		} else {
+			fmt.Fprintln(output, "Использование: /status или /status last")
+		}
 	case "/clear":
 		fmt.Fprintln(output, "Команда /clear доступна в полноэкранном TUI")
 	default:
@@ -381,13 +414,19 @@ func printRequestStatus(output io.Writer, status *requestStatus) {
 	}
 
 	result := status.Result
+	if status.Tokens != nil {
+		printTokenReport(output, *status.Tokens)
+	}
 	cached := min(result.CachedInputTokens, result.PromptTokens)
 	fmt.Fprintln(output, "Последний API-запрос")
 	fmt.Fprintf(output, "Профиль: %s\n", status.Profile)
 	fmt.Fprintf(output, "Модель: %s\n", resultModel(result))
-	fmt.Fprintf(output, "Токены: вход=%d (кэш=%d), выход=%d, всего=%d\n",
-		result.PromptTokens, cached, result.CompletionTokens, result.TotalTokens)
-	fmt.Fprintf(output, "Скорость: %.1f token/sec\n", tokensPerSecond(result))
+	if result.UsageKnown || result.PromptTokens > 0 || result.CompletionTokens > 0 {
+		fmt.Fprintf(output, "Токены: вход=%d (кэш=%d), выход=%d, всего=%d\n", result.PromptTokens, cached, result.CompletionTokens, result.TotalTokens)
+		fmt.Fprintf(output, "Скорость: %.1f token/sec\n", tokensPerSecond(result))
+	} else {
+		fmt.Fprintln(output, "Токены и скорость: usage API недоступен")
+	}
 	fmt.Fprintf(output, "Время: %.2f с\n", result.Duration.Seconds())
 
 	cost, known := requestCost(*status)
@@ -475,10 +514,6 @@ func printProfiles(output io.Writer, state sessionState) {
 
 func printSingleAnswer(output io.Writer, answer completionResult, validation *validationResult) {
 	fmt.Fprintln(output, formatAnswer(answer.Content))
-	fmt.Fprintf(output, "\nМетрики: model=%s, %d слов, %d символов, %d токенов, %.1f ток/с, %.2f с, finish_reason=%s\n",
-		resultModel(answer),
-		wordCount(answer.Content), utf8.RuneCountInString(answer.Content),
-		answer.CompletionTokens, tokensPerSecond(answer), answer.Duration.Seconds(), answer.FinishReason)
 	if validation != nil {
 		status := "OK"
 		if !validation.Passed {

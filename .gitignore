@@ -7,3 +7,8 @@ config.json
 config/config.json
 /deepseek-chat
 /deepseek-chat-*
+
+# Local LLM wiki and source snapshots
+/raw/
+/wiki/
+/docs/llm-wiki/

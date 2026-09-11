@@ -108,5 +108,8 @@ func printModelBenchmark(output io.Writer, results []agent.Response) {
 }
 
 func requestCost(status requestStatus) (float64, bool) {
+	if !status.Result.UsageKnown && status.Result.PromptTokens == 0 && status.Result.CompletionTokens == 0 {
+		return 0, false
+	}
 	return agent.EstimateCost(status.BaseURL, status.Result)
 }

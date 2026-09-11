@@ -12,6 +12,7 @@ import (
 // Configuration and credentials are resolved at the application boundary.
 func executeQuestion(ctx context.Context, token, prompt string, state sessionState, output, errorOutput io.Writer, ask askFunction) *requestStatus {
 	target := agent.Target{Profile: state.ActiveProfile, BaseURL: state.API.BaseURL, Model: state.Model, SendThinkingDisabled: isDeepSeekEndpoint(state.API.BaseURL)}
+	target.ContextWindow, target.MaxOutputTokens = state.API.ContextWindow, state.API.MaxOutputTokens
 	request := agent.Request{Prompt: prompt, Mode: state.Mode, Target: target, Temperature: state.Temperature, Strategy: state.Strategy, Control: state.Control}
 	credentials := map[string]string{target.Profile: token}
 	if state.Mode == modeModelBenchmark {
@@ -21,7 +22,7 @@ func executeQuestion(ctx context.Context, token, prompt string, state sessionSta
 			return nil
 		}
 		for _, item := range targets {
-			request.Targets = append(request.Targets, agent.Target{Profile: item.ProfileName, BaseURL: item.Profile.BaseURL, Model: item.Model, SendThinkingDisabled: isDeepSeekEndpoint(item.Profile.BaseURL)})
+			request.Targets = append(request.Targets, agent.Target{Profile: item.ProfileName, BaseURL: item.Profile.BaseURL, Model: item.Model, SendThinkingDisabled: isDeepSeekEndpoint(item.Profile.BaseURL), ContextWindow: item.Profile.ContextWindow, MaxOutputTokens: item.Profile.MaxOutputTokens})
 			credentials[item.ProfileName] = item.Token
 		}
 	}
@@ -30,6 +31,9 @@ func executeQuestion(ctx context.Context, token, prompt string, state sessionSta
 	})
 	request.ConversationID = conversationID(state.ConversationID)
 	runner := agent.NewWithHistory(client, state.History)
+	if !state.ToolsDisabled {
+		runner = runner.WithTools(state.Tools)
+	}
 	result, err := runner.Run(ctx, request)
 	renderAgentResult(output, result)
 	if err != nil {
@@ -42,7 +46,7 @@ func executeQuestion(ctx context.Context, token, prompt string, state sessionSta
 		fmt.Fprintf(errorOutput, "ошибка запроса: %s\n", message)
 	}
 	if last := result.Last(); last != nil {
-		return &requestStatus{Profile: last.Target.Profile, BaseURL: last.Target.BaseURL, Result: last.Answer}
+		return &requestStatus{Profile: last.Target.Profile, BaseURL: last.Target.BaseURL, Result: last.Answer, Tokens: &last.Tokens}
 	}
 	return nil
 }
@@ -92,4 +96,20 @@ func renderAgentResult(output io.Writer, result agent.Result) {
 
 func printAgentResponse(output io.Writer, response agent.Response) {
 	printSingleAnswer(output, response.Answer, response.Validation)
+	if response.Answer.FinishReason == "length" {
+		fmt.Fprintln(output, "Внимание: ответ обрезан лимитом генерации или контекста (finish_reason=length).")
+	}
+}
+
+func printTokenReport(output io.Writer, r agent.TokenReport) {
+	fmt.Fprintf(output, "Токены (оценка): последнее сообщение пользователя=%d, предыдущая история=%d (%d сообщений), инструкции=%d, служебные=%d, текущий запрос целиком=%d\n", r.LastUserMessageEstimate, r.HistoryEstimate, r.HistoryMessages, r.SystemEstimate, r.FramingEstimate, r.InputEstimate)
+	if r.UsageKnown {
+		fmt.Fprintf(output, "Токены API: вход=%d, ответ=%d, всего=%d\n", r.InputActual, r.OutputActual, r.TotalActual)
+		fmt.Fprintln(output, "Вход (prompt_tokens) = текущий запрос целиком: system + история + последнее сообщение пользователя + служебное оформление.")
+	} else {
+		fmt.Fprintf(output, "Usage API недоступен; ответ (оценка)=%d\n", r.AnswerEstimate)
+	}
+	if r.ContextWindow > 0 {
+		fmt.Fprintf(output, "Контекст (оценка): вход %d + резерв ответа %d / лимит %d\n", r.InputEstimate, r.OutputReserve, r.ContextWindow)
+	}
 }

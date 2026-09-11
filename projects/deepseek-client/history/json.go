@@ -19,9 +19,10 @@ type JSON struct{ Dir string }
 var validID = regexp.MustCompile(`^[a-zA-Z0-9_-]{1,100}$`)
 
 type document struct {
-	Version        int             `json:"version"`
-	ConversationID string          `json:"conversation_id"`
-	Messages       []agent.Message `json:"messages"`
+	Usage          []agent.TurnUsage `json:"usage,omitempty"`
+	Version        int               `json:"version"`
+	ConversationID string            `json:"conversation_id"`
+	Messages       []agent.Message   `json:"messages"`
 }
 
 const maxBytes = 16 << 20
@@ -50,39 +51,47 @@ func validate(messages []agent.Message) error {
 }
 
 func (s *JSON) Load(ctx context.Context, id string) ([]agent.Message, error) {
+	doc, err := s.loadDocument(ctx, id)
+	return doc.Messages, err
+}
+
+func (s *JSON) loadDocument(ctx context.Context, id string) (document, error) {
 	if err := ctx.Err(); err != nil {
-		return nil, err
+		return document{}, err
 	}
 	path, err := s.path(id)
 	if err != nil {
-		return nil, err
+		return document{}, err
 	}
 	f, err := os.Open(path)
 	if errors.Is(err, os.ErrNotExist) {
-		return nil, nil
+		return document{Version: 1, ConversationID: id}, nil
 	}
 	if err != nil {
-		return nil, err
+		return document{}, err
 	}
 	defer f.Close()
 	data, err := io.ReadAll(io.LimitReader(f, maxBytes+1))
 	if err != nil {
-		return nil, err
+		return document{}, err
 	}
 	if len(data) > maxBytes {
-		return nil, errors.New("conversation exceeds 16 MiB; archive it before continuing")
+		return document{}, errors.New("conversation exceeds 16 MiB; archive it before continuing")
 	}
 	var doc document
 	if err := json.Unmarshal(data, &doc); err != nil {
-		return nil, errors.New("invalid conversation JSON; file was not modified")
+		return document{}, errors.New("invalid conversation JSON; file was not modified")
 	}
 	if doc.Version != 1 || doc.ConversationID != id {
-		return nil, errors.New("unsupported conversation version or ID")
+		return document{}, errors.New("unsupported conversation version or ID")
 	}
 	if err := validate(doc.Messages); err != nil {
-		return nil, err
+		return document{}, err
 	}
-	return doc.Messages, ctx.Err()
+	if len(doc.Usage) > len(doc.Messages)/2 {
+		return document{}, errors.New("invalid conversation accounting")
+	}
+	return doc, ctx.Err()
 }
 
 func (s *JSON) Save(ctx context.Context, id string, messages []agent.Message) error {
@@ -96,7 +105,7 @@ func (s *JSON) Save(ctx context.Context, id string, messages []agent.Message) er
 	if err := validate(messages); err != nil {
 		return err
 	}
-	data, err := json.MarshalIndent(document{1, id, messages}, "", "  ")
+	data, err := json.MarshalIndent(document{Version: 1, ConversationID: id, Messages: messages}, "", "  ")
 	if err != nil {
 		return err
 	}

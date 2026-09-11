@@ -323,7 +323,7 @@ func TestPrintSingleAnswerUsesCompactQuestionAnswerFormat(t *testing.T) {
 	}, &validation)
 
 	got := output.String()
-	if !strings.Contains(got, "Короткий ответ") || !strings.Contains(got, "Метрики:") {
+	if !strings.Contains(got, "Короткий ответ") || strings.Contains(got, "Метрики:") {
 		t.Fatalf("compact answer is incomplete: %q", got)
 	}
 	if strings.Contains(got, "ОТВЕТ С ОГРАНИЧЕНИЯМИ") || strings.Contains(got, "Формат:") || strings.Contains(got, "====") {

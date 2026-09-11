@@ -14,13 +14,14 @@ import (
 )
 
 type ChatRequest struct {
-	Model       string        `json:"model"`
-	Messages    []chatMessage `json:"messages"`
-	Thinking    *ThinkingMode `json:"thinking,omitempty"`
-	Temperature float64       `json:"temperature"`
-	Stream      bool          `json:"stream"`
-	MaxTokens   int           `json:"max_tokens,omitempty"`
-	Stop        []string      `json:"stop,omitempty"`
+	Tools       []agent.ToolDefinition `json:"tools,omitempty"`
+	Model       string                 `json:"model"`
+	Messages    []chatMessage          `json:"messages"`
+	Thinking    *ThinkingMode          `json:"thinking,omitempty"`
+	Temperature float64                `json:"temperature"`
+	Stream      bool                   `json:"stream"`
+	MaxTokens   int                    `json:"max_tokens,omitempty"`
+	Stop        []string               `json:"stop,omitempty"`
 }
 type ThinkingMode struct {
 	Type string `json:"type"`
@@ -31,20 +32,22 @@ type chatResponse struct {
 		Message      chatMessage `json:"message"`
 		FinishReason string      `json:"finish_reason"`
 	} `json:"choices"`
-	Usage struct {
-		PromptTokens          int `json:"prompt_tokens"`
-		CompletionTokens      int `json:"completion_tokens"`
-		TotalTokens           int `json:"total_tokens"`
-		PromptCacheHitTokens  int `json:"prompt_cache_hit_tokens"`
-		PromptCacheMissTokens int `json:"prompt_cache_miss_tokens"`
-		PromptTokensDetails   struct {
-			CachedTokens int `json:"cached_tokens"`
-		} `json:"prompt_tokens_details"`
-	} `json:"usage"`
+	Usage *usage `json:"usage"`
 	Error *struct {
 		Message string `json:"message"`
 		Type    string `json:"type"`
 	} `json:"error,omitempty"`
+}
+
+type usage struct {
+	PromptTokens          int `json:"prompt_tokens"`
+	CompletionTokens      int `json:"completion_tokens"`
+	TotalTokens           int `json:"total_tokens"`
+	PromptCacheHitTokens  int `json:"prompt_cache_hit_tokens"`
+	PromptCacheMissTokens int `json:"prompt_cache_miss_tokens"`
+	PromptTokensDetails   struct {
+		CachedTokens int `json:"cached_tokens"`
+	} `json:"prompt_tokens_details"`
 }
 
 type chatMessage = agent.Message
@@ -120,7 +123,11 @@ func (c *Client) Complete(ctx context.Context, target agent.Target, prompt strin
 	if len(parsed.Choices) == 0 {
 		return agent.Completion{}, fmt.Errorf("api returned no choices")
 	}
-	if strings.TrimSpace(parsed.Choices[0].Message.Content) == "" {
+	usageKnown := parsed.Usage != nil
+	if parsed.Usage == nil {
+		parsed.Usage = &usage{}
+	}
+	if strings.TrimSpace(parsed.Choices[0].Message.Content) == "" && parsed.Choices[0].Message.ToolCalls == nil {
 		return agent.Completion{}, fmt.Errorf(
 			"api returned empty content: completion_tokens=%d finish_reason=%s",
 			parsed.Usage.CompletionTokens,
@@ -141,7 +148,13 @@ func (c *Client) Complete(ctx context.Context, target agent.Target, prompt strin
 		cachedInputTokens = parsed.Usage.PromptTokensDetails.CachedTokens
 	}
 
+	var calls []agent.ToolCall
+	if parsed.Choices[0].Message.ToolCalls != nil {
+		calls = *parsed.Choices[0].Message.ToolCalls
+	}
 	return agent.Completion{
+		ToolCalls:         calls,
+		UsageKnown:        usageKnown,
 		Content:           parsed.Choices[0].Message.Content,
 		Model:             model,
 		FinishReason:      parsed.Choices[0].FinishReason,
@@ -154,17 +167,21 @@ func (c *Client) Complete(ctx context.Context, target agent.Target, prompt strin
 }
 func BuildChatRequest(prompt string, settings agent.Settings) ChatRequest {
 	payload := ChatRequest{
+		Tools:       settings.Tools,
 		Model:       settings.Model,
 		Messages:    []chatMessage{{Role: "user", Content: prompt}},
 		Temperature: settings.Temperature,
 		Stream:      false,
+		MaxTokens:   settings.MaxOutputTokens,
 	}
 	if settings.SendThinkingDisabled {
 		payload.Thinking = &ThinkingMode{Type: "disabled"}
 	}
 
 	if settings.Control != nil {
-		payload.MaxTokens = settings.Control.MaxTokens
+		if settings.Control.MaxTokens > 0 {
+			payload.MaxTokens = settings.Control.MaxTokens
+		}
 		payload.Stop = settings.Control.Stop
 	}
 	payload.Messages = settings.Messages

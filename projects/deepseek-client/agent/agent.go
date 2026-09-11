@@ -12,6 +12,8 @@ import (
 // Agent owns request preparation, scenario execution and output validation.
 // History is optional and supplied independently of the transport and UI.
 type Agent struct {
+	tools   ToolExecutor
+	counter TokenCounter
 	client  Client
 	history HistoryStore
 }
@@ -23,6 +25,7 @@ func NewWithHistory(client Client, history HistoryStore) *Agent {
 }
 
 type invocation struct {
+	allowTools  bool
 	target      Target
 	temperature float64
 	strategy    Strategy
@@ -80,19 +83,28 @@ func (a *Agent) Run(ctx context.Context, request Request) (Result, error) {
 	for _, step := range plan {
 		response, err := a.invoke(ctx, request.Prompt, step)
 		if err != nil {
+			result.Failed = &response
 			return result, fmt.Errorf("model %s: %w", step.target.Model, err)
 		}
 		result.Responses = append(result.Responses, response)
 	}
 	if remember {
-		history = append(history, Message{Role: "user", Content: request.Prompt}, Message{Role: "assistant", Content: result.Responses[0].Answer.Content})
-		if err := a.history.Save(ctx, request.ConversationID, history); err != nil {
+		history = append(history, Message{Role: "user", Content: request.Prompt, FileContext: result.Responses[0].FileContext}, Message{Role: "assistant", Content: result.Responses[0].Answer.Content})
+		var saveErr error
+		if store, ok := a.history.(TurnStore); ok {
+			r := result.Responses[0]
+			saveErr = store.SaveTurn(ctx, request.ConversationID, history, TurnUsage{Model: r.Answer.Model, UsageKnown: r.Tokens.UsageKnown, Input: r.Answer.PromptTokens, CachedInput: r.Answer.CachedInputTokens, Output: r.Answer.CompletionTokens, Total: r.Answer.TotalTokens, CostUSD: r.CostUSD, Duration: r.Answer.Duration})
+		} else {
+			saveErr = a.history.Save(ctx, request.ConversationID, history)
+		}
+		if err := saveErr; err != nil {
 			return result, fmt.Errorf("answer received but conversation was not saved: %w", err)
 		}
 	}
 	if judge != nil {
 		analysis, err := a.invoke(ctx, analysisPrompt(request, result.Responses), *judge)
 		if err != nil {
+			result.Failed = &analysis
 			return result, fmt.Errorf("judge %s: %w", judge.target.Model, err)
 		}
 		result.Analysis = &analysis
@@ -121,6 +133,7 @@ func makePlan(request Request) ([]invocation, *invocation, error) {
 	var judge *invocation
 	switch request.Mode {
 	case Free, Controlled:
+		base.allowTools = true
 		plan = append(plan, base)
 	case Compare:
 		free := base
@@ -148,6 +161,9 @@ func makePlan(request Request) ([]invocation, *invocation, error) {
 		judge = &invocation{target: request.Targets[1], temperature: 0, strategy: Standard, control: modelBenchmarkAnalysisControl()}
 	}
 	for _, step := range plan {
+		if step.target.ContextWindow < 0 || step.target.MaxOutputTokens < 0 {
+			return nil, nil, errors.New("token limits must not be negative")
+		}
 		if strings.TrimSpace(step.target.Model) == "" {
 			return nil, nil, errors.New("model is required")
 		}
@@ -174,13 +190,30 @@ func (a *Agent) invoke(ctx context.Context, prompt string, step invocation) (Res
 	// Current policies precede history; the new user message always comes last.
 	last := len(settings.Messages) - 1
 	settings.Messages = append(settings.Messages[:last], append(append([]Message(nil), step.messages...), settings.Messages[last])...)
+	for i := range settings.Messages {
+		settings.Messages[i].Content += settings.Messages[i].FileContext
+		settings.Messages[i].FileContext = ""
+	}
+	settings.MaxOutputTokens = step.target.MaxOutputTokens
+	if step.control != nil && step.control.MaxTokens > 0 {
+		settings.MaxOutputTokens = step.control.MaxTokens
+	}
+	counter := a.counter
+	if counter == nil {
+		counter = ApproximateCounter{}
+	}
+	report := tokenReport(counter, prompt, step.messages, settings.Messages, step.target, settings.MaxOutputTokens)
+	response := Response{Target: step.target, Temperature: step.temperature, Control: cloneControl(step.control), Tokens: report}
+	if report.ContextWindow > 0 && (report.InputEstimate > report.ContextWindow || report.OutputReserve > report.ContextWindow-report.InputEstimate) {
+		return response, &ContextLimitError{Tokens: report}
+	}
 	started := time.Now()
-	answer, err := a.client.Complete(ctx, step.target, prompt, settings)
+	answer, fileContext, err := a.completeWithTools(ctx, step, prompt, settings, counter)
 	if err != nil {
-		return Response{}, err
+		return response, err
 	}
 	if err := ctx.Err(); err != nil {
-		return Response{}, err
+		return response, err
 	}
 	if strings.TrimSpace(answer.Content) == "" {
 		return Response{}, errors.New("LLM returned empty content")
@@ -194,12 +227,18 @@ func (a *Agent) invoke(ctx context.Context, prompt string, step invocation) (Res
 	if answer.Duration <= 0 {
 		answer.Duration = time.Since(started)
 	}
-	response := Response{Target: step.target, Answer: answer, Temperature: step.temperature, Control: cloneControl(step.control)}
+	response.Answer = answer
+	response.FileContext = fileContext
+	response.Tokens.AnswerEstimate = counter.Count(answer.Content)
+	response.Tokens.UsageKnown = !answer.UsageIncomplete && (answer.UsageKnown || answer.PromptTokens > 0 || answer.CompletionTokens > 0)
+	response.Tokens.InputActual = answer.PromptTokens
+	response.Tokens.OutputActual = answer.CompletionTokens
+	response.Tokens.TotalActual = answer.TotalTokens
 	if step.validate {
 		validation := ValidateAnswer(answer, step.control)
 		response.Validation = &validation
 	}
-	if cost, known := EstimateCost(step.target.BaseURL, answer); known {
+	if cost, known := EstimateCost(step.target.BaseURL, answer); known && response.Tokens.UsageKnown {
 		response.CostUSD = &cost
 	}
 	return response, nil

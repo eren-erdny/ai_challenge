@@ -74,6 +74,8 @@ var (
 )
 
 var commandSuggestions = []autocompleteSuggestion{
+	{value: "/tools"},
+	{value: "/context "},
 	{value: "/new"},
 	{value: "/conversation"},
 	{value: "/model "},
@@ -121,6 +123,7 @@ func newTUIModel(config appConfig, ask askFunction) tuiModel {
 	}
 	profile, _ := config.activeAPIProfile()
 	state := sessionState{
+		Tools: config.Tools, DocumentsDirectory: config.DocumentsDirectory,
 		ConversationID: conversationID(config.ConversationID),
 		History:        config.History,
 		Mode:           mode,
