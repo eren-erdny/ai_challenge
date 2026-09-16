@@ -1,0 +1,107 @@
+{
+  "utc": "2026-09-10T19:02:21.7062691Z",
+  "model": "deepseek-flash",
+  "budget_usd": 1,
+  "rows": [
+    {
+      "scenario": "short",
+      "history_messages": 2,
+      "history_bytes": 118,
+      "tokens": {
+        "RequestEstimate": 21,
+        "HistoryEstimate": 14,
+        "SystemEstimate": 0,
+        "FramingEstimate": 15,
+        "InputEstimate": 50,
+        "AnswerEstimate": 15,
+        "HistoryMessages": 2,
+        "ContextWindow": 0,
+        "OutputReserve": 64,
+        "InputActual": 41,
+        "OutputActual": 16,
+        "TotalActual": 57,
+        "UsageKnown": true
+      },
+      "answer": {
+        "UsageKnown": true,
+        "Content": "The project name is North and its budget is 75,000 rubles.",
+        "Model": "deepseek-flash",
+        "FinishReason": "stop",
+        "PromptTokens": 41,
+        "CachedInputTokens": 0,
+        "CompletionTokens": 16,
+        "TotalTokens": 57,
+        "Duration": 787663500
+      },
+      "cost_upper_usd": 0.0000315,
+      "history_unchanged_on_failure": false
+    },
+    {
+      "scenario": "long",
+      "history_messages": 6,
+      "history_bytes": 4419,
+      "tokens": {
+        "RequestEstimate": 21,
+        "HistoryEstimate": 1059,
+        "SystemEstimate": 0,
+        "FramingEstimate": 31,
+        "InputEstimate": 1111,
+        "AnswerEstimate": 15,
+        "HistoryMessages": 6,
+        "ContextWindow": 0,
+        "OutputReserve": 64,
+        "InputActual": 2089,
+        "OutputActual": 16,
+        "TotalActual": 2105,
+        "UsageKnown": true
+      },
+      "answer": {
+        "UsageKnown": true,
+        "Content": "The project name is North and its budget is 75,000 rubles.",
+        "Model": "deepseek-flash",
+        "FinishReason": "stop",
+        "PromptTokens": 2089,
+        "CachedInputTokens": 0,
+        "CompletionTokens": 16,
+        "TotalTokens": 2105,
+        "Duration": 809793800
+      },
+      "cost_upper_usd": 0.0006458999999999999,
+      "history_unchanged_on_failure": false
+    },
+    {
+      "scenario": "overflow",
+      "history_messages": 10,
+      "history_bytes": 2204720,
+      "tokens": {
+        "RequestEstimate": 21,
+        "HistoryEstimate": 551104,
+        "SystemEstimate": 0,
+        "FramingEstimate": 47,
+        "InputEstimate": 551172,
+        "AnswerEstimate": 0,
+        "HistoryMessages": 10,
+        "ContextWindow": 0,
+        "OutputReserve": 64,
+        "InputActual": 0,
+        "OutputActual": 0,
+        "TotalActual": 0,
+        "UsageKnown": false
+      },
+      "answer": {
+        "UsageKnown": false,
+        "Content": "",
+        "Model": "",
+        "FinishReason": "",
+        "PromptTokens": 0,
+        "CachedInputTokens": 0,
+        "CompletionTokens": 0,
+        "TotalTokens": 0,
+        "Duration": 0
+      },
+      "error": "model deepseek-flash: api error: status=400 type=invalid_request_error message=This model's maximum context length is 1048576 tokens. However, you requested 1102201 tokens (1102137 in the messages, 64 in the completion). Please reduce the length of the messages or completion.",
+      "cost_upper_usd": 0,
+      "history_unchanged_on_failure": true
+    }
+  ]
+}

@@ -14,6 +14,7 @@ import (
 	"runtime"
 	"strings"
 
+	"github.com/eren-erdny/ai_challenge/projects/deepseek-client/agent"
 	"golang.org/x/term"
 )
 
@@ -26,17 +27,44 @@ const (
 )
 
 type appConfig struct {
-	ActiveProfile   string                `json:"active_profile"`
-	Profiles        map[string]apiProfile `json:"profiles"`
-	APIToken        string                `json:"-"`
-	Generation      generationConfig      `json:"generation"`
-	ResponseControl responseControlConfig `json:"response_control"`
+	Tools              agent.ToolExecutor    `json:"-"`
+	DocumentsDirectory string                `json:"-"`
+	HistoryPolicy      historyConfig         `json:"history"`
+	HistoryNotice      string                `json:"-"`
+	ConversationID     string                `json:"-"`
+	History            agent.HistoryStore    `json:"-"`
+	InitialMessages    []agent.Message       `json:"-"`
+	ActiveProfile      string                `json:"active_profile"`
+	Profiles           map[string]apiProfile `json:"profiles"`
+	APIToken           string                `json:"-"`
+	Generation         generationConfig      `json:"generation"`
+	ResponseControl    responseControlConfig `json:"response_control"`
+}
+
+type historyConfig struct {
+	agent.CompressionConfig
+	RetentionDays int `json:"retention_days"`
+}
+
+func validateHistory(config historyConfig) error {
+	if !agent.ValidMemoryStrategy(config.Memory()) {
+		return fmt.Errorf("history.strategy unknown: %q", config.Memory())
+	}
+	if config.KeepLast < 0 {
+		return errors.New("history.keep_last must not be negative")
+	}
+	if config.RetentionDays < 0 || config.RetentionDays > 106751 {
+		return errors.New("history.retention_days должен быть от 0 до 106751")
+	}
+	return nil
 }
 
 type apiProfile struct {
-	BaseURL   string `json:"base_url"`
-	APIKeyEnv string `json:"api_key_env"`
-	Model     string `json:"model"`
+	ContextWindow   int    `json:"context_window,omitempty"`
+	MaxOutputTokens int    `json:"max_output_tokens,omitempty"`
+	BaseURL         string `json:"base_url"`
+	APIKeyEnv       string `json:"api_key_env"`
+	Model           string `json:"model"`
 }
 
 type generationConfig struct {
@@ -55,57 +83,16 @@ var modelCatalog = []modelDefinition{
 	{Name: "deepseek-v4-pro", Description: "более мощная модель для сложных задач"},
 }
 
-type responseControlConfig struct {
-	Enabled           bool     `json:"enabled"`
-	Format            string   `json:"format"`
-	CustomInstruction string   `json:"custom_instruction,omitempty"`
-	MaxWords          int      `json:"max_words"`
-	MaxTokens         int      `json:"max_tokens"`
-	StopSequences     []string `json:"stop_sequences"`
-}
+type responseControlConfig = agent.ControlConfig
 
-type formatDefinition struct {
-	Name        string
-	Description string
-	Instruction string
-}
+type formatDefinition = agent.FormatDefinition
 
-var formatCatalog = []formatDefinition{
-	{
-		Name:        "plain_text",
-		Description: "обычный связный текст с короткими абзацами",
-		Instruction: "Используй обычный связный текст и короткие абзацы без Markdown-заголовков.",
-	},
-	{
-		Name:        "short_answer",
-		Description: "один короткий абзац без вступления",
-		Instruction: "Дай один короткий содержательный абзац без заголовка и вступления.",
-	},
-	{
-		Name:        "bullet_list",
-		Description: "краткий маркированный список",
-		Instruction: "Верни только краткий маркированный Markdown-список без вступления и заключения.",
-	},
-	{
-		Name:        "structured_markdown",
-		Description: "краткий ответ с заголовком и тремя пунктами",
-		Instruction: "Используй Markdown: раздел «## Краткий ответ» с одним абзацем, " +
-			"затем раздел «## Ключевые пункты» ровно с тремя пунктами маркированного списка.",
-	},
-	{
-		Name:        "json",
-		Description: "валидный JSON с полями summary и points",
-		Instruction: "Верни валидный JSON без Markdown-обёртки: объект с полем summary типа string " +
-			"и полем points типа array of strings.",
-	},
-	{
-		Name:        "custom",
-		Description: "пользовательская инструкция из custom_instruction",
-	},
-}
+var formatCatalog = agent.Formats()
 
 func defaultAppConfig() appConfig {
+	autoCompress := true
 	return appConfig{
+		HistoryPolicy: historyConfig{CompressionConfig: agent.CompressionConfig{Strategy: agent.MemorySummary, KeepLast: 10, AutoCompress: &autoCompress}, RetentionDays: 30},
 		ActiveProfile: "deepseek",
 		Profiles: map[string]apiProfile{
 			"deepseek": {
@@ -194,6 +181,7 @@ func loadConfig(configPath string) (appConfig, error) {
 
 	config := defaultAppConfig()
 	var raw struct {
+		History        json.RawMessage       `json:"history"`
 		ActiveProfile  string                `json:"active_profile"`
 		Profiles       map[string]apiProfile `json:"profiles"`
 		APIToken       string                `json:"api_token"`
@@ -222,6 +210,14 @@ func loadConfig(configPath string) (appConfig, error) {
 		config.Generation = generationConfig{
 			Model: legacyGeneration.Model, Temperature: legacyGeneration.Temperature, Strategy: legacyGeneration.Strategy,
 		}
+	}
+	if len(raw.History) > 0 {
+		if err := json.Unmarshal(raw.History, &config.HistoryPolicy); err != nil {
+			return appConfig{}, fmt.Errorf("некорректный history: %w", err)
+		}
+	}
+	if err := validateHistory(config.HistoryPolicy); err != nil {
+		return appConfig{}, err
 	}
 	if len(raw.ResponseControl) > 0 {
 		if err := json.Unmarshal(raw.ResponseControl, &config.ResponseControl); err != nil {
@@ -286,6 +282,9 @@ func loadConfigForReload(configPath string, currentToken string, currentBaseURL 
 }
 
 func saveConfig(configPath string, config appConfig) error {
+	if err := validateHistory(config.HistoryPolicy); err != nil {
+		return err
+	}
 	if err := config.normalizeAndValidateProfiles(); err != nil {
 		return fmt.Errorf("некорректные profiles: %w", err)
 	}
@@ -305,6 +304,7 @@ func saveConfig(configPath string, config appConfig) error {
 	}
 
 	fileConfig := struct {
+		History       historyConfig         `json:"history"`
 		ActiveProfile string                `json:"active_profile"`
 		Profiles      map[string]apiProfile `json:"profiles"`
 		Generation    struct {
@@ -313,6 +313,7 @@ func saveConfig(configPath string, config appConfig) error {
 		} `json:"generation"`
 		ResponseControl responseControlConfig `json:"response_control"`
 	}{
+		History:       config.HistoryPolicy,
 		ActiveProfile: config.ActiveProfile, Profiles: config.Profiles, ResponseControl: config.ResponseControl,
 	}
 	fileConfig.Generation.Temperature = config.Generation.Temperature
@@ -374,6 +375,9 @@ func printModelCatalog(output io.Writer) {
 }
 
 func validateAPIProfile(profile apiProfile) error {
+	if profile.ContextWindow < 0 || profile.MaxOutputTokens < 0 {
+		return errors.New("context_window и max_output_tokens не могут быть отрицательными")
+	}
 	parsed, err := url.Parse(strings.TrimSpace(profile.BaseURL))
 	if err != nil || parsed.Host == "" || (parsed.Scheme != "http" && parsed.Scheme != "https") {
 		return errors.New("base_url должен быть корректным http:// или https:// URL")
@@ -474,77 +478,11 @@ func replaceConfigFile(tempPath string, configPath string) error {
 }
 
 func validateResponseControl(config responseControlConfig) error {
-	if !config.Enabled {
-		return nil
-	}
-	if config.MaxWords <= 0 {
-		return errors.New("max_words должен быть больше нуля")
-	}
-	if config.MaxTokens <= 0 {
-		return errors.New("max_tokens должен быть больше нуля")
-	}
-	if len(config.StopSequences) > 16 {
-		return errors.New("stop_sequences может содержать не более 16 значений")
-	}
-	for _, sequence := range config.StopSequences {
-		if strings.TrimSpace(sequence) == "" {
-			return errors.New("stop_sequences не может содержать пустые значения")
-		}
-	}
-
-	definition, ok := findFormat(config.Format)
-	if !ok {
-		return fmt.Errorf("неизвестный формат %q; используйте --list-formats", config.Format)
-	}
-	if definition.Name == "custom" && strings.TrimSpace(config.CustomInstruction) == "" {
-		return errors.New("для формата custom заполните custom_instruction")
-	}
-
-	return nil
-}
-
-func findFormat(name string) (formatDefinition, bool) {
-	for _, definition := range formatCatalog {
-		if definition.Name == name {
-			return definition, true
-		}
-	}
-	return formatDefinition{}, false
+	return agent.ValidateControlConfig(config)
 }
 
 func buildResponseControl(config responseControlConfig) (*responseControl, error) {
-	if !config.Enabled {
-		return nil, nil
-	}
-	if err := validateResponseControl(config); err != nil {
-		return nil, err
-	}
-
-	definition, _ := findFormat(config.Format)
-	formatInstruction := definition.Instruction
-	if definition.Name == "custom" {
-		formatInstruction = strings.TrimSpace(config.CustomInstruction)
-	}
-
-	systemPrompt := fmt.Sprintf(
-		"Ответь на русском языке. %s Общий объём ответа — не более %d слов.",
-		formatInstruction,
-		config.MaxWords,
-	)
-	if len(config.StopSequences) > 0 {
-		systemPrompt += fmt.Sprintf(
-			" После содержательной части выведи отдельной строкой %s и сразу заверши ответ.",
-			config.StopSequences[0],
-		)
-	}
-
-	return &responseControl{
-		Format:       config.Format,
-		SystemPrompt: systemPrompt,
-		MaxWords:     config.MaxWords,
-		MaxTokens:    config.MaxTokens,
-		Stop:         append([]string(nil), config.StopSequences...),
-	}, nil
+	return agent.BuildControl(config)
 }
 
 func printFormatCatalog(output io.Writer) {

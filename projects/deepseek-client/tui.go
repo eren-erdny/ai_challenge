@@ -1,6 +1,7 @@
 package main
 
 import (
+	"context"
 	"fmt"
 	"os"
 	"sort"
@@ -12,6 +13,7 @@ import (
 	"charm.land/bubbles/v2/viewport"
 	tea "charm.land/bubbletea/v2"
 	"charm.land/lipgloss/v2"
+	"github.com/eren-erdny/ai_challenge/projects/deepseek-client/agent"
 	"golang.org/x/term"
 )
 
@@ -39,6 +41,8 @@ const (
 )
 
 type tuiModel struct {
+	ctx             context.Context
+	cancel          context.CancelFunc
 	textarea        textarea.Model
 	viewport        viewport.Model
 	state           sessionState
@@ -71,6 +75,15 @@ var (
 )
 
 var commandSuggestions = []autocompleteSuggestion{
+	{value: "/compress"},
+	{value: "/memory "},
+	{value: "/checkpoint "},
+	{value: "/branch "},
+	{value: "/branches"},
+	{value: "/tools"},
+	{value: "/context "},
+	{value: "/new"},
+	{value: "/conversation"},
 	{value: "/model "},
 	{value: "/models"},
 	{value: "/profile "},
@@ -93,8 +106,16 @@ func isInteractiveTerminal(input *os.File, output *os.File) bool {
 }
 
 func runTUI(config appConfig, ask askFunction) int {
-	program := tea.NewProgram(newTUIModel(config, ask))
-	if _, err := program.Run(); err != nil {
+	ctx, cancel := context.WithCancel(context.Background())
+	defer cancel()
+	model := newTUIModel(config, ask)
+	model.ctx, model.cancel = ctx, cancel
+	program := tea.NewProgram(model)
+	final, err := program.Run()
+	if closed, ok := final.(tuiModel); ok {
+		printConversationExit(os.Stdout, closed.state)
+	}
+	if err != nil {
 		fmt.Fprintf(os.Stderr, "ошибка TUI: %v\n", err)
 		return 1
 	}
@@ -108,15 +129,19 @@ func newTUIModel(config appConfig, ask askFunction) tuiModel {
 	}
 	profile, _ := config.activeAPIProfile()
 	state := sessionState{
-		Mode:          mode,
-		ActiveProfile: config.ActiveProfile,
-		Profiles:      config.Profiles,
-		API:           profile,
-		APIToken:      config.APIToken,
-		Model:         profile.Model,
-		Temperature:   config.Generation.Temperature,
-		Strategy:      config.Generation.Strategy,
-		Control:       config.ResponseControl,
+		Compression: config.HistoryPolicy.CompressionConfig,
+		Tools:       config.Tools, DocumentsDirectory: config.DocumentsDirectory,
+		ConversationID: conversationID(config.ConversationID),
+		History:        config.History,
+		Mode:           mode,
+		ActiveProfile:  config.ActiveProfile,
+		Profiles:       config.Profiles,
+		API:            profile,
+		APIToken:       config.APIToken,
+		Model:          profile.Model,
+		Temperature:    config.Generation.Temperature,
+		Strategy:       config.Generation.Strategy,
+		Control:        config.ResponseControl,
 	}
 
 	input := textarea.New()
@@ -131,12 +156,25 @@ func newTUIModel(config appConfig, ask askFunction) tuiModel {
 
 	history := []string{
 		titleStyle.Render("DeepSeek Client"),
+		statusStyle.Render("Conversation ID: " + state.ConversationID),
 		"Вставьте многострочный запрос и нажмите Enter. Команда /help покажет настройки.",
 	}
 	view := viewport.New(viewport.WithWidth(80), viewport.WithHeight(16))
+	if config.HistoryNotice != "" {
+		history = append(history, statusStyle.Render(config.HistoryNotice))
+	}
+	for _, message := range config.InitialMessages {
+		label := userStyle.Render("Вы")
+		if message.Role == "assistant" {
+			label = titleStyle.Render("Ассистент")
+		}
+		history = append(history, label+"\n"+message.Content)
+	}
 	view.SetContent(strings.Join(history, "\n\n"))
+	view.GotoBottom()
 
 	return tuiModel{
+		ctx:      context.Background(),
 		textarea: input,
 		viewport: view,
 		state:    state,
@@ -191,6 +229,9 @@ func (model tuiModel) Update(message tea.Msg) (tea.Model, tea.Cmd) {
 	case tea.KeyPressMsg:
 		switch message.String() {
 		case "ctrl+c", "esc":
+			if model.cancel != nil {
+				model.cancel()
+			}
 			return model, tea.Quit
 		case "up", "down":
 			suggestions := model.autocompleteSuggestions()
@@ -247,6 +288,37 @@ func (model tuiModel) submit() (tea.Model, tea.Cmd) {
 	if text == "/exit" || strings.EqualFold(text, "exit") || strings.EqualFold(text, "выход") {
 		return model, tea.Quit
 	}
+	var conversationOutput strings.Builder
+	if handled, changed, messages := handleConversationCommand(model.ctx, text, &model.state, &conversationOutput); handled {
+		if changed {
+			model.history = nil
+			for _, message := range messages {
+				label := userStyle.Render("Вы")
+				if message.Role == "assistant" {
+					label = titleStyle.Render("Ассистент")
+				}
+				model.history = append(model.history, label+"\n"+message.Content)
+			}
+		}
+		model.history = append(model.history, statusStyle.Render(conversationOutput.String()))
+		model.refreshHistory()
+		return model, nil
+	}
+	if handled, changed, messages := handleBranchCommand(model.ctx, text, &model.state, &conversationOutput); handled {
+		if changed {
+			model.history = nil
+			for _, message := range messages {
+				label := userStyle.Render("Вы")
+				if message.Role == "assistant" {
+					label = titleStyle.Render("Ассистент")
+				}
+				model.history = append(model.history, label+"\n"+message.Content)
+			}
+		}
+		model.history = append(model.history, statusStyle.Render(conversationOutput.String()))
+		model.refreshHistory()
+		return model, nil
+	}
 	if text == "/clear" {
 		model.history = nil
 		model.refreshHistory()
@@ -269,9 +341,9 @@ func (model tuiModel) submit() (tea.Model, tea.Cmd) {
 		model.activityGen++
 		model.history = append(model.history, statusStyle.Render("Получаю список моделей..."))
 		model.refreshHistory()
-		return model, tea.Batch(fetchModelsCommand(model.state.APIToken, model.state.API), activityTickCommand(model.activityGen))
+		return model, tea.Batch(fetchModelsCommand(model.ctx, model.state.APIToken, model.state.API), activityTickCommand(model.activityGen))
 	}
-	if strings.HasPrefix(text, "/") {
+	if strings.HasPrefix(text, "/") && text != "/compress" {
 		var output strings.Builder
 		previousProfile := model.state.ActiveProfile
 		handleSessionCommand(text, &model.state, &output)
@@ -289,7 +361,7 @@ func (model tuiModel) submit() (tea.Model, tea.Cmd) {
 	model.activityGen++
 	model.refreshHistory()
 	return model, tea.Batch(
-		executeQuestionCommand(model.state.APIToken, text, model.state, model.ask),
+		executeQuestionCommand(model.ctx, model.state.APIToken, text, model.state, model.ask),
 		activityTickCommand(model.activityGen),
 	)
 }
@@ -300,18 +372,18 @@ func activityTickCommand(generation int) tea.Cmd {
 	})
 }
 
-func fetchModelsCommand(token string, profile apiProfile) tea.Cmd {
+func fetchModelsCommand(ctx context.Context, token string, profile apiProfile) tea.Cmd {
 	return func() tea.Msg {
-		models, err := fetchModels(token, profile)
+		models, err := fetchModels(ctx, token, profile)
 		return modelListMessage{models: models, err: err}
 	}
 }
 
-func executeQuestionCommand(token string, prompt string, state sessionState, ask askFunction) tea.Cmd {
+func executeQuestionCommand(ctx context.Context, token string, prompt string, state sessionState, ask askFunction) tea.Cmd {
 	return func() tea.Msg {
 		var output strings.Builder
 		var errorOutput strings.Builder
-		lastStatus := executeQuestion(token, prompt, state, &output, &errorOutput, ask)
+		lastStatus := executeQuestion(ctx, token, prompt, state, &output, &errorOutput, ask)
 		text := strings.TrimSpace(output.String())
 		if errorOutput.Len() > 0 {
 			errorText := errorStyle.Render(strings.TrimSpace(errorOutput.String()))
@@ -410,6 +482,8 @@ func (model tuiModel) autocompleteSuggestions() []autocompleteSuggestion {
 		}
 	case "/mode":
 		values = []string{string(modeFree), string(modeControlled), string(modeCompare), string(modeTemperatureBenchmark), string(modeModelBenchmark)}
+	case "/memory":
+		values = []string{string(agent.MemoryFull), string(agent.MemorySummary), string(agent.MemorySliding), string(agent.MemoryFacts), string(agent.MemoryBranching)}
 	case "/strategy":
 		values = []string{string(strategyStandard), string(strategyStepByStep), string(strategyExperts)}
 	case "/temperature":
