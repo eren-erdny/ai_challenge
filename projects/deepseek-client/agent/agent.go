@@ -76,6 +76,10 @@ func (a *Agent) Run(ctx context.Context, request Request) (Result, error) {
 	if err != nil {
 		return result, err
 	}
+	personalization, err := PersonalizationMessages(request.UserProfile)
+	if err != nil {
+		return result, fmt.Errorf("user profile: %w", err)
+	}
 	remember := a.history != nil && (request.Mode == Free || request.Mode == Controlled)
 	memoryStrategy := request.Compression.Memory()
 	if !ValidMemoryStrategy(memoryStrategy) {
@@ -131,7 +135,7 @@ func (a *Agent) Run(ctx context.Context, request Request) (Result, error) {
 				return result, err
 			}
 			step := plan[0]
-			step.messages = append(append([]Message(nil), layers...), effective...)
+			step.messages = append(append(append([]Message(nil), personalization...), layers...), effective...)
 			prepared, reserve := a.prepare(request.Prompt, step)
 			estimate := a.historySize(prepared.Messages) + reserve
 			if step.allowTools && a.tools != nil {
@@ -156,6 +160,12 @@ func (a *Agent) Run(ctx context.Context, request Request) (Result, error) {
 		}
 		effective = append(layers, effective...)
 		plan[0].messages = append([]Message(nil), effective...)
+	}
+	for i := range plan {
+		plan[i].messages = append(append([]Message(nil), personalization...), plan[i].messages...)
+	}
+	if judge != nil {
+		judge.messages = append(append([]Message(nil), personalization...), judge.messages...)
 	}
 	for _, step := range plan {
 		response, err := a.invoke(ctx, request.Prompt, step)

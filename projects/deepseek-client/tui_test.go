@@ -2,11 +2,13 @@ package main
 
 import (
 	"context"
+	"path/filepath"
 	"strings"
 	"testing"
 
 	tea "charm.land/bubbletea/v2"
 	"charm.land/lipgloss/v2"
+	"github.com/eren-erdny/ai_challenge/projects/deepseek-client/userprofiles"
 )
 
 func TestTUIReceivesAgentResultAndCancelsOnExit(t *testing.T) {
@@ -31,6 +33,20 @@ func TestTUIReceivesAgentResultAndCancelsOnExit(t *testing.T) {
 	_, _ = model.Update(keyPress(tea.KeyEscape))
 	if ctx.Err() != context.Canceled {
 		t.Fatal("exit did not cancel active work")
+	}
+}
+
+func TestTUIPersonaCreateStartsAndCompletesWizard(t *testing.T) {
+	config := defaultAppConfig()
+	config.UserProfiles = &userprofiles.JSON{Path: filepath.Join(t.TempDir(), "profiles.json")}
+	model := newTUIModel(config, nil)
+	for _, input := range []string{"/persona create guided", "Кратко", "Markdown", "Без emoji; До трёх пунктов"} {
+		model.textarea.SetValue(input)
+		updated, _ := model.submit()
+		model = updated.(tuiModel)
+	}
+	if model.personaSetup != 0 || model.state.UserProfile.Name != "guided" || model.state.UserProfile.Style != "Кратко" || model.state.UserProfile.Format != "Markdown" || len(model.state.UserProfile.Constraints) != 2 {
+		t.Fatalf("wizard state=%d profile=%+v", model.personaSetup, model.state.UserProfile)
 	}
 }
 
@@ -169,6 +185,16 @@ func TestTUIAutocompleteIncludesExplicitMemoryCommand(t *testing.T) {
 	model = updated.(tuiModel)
 	if got := model.textarea.Value(); got != "/memory set working " {
 		t.Fatalf("explicit memory completion = %q", got)
+	}
+}
+
+func TestTUIAutocompleteIncludesPersonaCommand(t *testing.T) {
+	model := newTUIModel(defaultAppConfig(), nil)
+	model.textarea.SetValue("/persona set")
+	updated, _ := model.Update(keyPress(tea.KeyTab))
+	model = updated.(tuiModel)
+	if got := model.textarea.Value(); got != "/persona set style " {
+		t.Fatalf("persona completion = %q", got)
 	}
 }
 

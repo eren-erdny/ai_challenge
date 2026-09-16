@@ -39,6 +39,8 @@ type askFunction func(context.Context, string, string, requestSettings) (complet
 type sessionState struct {
 	Compression        agent.CompressionConfig
 	Memory             agent.LayeredMemoryStore
+	UserProfiles       userProfileStore
+	UserProfile        agent.UserProfile
 	Tools              agent.ToolExecutor
 	DocumentsDirectory string
 	ToolsDisabled      bool
@@ -76,9 +78,11 @@ func runInteractiveSession(
 	}
 	profile, _ := config.activeAPIProfile()
 	state := sessionState{
-		Compression: config.HistoryPolicy.CompressionConfig,
-		Memory:      config.Memory,
-		Tools:       config.Tools, DocumentsDirectory: config.DocumentsDirectory,
+		Compression:  config.HistoryPolicy.CompressionConfig,
+		Memory:       config.Memory,
+		UserProfiles: config.UserProfiles,
+		UserProfile:  config.UserProfile,
+		Tools:        config.Tools, DocumentsDirectory: config.DocumentsDirectory,
 		ConversationID: conversationID(config.ConversationID),
 		History:        config.History,
 		Mode:           mode,
@@ -137,6 +141,14 @@ func runInteractiveSession(
 			if handleMemoryLayerCommand(context.Background(), text, &state, output) {
 				continue
 			}
+			beforePersona := state.UserProfile.Name
+			if handlePersonalizationCommand(context.Background(), text, &state, output) {
+				fields := strings.Fields(text)
+				if len(fields) == 3 && fields[0] == "/persona" && fields[1] == "create" && beforePersona != fields[2] && state.UserProfile.Name == fields[2] {
+					runPersonaWizard(input, &state, output, errorOutput)
+				}
+				continue
+			}
 			if text == "/models" {
 				ctx, cancel := signal.NotifyContext(context.Background(), os.Interrupt)
 				models, modelsErr := fetchModels(ctx, state.APIToken, state.API)
@@ -186,18 +198,48 @@ func runInteractiveSession(
 	}
 }
 
+func runPersonaWizard(input *bufio.Reader, state *sessionState, output, errorOutput io.Writer) {
+	for stage := 1; stage <= 3; {
+		fmt.Fprint(output, personaWizardPrompt(stage)+" ")
+		line, err := input.ReadString('\n')
+		if err != nil && !errors.Is(err, io.EOF) {
+			fmt.Fprintf(errorOutput, "Не удалось прочитать настройку профиля: %v\n", err)
+			return
+		}
+		next, saveErr := applyPersonaWizardAnswer(context.Background(), state, stage, strings.TrimSpace(line))
+		if saveErr != nil {
+			fmt.Fprintf(errorOutput, "Настройка профиля не сохранена: %v\n", saveErr)
+			continue
+		}
+		if next == -1 {
+			fmt.Fprintln(output, "Первичная настройка профиля завершена досрочно.")
+			return
+		}
+		if next == 0 {
+			fmt.Fprintf(output, "Профиль пользователя %s настроен.\n", state.UserProfile.Name)
+			return
+		}
+		stage = next
+		if errors.Is(err, io.EOF) {
+			return
+		}
+	}
+}
+
 func printSessionWelcome(output io.Writer, state sessionState) {
 	fmt.Fprintln(output, "Добрый день! Интерактивный клиент DeepSeek запущен.")
 	printConversationExit(output, state)
-	fmt.Fprintf(output, "Профиль: %s; модель: %s; режим: %s; стратегия: %s; temperature: %g; формат: %s\n",
-		state.ActiveProfile, state.Model, state.Mode, state.Strategy, state.Temperature, state.Control.Format)
-	fmt.Fprintln(output, "Команды: /new, /conversation, /memory, /compress, /checkpoint, /branch, /branches, /profile, /model, /mode, /status, /settings, /help, /exit")
+	fmt.Fprintf(output, "API-профиль: %s; профиль пользователя: %s; модель: %s; режим: %s; стратегия: %s; temperature: %g; формат: %s\n",
+		state.ActiveProfile, state.UserProfile.Name,
+		state.Model, state.Mode, state.Strategy, state.Temperature, state.Control.Format)
+	fmt.Fprintln(output, "Команды: /new, /conversation, /memory, /persona, /compress, /checkpoint, /branch, /branches, /profile, /model, /mode, /status, /settings, /help, /exit")
 }
 
 func handleSessionCommand(command string, state *sessionState, output io.Writer) {
 	parts := strings.Fields(command)
 	switch parts[0] {
 	case "/help":
+		fmt.Fprintln(output, "/persona create|use|show|list|set|add-constraint|remove-constraint|delete — профиль пользователя")
 		fmt.Fprintln(output, "/memory STRATEGY   — full|summary|sliding|facts|branching")
 		fmt.Fprintln(output, "/memory show [LAYER] — показать short-term, working и long-term")
 		fmt.Fprintln(output, "/memory set working|long-term KEY VALUE — явно сохранить запись")
@@ -421,7 +463,8 @@ func reloadSessionConfig(currentToken string, state *sessionState) (string, stri
 func printSessionSettings(output io.Writer, state sessionState) {
 	fmt.Fprintf(output, "Стратегия памяти: %s\n", state.Compression.Memory())
 	fmt.Fprintf(output, "Память: последние N=%d. Summary: auto_compress=%t; порог=80%% (при context_window=0 отключено)\n", state.Compression.Keep(), state.Compression.Automatic())
-	fmt.Fprintf(output, "Активный профиль: %s\n", state.ActiveProfile)
+	fmt.Fprintf(output, "Активный API-профиль: %s\n", state.ActiveProfile)
+	fmt.Fprintf(output, "Активный профиль пользователя: %s\n", state.UserProfile.Name)
 	fmt.Fprintf(output, "Модель: %s\n", state.Model)
 	fmt.Fprintf(output, "Режим: %s\n", state.Mode)
 	fmt.Fprintf(output, "Стратегия: %s\n", state.Strategy)

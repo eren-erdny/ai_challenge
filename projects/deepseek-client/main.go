@@ -20,6 +20,7 @@ import (
 	"github.com/eren-erdny/ai_challenge/projects/deepseek-client/history"
 	"github.com/eren-erdny/ai_challenge/projects/deepseek-client/llm"
 	"github.com/eren-erdny/ai_challenge/projects/deepseek-client/memorylayers"
+	"github.com/eren-erdny/ai_challenge/projects/deepseek-client/userprofiles"
 )
 
 type modelsResponse struct {
@@ -63,6 +64,12 @@ func run(input *bufio.Reader) int {
 	}
 	store := &history.JSON{Dir: filepath.Join(filepath.Dir(configPath), "conversations")}
 	config.Memory = &memorylayers.JSON{Dir: filepath.Join(filepath.Dir(configPath), "memory")}
+	config.UserProfiles = &userprofiles.JSON{Path: filepath.Join(filepath.Dir(configPath), "memory", "profiles.json")}
+	config.UserProfile, err = config.UserProfiles.Active(context.Background())
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "Не удалось восстановить профиль пользователя: %v\n", err)
+		return 1
+	}
 	config.DocumentsDirectory = filepath.Join(filepath.Dir(configPath), "documents")
 	if err := os.MkdirAll(config.DocumentsDirectory, 0700); err != nil {
 		fmt.Fprintln(os.Stderr, "Не удалось создать папку документов")

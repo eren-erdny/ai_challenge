@@ -29,6 +29,8 @@ const (
 type appConfig struct {
 	Tools              agent.ToolExecutor       `json:"-"`
 	Memory             agent.LayeredMemoryStore `json:"-"`
+	UserProfiles       userProfileStore         `json:"-"`
+	UserProfile        agent.UserProfile        `json:"-"`
 	DocumentsDirectory string                   `json:"-"`
 	HistoryPolicy      historyConfig            `json:"history"`
 	HistoryNotice      string                   `json:"-"`

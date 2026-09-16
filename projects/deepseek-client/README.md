@@ -153,6 +153,43 @@ Conversation ID, поэтому новый диалог начинает с пу
 стратегии `full|summary|sliding|facts|branching` и входят в расчёт контекстного
 лимита. Данные сохраняются открытым текстом и отправляются активному провайдеру.
 
+### Персонализация
+
+Именованный профиль пользователя задаёт стиль, формат и ограничения ответа. Это
+отдельный слой поверх short-term, working и long-term памяти. Активный профиль
+хранится в `memory/profiles.json`, восстанавливается после перезапуска и
+автоматически добавляется ко всем пользовательским запросам, включая compare и
+benchmark. Текущий явный запрос имеет приоритет над сохранёнными предпочтениями.
+
+```text
+/persona create concise
+Кратко и делово
+Markdown, до трёх пунктов
+Не использовать emoji; Не добавлять вступление
+/persona show
+/persona list
+
+/persona create teacher
+Объяснять доброжелательно и с примерами
+Пошаговое объяснение
+Расшифровывать технические термины
+/persona use concise
+/persona set style Очень кратко
+/persona set format Нумерованный список
+/persona add-constraint Не использовать таблицы
+/persona remove-constraint 1
+/persona delete teacher
+```
+
+После `create` TUI/CLI последовательно спрашивает стиль, формат и ограничения;
+ограничения разделяются `;`. Enter или `-` пропускает поле, `/cancel` завершает
+мастер досрочно. Команды `set`, `add-constraint` и `remove-constraint` позволяют
+редактировать готовый профиль в любое время.
+
+Имя содержит буквы латиницы, цифры, `.`, `_` или `-`. Можно хранить до 100
+профилей и до 20 ограничений в каждом. Профиль влияет на представление ответа,
+но не переносит факты между диалогами: для этого остаются слои памяти.
+
 `full` отправляет всю активную историю и служит контрольной группой. Три стратегии
 Дня 10 работают без summary:
 
@@ -514,6 +551,11 @@ Esc/Ctrl+C        завершить программу
 /memory show [LAYER]
 /memory set working|long-term KEY VALUE
 /memory delete working|long-term KEY
+/persona create|use|show|list ...
+/persona set style|format VALUE
+/persona add-constraint VALUE
+/persona remove-constraint N
+/persona delete NAME
 /checkpoint NAME   сохранить точку ветвления
 /branch create NAME CHECKPOINT
 /branch switch NAME
