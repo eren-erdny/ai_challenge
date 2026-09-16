@@ -121,6 +121,38 @@ go run ./projects/deepseek-client --token-demo
 /memory branching
 ```
 
+Помимо стратегии контекста агент использует три явных слоя памяти:
+
+| Слой | Что хранится | Область и файл | Как пополняется |
+| --- | --- | --- | --- |
+| Краткосрочная | Сообщения текущего диалога | `conversations/<ID>.json` | Автоматически после успешного ответа |
+| Рабочая | Цель, ограничения и состояние текущей задачи | `memory/working/<ID>.json` | Только явной командой пользователя |
+| Долговременная | Профиль, устойчивые решения и знания | `memory/long-term.json` | Только явной командой пользователя |
+
+Явное управление слоями:
+
+```text
+/memory show all
+/memory show short-term
+/memory set working task_goal Подготовить ТЗ сервиса бронирования
+/memory set working deadline 2026-09-30
+/memory set long-term preferred_language Русский
+/memory delete working deadline
+/memory delete long-term preferred_language
+```
+
+Ключи состоят из букв, цифр, `.`, `_` и `-`; слой содержит не более 100 ключей,
+значение — не более 4000 байт. Автоматического переноса из диалога в working или
+long-term нет: назначение всегда выбирает пользователь. Working привязан к
+Conversation ID, поэтому новый диалог начинает с пустого рабочего слоя; long-term общий для всех
+диалогов. Ветки одного Conversation ID используют одну рабочую память.
+
+В remembered-режимах модель получает слои в порядке `long-term → working →
+краткосрочная история → новый вопрос`. Рабочая память уточняет долговременную,
+а новый вопрос имеет приоритет при конфликте. Явные слои применяются при любой
+стратегии `full|summary|sliding|facts|branching` и входят в расчёт контекстного
+лимита. Данные сохраняются открытым текстом и отправляются активному провайдеру.
+
 `full` отправляет всю активную историю и служит контрольной группой. Три стратегии
 Дня 10 работают без summary:
 
@@ -479,6 +511,9 @@ Esc/Ctrl+C        завершить программу
 /status last       токены, стоимость и скорость последнего API-запроса
 /compress          сжать старую историю, сохранив последние N сообщений
 /memory STRATEGY   выбрать full|summary|sliding|facts|branching
+/memory show [LAYER]
+/memory set working|long-term KEY VALUE
+/memory delete working|long-term KEY
 /checkpoint NAME   сохранить точку ветвления
 /branch create NAME CHECKPOINT
 /branch switch NAME

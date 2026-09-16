@@ -32,6 +32,9 @@ func executeQuestion(ctx context.Context, token, prompt string, state sessionSta
 	request.ConversationID = conversationID(state.ConversationID)
 	request.Compression = state.Compression
 	runner := agent.NewWithHistory(client, state.History)
+	if state.Memory != nil {
+		runner = runner.WithMemoryLayers(state.Memory)
+	}
 	if !state.ToolsDisabled {
 		runner = runner.WithTools(state.Tools)
 	}

@@ -130,6 +130,7 @@ func newTUIModel(config appConfig, ask askFunction) tuiModel {
 	profile, _ := config.activeAPIProfile()
 	state := sessionState{
 		Compression: config.HistoryPolicy.CompressionConfig,
+		Memory:      config.Memory,
 		Tools:       config.Tools, DocumentsDirectory: config.DocumentsDirectory,
 		ConversationID: conversationID(config.ConversationID),
 		History:        config.History,
@@ -319,6 +320,11 @@ func (model tuiModel) submit() (tea.Model, tea.Cmd) {
 		model.refreshHistory()
 		return model, nil
 	}
+	if handleMemoryLayerCommand(model.ctx, text, &model.state, &conversationOutput) {
+		model.history = append(model.history, statusStyle.Render(conversationOutput.String()))
+		model.refreshHistory()
+		return model, nil
+	}
 	if text == "/clear" {
 		model.history = nil
 		model.refreshHistory()
@@ -483,7 +489,7 @@ func (model tuiModel) autocompleteSuggestions() []autocompleteSuggestion {
 	case "/mode":
 		values = []string{string(modeFree), string(modeControlled), string(modeCompare), string(modeTemperatureBenchmark), string(modeModelBenchmark)}
 	case "/memory":
-		values = []string{string(agent.MemoryFull), string(agent.MemorySummary), string(agent.MemorySliding), string(agent.MemoryFacts), string(agent.MemoryBranching)}
+		values = []string{string(agent.MemoryFull), string(agent.MemorySummary), string(agent.MemorySliding), string(agent.MemoryFacts), string(agent.MemoryBranching), "show", "set working ", "set long-term ", "delete working ", "delete long-term "}
 	case "/strategy":
 		values = []string{string(strategyStandard), string(strategyStepByStep), string(strategyExperts)}
 	case "/temperature":

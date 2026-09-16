@@ -14,6 +14,7 @@ import (
 // History is optional and supplied independently of the transport and UI.
 type Agent struct {
 	tools   ToolExecutor
+	memory  LayeredMemoryStore
 	counter TokenCounter
 	client  Client
 	history HistoryStore
@@ -23,6 +24,12 @@ func New(client Client) *Agent { return &Agent{client: client} }
 
 func NewWithHistory(client Client, history HistoryStore) *Agent {
 	return &Agent{client: client, history: history}
+}
+
+func (a *Agent) WithMemoryLayers(memory LayeredMemoryStore) *Agent {
+	copy := *a
+	copy.memory = memory
+	return &copy
 }
 
 type invocation struct {
@@ -83,6 +90,10 @@ func (a *Agent) Run(ctx context.Context, request Request) (Result, error) {
 		if err != nil {
 			return result, fmt.Errorf("load conversation: %w", err)
 		}
+		layers, layerErr := LayerMemoryMessages(ctx, a.memory, request.ConversationID)
+		if layerErr != nil {
+			return result, fmt.Errorf("load memory layers: %w", layerErr)
+		}
 		effective := append([]Message(nil), history...)
 		switch memoryStrategy {
 		case MemoryFull, MemoryBranching:
@@ -120,7 +131,7 @@ func (a *Agent) Run(ctx context.Context, request Request) (Result, error) {
 				return result, err
 			}
 			step := plan[0]
-			step.messages = effective
+			step.messages = append(append([]Message(nil), layers...), effective...)
 			prepared, reserve := a.prepare(request.Prompt, step)
 			estimate := a.historySize(prepared.Messages) + reserve
 			if step.allowTools && a.tools != nil {
@@ -143,6 +154,7 @@ func (a *Agent) Run(ctx context.Context, request Request) (Result, error) {
 				}
 			}
 		}
+		effective = append(layers, effective...)
 		plan[0].messages = append([]Message(nil), effective...)
 	}
 	for _, step := range plan {

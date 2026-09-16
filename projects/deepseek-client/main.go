@@ -19,6 +19,7 @@ import (
 	"github.com/eren-erdny/ai_challenge/projects/deepseek-client/filetools"
 	"github.com/eren-erdny/ai_challenge/projects/deepseek-client/history"
 	"github.com/eren-erdny/ai_challenge/projects/deepseek-client/llm"
+	"github.com/eren-erdny/ai_challenge/projects/deepseek-client/memorylayers"
 )
 
 type modelsResponse struct {
@@ -61,6 +62,7 @@ func run(input *bufio.Reader) int {
 		return 1
 	}
 	store := &history.JSON{Dir: filepath.Join(filepath.Dir(configPath), "conversations")}
+	config.Memory = &memorylayers.JSON{Dir: filepath.Join(filepath.Dir(configPath), "memory")}
 	config.DocumentsDirectory = filepath.Join(filepath.Dir(configPath), "documents")
 	if err := os.MkdirAll(config.DocumentsDirectory, 0700); err != nil {
 		fmt.Fprintln(os.Stderr, "Не удалось создать папку документов")

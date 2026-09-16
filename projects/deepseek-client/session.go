@@ -38,6 +38,7 @@ type askFunction func(context.Context, string, string, requestSettings) (complet
 
 type sessionState struct {
 	Compression        agent.CompressionConfig
+	Memory             agent.LayeredMemoryStore
 	Tools              agent.ToolExecutor
 	DocumentsDirectory string
 	ToolsDisabled      bool
@@ -76,6 +77,7 @@ func runInteractiveSession(
 	profile, _ := config.activeAPIProfile()
 	state := sessionState{
 		Compression: config.HistoryPolicy.CompressionConfig,
+		Memory:      config.Memory,
 		Tools:       config.Tools, DocumentsDirectory: config.DocumentsDirectory,
 		ConversationID: conversationID(config.ConversationID),
 		History:        config.History,
@@ -130,6 +132,9 @@ func runInteractiveSession(
 				if changed {
 					printConversationMessages(output, messages)
 				}
+				continue
+			}
+			if handleMemoryLayerCommand(context.Background(), text, &state, output) {
 				continue
 			}
 			if text == "/models" {
@@ -194,6 +199,9 @@ func handleSessionCommand(command string, state *sessionState, output io.Writer)
 	switch parts[0] {
 	case "/help":
 		fmt.Fprintln(output, "/memory STRATEGY   — full|summary|sliding|facts|branching")
+		fmt.Fprintln(output, "/memory show [LAYER] — показать short-term, working и long-term")
+		fmt.Fprintln(output, "/memory set working|long-term KEY VALUE — явно сохранить запись")
+		fmt.Fprintln(output, "/memory delete working|long-term KEY — удалить запись")
 		fmt.Fprintln(output, "/checkpoint NAME  — сохранить точку ветвления")
 		fmt.Fprintln(output, "/branch create NAME CHECKPOINT | /branch switch NAME")
 		fmt.Fprintln(output, "/branches          — показать ветки и checkpoints")
