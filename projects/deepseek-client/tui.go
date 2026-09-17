@@ -135,6 +135,7 @@ func newTUIModel(config appConfig, ask askFunction) tuiModel {
 		Memory:       config.Memory,
 		UserProfiles: config.UserProfiles,
 		UserProfile:  config.UserProfile,
+		TaskStates:   config.TaskStates,
 		Tools:        config.Tools, DocumentsDirectory: config.DocumentsDirectory,
 		ConversationID: conversationID(config.ConversationID),
 		History:        config.History,
@@ -524,7 +525,7 @@ func (model tuiModel) autocompleteSuggestions() []autocompleteSuggestion {
 			}
 		}
 	case "/mode":
-		values = []string{string(modeFree), string(modeControlled), string(modeCompare), string(modeTemperatureBenchmark), string(modeModelBenchmark)}
+		values = []string{string(modeFree), string(modeTask), string(modeControlled), string(modeCompare), string(modeTemperatureBenchmark), string(modeModelBenchmark)}
 	case "/memory":
 		values = []string{string(agent.MemoryFull), string(agent.MemorySummary), string(agent.MemorySliding), string(agent.MemoryFacts), string(agent.MemoryBranching), "show", "set working ", "set long-term ", "delete working ", "delete long-term "}
 	case "/persona":

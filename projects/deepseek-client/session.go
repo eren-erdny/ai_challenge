@@ -20,6 +20,7 @@ type promptStrategy = agent.Strategy
 
 const (
 	modeFree                 sessionMode = agent.Free
+	modeTask                 sessionMode = agent.Task
 	modeControlled           sessionMode = agent.Controlled
 	modeCompare              sessionMode = agent.Compare
 	modeTemperatureBenchmark sessionMode = agent.TemperatureBenchmark
@@ -41,6 +42,7 @@ type sessionState struct {
 	Memory             agent.LayeredMemoryStore
 	UserProfiles       userProfileStore
 	UserProfile        agent.UserProfile
+	TaskStates         agent.TaskStateStore
 	Tools              agent.ToolExecutor
 	DocumentsDirectory string
 	ToolsDisabled      bool
@@ -82,6 +84,7 @@ func runInteractiveSession(
 		Memory:       config.Memory,
 		UserProfiles: config.UserProfiles,
 		UserProfile:  config.UserProfile,
+		TaskStates:   config.TaskStates,
 		Tools:        config.Tools, DocumentsDirectory: config.DocumentsDirectory,
 		ConversationID: conversationID(config.ConversationID),
 		History:        config.History,
@@ -253,6 +256,7 @@ func handleSessionCommand(command string, state *sessionState, output io.Writer)
 		fmt.Fprintln(output, "/new              — начать новый чистый диалог")
 		fmt.Fprintln(output, "/conversation [ID] — показать ID или открыть сохранённый диалог")
 		fmt.Fprintln(output, "/mode free        — один запрос без ограничений")
+		fmt.Fprintln(output, "/mode task        — вести задачу по этапам; «Продолжай» использует сохранённое состояние")
 		fmt.Fprintln(output, "/mode controlled  — один запрос с настройками и локальным судьёй")
 		fmt.Fprintln(output, "/mode compare     — два запроса и сравнение")
 		fmt.Fprintln(output, "/mode temperature_benchmark — три коротких ответа при temperature 0, 1.2 и 2")
@@ -311,13 +315,13 @@ func handleSessionCommand(command string, state *sessionState, output io.Writer)
 		if mode == "benchmark" || mode == "benchmark_temperature" {
 			mode = modeTemperatureBenchmark
 		}
-		if mode != modeFree && mode != modeControlled && mode != modeCompare && mode != modeTemperatureBenchmark && mode != modeModelBenchmark {
-			fmt.Fprintln(output, "Неизвестный режим. Доступны: free, controlled, compare, temperature_benchmark, model_benchmark")
+		if mode != modeFree && mode != modeTask && mode != modeControlled && mode != modeCompare && mode != modeTemperatureBenchmark && mode != modeModelBenchmark {
+			fmt.Fprintln(output, "Неизвестный режим. Доступны: free, task, controlled, compare, temperature_benchmark, model_benchmark")
 			return
 		}
 		state.Mode = mode
 		switch state.Mode {
-		case modeFree:
+		case modeFree, modeTask:
 			state.Control.Enabled = false
 		case modeControlled, modeCompare:
 			state.Control.Enabled = true

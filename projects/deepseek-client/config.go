@@ -31,6 +31,7 @@ type appConfig struct {
 	Memory             agent.LayeredMemoryStore `json:"-"`
 	UserProfiles       userProfileStore         `json:"-"`
 	UserProfile        agent.UserProfile        `json:"-"`
+	TaskStates         agent.TaskStateStore     `json:"-"`
 	DocumentsDirectory string                   `json:"-"`
 	HistoryPolicy      historyConfig            `json:"history"`
 	HistoryNotice      string                   `json:"-"`

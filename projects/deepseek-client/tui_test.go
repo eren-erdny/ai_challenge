@@ -152,14 +152,14 @@ func TestTUIAutocompleteSelectionUsesArrowKeys(t *testing.T) {
 	updated, _ = model.Update(keyPress(tea.KeyTab))
 	model = updated.(tuiModel)
 
-	if got := model.textarea.Value(); got != "/mode controlled" {
-		t.Fatalf("selected completion = %q, want /mode controlled", got)
+	if got := model.textarea.Value(); got != "/mode task" {
+		t.Fatalf("selected completion = %q, want /mode task", got)
 	}
 }
 
 func TestTUIAutocompleteIncludesBenchmarkMode(t *testing.T) {
 	model := newTUIModel(defaultAppConfig(), nil)
-	model.textarea.SetValue("/mode t")
+	model.textarea.SetValue("/mode te")
 
 	updated, _ := model.Update(keyPress(tea.KeyTab))
 	model = updated.(tuiModel)
@@ -195,6 +195,16 @@ func TestTUIAutocompleteIncludesPersonaCommand(t *testing.T) {
 	model = updated.(tuiModel)
 	if got := model.textarea.Value(); got != "/persona set style " {
 		t.Fatalf("persona completion = %q", got)
+	}
+}
+
+func TestTUIAutocompleteIncludesTaskMode(t *testing.T) {
+	model := newTUIModel(defaultAppConfig(), nil)
+	model.textarea.SetValue("/mode ta")
+	updated, _ := model.Update(keyPress(tea.KeyTab))
+	model = updated.(tuiModel)
+	if got := model.textarea.Value(); got != "/mode task" {
+		t.Fatalf("task mode completion = %q", got)
 	}
 }
 

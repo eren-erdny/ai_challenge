@@ -15,6 +15,7 @@ import (
 type Agent struct {
 	tools   ToolExecutor
 	memory  LayeredMemoryStore
+	tasks   TaskStateStore
 	counter TokenCounter
 	client  Client
 	history HistoryStore
@@ -29,6 +30,12 @@ func NewWithHistory(client Client, history HistoryStore) *Agent {
 func (a *Agent) WithMemoryLayers(memory LayeredMemoryStore) *Agent {
 	copy := *a
 	copy.memory = memory
+	return &copy
+}
+
+func (a *Agent) WithTaskStates(tasks TaskStateStore) *Agent {
+	copy := *a
+	copy.tasks = tasks
 	return &copy
 }
 
@@ -80,7 +87,25 @@ func (a *Agent) Run(ctx context.Context, request Request) (Result, error) {
 	if err != nil {
 		return result, fmt.Errorf("user profile: %w", err)
 	}
-	remember := a.history != nil && (request.Mode == Free || request.Mode == Controlled)
+	var currentTask TaskState
+	if request.Mode == Task {
+		if a.tasks == nil {
+			return result, errors.New("task mode requires a task state store")
+		}
+		if strings.TrimSpace(request.ConversationID) == "" {
+			return result, errors.New("conversation ID is required for task mode")
+		}
+		currentTask, err = a.tasks.LoadTaskState(ctx, request.ConversationID)
+		if err != nil {
+			return result, fmt.Errorf("load task state: %w", err)
+		}
+	}
+	taskContext, err := TaskModeMessages(request.Mode, currentTask)
+	if err != nil {
+		return result, fmt.Errorf("task state: %w", err)
+	}
+	requestContext := append(append([]Message(nil), personalization...), taskContext...)
+	remember := a.history != nil && (request.Mode == Free || request.Mode == Controlled || request.Mode == Task)
 	memoryStrategy := request.Compression.Memory()
 	if !ValidMemoryStrategy(memoryStrategy) {
 		return result, fmt.Errorf("unknown memory strategy %q", memoryStrategy)
@@ -135,7 +160,7 @@ func (a *Agent) Run(ctx context.Context, request Request) (Result, error) {
 				return result, err
 			}
 			step := plan[0]
-			step.messages = append(append(append([]Message(nil), personalization...), layers...), effective...)
+			step.messages = append(append(append([]Message(nil), requestContext...), layers...), effective...)
 			prepared, reserve := a.prepare(request.Prompt, step)
 			estimate := a.historySize(prepared.Messages) + reserve
 			if step.allowTools && a.tools != nil {
@@ -162,16 +187,31 @@ func (a *Agent) Run(ctx context.Context, request Request) (Result, error) {
 		plan[0].messages = append([]Message(nil), effective...)
 	}
 	for i := range plan {
-		plan[i].messages = append(append([]Message(nil), personalization...), plan[i].messages...)
+		plan[i].messages = append(append([]Message(nil), requestContext...), plan[i].messages...)
 	}
 	if judge != nil {
-		judge.messages = append(append([]Message(nil), personalization...), judge.messages...)
+		judge.messages = append(append([]Message(nil), requestContext...), judge.messages...)
 	}
+	var nextTask TaskState
 	for _, step := range plan {
 		response, err := a.invoke(ctx, request.Prompt, step)
 		if err != nil {
 			result.Failed = &response
 			return result, fmt.Errorf("model %s: %w", step.target.Model, err)
+		}
+		if request.Mode == Task {
+			answer, proposed, decodeErr := DecodeTaskCompletion(response.Answer.Content, time.Now())
+			if decodeErr != nil {
+				result.Failed = &response
+				return result, decodeErr
+			}
+			if transitionErr := ValidateTaskTransition(currentTask, proposed); transitionErr != nil {
+				result.Failed = &response
+				return result, fmt.Errorf("invalid task transition: %w", transitionErr)
+			}
+			response.Answer.Content = answer
+			response.Tokens.AnswerEstimate = a.count().Count(answer)
+			nextTask = proposed
 		}
 		result.Responses = append(result.Responses, response)
 	}
@@ -195,6 +235,12 @@ func (a *Agent) Run(ctx context.Context, request Request) (Result, error) {
 			}
 		}
 	}
+	if request.Mode == Task {
+		if err := a.tasks.SaveTaskState(ctx, request.ConversationID, currentTask, nextTask); err != nil {
+			return result, fmt.Errorf("answer received but task state was not saved: %w", err)
+		}
+		result.TaskState = &nextTask
+	}
 	if judge != nil {
 		analysis, err := a.invoke(ctx, analysisPrompt(request, result.Responses), *judge)
 		if err != nil {
@@ -215,7 +261,7 @@ func makePlan(request Request) ([]invocation, *invocation, error) {
 		control, err = BuildControl(request.Control)
 	case ModelBenchmark:
 		control, err = BuildControl(request.Control)
-	case Free, TemperatureBenchmark:
+	case Free, Task, TemperatureBenchmark:
 	default:
 		return nil, nil, fmt.Errorf("unknown mode %q", request.Mode)
 	}
@@ -226,7 +272,7 @@ func makePlan(request Request) ([]invocation, *invocation, error) {
 	var plan []invocation
 	var judge *invocation
 	switch request.Mode {
-	case Free, Controlled:
+	case Free, Task, Controlled:
 		base.allowTools = true
 		plan = append(plan, base)
 	case Compare:

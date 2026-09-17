@@ -32,6 +32,9 @@ func executeQuestion(ctx context.Context, token, prompt string, state sessionSta
 	request.ConversationID = conversationID(state.ConversationID)
 	request.Compression = state.Compression
 	runner := agent.NewWithHistory(client, state.History)
+	if state.TaskStates != nil {
+		runner = runner.WithTaskStates(state.TaskStates)
+	}
 	if state.Memory != nil {
 		runner = runner.WithMemoryLayers(state.Memory)
 	}
@@ -70,6 +73,15 @@ func renderAgentResult(output io.Writer, result agent.Result) {
 	if c := result.Compression; c != nil {
 		fmt.Fprintf(output, "Сжатие: применено=%t; оценка истории до=%d, после=%d токенов; API-вызовов=%d (без usage=%d), сообщённый вход=%d, выход=%d. Полный учёт: /status.\n", c.Changed, c.Before, c.After, c.Calls, c.UnknownUsageCalls, c.Input, c.Output)
 	}
+	defer func() {
+		if state := result.TaskState; state != nil {
+			fmt.Fprintf(output, "[task:%s] %s → %s", state.Stage, state.CurrentStep, state.ExpectedAction)
+			if state.Paused {
+				fmt.Fprint(output, " (пауза)")
+			}
+			fmt.Fprintln(output)
+		}
+	}()
 	switch result.Mode {
 	case agent.ModelBenchmark:
 		printModelBenchmark(output, result.Responses)

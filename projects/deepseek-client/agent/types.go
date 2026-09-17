@@ -9,6 +9,7 @@ type Mode string
 
 const (
 	Free                 Mode = "free"
+	Task                 Mode = "task"
 	Controlled           Mode = "controlled"
 	Compare              Mode = "compare"
 	TemperatureBenchmark Mode = "temperature_benchmark"
@@ -97,6 +98,7 @@ type Response struct {
 type Result struct {
 	Compression    *CompressionResult
 	Facts          *FactsResult
+	TaskState      *TaskState
 	Failed         *Response
 	ConversationID string
 	Mode           Mode
