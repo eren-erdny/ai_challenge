@@ -426,18 +426,18 @@ func TestTaskModeContinuesFromPersistedState(t *testing.T) {
 			joined += message.Content
 		}
 		if calls == 1 {
-			return completionResult{Content: `{"answer":"План готов","task_state":{"goal":"Создать API","stage":"planning","current_step":"Согласовать контракт","expected_action":"Начать реализацию","paused":false,"pause_reason":""}}`}, nil
+			return completionResult{Content: `{"answer":"План готов","task_state":{"goal":"Создать API","stage":"planning","current_step":"Согласовать контракт","expected_action":"Утвердить план","paused":false,"pause_reason":""},"transition":{"action":"start","from":"","to":"planning","gate":"none","reason":"Задача создана","evidence":""}}`}, nil
 		}
-		if prompt != "Продолжай" || !strings.Contains(joined, `"current_step":"Согласовать контракт"`) {
+		if prompt != "Утверждаю план, продолжай" || !strings.Contains(joined, `"current_step":"Согласовать контракт"`) {
 			t.Fatalf("continuation lost state: prompt=%q messages=%s", prompt, joined)
 		}
-		return completionResult{Content: `{"answer":"Начинаю реализацию","task_state":{"goal":"Создать API","stage":"execution","current_step":"Реализовать endpoint","expected_action":"Запустить тесты","paused":false,"pause_reason":""}}`}, nil
+		return completionResult{Content: `{"answer":"Начинаю реализацию","task_state":{"goal":"Создать API","stage":"execution","current_step":"Реализовать endpoint","expected_action":"Запустить тесты","paused":false,"pause_reason":""},"transition":{"action":"advance","from":"planning","to":"execution","gate":"plan_approved","reason":"План утверждён","evidence":"Пользователь явно утвердил план"}}`}, nil
 	}
 
 	var output, errorOutput strings.Builder
 	executeQuestion(context.Background(), "", "Создай API", state, &output, &errorOutput, ask)
-	executeQuestion(context.Background(), "", "Продолжай", state, &output, &errorOutput, ask)
-	if errorOutput.Len() != 0 || !strings.Contains(output.String(), "План готов") || !strings.Contains(output.String(), "[task:execution]") {
+	executeQuestion(context.Background(), "", "Утверждаю план, продолжай", state, &output, &errorOutput, ask)
+	if errorOutput.Len() != 0 || !strings.Contains(output.String(), "План готов") || !strings.Contains(output.String(), "[transition:advance разрешён] planning → execution") || !strings.Contains(output.String(), "[task:execution]") {
 		t.Fatalf("output=%q error=%q", output.String(), errorOutput.String())
 	}
 	persisted, err := store.LoadTaskState(context.Background(), "task-dialog")

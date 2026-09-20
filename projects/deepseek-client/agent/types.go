@@ -100,6 +100,8 @@ type Result struct {
 	Compression    *CompressionResult
 	Facts          *FactsResult
 	TaskState      *TaskState
+	TaskTransition *TaskTransition
+	TaskRepaired   bool
 	Failed         *Response
 	ConversationID string
 	Mode           Mode

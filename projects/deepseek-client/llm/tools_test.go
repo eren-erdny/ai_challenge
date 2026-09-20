@@ -29,10 +29,10 @@ func TestToolCallingHTTPAndRestoredContext(t *testing.T) {
 			t.Error(err)
 		}
 		if calls == 1 {
-			if len(payload.Tools) != 2 {
+			if len(payload.Tools) != 7 {
 				t.Error("tools not sent")
 			}
-			w.Write([]byte(`{"choices":[{"message":{"content":null,"tool_calls":[{"id":"read-1","type":"function","function":{"name":"read_file","arguments":"{\"name\":\"article.txt\"}"}}]},"finish_reason":"tool_calls"}],"usage":{"prompt_tokens":10,"completion_tokens":4}}`))
+			w.Write([]byte(`{"choices":[{"message":{"content":null,"tool_calls":[{"id":"read-1","type":"function","function":{"name":"read_file","arguments":"{\"path\":\"article.txt\"}"}}]},"finish_reason":"tool_calls"}],"usage":{"prompt_tokens":10,"completion_tokens":4}}`))
 			return
 		}
 		if calls == 2 {

@@ -77,6 +77,22 @@ func renderAgentResult(output io.Writer, result agent.Result) {
 		fmt.Fprintf(output, "Сжатие: применено=%t; оценка истории до=%d, после=%d токенов; API-вызовов=%d (без usage=%d), сообщённый вход=%d, выход=%d. Полный учёт: /status.\n", c.Changed, c.Before, c.After, c.Calls, c.UnknownUsageCalls, c.Input, c.Output)
 	}
 	defer func() {
+		if result.TaskRepaired {
+			fmt.Fprintln(output, "[task] Формат ответа модели восстановлен дополнительным вызовом")
+		}
+		if transition := result.TaskTransition; transition != nil {
+			from := transition.From
+			if from == "" {
+				from = "not_started"
+			}
+			status := "разрешён"
+			if !transition.Allowed {
+				status = "отклонён"
+			} else if !transition.Applied {
+				status = "заблокирован"
+			}
+			fmt.Fprintf(output, "[transition:%s %s] %s → %s\n", transition.Action, status, from, transition.To)
+		}
 		if state := result.TaskState; state != nil {
 			fmt.Fprintf(output, "[task:%s] %s → %s", state.Stage, state.CurrentStep, state.ExpectedAction)
 			if state.Paused {

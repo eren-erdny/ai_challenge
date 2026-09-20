@@ -214,6 +214,7 @@ func (a *Agent) Run(ctx context.Context, request Request) (Result, error) {
 	}
 	var nextTask TaskState
 	saveTask := false
+	var lifecycle *TaskTransition
 	for _, step := range plan {
 		response, err := a.invoke(ctx, request.Prompt, step)
 		if err != nil {
@@ -222,16 +223,30 @@ func (a *Agent) Run(ctx context.Context, request Request) (Result, error) {
 		}
 		var proposedTask *TaskState
 		if request.Mode == Task {
-			answer, proposed, decodeErr := DecodeTaskCompletion(response.Answer.Content, time.Now())
+			answer, proposed, proposedTransition, decodeErr := DecodeTaskCompletion(response.Answer.Content, time.Now())
 			if decodeErr != nil {
-				result.Failed = &response
-				return result, decodeErr
+				initialErr := decodeErr
+				repaired, repairErr := a.repairTaskCompletion(ctx, step.target, request.Prompt, response.Answer.Content, currentTask)
+				mergeResponseUsage(&response, repaired)
+				if repairErr != nil {
+					result.Failed = &response
+					return result, fmt.Errorf("task-mode JSON was invalid (%v); format recovery failed: %w", initialErr, repairErr)
+				}
+				response.Answer.Content = repaired.Answer.Content
+				answer, proposed, proposedTransition, decodeErr = DecodeTaskCompletion(repaired.Answer.Content, time.Now())
+				if decodeErr != nil {
+					result.Failed = &response
+					return result, fmt.Errorf("task-mode JSON was invalid (%v); format recovery returned invalid JSON: %w", initialErr, decodeErr)
+				}
+				result.TaskRepaired = true
 			}
-			if transitionErr := ValidateTaskTransition(currentTask, proposed); transitionErr != nil {
-				result.Failed = &response
-				return result, fmt.Errorf("invalid task transition: %w", transitionErr)
+			transition, transitionErr := ValidateExplicitTaskTransition(currentTask, proposed, proposedTransition, request.Prompt)
+			lifecycle = &transition
+			if transitionErr != nil {
+				answer = TaskTransitionRefusal(currentTask, transition, transitionErr)
+			} else {
+				proposedTask = &proposed
 			}
-			proposedTask = &proposed
 			response.Answer.Content = answer
 			response.Tokens.AnswerEstimate = a.count().Count(answer)
 		}
@@ -251,6 +266,10 @@ func (a *Agent) Run(ctx context.Context, request Request) (Result, error) {
 				response.Answer.Content = invariantRefusal(check)
 				response.Tokens.AnswerEstimate = a.count().Count(response.Answer.Content)
 				response.Validation = nil
+				if lifecycle != nil {
+					lifecycle.Applied = false
+					lifecycle.Rejection = "transition blocked by invariant enforcement"
+				}
 			} else if proposedTask != nil {
 				nextTask, saveTask = *proposedTask, true
 			}
@@ -260,7 +279,8 @@ func (a *Agent) Run(ctx context.Context, request Request) (Result, error) {
 		result.Responses = append(result.Responses, response)
 	}
 	if request.Mode == Task {
-		if !saveTask && currentTask.Stage != "" {
+		result.TaskTransition = lifecycle
+		if (lifecycle == nil || !lifecycle.Allowed || !saveTask) && currentTask.Stage != "" {
 			preserved := currentTask
 			result.TaskState = &preserved
 		}
@@ -288,6 +308,9 @@ func (a *Agent) Run(ctx context.Context, request Request) (Result, error) {
 	if request.Mode == Task && saveTask {
 		if err := a.tasks.SaveTaskState(ctx, request.ConversationID, currentTask, nextTask); err != nil {
 			return result, fmt.Errorf("answer received but task state was not saved: %w", err)
+		}
+		if lifecycle != nil {
+			lifecycle.Applied = true
 		}
 		result.TaskState = &nextTask
 	}

@@ -87,7 +87,7 @@ func TestInvariantRefusalDoesNotAdvanceTaskState(t *testing.T) {
 	client := agent.ClientFunc(func(context.Context, agent.Target, string, agent.Settings) (agent.Completion, error) {
 		calls++
 		if calls == 1 {
-			return agent.Completion{Content: `{"answer":"Перепишем на Python","task_state":{"goal":"Build API","stage":"execution","current_step":"Rewrite","expected_action":"Deploy","paused":false,"pause_reason":""}}`}, nil
+			return agent.Completion{Content: `{"answer":"Перепишем на Python","task_state":{"goal":"Build API","stage":"execution","current_step":"Rewrite","expected_action":"Deploy","paused":false,"pause_reason":""},"transition":{"action":"advance","from":"planning","to":"execution","gate":"plan_approved","reason":"План утверждён","evidence":"Пользователь утвердил план"}}`}, nil
 		}
 		return agent.Completion{Content: `{"compliant":false,"violations":[1],"explanation":"Python нарушает ограничение стека."}`}, nil
 	})
