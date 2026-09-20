@@ -92,6 +92,7 @@ type Response struct {
 	Temperature float64
 	Control     *Control
 	Validation  *ValidationResult
+	Invariant   *InvariantCheck
 	CostUSD     *float64
 }
 

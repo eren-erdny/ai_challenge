@@ -43,6 +43,7 @@ type sessionState struct {
 	UserProfiles       userProfileStore
 	UserProfile        agent.UserProfile
 	TaskStates         agent.TaskStateStore
+	Invariants         invariantStore
 	Tools              agent.ToolExecutor
 	DocumentsDirectory string
 	ToolsDisabled      bool
@@ -85,6 +86,7 @@ func runInteractiveSession(
 		UserProfiles: config.UserProfiles,
 		UserProfile:  config.UserProfile,
 		TaskStates:   config.TaskStates,
+		Invariants:   config.Invariants,
 		Tools:        config.Tools, DocumentsDirectory: config.DocumentsDirectory,
 		ConversationID: conversationID(config.ConversationID),
 		History:        config.History,
@@ -142,6 +144,9 @@ func runInteractiveSession(
 				continue
 			}
 			if handleMemoryLayerCommand(context.Background(), text, &state, output) {
+				continue
+			}
+			if handleInvariantCommand(context.Background(), text, &state, output) {
 				continue
 			}
 			beforePersona := state.UserProfile.Name
@@ -235,7 +240,7 @@ func printSessionWelcome(output io.Writer, state sessionState) {
 	fmt.Fprintf(output, "API-профиль: %s; профиль пользователя: %s; модель: %s; режим: %s; стратегия: %s; temperature: %g; формат: %s\n",
 		state.ActiveProfile, state.UserProfile.Name,
 		state.Model, state.Mode, state.Strategy, state.Temperature, state.Control.Format)
-	fmt.Fprintln(output, "Команды: /new, /conversation, /memory, /persona, /compress, /checkpoint, /branch, /branches, /profile, /model, /mode, /status, /settings, /help, /exit")
+	fmt.Fprintln(output, "Команды: /new, /conversation, /memory, /invariant, /persona, /compress, /checkpoint, /branch, /branches, /profile, /model, /mode, /status, /settings, /help, /exit")
 }
 
 func handleSessionCommand(command string, state *sessionState, output io.Writer) {
@@ -247,6 +252,7 @@ func handleSessionCommand(command string, state *sessionState, output io.Writer)
 		fmt.Fprintln(output, "/memory show [LAYER] — показать short-term, working и long-term")
 		fmt.Fprintln(output, "/memory set working|long-term KEY VALUE — явно сохранить запись")
 		fmt.Fprintln(output, "/memory delete working|long-term KEY — удалить запись")
+		fmt.Fprintln(output, "/invariant add|list|remove — обязательные архитектурные, технические и бизнес-ограничения")
 		fmt.Fprintln(output, "/checkpoint NAME  — сохранить точку ветвления")
 		fmt.Fprintln(output, "/branch create NAME CHECKPOINT | /branch switch NAME")
 		fmt.Fprintln(output, "/branches          — показать ветки и checkpoints")

@@ -198,6 +198,16 @@ func TestTUIAutocompleteIncludesPersonaCommand(t *testing.T) {
 	}
 }
 
+func TestTUIAutocompleteIncludesInvariantCommand(t *testing.T) {
+	model := newTUIModel(defaultAppConfig(), nil)
+	model.textarea.SetValue("/invariant add s")
+	updated, _ := model.Update(keyPress(tea.KeyTab))
+	model = updated.(tuiModel)
+	if got := model.textarea.Value(); got != "/invariant add stack " {
+		t.Fatalf("invariant completion = %q", got)
+	}
+}
+
 func TestTUIAutocompleteIncludesTaskMode(t *testing.T) {
 	model := newTUIModel(defaultAppConfig(), nil)
 	model.textarea.SetValue("/mode ta")

@@ -18,6 +18,7 @@ import (
 	"github.com/eren-erdny/ai_challenge/projects/deepseek-client/agent"
 	"github.com/eren-erdny/ai_challenge/projects/deepseek-client/filetools"
 	"github.com/eren-erdny/ai_challenge/projects/deepseek-client/history"
+	"github.com/eren-erdny/ai_challenge/projects/deepseek-client/invariants"
 	"github.com/eren-erdny/ai_challenge/projects/deepseek-client/llm"
 	"github.com/eren-erdny/ai_challenge/projects/deepseek-client/memorylayers"
 	"github.com/eren-erdny/ai_challenge/projects/deepseek-client/taskstates"
@@ -67,6 +68,7 @@ func run(input *bufio.Reader) int {
 	config.Memory = &memorylayers.JSON{Dir: filepath.Join(filepath.Dir(configPath), "memory")}
 	config.UserProfiles = &userprofiles.JSON{Path: filepath.Join(filepath.Dir(configPath), "memory", "profiles.json")}
 	config.TaskStates = &taskstates.JSON{Dir: filepath.Join(filepath.Dir(configPath), "memory", "tasks")}
+	config.Invariants = &invariants.JSON{Path: filepath.Join(filepath.Dir(configPath), "memory", "invariants.json")}
 	config.UserProfile, err = config.UserProfiles.Active(context.Background())
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "Не удалось восстановить профиль пользователя: %v\n", err)

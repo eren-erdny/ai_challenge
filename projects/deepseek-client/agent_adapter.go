@@ -35,6 +35,9 @@ func executeQuestion(ctx context.Context, token, prompt string, state sessionSta
 	if state.TaskStates != nil {
 		runner = runner.WithTaskStates(state.TaskStates)
 	}
+	if state.Invariants != nil {
+		runner = runner.WithInvariants(state.Invariants)
+	}
 	if state.Memory != nil {
 		runner = runner.WithMemoryLayers(state.Memory)
 	}
@@ -126,6 +129,13 @@ func renderAgentResult(output io.Writer, result agent.Result) {
 
 func printAgentResponse(output io.Writer, response agent.Response) {
 	printSingleAnswer(output, response.Answer, response.Validation)
+	if check := response.Invariant; check != nil {
+		if check.Refused {
+			fmt.Fprintf(output, "Инварианты: запрос отклонён (%d конфликтов из %d правил)\n", len(check.Violations), check.Active)
+		} else {
+			fmt.Fprintf(output, "Инварианты: соблюдены (%d правил)\n", check.Active)
+		}
+	}
 	if response.Answer.FinishReason == "length" {
 		fmt.Fprintln(output, "Внимание: ответ обрезан лимитом генерации или контекста (finish_reason=length).")
 	}

@@ -13,12 +13,13 @@ import (
 // Agent owns request preparation, scenario execution and output validation.
 // History is optional and supplied independently of the transport and UI.
 type Agent struct {
-	tools   ToolExecutor
-	memory  LayeredMemoryStore
-	tasks   TaskStateStore
-	counter TokenCounter
-	client  Client
-	history HistoryStore
+	tools      ToolExecutor
+	memory     LayeredMemoryStore
+	tasks      TaskStateStore
+	invariants InvariantStore
+	counter    TokenCounter
+	client     Client
+	history    HistoryStore
 }
 
 func New(client Client) *Agent { return &Agent{client: client} }
@@ -36,6 +37,12 @@ func (a *Agent) WithMemoryLayers(memory LayeredMemoryStore) *Agent {
 func (a *Agent) WithTaskStates(tasks TaskStateStore) *Agent {
 	copy := *a
 	copy.tasks = tasks
+	return &copy
+}
+
+func (a *Agent) WithInvariants(invariants InvariantStore) *Agent {
+	copy := *a
+	copy.invariants = invariants
 	return &copy
 }
 
@@ -87,6 +94,17 @@ func (a *Agent) Run(ctx context.Context, request Request) (Result, error) {
 	if err != nil {
 		return result, fmt.Errorf("user profile: %w", err)
 	}
+	var invariants []Invariant
+	if a.invariants != nil {
+		invariants, err = a.invariants.LoadInvariants(ctx)
+		if err != nil {
+			return result, fmt.Errorf("load invariants: %w", err)
+		}
+	}
+	invariantContext, err := InvariantMessages(invariants)
+	if err != nil {
+		return result, fmt.Errorf("invariants: %w", err)
+	}
 	var currentTask TaskState
 	if request.Mode == Task {
 		if a.tasks == nil {
@@ -104,7 +122,9 @@ func (a *Agent) Run(ctx context.Context, request Request) (Result, error) {
 	if err != nil {
 		return result, fmt.Errorf("task state: %w", err)
 	}
-	requestContext := append(append([]Message(nil), personalization...), taskContext...)
+	requestContext := append([]Message(nil), personalization...)
+	requestContext = append(requestContext, invariantContext...)
+	requestContext = append(requestContext, taskContext...)
 	remember := a.history != nil && (request.Mode == Free || request.Mode == Controlled || request.Mode == Task)
 	memoryStrategy := request.Compression.Memory()
 	if !ValidMemoryStrategy(memoryStrategy) {
@@ -193,12 +213,14 @@ func (a *Agent) Run(ctx context.Context, request Request) (Result, error) {
 		judge.messages = append(append([]Message(nil), requestContext...), judge.messages...)
 	}
 	var nextTask TaskState
+	saveTask := false
 	for _, step := range plan {
 		response, err := a.invoke(ctx, request.Prompt, step)
 		if err != nil {
 			result.Failed = &response
 			return result, fmt.Errorf("model %s: %w", step.target.Model, err)
 		}
+		var proposedTask *TaskState
 		if request.Mode == Task {
 			answer, proposed, decodeErr := DecodeTaskCompletion(response.Answer.Content, time.Now())
 			if decodeErr != nil {
@@ -209,11 +231,39 @@ func (a *Agent) Run(ctx context.Context, request Request) (Result, error) {
 				result.Failed = &response
 				return result, fmt.Errorf("invalid task transition: %w", transitionErr)
 			}
+			proposedTask = &proposed
 			response.Answer.Content = answer
 			response.Tokens.AnswerEstimate = a.count().Count(answer)
-			nextTask = proposed
+		}
+		if len(invariants) > 0 {
+			candidate, candidateErr := invariantCandidate(request.Prompt, response.Answer.Content, proposedTask)
+			if candidateErr != nil {
+				return result, candidateErr
+			}
+			check, audit, checkErr := a.enforceInvariants(ctx, step.target, invariants, candidate)
+			mergeResponseUsage(&response, audit)
+			if checkErr != nil {
+				result.Failed = &response
+				return result, fmt.Errorf("invariant check failed closed: %w", checkErr)
+			}
+			response.Invariant = &check
+			if check.Refused {
+				response.Answer.Content = invariantRefusal(check)
+				response.Tokens.AnswerEstimate = a.count().Count(response.Answer.Content)
+				response.Validation = nil
+			} else if proposedTask != nil {
+				nextTask, saveTask = *proposedTask, true
+			}
+		} else if proposedTask != nil {
+			nextTask, saveTask = *proposedTask, true
 		}
 		result.Responses = append(result.Responses, response)
+	}
+	if request.Mode == Task {
+		if !saveTask && currentTask.Stage != "" {
+			preserved := currentTask
+			result.TaskState = &preserved
+		}
 	}
 	if remember {
 		history = append(history, Message{Role: "user", Content: request.Prompt, FileContext: result.Responses[0].FileContext}, Message{Role: "assistant", Content: result.Responses[0].Answer.Content})
@@ -235,7 +285,7 @@ func (a *Agent) Run(ctx context.Context, request Request) (Result, error) {
 			}
 		}
 	}
-	if request.Mode == Task {
+	if request.Mode == Task && saveTask {
 		if err := a.tasks.SaveTaskState(ctx, request.ConversationID, currentTask, nextTask); err != nil {
 			return result, fmt.Errorf("answer received but task state was not saved: %w", err)
 		}
@@ -246,6 +296,24 @@ func (a *Agent) Run(ctx context.Context, request Request) (Result, error) {
 		if err != nil {
 			result.Failed = &analysis
 			return result, fmt.Errorf("judge %s: %w", judge.target.Model, err)
+		}
+		if len(invariants) > 0 {
+			candidate, candidateErr := invariantCandidate(request.Prompt, analysis.Answer.Content, nil)
+			if candidateErr != nil {
+				return result, candidateErr
+			}
+			check, audit, checkErr := a.enforceInvariants(ctx, judge.target, invariants, candidate)
+			mergeResponseUsage(&analysis, audit)
+			if checkErr != nil {
+				result.Failed = &analysis
+				return result, fmt.Errorf("invariant check failed closed: %w", checkErr)
+			}
+			analysis.Invariant = &check
+			if check.Refused {
+				analysis.Answer.Content = invariantRefusal(check)
+				analysis.Tokens.AnswerEstimate = a.count().Count(analysis.Answer.Content)
+				analysis.Validation = nil
+			}
 		}
 		result.Analysis = &analysis
 	}

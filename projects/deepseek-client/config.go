@@ -32,6 +32,7 @@ type appConfig struct {
 	UserProfiles       userProfileStore         `json:"-"`
 	UserProfile        agent.UserProfile        `json:"-"`
 	TaskStates         agent.TaskStateStore     `json:"-"`
+	Invariants         invariantStore           `json:"-"`
 	DocumentsDirectory string                   `json:"-"`
 	HistoryPolicy      historyConfig            `json:"history"`
 	HistoryNotice      string                   `json:"-"`

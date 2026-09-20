@@ -78,6 +78,7 @@ var (
 var commandSuggestions = []autocompleteSuggestion{
 	{value: "/compress"},
 	{value: "/memory "},
+	{value: "/invariant "},
 	{value: "/persona "},
 	{value: "/checkpoint "},
 	{value: "/branch "},
@@ -136,6 +137,7 @@ func newTUIModel(config appConfig, ask askFunction) tuiModel {
 		UserProfiles: config.UserProfiles,
 		UserProfile:  config.UserProfile,
 		TaskStates:   config.TaskStates,
+		Invariants:   config.Invariants,
 		Tools:        config.Tools, DocumentsDirectory: config.DocumentsDirectory,
 		ConversationID: conversationID(config.ConversationID),
 		History:        config.History,
@@ -352,6 +354,11 @@ func (model tuiModel) submit() (tea.Model, tea.Cmd) {
 		model.refreshHistory()
 		return model, nil
 	}
+	if handleInvariantCommand(model.ctx, text, &model.state, &conversationOutput) {
+		model.history = append(model.history, statusStyle.Render(conversationOutput.String()))
+		model.refreshHistory()
+		return model, nil
+	}
 	beforePersona := model.state.UserProfile.Name
 	if handlePersonalizationCommand(model.ctx, text, &model.state, &conversationOutput) {
 		model.history = append(model.history, statusStyle.Render(conversationOutput.String()))
@@ -510,7 +517,7 @@ func (model tuiModel) autocompleteSuggestions() []autocompleteSuggestion {
 
 	command := value[:space]
 	argument := strings.TrimSpace(value[space+1:])
-	if strings.Contains(argument, " ") {
+	if strings.Contains(argument, " ") && command != "/invariant" {
 		return nil
 	}
 
@@ -528,6 +535,8 @@ func (model tuiModel) autocompleteSuggestions() []autocompleteSuggestion {
 		values = []string{string(modeFree), string(modeTask), string(modeControlled), string(modeCompare), string(modeTemperatureBenchmark), string(modeModelBenchmark)}
 	case "/memory":
 		values = []string{string(agent.MemoryFull), string(agent.MemorySummary), string(agent.MemorySliding), string(agent.MemoryFacts), string(agent.MemoryBranching), "show", "set working ", "set long-term ", "delete working ", "delete long-term "}
+	case "/invariant":
+		values = []string{"add architecture ", "add decision ", "add stack ", "add business ", "list", "remove "}
 	case "/persona":
 		values = []string{"create ", "use ", "show", "list", "set style ", "set format ", "add-constraint ", "remove-constraint ", "delete "}
 	case "/strategy":
