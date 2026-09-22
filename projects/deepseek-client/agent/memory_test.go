@@ -10,6 +10,24 @@ import (
 	"github.com/eren-erdny/ai_challenge/projects/deepseek-client/history"
 )
 
+type layerStoreStub struct {
+	working  map[string]agent.MemoryEntry
+	longTerm map[string]agent.MemoryEntry
+}
+
+func (s layerStoreStub) LoadMemory(_ context.Context, _ string, layer agent.MemoryLayer) (map[string]agent.MemoryEntry, error) {
+	if layer == agent.MemoryWorking {
+		return s.working, nil
+	}
+	return s.longTerm, nil
+}
+func (layerStoreStub) SetMemory(context.Context, string, agent.MemoryLayer, string, string) error {
+	return nil
+}
+func (layerStoreStub) DeleteMemory(context.Context, string, agent.MemoryLayer, string) (bool, error) {
+	return false, nil
+}
+
 func TestSlidingWindowSendsTailAndPreservesFullHistory(t *testing.T) {
 	store, original := seedCompression(t, 6)
 	summary := agent.Summary{Text: compactSummary, Covered: 2, PrefixHash: agent.HistoryHash(original[:2]), Version: 1}
@@ -133,5 +151,58 @@ func TestFactsContextWindowZeroDefersLimitToProvider(t *testing.T) {
 	}
 	if !called {
 		t.Fatal("provider was not called")
+	}
+}
+
+func TestExplicitLayersAreInjectedBeforeSlidingHistory(t *testing.T) {
+	store, original := seedCompression(t, 6)
+	layers := layerStoreStub{
+		working:  map[string]agent.MemoryEntry{"task_goal": {Value: "ship release"}},
+		longTerm: map[string]agent.MemoryEntry{"preferred_language": {Value: "Russian"}},
+	}
+	client := agent.ClientFunc(func(_ context.Context, _ agent.Target, _ string, settings agent.Settings) (agent.Completion, error) {
+		all := ""
+		for _, message := range settings.Messages {
+			all += message.Content + "\n"
+		}
+		if !strings.Contains(all, `"task_goal":"ship release"`) || !strings.Contains(all, `"preferred_language":"Russian"`) {
+			t.Fatalf("memory layers missing: %s", all)
+		}
+		if strings.Count(all, "OLD-DETAIL") != 1 || strings.Contains(all, "UNTRUSTED-DOCUMENT") || !strings.Contains(all, original[len(original)-1].Content) {
+			t.Fatalf("sliding boundary changed by layers: %s", all)
+		}
+		if len(settings.Messages) < 5 || settings.Messages[0].Role != "system" || settings.Messages[1].Role != "user" {
+			t.Fatalf("layer order=%+v", settings.Messages)
+		}
+		return agent.Completion{Content: "answer"}, nil
+	})
+	request := agent.Request{ConversationID: "test", Prompt: "new question", Target: agent.Target{Model: "test"}, Compression: agent.CompressionConfig{Strategy: agent.MemorySliding, KeepLast: 2}}
+	runner := agent.NewWithHistory(client, store).WithMemoryLayers(layers)
+	if _, err := runner.Run(context.Background(), request); err != nil {
+		t.Fatal(err)
+	}
+}
+
+func TestExplicitLayerChangesSyntheticAnswer(t *testing.T) {
+	answeringClient := agent.ClientFunc(func(_ context.Context, _ agent.Target, _ string, settings agent.Settings) (agent.Completion, error) {
+		content := "deadline unknown"
+		for _, message := range settings.Messages {
+			if strings.Contains(message.Content, `"deadline":"Friday"`) {
+				content = "deadline Friday"
+			}
+		}
+		return agent.Completion{Content: content}, nil
+	})
+	request := agent.Request{ConversationID: "test", Prompt: "What is the deadline?", Target: agent.Target{Model: "test"}, Compression: agent.CompressionConfig{Strategy: agent.MemoryFull}}
+	withoutStore := &history.JSON{Dir: t.TempDir()}
+	without, err := agent.NewWithHistory(answeringClient, withoutStore).Run(context.Background(), request)
+	if err != nil || without.Last().Answer.Content != "deadline unknown" {
+		t.Fatalf("without=%+v err=%v", without, err)
+	}
+	withStore := &history.JSON{Dir: t.TempDir()}
+	layers := layerStoreStub{working: map[string]agent.MemoryEntry{"deadline": {Value: "Friday"}}}
+	with, err := agent.NewWithHistory(answeringClient, withStore).WithMemoryLayers(layers).Run(context.Background(), request)
+	if err != nil || with.Last().Answer.Content != "deadline Friday" {
+		t.Fatalf("with=%+v err=%v", with, err)
 	}
 }

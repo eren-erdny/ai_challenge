@@ -13,16 +13,37 @@ import (
 // Agent owns request preparation, scenario execution and output validation.
 // History is optional and supplied independently of the transport and UI.
 type Agent struct {
-	tools   ToolExecutor
-	counter TokenCounter
-	client  Client
-	history HistoryStore
+	tools      ToolExecutor
+	memory     LayeredMemoryStore
+	tasks      TaskStateStore
+	invariants InvariantStore
+	counter    TokenCounter
+	client     Client
+	history    HistoryStore
 }
 
 func New(client Client) *Agent { return &Agent{client: client} }
 
 func NewWithHistory(client Client, history HistoryStore) *Agent {
 	return &Agent{client: client, history: history}
+}
+
+func (a *Agent) WithMemoryLayers(memory LayeredMemoryStore) *Agent {
+	copy := *a
+	copy.memory = memory
+	return &copy
+}
+
+func (a *Agent) WithTaskStates(tasks TaskStateStore) *Agent {
+	copy := *a
+	copy.tasks = tasks
+	return &copy
+}
+
+func (a *Agent) WithInvariants(invariants InvariantStore) *Agent {
+	copy := *a
+	copy.invariants = invariants
+	return &copy
 }
 
 type invocation struct {
@@ -69,7 +90,42 @@ func (a *Agent) Run(ctx context.Context, request Request) (Result, error) {
 	if err != nil {
 		return result, err
 	}
-	remember := a.history != nil && (request.Mode == Free || request.Mode == Controlled)
+	personalization, err := PersonalizationMessages(request.UserProfile)
+	if err != nil {
+		return result, fmt.Errorf("user profile: %w", err)
+	}
+	var invariants []Invariant
+	if a.invariants != nil {
+		invariants, err = a.invariants.LoadInvariants(ctx)
+		if err != nil {
+			return result, fmt.Errorf("load invariants: %w", err)
+		}
+	}
+	invariantContext, err := InvariantMessages(invariants)
+	if err != nil {
+		return result, fmt.Errorf("invariants: %w", err)
+	}
+	var currentTask TaskState
+	if request.Mode == Task {
+		if a.tasks == nil {
+			return result, errors.New("task mode requires a task state store")
+		}
+		if strings.TrimSpace(request.ConversationID) == "" {
+			return result, errors.New("conversation ID is required for task mode")
+		}
+		currentTask, err = a.tasks.LoadTaskState(ctx, request.ConversationID)
+		if err != nil {
+			return result, fmt.Errorf("load task state: %w", err)
+		}
+	}
+	taskContext, err := TaskModeMessages(request.Mode, currentTask)
+	if err != nil {
+		return result, fmt.Errorf("task state: %w", err)
+	}
+	requestContext := append([]Message(nil), personalization...)
+	requestContext = append(requestContext, invariantContext...)
+	requestContext = append(requestContext, taskContext...)
+	remember := a.history != nil && (request.Mode == Free || request.Mode == Controlled || request.Mode == Task)
 	memoryStrategy := request.Compression.Memory()
 	if !ValidMemoryStrategy(memoryStrategy) {
 		return result, fmt.Errorf("unknown memory strategy %q", memoryStrategy)
@@ -82,6 +138,10 @@ func (a *Agent) Run(ctx context.Context, request Request) (Result, error) {
 		history, err = a.history.Load(ctx, request.ConversationID)
 		if err != nil {
 			return result, fmt.Errorf("load conversation: %w", err)
+		}
+		layers, layerErr := LayerMemoryMessages(ctx, a.memory, request.ConversationID)
+		if layerErr != nil {
+			return result, fmt.Errorf("load memory layers: %w", layerErr)
 		}
 		effective := append([]Message(nil), history...)
 		switch memoryStrategy {
@@ -120,7 +180,7 @@ func (a *Agent) Run(ctx context.Context, request Request) (Result, error) {
 				return result, err
 			}
 			step := plan[0]
-			step.messages = effective
+			step.messages = append(append(append([]Message(nil), requestContext...), layers...), effective...)
 			prepared, reserve := a.prepare(request.Prompt, step)
 			estimate := a.historySize(prepared.Messages) + reserve
 			if step.allowTools && a.tools != nil {
@@ -143,15 +203,87 @@ func (a *Agent) Run(ctx context.Context, request Request) (Result, error) {
 				}
 			}
 		}
+		effective = append(layers, effective...)
 		plan[0].messages = append([]Message(nil), effective...)
 	}
+	for i := range plan {
+		plan[i].messages = append(append([]Message(nil), requestContext...), plan[i].messages...)
+	}
+	if judge != nil {
+		judge.messages = append(append([]Message(nil), requestContext...), judge.messages...)
+	}
+	var nextTask TaskState
+	saveTask := false
+	var lifecycle *TaskTransition
 	for _, step := range plan {
 		response, err := a.invoke(ctx, request.Prompt, step)
 		if err != nil {
 			result.Failed = &response
 			return result, fmt.Errorf("model %s: %w", step.target.Model, err)
 		}
+		var proposedTask *TaskState
+		if request.Mode == Task {
+			answer, proposed, proposedTransition, decodeErr := DecodeTaskCompletion(response.Answer.Content, time.Now())
+			if decodeErr != nil {
+				initialErr := decodeErr
+				repaired, repairErr := a.repairTaskCompletion(ctx, step.target, request.Prompt, response.Answer.Content, currentTask)
+				mergeResponseUsage(&response, repaired)
+				if repairErr != nil {
+					result.Failed = &response
+					return result, fmt.Errorf("task-mode JSON was invalid (%v); format recovery failed: %w", initialErr, repairErr)
+				}
+				response.Answer.Content = repaired.Answer.Content
+				answer, proposed, proposedTransition, decodeErr = DecodeTaskCompletion(repaired.Answer.Content, time.Now())
+				if decodeErr != nil {
+					result.Failed = &response
+					return result, fmt.Errorf("task-mode JSON was invalid (%v); format recovery returned invalid JSON: %w", initialErr, decodeErr)
+				}
+				result.TaskRepaired = true
+			}
+			transition, transitionErr := ValidateExplicitTaskTransition(currentTask, proposed, proposedTransition, request.Prompt)
+			lifecycle = &transition
+			if transitionErr != nil {
+				answer = TaskTransitionRefusal(currentTask, transition, transitionErr)
+			} else {
+				proposedTask = &proposed
+			}
+			response.Answer.Content = answer
+			response.Tokens.AnswerEstimate = a.count().Count(answer)
+		}
+		if len(invariants) > 0 {
+			candidate, candidateErr := invariantCandidate(request.Prompt, response.Answer.Content, proposedTask)
+			if candidateErr != nil {
+				return result, candidateErr
+			}
+			check, audit, checkErr := a.enforceInvariants(ctx, step.target, invariants, candidate)
+			mergeResponseUsage(&response, audit)
+			if checkErr != nil {
+				result.Failed = &response
+				return result, fmt.Errorf("invariant check failed closed: %w", checkErr)
+			}
+			response.Invariant = &check
+			if check.Refused {
+				response.Answer.Content = invariantRefusal(check)
+				response.Tokens.AnswerEstimate = a.count().Count(response.Answer.Content)
+				response.Validation = nil
+				if lifecycle != nil {
+					lifecycle.Applied = false
+					lifecycle.Rejection = "transition blocked by invariant enforcement"
+				}
+			} else if proposedTask != nil {
+				nextTask, saveTask = *proposedTask, true
+			}
+		} else if proposedTask != nil {
+			nextTask, saveTask = *proposedTask, true
+		}
 		result.Responses = append(result.Responses, response)
+	}
+	if request.Mode == Task {
+		result.TaskTransition = lifecycle
+		if (lifecycle == nil || !lifecycle.Allowed || !saveTask) && currentTask.Stage != "" {
+			preserved := currentTask
+			result.TaskState = &preserved
+		}
 	}
 	if remember {
 		history = append(history, Message{Role: "user", Content: request.Prompt, FileContext: result.Responses[0].FileContext}, Message{Role: "assistant", Content: result.Responses[0].Answer.Content})
@@ -173,11 +305,38 @@ func (a *Agent) Run(ctx context.Context, request Request) (Result, error) {
 			}
 		}
 	}
+	if request.Mode == Task && saveTask {
+		if err := a.tasks.SaveTaskState(ctx, request.ConversationID, currentTask, nextTask); err != nil {
+			return result, fmt.Errorf("answer received but task state was not saved: %w", err)
+		}
+		if lifecycle != nil {
+			lifecycle.Applied = true
+		}
+		result.TaskState = &nextTask
+	}
 	if judge != nil {
 		analysis, err := a.invoke(ctx, analysisPrompt(request, result.Responses), *judge)
 		if err != nil {
 			result.Failed = &analysis
 			return result, fmt.Errorf("judge %s: %w", judge.target.Model, err)
+		}
+		if len(invariants) > 0 {
+			candidate, candidateErr := invariantCandidate(request.Prompt, analysis.Answer.Content, nil)
+			if candidateErr != nil {
+				return result, candidateErr
+			}
+			check, audit, checkErr := a.enforceInvariants(ctx, judge.target, invariants, candidate)
+			mergeResponseUsage(&analysis, audit)
+			if checkErr != nil {
+				result.Failed = &analysis
+				return result, fmt.Errorf("invariant check failed closed: %w", checkErr)
+			}
+			analysis.Invariant = &check
+			if check.Refused {
+				analysis.Answer.Content = invariantRefusal(check)
+				analysis.Tokens.AnswerEstimate = a.count().Count(analysis.Answer.Content)
+				analysis.Validation = nil
+			}
 		}
 		result.Analysis = &analysis
 	}
@@ -193,7 +352,7 @@ func makePlan(request Request) ([]invocation, *invocation, error) {
 		control, err = BuildControl(request.Control)
 	case ModelBenchmark:
 		control, err = BuildControl(request.Control)
-	case Free, TemperatureBenchmark:
+	case Free, Task, TemperatureBenchmark:
 	default:
 		return nil, nil, fmt.Errorf("unknown mode %q", request.Mode)
 	}
@@ -204,7 +363,7 @@ func makePlan(request Request) ([]invocation, *invocation, error) {
 	var plan []invocation
 	var judge *invocation
 	switch request.Mode {
-	case Free, Controlled:
+	case Free, Task, Controlled:
 		base.allowTools = true
 		plan = append(plan, base)
 	case Compare:

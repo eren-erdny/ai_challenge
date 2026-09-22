@@ -55,6 +55,7 @@ type tuiModel struct {
 	availableModels []string
 	activityFrame   int
 	activityGen     int
+	personaSetup    int
 }
 
 var (
@@ -77,6 +78,8 @@ var (
 var commandSuggestions = []autocompleteSuggestion{
 	{value: "/compress"},
 	{value: "/memory "},
+	{value: "/invariant "},
+	{value: "/persona "},
 	{value: "/checkpoint "},
 	{value: "/branch "},
 	{value: "/branches"},
@@ -129,8 +132,13 @@ func newTUIModel(config appConfig, ask askFunction) tuiModel {
 	}
 	profile, _ := config.activeAPIProfile()
 	state := sessionState{
-		Compression: config.HistoryPolicy.CompressionConfig,
-		Tools:       config.Tools, DocumentsDirectory: config.DocumentsDirectory,
+		Compression:  config.HistoryPolicy.CompressionConfig,
+		Memory:       config.Memory,
+		UserProfiles: config.UserProfiles,
+		UserProfile:  config.UserProfile,
+		TaskStates:   config.TaskStates,
+		Invariants:   config.Invariants,
+		Tools:        config.Tools, DocumentsDirectory: config.DocumentsDirectory,
 		ConversationID: conversationID(config.ConversationID),
 		History:        config.History,
 		Mode:           mode,
@@ -279,11 +287,33 @@ func (model tuiModel) Update(message tea.Msg) (tea.Model, tea.Cmd) {
 
 func (model tuiModel) submit() (tea.Model, tea.Cmd) {
 	text := normalizePastedText(model.textarea.Value())
-	if text == "" {
+	if text == "" && model.personaSetup == 0 {
 		return model, nil
+	}
+	if text == "" {
+		text = "-"
 	}
 	model.textarea.Reset()
 	model.suggestionIndex = 0
+	if model.personaSetup != 0 {
+		next, err := applyPersonaWizardAnswer(model.ctx, &model.state, model.personaSetup, text)
+		if err != nil {
+			model.history = append(model.history, errorStyle.Render("Настройка профиля не сохранена: "+err.Error()))
+		} else {
+			if next == -1 {
+				model.personaSetup = 0
+				model.history = append(model.history, statusStyle.Render("Первичная настройка профиля завершена досрочно."))
+			} else if next == 0 {
+				model.personaSetup = 0
+				model.history = append(model.history, statusStyle.Render("Профиль пользователя "+model.state.UserProfile.Name+" настроен."))
+			} else {
+				model.personaSetup = next
+				model.history = append(model.history, statusStyle.Render(personaWizardPrompt(next)))
+			}
+		}
+		model.refreshHistory()
+		return model, nil
+	}
 
 	if text == "/exit" || strings.EqualFold(text, "exit") || strings.EqualFold(text, "выход") {
 		return model, tea.Quit
@@ -316,6 +346,27 @@ func (model tuiModel) submit() (tea.Model, tea.Cmd) {
 			}
 		}
 		model.history = append(model.history, statusStyle.Render(conversationOutput.String()))
+		model.refreshHistory()
+		return model, nil
+	}
+	if handleMemoryLayerCommand(model.ctx, text, &model.state, &conversationOutput) {
+		model.history = append(model.history, statusStyle.Render(conversationOutput.String()))
+		model.refreshHistory()
+		return model, nil
+	}
+	if handleInvariantCommand(model.ctx, text, &model.state, &conversationOutput) {
+		model.history = append(model.history, statusStyle.Render(conversationOutput.String()))
+		model.refreshHistory()
+		return model, nil
+	}
+	beforePersona := model.state.UserProfile.Name
+	if handlePersonalizationCommand(model.ctx, text, &model.state, &conversationOutput) {
+		model.history = append(model.history, statusStyle.Render(conversationOutput.String()))
+		fields := strings.Fields(text)
+		if len(fields) == 3 && fields[0] == "/persona" && fields[1] == "create" && beforePersona != fields[2] && model.state.UserProfile.Name == fields[2] {
+			model.personaSetup = 1
+			model.history = append(model.history, statusStyle.Render(personaWizardPrompt(1)))
+		}
 		model.refreshHistory()
 		return model, nil
 	}
@@ -466,7 +517,7 @@ func (model tuiModel) autocompleteSuggestions() []autocompleteSuggestion {
 
 	command := value[:space]
 	argument := strings.TrimSpace(value[space+1:])
-	if strings.Contains(argument, " ") {
+	if strings.Contains(argument, " ") && command != "/invariant" {
 		return nil
 	}
 
@@ -481,9 +532,13 @@ func (model tuiModel) autocompleteSuggestions() []autocompleteSuggestion {
 			}
 		}
 	case "/mode":
-		values = []string{string(modeFree), string(modeControlled), string(modeCompare), string(modeTemperatureBenchmark), string(modeModelBenchmark)}
+		values = []string{string(modeFree), string(modeTask), string(modeControlled), string(modeCompare), string(modeTemperatureBenchmark), string(modeModelBenchmark)}
 	case "/memory":
-		values = []string{string(agent.MemoryFull), string(agent.MemorySummary), string(agent.MemorySliding), string(agent.MemoryFacts), string(agent.MemoryBranching)}
+		values = []string{string(agent.MemoryFull), string(agent.MemorySummary), string(agent.MemorySliding), string(agent.MemoryFacts), string(agent.MemoryBranching), "show", "set working ", "set long-term ", "delete working ", "delete long-term "}
+	case "/invariant":
+		values = []string{"add architecture ", "add decision ", "add stack ", "add business ", "list", "remove "}
+	case "/persona":
+		values = []string{"create ", "use ", "show", "list", "set style ", "set format ", "add-constraint ", "remove-constraint ", "delete "}
 	case "/strategy":
 		values = []string{string(strategyStandard), string(strategyStepByStep), string(strategyExperts)}
 	case "/temperature":

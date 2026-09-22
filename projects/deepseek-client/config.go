@@ -27,18 +27,23 @@ const (
 )
 
 type appConfig struct {
-	Tools              agent.ToolExecutor    `json:"-"`
-	DocumentsDirectory string                `json:"-"`
-	HistoryPolicy      historyConfig         `json:"history"`
-	HistoryNotice      string                `json:"-"`
-	ConversationID     string                `json:"-"`
-	History            agent.HistoryStore    `json:"-"`
-	InitialMessages    []agent.Message       `json:"-"`
-	ActiveProfile      string                `json:"active_profile"`
-	Profiles           map[string]apiProfile `json:"profiles"`
-	APIToken           string                `json:"-"`
-	Generation         generationConfig      `json:"generation"`
-	ResponseControl    responseControlConfig `json:"response_control"`
+	Tools              agent.ToolExecutor       `json:"-"`
+	Memory             agent.LayeredMemoryStore `json:"-"`
+	UserProfiles       userProfileStore         `json:"-"`
+	UserProfile        agent.UserProfile        `json:"-"`
+	TaskStates         agent.TaskStateStore     `json:"-"`
+	Invariants         invariantStore           `json:"-"`
+	DocumentsDirectory string                   `json:"-"`
+	HistoryPolicy      historyConfig            `json:"history"`
+	HistoryNotice      string                   `json:"-"`
+	ConversationID     string                   `json:"-"`
+	History            agent.HistoryStore       `json:"-"`
+	InitialMessages    []agent.Message          `json:"-"`
+	ActiveProfile      string                   `json:"active_profile"`
+	Profiles           map[string]apiProfile    `json:"profiles"`
+	APIToken           string                   `json:"-"`
+	Generation         generationConfig         `json:"generation"`
+	ResponseControl    responseControlConfig    `json:"response_control"`
 }
 
 type historyConfig struct {

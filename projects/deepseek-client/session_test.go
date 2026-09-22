@@ -8,6 +8,9 @@ import (
 	"strings"
 	"testing"
 	"time"
+
+	"github.com/eren-erdny/ai_challenge/projects/deepseek-client/agent"
+	"github.com/eren-erdny/ai_challenge/projects/deepseek-client/taskstates"
 )
 
 func TestPartialBenchmarkIsRenderedBeforeError(t *testing.T) {
@@ -397,6 +400,49 @@ func TestLegacyBenchmarkModeUsesCanonicalName(t *testing.T) {
 		if !strings.Contains(output.String(), "Режим изменён: temperature_benchmark") {
 			t.Fatalf("canonical mode name is missing for alias %q: %q", alias, output.String())
 		}
+	}
+}
+
+func TestTaskModeContinuesFromPersistedState(t *testing.T) {
+	store := &taskstates.JSON{Dir: t.TempDir()}
+	state := sessionState{
+		TaskStates:     store,
+		ConversationID: "task-dialog",
+		Mode:           modeControlled,
+		Model:          "test-model",
+		Strategy:       strategyStandard,
+	}
+	var commandOutput strings.Builder
+	handleSessionCommand("/mode task", &state, &commandOutput)
+	if state.Mode != modeTask || state.Control.Enabled {
+		t.Fatalf("mode=%s control=%t", state.Mode, state.Control.Enabled)
+	}
+
+	calls := 0
+	ask := func(_ context.Context, _ string, prompt string, settings requestSettings) (completionResult, error) {
+		calls++
+		joined := ""
+		for _, message := range settings.Messages {
+			joined += message.Content
+		}
+		if calls == 1 {
+			return completionResult{Content: `{"answer":"План готов","task_state":{"goal":"Создать API","stage":"planning","current_step":"Согласовать контракт","expected_action":"Утвердить план","paused":false,"pause_reason":""},"transition":{"action":"start","from":"","to":"planning","gate":"none","reason":"Задача создана","evidence":""}}`}, nil
+		}
+		if prompt != "Утверждаю план, продолжай" || !strings.Contains(joined, `"current_step":"Согласовать контракт"`) {
+			t.Fatalf("continuation lost state: prompt=%q messages=%s", prompt, joined)
+		}
+		return completionResult{Content: `{"answer":"Начинаю реализацию","task_state":{"goal":"Создать API","stage":"execution","current_step":"Реализовать endpoint","expected_action":"Запустить тесты","paused":false,"pause_reason":""},"transition":{"action":"advance","from":"planning","to":"execution","gate":"plan_approved","reason":"План утверждён","evidence":"Пользователь явно утвердил план"}}`}, nil
+	}
+
+	var output, errorOutput strings.Builder
+	executeQuestion(context.Background(), "", "Создай API", state, &output, &errorOutput, ask)
+	executeQuestion(context.Background(), "", "Утверждаю план, продолжай", state, &output, &errorOutput, ask)
+	if errorOutput.Len() != 0 || !strings.Contains(output.String(), "План готов") || !strings.Contains(output.String(), "[transition:advance разрешён] planning → execution") || !strings.Contains(output.String(), "[task:execution]") {
+		t.Fatalf("output=%q error=%q", output.String(), errorOutput.String())
+	}
+	persisted, err := store.LoadTaskState(context.Background(), "task-dialog")
+	if err != nil || persisted.Stage != agent.TaskExecution || persisted.CurrentStep != "Реализовать endpoint" {
+		t.Fatalf("state=%+v err=%v", persisted, err)
 	}
 }
 

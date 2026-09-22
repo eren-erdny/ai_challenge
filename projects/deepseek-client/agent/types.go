@@ -9,6 +9,7 @@ type Mode string
 
 const (
 	Free                 Mode = "free"
+	Task                 Mode = "task"
 	Controlled           Mode = "controlled"
 	Compare              Mode = "compare"
 	TemperatureBenchmark Mode = "temperature_benchmark"
@@ -72,6 +73,7 @@ func (f ClientFunc) Complete(ctx context.Context, target Target, prompt string, 
 
 type Request struct {
 	Compression    CompressionConfig
+	UserProfile    UserProfile
 	ConversationID string
 	Prompt         string
 	Mode           Mode
@@ -90,12 +92,16 @@ type Response struct {
 	Temperature float64
 	Control     *Control
 	Validation  *ValidationResult
+	Invariant   *InvariantCheck
 	CostUSD     *float64
 }
 
 type Result struct {
 	Compression    *CompressionResult
 	Facts          *FactsResult
+	TaskState      *TaskState
+	TaskTransition *TaskTransition
+	TaskRepaired   bool
 	Failed         *Response
 	ConversationID string
 	Mode           Mode

@@ -13,7 +13,7 @@ import (
 func executeQuestion(ctx context.Context, token, prompt string, state sessionState, output, errorOutput io.Writer, ask askFunction) *requestStatus {
 	target := agent.Target{Profile: state.ActiveProfile, BaseURL: state.API.BaseURL, Model: state.Model, SendThinkingDisabled: isDeepSeekEndpoint(state.API.BaseURL)}
 	target.ContextWindow, target.MaxOutputTokens = state.API.ContextWindow, state.API.MaxOutputTokens
-	request := agent.Request{Prompt: prompt, Mode: state.Mode, Target: target, Temperature: state.Temperature, Strategy: state.Strategy, Control: state.Control}
+	request := agent.Request{Prompt: prompt, Mode: state.Mode, Target: target, Temperature: state.Temperature, Strategy: state.Strategy, Control: state.Control, UserProfile: state.UserProfile}
 	credentials := map[string]string{target.Profile: token}
 	if state.Mode == modeModelBenchmark && prompt != "/compress" {
 		targets, err := buildModelBenchmarkTargets(state, token)
@@ -32,6 +32,15 @@ func executeQuestion(ctx context.Context, token, prompt string, state sessionSta
 	request.ConversationID = conversationID(state.ConversationID)
 	request.Compression = state.Compression
 	runner := agent.NewWithHistory(client, state.History)
+	if state.TaskStates != nil {
+		runner = runner.WithTaskStates(state.TaskStates)
+	}
+	if state.Invariants != nil {
+		runner = runner.WithInvariants(state.Invariants)
+	}
+	if state.Memory != nil {
+		runner = runner.WithMemoryLayers(state.Memory)
+	}
 	if !state.ToolsDisabled {
 		runner = runner.WithTools(state.Tools)
 	}
@@ -67,6 +76,31 @@ func renderAgentResult(output io.Writer, result agent.Result) {
 	if c := result.Compression; c != nil {
 		fmt.Fprintf(output, "Сжатие: применено=%t; оценка истории до=%d, после=%d токенов; API-вызовов=%d (без usage=%d), сообщённый вход=%d, выход=%d. Полный учёт: /status.\n", c.Changed, c.Before, c.After, c.Calls, c.UnknownUsageCalls, c.Input, c.Output)
 	}
+	defer func() {
+		if result.TaskRepaired {
+			fmt.Fprintln(output, "[task] Формат ответа модели восстановлен дополнительным вызовом")
+		}
+		if transition := result.TaskTransition; transition != nil {
+			from := transition.From
+			if from == "" {
+				from = "not_started"
+			}
+			status := "разрешён"
+			if !transition.Allowed {
+				status = "отклонён"
+			} else if !transition.Applied {
+				status = "заблокирован"
+			}
+			fmt.Fprintf(output, "[transition:%s %s] %s → %s\n", transition.Action, status, from, transition.To)
+		}
+		if state := result.TaskState; state != nil {
+			fmt.Fprintf(output, "[task:%s] %s → %s", state.Stage, state.CurrentStep, state.ExpectedAction)
+			if state.Paused {
+				fmt.Fprint(output, " (пауза)")
+			}
+			fmt.Fprintln(output)
+		}
+	}()
 	switch result.Mode {
 	case agent.ModelBenchmark:
 		printModelBenchmark(output, result.Responses)
@@ -111,6 +145,13 @@ func renderAgentResult(output io.Writer, result agent.Result) {
 
 func printAgentResponse(output io.Writer, response agent.Response) {
 	printSingleAnswer(output, response.Answer, response.Validation)
+	if check := response.Invariant; check != nil {
+		if check.Refused {
+			fmt.Fprintf(output, "Инварианты: запрос отклонён (%d конфликтов из %d правил)\n", len(check.Violations), check.Active)
+		} else {
+			fmt.Fprintf(output, "Инварианты: соблюдены (%d правил)\n", check.Active)
+		}
+	}
 	if response.Answer.FinishReason == "length" {
 		fmt.Fprintln(output, "Внимание: ответ обрезан лимитом генерации или контекста (finish_reason=length).")
 	}
