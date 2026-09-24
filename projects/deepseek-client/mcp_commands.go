@@ -11,6 +11,8 @@ import (
 
 	"github.com/eren-erdny/ai_challenge/projects/deepseek-client/agent"
 	"github.com/eren-erdny/ai_challenge/projects/deepseek-client/githubmcp"
+	"github.com/eren-erdny/ai_challenge/projects/deepseek-client/gitmcp"
+	"github.com/eren-erdny/ai_challenge/projects/deepseek-client/mcppipeline"
 	"github.com/eren-erdny/ai_challenge/projects/deepseek-client/mcptools"
 	"github.com/modelcontextprotocol/go-sdk/mcp"
 )
@@ -35,6 +37,32 @@ func connectApplicationMCP(fallback agent.ToolExecutor) (*mcptools.Client, error
 }
 
 func handleMCPCommand(args []string, output, errorOutput io.Writer) (bool, int) {
+	if args[0] == "--mcp-pipeline" {
+		if len(args) != 2 || os.Getenv("GIT_MCP_URL") == "" {
+			fmt.Fprintln(errorOutput, "Set GIT_MCP_URL and GIT_MCP_TOKEN; usage: --mcp-pipeline QUERY")
+			return true, 2
+		}
+		client, err := connectApplicationMCP(nil)
+		if err != nil {
+			fmt.Fprintln(errorOutput, err)
+			return true, 1
+		}
+		defer client.Close()
+		ctx, cancel := context.WithTimeout(context.Background(), time.Minute)
+		defer cancel()
+		result, err := mcppipeline.Run(ctx, client, gitmcp.SearchInput{Query: args[1], Limit: 20})
+		if err != nil {
+			fmt.Fprintln(errorOutput, err)
+			return true, 1
+		}
+		encoded, err := json.MarshalIndent(result, "", "  ")
+		if err != nil {
+			fmt.Fprintln(errorOutput, err)
+			return true, 1
+		}
+		fmt.Fprintln(output, string(encoded))
+		return true, 0
+	}
 	if args[0] == "--mcp-call" {
 		if len(args) != 3 || os.Getenv("GIT_MCP_URL") == "" {
 			fmt.Fprintln(errorOutput, "Set GIT_MCP_URL and GIT_MCP_TOKEN; usage: --mcp-call TOOL JSON_ARGUMENTS")

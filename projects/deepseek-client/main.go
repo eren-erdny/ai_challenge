@@ -127,7 +127,7 @@ func handleCommand(args []string, output io.Writer, errorOutput io.Writer) (bool
 	}
 
 	fmt.Fprintf(errorOutput, "неизвестные аргументы: %s\n", strings.Join(args, " "))
-	fmt.Fprintln(errorOutput, "Доступные команды: --list-formats, --list-models, --token-demo, --mcp-list, --mcp-call TOOL JSON_ARGUMENTS, --mcp-github-check OWNER REPO, --mcp-github-server")
+	fmt.Fprintln(errorOutput, "Доступные команды: --list-formats, --list-models, --token-demo, --mcp-list, --mcp-pipeline QUERY, --mcp-call TOOL JSON_ARGUMENTS, --mcp-github-check OWNER REPO, --mcp-github-server")
 	return true, 2
 }
 

@@ -56,6 +56,12 @@ func run() error {
 	}
 	defer scheduler.Close()
 	scheduler.Register(s)
+	pipeline, err := gitmcp.OpenPipelineTools(*repo, *dataDir)
+	if err != nil {
+		return err
+	}
+	defer pipeline.Close()
+	pipeline.Register(s)
 	if *stdio {
 		return supervise(ctx, scheduler, func(ctx context.Context) error { return s.Run(ctx, &mcp.StdioTransport{}) })
 	}
