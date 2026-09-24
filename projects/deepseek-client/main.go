@@ -80,6 +80,13 @@ func run(input *bufio.Reader) int {
 		return 1
 	}
 	config.Tools = &filetools.Documents{Dir: config.DocumentsDirectory}
+	mcpClient, err := connectGitHubMCP(config.Tools)
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "MCP недоступен: %v\n", err)
+		return 1
+	}
+	defer mcpClient.Close()
+	config.Tools = mcpClient
 	config.History = store
 	config.ConversationID, config.InitialMessages, err = store.Active(context.Background())
 	if err != nil {
@@ -103,6 +110,9 @@ func handleCommand(args []string, output io.Writer, errorOutput io.Writer) (bool
 	if len(args) == 0 {
 		return false, 0
 	}
+	if handled, code := handleMCPCommand(args, output, errorOutput); handled {
+		return true, code
+	}
 	if len(args) == 1 {
 		switch args[0] {
 		case "--token-demo":
@@ -117,7 +127,7 @@ func handleCommand(args []string, output io.Writer, errorOutput io.Writer) (bool
 	}
 
 	fmt.Fprintf(errorOutput, "неизвестные аргументы: %s\n", strings.Join(args, " "))
-	fmt.Fprintln(errorOutput, "Доступные команды: --list-formats, --list-models, --token-demo")
+	fmt.Fprintln(errorOutput, "Доступные команды: --list-formats, --list-models, --token-demo, --mcp-github-check OWNER REPO, --mcp-github-server")
 	return true, 2
 }
 

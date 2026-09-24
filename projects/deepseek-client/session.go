@@ -257,7 +257,7 @@ func handleSessionCommand(command string, state *sessionState, output io.Writer)
 		fmt.Fprintln(output, "/branch create NAME CHECKPOINT | /branch switch NAME")
 		fmt.Fprintln(output, "/branches          — показать ветки и checkpoints")
 		fmt.Fprintln(output, "/compress         — сжать старую историю текущего диалога через модель")
-		fmt.Fprintln(output, "/tools [on|off]   — рабочая папка: чтение и запись текстовых исходников")
+		fmt.Fprintln(output, "/tools [on|off]   — инструменты рабочей папки и MCP")
 		fmt.Fprintln(output, "/context N        — задать лимит контекста для локальной оценки (0 отключает проверку)")
 		fmt.Fprintln(output, "/new              — начать новый чистый диалог")
 		fmt.Fprintln(output, "/conversation [ID] — показать ID или открыть сохранённый диалог")
@@ -289,6 +289,12 @@ func handleSessionCommand(command string, state *sessionState, output io.Writer)
 			state.ToolsDisabled = parts[1] == "off"
 		}
 		fmt.Fprintf(output, "Файловые инструменты: %t\nРабочая папка: %s\n", state.Tools != nil && !state.ToolsDisabled, state.DocumentsDirectory)
+		if state.Tools != nil {
+			fmt.Fprintf(output, "Все инструменты включены: %t\n", !state.ToolsDisabled)
+			for _, tool := range state.Tools.Definitions() {
+				fmt.Fprintf(output, "- %s: %s\n", tool.Function.Name, tool.Function.Description)
+			}
+		}
 	case "/memory":
 		if len(parts) == 1 {
 			fmt.Fprintf(output, "Стратегия памяти: %s\n", state.Compression.Memory())
