@@ -1,5 +1,29 @@
 # DeepSeek Client
 
+## Минимальный MCP-клиент
+
+В проекте есть автономный пример на официальном Go SDK: он запускает локальный
+MCP-сервер через stdio, устанавливает соединение, выполняет `tools/list` и
+печатает доступные инструменты. API-ключ не нужен.
+
+```powershell
+go run ./projects/deepseek-client/cmd/mcp-demo
+```
+
+Ожидаемый результат:
+
+```text
+MCP connection established
+Available tools (1):
+- echo: Returns the supplied text unchanged
+```
+
+Тест соединяет клиент и сервер через транспорт SDK в памяти:
+
+```powershell
+go test ./projects/deepseek-client/cmd/mcp-demo
+```
+
 ## Токены и переполнение контекста
 
 **Токены текущего запроса** — полный контекст, отправленный модели:
