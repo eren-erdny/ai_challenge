@@ -15,6 +15,42 @@ import (
 
 type failingTools struct{ calls int }
 
+type describedTools struct{}
+
+func (*describedTools) Definitions() []agent.ToolDefinition {
+	var definitions []agent.ToolDefinition
+	for _, name := range []string{"git__git_search_commits", "git__git_summarize_commits", "git__git_save_report"} {
+		definitions = append(definitions, agent.ToolDefinition{Type: "function", Function: agent.ToolFunction{Name: name, Description: name, Parameters: []byte(`{"type":"object"}`)}})
+	}
+	return definitions
+}
+func (*describedTools) Execute(context.Context, string, string) (string, error) {
+	return "", errors.New("unexpected execution")
+}
+
+func TestToolInstructionsLeaveMCPOrderToModel(t *testing.T) {
+	client := agent.ClientFunc(func(_ context.Context, _ agent.Target, _ string, settings agent.Settings) (agent.Completion, error) {
+		if len(settings.Tools) != 3 {
+			t.Fatalf("advertised tools=%d", len(settings.Tools))
+		}
+		for _, message := range settings.Messages {
+			if message.Role != "system" {
+				continue
+			}
+			for _, name := range []string{"git_search_commits", "git_summarize_commits", "git_save_report"} {
+				if strings.Contains(message.Content, name) {
+					t.Fatalf("system prompt prescribes tool %s: %s", name, message.Content)
+				}
+			}
+		}
+		return agent.Completion{Content: "done"}, nil
+	})
+	_, err := agent.New(client).WithTools(&describedTools{}).Run(context.Background(), agent.Request{Prompt: "Prepare and save a report", Mode: agent.Free, Target: agent.Target{Model: "test"}})
+	if err != nil {
+		t.Fatal(err)
+	}
+}
+
 func (*failingTools) Definitions() []agent.ToolDefinition {
 	return []agent.ToolDefinition{{Type: "function", Function: agent.ToolFunction{Name: "unknown", Parameters: []byte(`{"type":"object"}`)}}}
 }

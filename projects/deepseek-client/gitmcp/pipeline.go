@@ -222,15 +222,15 @@ func (p *PipelineTools) save(ctx context.Context, in CommitSummary) (SavedReport
 }
 
 func (p *PipelineTools) Register(s *mcp.Server) {
-	mcp.AddTool(s, &mcp.Tool{Name: "git_search_commits", Description: "Pipeline step 1: search commit messages on current HEAD with a literal query. Pass the entire structured result unchanged to git_summarize_commits."}, func(ctx context.Context, _ *mcp.CallToolRequest, in SearchInput) (*mcp.CallToolResult, SearchResult, error) {
+	mcp.AddTool(s, &mcp.Tool{Name: "git_search_commits", Description: "Search commit messages reachable from current HEAD with a literal query. Returns the query and matching commit hashes and subjects. Read-only; does not fetch."}, func(ctx context.Context, _ *mcp.CallToolRequest, in SearchInput) (*mcp.CallToolResult, SearchResult, error) {
 		out, err := p.search(ctx, in)
 		return nil, out, err
 	})
-	mcp.AddTool(s, &mcp.Tool{Name: "git_summarize_commits", Description: "Pipeline step 2: turn the search result into a deterministic Markdown summary with counts and commit subjects. Pass the entire result unchanged to git_save_report."}, func(_ context.Context, _ *mcp.CallToolRequest, in SearchResult) (*mcp.CallToolResult, CommitSummary, error) {
+	mcp.AddTool(s, &mcp.Tool{Name: "git_summarize_commits", Description: "Create a deterministic Markdown summary from a query and supplied commit hashes and subjects. Returns commit count, categories and Markdown. Does not search the repository or write files."}, func(_ context.Context, _ *mcp.CallToolRequest, in SearchResult) (*mcp.CallToolResult, CommitSummary, error) {
 		out, err := summarizeCommits(in)
 		return nil, out, err
 	})
-	mcp.AddTool(s, &mcp.Tool{Name: "git_save_report", Description: "Pipeline step 3: save summary Markdown unchanged in the server's reports directory. Returns server path, byte count and SHA256. Creates a unique new file; no overwrite or caller-supplied paths."}, func(ctx context.Context, _ *mcp.CallToolRequest, in CommitSummary) (*mcp.CallToolResult, SavedReport, error) {
+	mcp.AddTool(s, &mcp.Tool{Name: "git_save_report", Description: "Save supplied summary Markdown unchanged in the server's reports directory. Returns server path, byte count and SHA256. Creates a unique new file; no overwrite or caller-supplied paths."}, func(ctx context.Context, _ *mcp.CallToolRequest, in CommitSummary) (*mcp.CallToolResult, SavedReport, error) {
 		out, err := p.save(ctx, in)
 		return nil, out, err
 	})

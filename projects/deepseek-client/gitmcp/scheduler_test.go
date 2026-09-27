@@ -46,11 +46,11 @@ func TestScheduledMCPRunsWithoutClientAndSurvivesRestart(t *testing.T) {
 	model := agent.ClientFunc(func(_ context.Context, _ agent.Target, _ string, settings agent.Settings) (agent.Completion, error) {
 		turns++
 		if turns == 1 {
-			return agent.Completion{ToolCalls: []agent.ToolCall{{ID: "schedule", Type: "function", Function: agent.FunctionCall{Name: "git_summary_schedule", Arguments: `{"id":"once","delay_seconds":1}`}}}}, nil
+			return agent.Completion{ToolCalls: []agent.ToolCall{{ID: "schedule", Type: "function", Function: agent.FunctionCall{Name: "git_summary_schedule", Arguments: `{"id":"once","delay_seconds":1,"write_file":true}`}}}}, nil
 		}
 		last := settings.Messages[len(settings.Messages)-1]
 		var r Report
-		if last.Role != "tool" || json.Unmarshal([]byte(last.Content), &r) != nil || r.ID != "once" || !r.Active {
+		if last.Role != "tool" || json.Unmarshal([]byte(last.Content), &r) != nil || r.ID != "once" || !r.Active || r.SummaryFile != filepath.Join(dir, "summary-once.txt") {
 			t.Fatalf("schedule not delivered to agent: %+v", last)
 		}
 		return agent.Completion{Content: "Scheduled " + r.ID}, nil
@@ -67,6 +67,10 @@ func TestScheduledMCPRunsWithoutClientAndSurvivesRestart(t *testing.T) {
 	case r := <-events:
 		if r.Runs != 1 || r.Active || r.DirtySamples != 1 || r.Latest.Snapshot.ChangedEntries != 1 {
 			t.Fatalf("unexpected summary: %+v", r)
+		}
+		b, err := os.ReadFile(filepath.Join(dir, "summary-once.txt"))
+		if err != nil || !strings.Contains(string(b), "runs=1, failures=0") {
+			t.Fatalf("summary file: %q %v", b, err)
 		}
 	case <-ctx.Done():
 		t.Fatal("scheduled execution did not happen")
@@ -181,6 +185,60 @@ func TestPeriodicAggregationCatchUpAndCancel(t *testing.T) {
 	}
 	if calls != 38 {
 		t.Fatal("cancelled schedule executed")
+	}
+}
+
+func TestScheduledSummaryFileUpdatesAndRestores(t *testing.T) {
+	repo, dir := fixture(t), t.TempDir()
+	s, err := OpenScheduler(repo, dir, nil)
+	if err != nil {
+		t.Fatal(err)
+	}
+	now := time.Now().UTC()
+	r, err := s.Create(ScheduleInput{ID: "file-demo", DelaySeconds: 1, IntervalSeconds: 10, WriteFile: true}, now.Add(-time.Minute))
+	if err != nil {
+		t.Fatal(err)
+	}
+	path := filepath.Join(dir, "summary-file-demo.txt")
+	if r.SummaryFile != path {
+		t.Fatalf("summary path: %q", r.SummaryFile)
+	}
+	if err := s.runDue(context.Background(), now); err != nil {
+		t.Fatal(err)
+	}
+	b, err := os.ReadFile(path)
+	if err != nil || !strings.Contains(string(b), "runs=1, failures=0") {
+		t.Fatalf("first summary: %q %v", b, err)
+	}
+	r, _ = s.Get("file-demo")
+	if err := s.runDue(context.Background(), r.NextRun); err != nil {
+		t.Fatal(err)
+	}
+	b, err = os.ReadFile(path)
+	if err != nil || !strings.Contains(string(b), "runs=2, failures=0") {
+		t.Fatalf("updated summary: %q %v", b, err)
+	}
+	if err := s.Close(); err != nil {
+		t.Fatal(err)
+	}
+	if err := os.Remove(path); err != nil {
+		t.Fatal(err)
+	}
+	s, err = OpenScheduler(repo, dir, nil)
+	if err != nil {
+		t.Fatal(err)
+	}
+	defer s.Close()
+	b, err = os.ReadFile(path)
+	if err != nil || !strings.Contains(string(b), "runs=2, failures=0") {
+		t.Fatalf("restored summary: %q %v", b, err)
+	}
+	if _, err := s.Cancel("file-demo"); err != nil {
+		t.Fatal(err)
+	}
+	b, err = os.ReadFile(path)
+	if err != nil || !strings.Contains(string(b), "active=false") {
+		t.Fatalf("cancelled summary: %q %v", b, err)
 	}
 }
 

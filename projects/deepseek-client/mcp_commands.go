@@ -37,6 +37,32 @@ func connectApplicationMCP(fallback agent.ToolExecutor) (*mcptools.Client, error
 }
 
 func handleMCPCommand(args []string, output, errorOutput io.Writer) (bool, int) {
+	if args[0] == "--mcp-multi-list" || args[0] == "--mcp-multi-call" {
+		if (args[0] == "--mcp-multi-list" && len(args) != 1) || (args[0] == "--mcp-multi-call" && len(args) != 3) {
+			fmt.Fprintln(errorOutput, "Usage: --mcp-multi-list | --mcp-multi-call SERVER__TOOL JSON_ARGUMENTS")
+			return true, 2
+		}
+		registry, err := connectAgentMCP(nil)
+		if err != nil {
+			fmt.Fprintln(errorOutput, err)
+			return true, 1
+		}
+		defer registry.Close()
+		if args[0] == "--mcp-multi-list" {
+			fmt.Fprintln(output, "MCP servers connected")
+			for _, tool := range registry.Definitions() {
+				fmt.Fprintf(output, "- %s: %s\n", tool.Function.Name, tool.Function.Description)
+			}
+			return true, 0
+		}
+		value, err := registry.Execute(context.Background(), args[1], args[2])
+		if err != nil {
+			fmt.Fprintln(errorOutput, err)
+			return true, 1
+		}
+		fmt.Fprintln(output, value)
+		return true, 0
+	}
 	if args[0] == "--mcp-pipeline" {
 		if len(args) != 2 || os.Getenv("GIT_MCP_URL") == "" {
 			fmt.Fprintln(errorOutput, "Set GIT_MCP_URL and GIT_MCP_TOKEN; usage: --mcp-pipeline QUERY")

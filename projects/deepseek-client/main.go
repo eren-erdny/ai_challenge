@@ -80,7 +80,7 @@ func run(input *bufio.Reader) int {
 		return 1
 	}
 	config.Tools = &filetools.Documents{Dir: config.DocumentsDirectory}
-	mcpClient, err := connectApplicationMCP(config.Tools)
+	mcpClient, err := connectAgentMCP(config.Tools)
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "MCP недоступен: %v\n", err)
 		return 1
@@ -127,7 +127,7 @@ func handleCommand(args []string, output io.Writer, errorOutput io.Writer) (bool
 	}
 
 	fmt.Fprintf(errorOutput, "неизвестные аргументы: %s\n", strings.Join(args, " "))
-	fmt.Fprintln(errorOutput, "Доступные команды: --list-formats, --list-models, --token-demo, --mcp-list, --mcp-pipeline QUERY, --mcp-call TOOL JSON_ARGUMENTS, --mcp-github-check OWNER REPO, --mcp-github-server")
+	fmt.Fprintln(errorOutput, "Доступные команды: --list-formats, --list-models, --token-demo, --mcp-multi-list, --mcp-multi-call SERVER__TOOL JSON_ARGUMENTS, --mcp-list, --mcp-pipeline QUERY, --mcp-call TOOL JSON_ARGUMENTS, --mcp-github-check OWNER REPO, --mcp-github-server")
 	return true, 2
 }
 

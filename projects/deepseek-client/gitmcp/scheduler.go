@@ -23,6 +23,7 @@ type ScheduleInput struct {
 	ID              string `json:"id" jsonschema:"Unique schedule ID: letters, digits, hyphen or underscore, up to 64 characters. Repeating identical creation is idempotent."`
 	DelaySeconds    int    `json:"delay_seconds" jsonschema:"Delay before first execution, 1 to 604800 seconds"`
 	IntervalSeconds int    `json:"interval_seconds,omitempty" jsonschema:"Repeat interval: 10 to 604800 seconds; 0 means execute once"`
+	WriteFile       bool   `json:"write_file,omitempty" jsonschema:"Also update a readable summary-ID.txt file in the server data directory after each run"`
 }
 type jobID struct {
 	ID string `json:"id" jsonschema:"Schedule ID returned by git_summary_schedule"`
@@ -56,6 +57,7 @@ type scheduleDocument struct {
 // Report aggregates the retained window; Runs/Failures are lifetime counters.
 type Report struct {
 	ID              string    `json:"id"`
+	SummaryFile     string    `json:"summary_file,omitempty"`
 	Active          bool      `json:"active"`
 	NextRun         time.Time `json:"next_run"`
 	IntervalSeconds int       `json:"interval_seconds"`
@@ -136,6 +138,14 @@ func OpenScheduler(repo, dataDir string, emit func(Report)) (*Scheduler, error) 
 	if err = s.load(); err != nil {
 		s.Close()
 		return nil, err
+	}
+	for _, j := range s.doc.Jobs {
+		if j.WriteFile && j.Runs > 0 {
+			if err = s.writeSummary(s.report(j)); err != nil {
+				s.Close()
+				return nil, fmt.Errorf("restore summary file: %w", err)
+			}
+		}
 	}
 	return s, nil
 }
@@ -220,6 +230,30 @@ func (s *Scheduler) save(doc scheduleDocument) error {
 	return nil
 }
 
+func (s *Scheduler) writeSummary(r Report) error {
+	content := fmt.Sprintf("%s\nfrom=%s\nto=%s\nactive=%t\nnext_run=%s\n", r.Summary, r.From.Format(time.RFC3339Nano), r.To.Format(time.RFC3339Nano), r.Active, r.NextRun.Format(time.RFC3339Nano))
+	dir := filepath.Dir(s.path)
+	f, err := os.CreateTemp(dir, ".summary-*.tmp")
+	if err != nil {
+		return err
+	}
+	defer os.Remove(f.Name())
+	defer f.Close()
+	if err = f.Chmod(0600); err != nil {
+		return err
+	}
+	if _, err = f.WriteString(content); err != nil {
+		return err
+	}
+	if err = f.Sync(); err != nil {
+		return err
+	}
+	if err = f.Close(); err != nil {
+		return err
+	}
+	return os.Rename(f.Name(), r.SummaryFile)
+}
+
 func report(j Job) Report {
 	r := Report{ID: j.ID, Active: j.Active, NextRun: j.NextRun, IntervalSeconds: j.IntervalSeconds, Runs: j.Runs, Failures: j.Failures, RetainedSamples: len(j.Samples)}
 	var previous *Snapshot
@@ -269,7 +303,7 @@ func (s *Scheduler) Create(in ScheduleInput, now time.Time) (Report, error) {
 	for _, j := range s.doc.Jobs {
 		if j.ID == in.ID {
 			if j.ScheduleInput == in {
-				return report(j), nil
+				return s.report(j), nil
 			}
 			return Report{}, errors.New("ID already exists with different settings; choose another ID")
 		}
@@ -283,14 +317,21 @@ func (s *Scheduler) Create(in ScheduleInput, now time.Time) (Report, error) {
 	if err := s.save(doc); err != nil {
 		return Report{}, err
 	}
-	return report(j), nil
+	return s.report(j), nil
+}
+func (s *Scheduler) report(j Job) Report {
+	r := report(j)
+	if j.WriteFile {
+		r.SummaryFile = filepath.Join(filepath.Dir(s.path), "summary-"+j.ID+".txt")
+	}
+	return r
 }
 func (s *Scheduler) Reports() []Report {
 	s.mu.Lock()
 	defer s.mu.Unlock()
 	out := []Report{}
 	for _, j := range s.doc.Jobs {
-		out = append(out, report(j))
+		out = append(out, s.report(j))
 	}
 	return out
 }
@@ -313,7 +354,13 @@ func (s *Scheduler) Cancel(id string) (Report, error) {
 			if err := s.save(doc); err != nil {
 				return Report{}, err
 			}
-			return report(doc.Jobs[i]), nil
+			r := s.report(doc.Jobs[i])
+			if r.SummaryFile != "" && r.Runs > 0 {
+				if err := s.writeSummary(r); err != nil {
+					return Report{}, fmt.Errorf("update summary file: %w", err)
+				}
+			}
+			return r, nil
 		}
 	}
 	return Report{}, errors.New("unknown schedule ID")
@@ -397,7 +444,12 @@ func (s *Scheduler) execute(ctx context.Context, id string, now time.Time) (*Rep
 		if err := s.save(doc); err != nil {
 			return nil, fmt.Errorf("persist scheduled result: %w", err)
 		}
-		r := report(*j)
+		r := s.report(*j)
+		if r.SummaryFile != "" {
+			if err := s.writeSummary(r); err != nil {
+				return nil, fmt.Errorf("update summary file: %w", err)
+			}
+		}
 		return &r, nil
 	}
 	return nil, nil
@@ -456,7 +508,7 @@ func collectSnapshot(ctx context.Context, root string) (Snapshot, error) {
 }
 
 func (s *Scheduler) Register(server *mcp.Server) {
-	mcp.AddTool(server, &mcp.Tool{Name: "git_summary_schedule", Description: "Persist a delayed or periodic Git summary job on the server. Runs without a connected client or LLM; emits summaries to server logs. Does not push notifications into chat."}, func(_ context.Context, _ *mcp.CallToolRequest, in ScheduleInput) (*mcp.CallToolResult, Report, error) {
+	mcp.AddTool(server, &mcp.Tool{Name: "git_summary_schedule", Description: "Persist a delayed or periodic Git summary job on the server. Set write_file=true to update a readable summary-ID.txt file in the server data directory after each run. Runs without a connected client or LLM; emits summaries to server logs. Does not push notifications into chat."}, func(_ context.Context, _ *mcp.CallToolRequest, in ScheduleInput) (*mcp.CallToolResult, Report, error) {
 		r, e := s.Create(in, time.Now().UTC())
 		return nil, r, e
 	})
