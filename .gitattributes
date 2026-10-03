@@ -1,0 +1,2 @@
+# Keep public source checksums and reviewed answer hashes stable on Windows.
+examples/** text eol=lf

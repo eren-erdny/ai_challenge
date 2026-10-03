@@ -1,5 +1,10 @@
 # DeepSeek Client
 
+## Локальный индекс документов
+
+[Домашка 21: chunking, embeddings, метаданные и сравнение](../../examples/rag-indexing/README.md).
+Инструкция: [RAG.md](RAG.md).
+
 ## Несколько MCP-серверов
 
 [Реестр, маршрутизация и длинный флоу](MULTI_MCP.md): агент одновременно
