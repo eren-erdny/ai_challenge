@@ -255,6 +255,8 @@ func printSessionWelcome(output io.Writer, state sessionState) {
 func handleSessionCommand(command string, state *sessionState, output io.Writer) {
 	parts := strings.Fields(command)
 	switch parts[0] {
+	case "/rag":
+		handleRetrievalSettings(parts, state, output)
 	case "/help":
 		fmt.Fprintln(output, "/persona create|use|show|list|set|add-constraint|remove-constraint|delete — профиль пользователя")
 		fmt.Fprintln(output, "/memory STRATEGY   — full|summary|sliding|facts|branching")
@@ -267,6 +269,7 @@ func handleSessionCommand(command string, state *sessionState, output io.Writer)
 		fmt.Fprintln(output, "/branches          — показать ветки и checkpoints")
 		fmt.Fprintln(output, "/compress         — сжать старую историю текущего диалога через модель")
 		fmt.Fprintln(output, "/tools [on|off]   — инструменты рабочей папки и MCP")
+		fmt.Fprintln(output, "/rag              — режим, порог, кандидаты и top-K поиска для этого чата")
 		fmt.Fprintln(output, "/kb               — базы знаний: создать, выбрать, добавить документы, обновить")
 		fmt.Fprintln(output, "/context N        — задать лимит контекста для локальной оценки (0 отключает проверку)")
 		fmt.Fprintln(output, "/new              — начать новый чистый диалог")

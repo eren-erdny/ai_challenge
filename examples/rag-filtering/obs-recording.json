@@ -1,0 +1,43 @@
+{
+  "assignment": 23,
+  "video": "C:\\Users\\erdni\\Videos\\ai_challenge_hw23.mp4",
+  "obs_output_path": "C:/Users/erdni/Videos/2026-10-03 00-39-52.mp4",
+  "bytes": 18160931,
+  "sha256": "0fc78f7c037f1880593f3f8686a6ca240ec8fa60f58125d87a124f6dc00269b3",
+  "duration_seconds": 221.58,
+  "width": 2560,
+  "height": 1440,
+  "fps": 60,
+  "container": "MP4",
+  "video_codec": "H.264",
+  "silent": true,
+  "full_decode_passed": true,
+  "encoded_frames_inspected": [
+    "baseline result",
+    "enhanced 431 result",
+    "empty evidence for Moon distance",
+    "AES unsupported case",
+    "previous full comparison and current recording totals"
+  ],
+  "new_provider_calls": 10,
+  "input_tokens": 17965,
+  "output_tokens": 525,
+  "estimated_peak_usd": 0.00564318,
+  "day23_total_estimated_peak_usd": 0.02488818,
+  "total_reserved_usd": 0.15292319999999998,
+  "budget_usd": 0.2,
+  "stats": {
+    "baseline": {
+      "input_tokens": 11104,
+      "output_tokens": 271,
+      "chunks": 25
+    },
+    "enhanced": {
+      "input_tokens": 6861,
+      "output_tokens": 254,
+      "chunks": 13
+    }
+  },
+  "automation": "Scripted input to the actual BubbleTea TUI; temporary status overlay reads actual artifacts. Real local worker and real DeepSeek, no mocked answers, no retries, no history or extra tools.",
+  "review": "All ten saved responses substantively inspected by Codex: both modes give correct WHEN/opacity/431 facts and acknowledge missing Moon/AES information. Citation IDs match retrieved evidence."
+}

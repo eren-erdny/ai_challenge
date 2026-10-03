@@ -29,6 +29,9 @@ def main():
     search.add_argument('--strategy', choices=['fixed', 'structured'], default='structured')
     search.add_argument('--no-rerank', action='store_true')
     search.add_argument('--output')
+    search.add_argument('--min-similarity', type=float)
+    search.add_argument('--min-rerank-score', type=float)
+    search.add_argument('--rewrite', action='store_true')
     compare = sub.add_parser('evaluate')
     compare.add_argument('questions')
     compare.add_argument('--output', default=str(ROOT / 'reports' / 'comparison.json'))
@@ -54,7 +57,7 @@ def main():
     elif args.command == 'search':
         session = SearchSession(args.manifest, rerank=not args.no_rerank)
         try:
-            result = session.search(args.query, args.strategy, args.candidates, args.top_k, not args.no_rerank)
+            result = session.search(args.query, args.strategy, args.candidates, args.top_k, not args.no_rerank, min_similarity=args.min_similarity, rewrite=args.rewrite, min_rerank_score=args.min_rerank_score)
             if args.output:
                 from .pipeline import save_json
                 save_json(args.output, result)

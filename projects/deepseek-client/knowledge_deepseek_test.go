@@ -157,7 +157,7 @@ func TestKnowledgeRealDeepSeek(t *testing.T) {
 					}
 				}
 			}
-			if len(current.Sources) == 0 || bytes > 12000 {
+			if (len(current.Sources) == 0 && item.Expected != "NOT_FOUND") || bytes > 12000 {
 				return completionResult{}, fmt.Errorf("missing evidence or oversized request")
 			}
 			// Conservative tariff envelope ($5/M input, $20/M output), not a billing claim.

@@ -28,8 +28,9 @@ type Base struct {
 	Updated   string   `json:"updated,omitempty"`
 }
 type catalog struct {
-	Bases map[string]Base   `json:"bases"`
-	Chats map[string]string `json:"chats"`
+	Retrieval map[string]RetrievalOptions `json:"retrieval,omitempty"`
+	Bases     map[string]Base             `json:"bases"`
+	Chats     map[string]string           `json:"chats"`
 }
 type Manager struct {
 	Dir     string
@@ -54,7 +55,7 @@ func (m *Manager) load() error {
 	if m.loaded {
 		return nil
 	}
-	m.data = catalog{Bases: map[string]Base{}, Chats: map[string]string{}}
+	m.data = catalog{Bases: map[string]Base{}, Chats: map[string]string{}, Retrieval: map[string]RetrievalOptions{}}
 	value, err := os.ReadFile(filepath.Join(m.Dir, "catalog.json"))
 	if err != nil && !errors.Is(err, os.ErrNotExist) {
 		return err
@@ -68,6 +69,14 @@ func (m *Manager) load() error {
 		}
 		if m.data.Chats == nil {
 			m.data.Chats = map[string]string{}
+		}
+		if m.data.Retrieval == nil {
+			m.data.Retrieval = map[string]RetrievalOptions{}
+		}
+		for _, o := range m.data.Retrieval {
+			if err := o.Validate(); err != nil {
+				return err
+			}
 		}
 		for id, base := range m.data.Bases {
 			if len(id) != 32 || base.ID != id {
@@ -122,13 +131,16 @@ func (m *Manager) save(next catalog) error {
 	return nil
 }
 func (m *Manager) copyCatalog() catalog {
-	next := catalog{Bases: map[string]Base{}, Chats: map[string]string{}}
+	next := catalog{Bases: map[string]Base{}, Chats: map[string]string{}, Retrieval: map[string]RetrievalOptions{}}
 	for id, b := range m.data.Bases {
 		b.Sources = append([]string(nil), b.Sources...)
 		next.Bases[id] = b
 	}
 	for chat, id := range m.data.Chats {
 		next.Chats[chat] = id
+	}
+	for chat, o := range m.data.Retrieval {
+		next.Retrieval[chat] = o
 	}
 	return next
 }
@@ -408,7 +420,11 @@ func (m *Manager) Search(ctx context.Context, chat, query string) (string, error
 		m.output.Buffer(make([]byte, 4096), 1<<20)
 		m.workerID = id
 	}
-	value, _ := json.Marshal(map[string]string{"query": query})
+	options := m.retrieval(chat)
+	value, _ := json.Marshal(struct {
+		Query string `json:"query"`
+		RetrievalOptions
+	}{query, options})
 	if _, err := fmt.Fprintln(m.input, string(value)); err != nil {
 		m.stopWorker()
 		return "", err

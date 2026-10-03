@@ -4,6 +4,8 @@ import sys
 
 from .models import DATA, Reranker
 from .pipeline import SearchSession
+from .server import validate
+from .retrieval import extra_options
 
 
 def main():
@@ -14,13 +16,14 @@ def main():
         for line in sys.stdin:
             try:
                 value = json.loads(line)
+                query, strategy, candidates, top_k, rerank = validate(value)
                 if session is None:
                     session = SearchSession(DATA / 'index.json', rerank=False)
                 if session.embedder.identity() != session.manifest['embedding']:
                     raise ValueError('Embedding model changed; update the knowledge base')
-                if session.reranker is None:
+                if rerank and session.reranker is None:
                     session.reranker = Reranker()
-                result = session.search(value['query'], candidates=20, top_k=5, rerank=True)
+                result = session.search(query, strategy=strategy, candidates=candidates, top_k=top_k, rerank=rerank, **extra_options(value))
                 print(json.dumps({'result': result}, ensure_ascii=False, allow_nan=False), flush=True)
             except Exception as exc:
                 print(json.dumps({'error': str(exc)}, ensure_ascii=False), flush=True)

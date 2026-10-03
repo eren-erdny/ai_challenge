@@ -27,13 +27,26 @@ func executeQuestion(ctx context.Context, token, prompt string, state sessionSta
 		request.Evidence = evidence
 		if evidence != "" {
 			var found struct {
-				Results []struct {
+				CandidateCount int    `json:"candidate_count"`
+				RetainedCount  int    `json:"retained_count"`
+				FilteredCount  int    `json:"filtered_count"`
+				SearchQuery    string `json:"search_query"`
+				Query          string `json:"query"`
+				NoEvidence     bool   `json:"no_evidence"`
+				Results        []struct {
 					Source  string `json:"source"`
 					ChunkID string `json:"chunk_id"`
 				} `json:"results"`
 			}
 			if json.Unmarshal([]byte(evidence), &found) == nil {
 				fmt.Fprintf(output, "[База знаний: %s · найдено фрагментов: %d]\n", state.KnowledgeLabel, len(found.Results))
+				fmt.Fprintf(output, "[Поиск: %d кандидатов → %d после фильтра → %d в контекст; отсечено %d]\n", found.CandidateCount, found.RetainedCount, len(found.Results), found.FilteredCount)
+				if found.SearchQuery != "" && found.SearchQuery != found.Query {
+					fmt.Fprintf(output, "[Поисковый запрос: %s]\n", toolPreview(found.SearchQuery, token))
+				}
+				if found.NoEvidence {
+					fmt.Fprintln(output, "[В базе не найдено подтверждающих фрагментов]")
+				}
 				for _, hit := range found.Results {
 					fmt.Fprintf(output, "[%s#%s]\n", toolPreview(hit.Source, token), hit.ChunkID)
 				}

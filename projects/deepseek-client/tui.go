@@ -81,6 +81,7 @@ var (
 
 var commandSuggestions = []autocompleteSuggestion{
 	{value: "/kb"},
+	{value: "/rag"},
 	{value: "/compress"},
 	{value: "/memory "},
 	{value: "/invariant "},

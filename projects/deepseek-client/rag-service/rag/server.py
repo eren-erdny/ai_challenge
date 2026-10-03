@@ -5,6 +5,7 @@ from pathlib import Path
 
 from .models import Reranker
 from .pipeline import SearchSession
+from .retrieval import extra_options
 
 
 class Retrieval:
@@ -21,14 +22,14 @@ class Retrieval:
         query, strategy, candidates, top_k, rerank = validate(value)
         if rerank and self.session.reranker is None:
             self.session.reranker = Reranker()
-        return self.session.search(query, strategy, candidates, top_k, rerank)
+        return self.session.search(query, strategy, candidates, top_k, rerank, **extra_options(value))
 
     def close(self):
         self.session.close()
 
 
 def validate(value):
-    if not isinstance(value, dict) or set(value) - {'query', 'strategy', 'candidates', 'top_k', 'rerank'}:
+    if not isinstance(value, dict) or set(value) - {'query', 'strategy', 'candidates', 'top_k', 'rerank', 'min_similarity', 'rewrite', 'min_rerank_score'}:
         raise ValueError('Expected a search object with known fields')
     query = value.get('query')
     strategy = value.get('strategy', 'structured')
@@ -42,6 +43,7 @@ def validate(value):
         raise ValueError('Invalid strategy or rerank setting')
     if type(candidates) is not int or type(top_k) is not int or not 1 <= top_k <= 20 or not top_k <= candidates <= 100:
         raise ValueError('Require 1 <= top_k <= 20 and top_k <= candidates <= 100')
+    extra_options(value)
     return query, strategy, candidates, top_k, rerank
 
 

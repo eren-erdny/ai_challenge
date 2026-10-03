@@ -10,6 +10,7 @@ from qdrant_client import models
 from qdrant_store import open_store
 from .chunking import TokenCounter, chunk_documents
 from .documents import load_documents
+from .retrieval import rewrite_query, validate_options
 from .models import CACHE, ROOT, DATA, OllamaEmbedder, Reranker
 
 
@@ -123,15 +124,19 @@ class SearchSession:
     def close(self):
         self.client.close()
 
-    def search(self, query, strategy='structured', candidates=20, top_k=5, rerank=True, vector=None):
-        if not query.strip() or top_k < 1 or candidates < top_k:
-            raise ValueError('Require nonempty query and candidates >= top_k >= 1')
+    def search(self, query, strategy='structured', candidates=20, top_k=5, rerank=True, vector=None, min_similarity=None, rewrite=False, min_rerank_score=None):
+        validate_options(candidates, top_k, rerank, min_similarity, rewrite, min_rerank_score)
+        if not isinstance(query, str) or not query.strip() or len(query.encode('utf-8')) > 4096:
+            raise ValueError('Query must be nonempty and at most 4096 UTF-8 bytes')
+        search_query = rewrite_query(query) if rewrite else query
+        if vector is not None and search_query != query:
+            raise ValueError('A supplied vector must correspond to the original query; disable rewrite')
         if strategy not in self.manifest['collections']:
             raise ValueError('Unknown chunking strategy')
         if rerank and self.reranker is None:
             raise ValueError('Reranker is not loaded')
         started = time.perf_counter()
-        vector = vector if vector is not None else self.embedder.embed([query], query=True)[0]
+        vector = vector if vector is not None else self.embedder.embed([search_query], query=True)[0]
         collection = self.manifest['collections'][strategy]
         if len(vector) != collection['dimension']:
             raise ValueError('Query embedding dimension differs from the index')
@@ -140,12 +145,20 @@ class SearchSession:
         retrieved = [dict(hit.payload, vector_score=hit.score) for hit in hits]
         retrieval_seconds = time.perf_counter() - started
         rerank_start = time.perf_counter()
-        ranked = self.reranker.rank(query, retrieved) if rerank else retrieved
-        return {'query': query, 'strategy': strategy, 'reranking': rerank,
+        eligible = [hit for hit in retrieved if min_similarity is None or hit['vector_score'] >= min_similarity]
+        ranked = self.reranker.rank(search_query, eligible) if rerank and eligible else eligible
+        accepted = [hit for hit in ranked if min_rerank_score is None or hit['rerank_score'] >= min_rerank_score]
+        return {'query': query, 'search_query': search_query, 'rewrite': rewrite,
+                'min_similarity': min_similarity, 'score_type': 'cosine',
+                'retained_count': len(accepted), 'filtered_count': len(retrieved) - len(accepted),
+                'cosine_retained_count': len(eligible), 'min_rerank_score': min_rerank_score,
+                'rerank_score_type': 'raw_logit',
+                'no_evidence': not accepted, 'candidates': candidates,
+                'strategy': strategy, 'reranking': rerank,
                 'candidate_count': len(retrieved), 'top_k': top_k,
                 'retrieval_seconds': retrieval_seconds,
                 'rerank_seconds': time.perf_counter() - rerank_start if rerank else 0,
-                'results': ranked[:top_k]}
+                'results': accepted[:top_k]}
 
 
 def relevance(hit, evidence):

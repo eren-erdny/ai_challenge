@@ -1,0 +1,182 @@
+{
+  "answers_sha256": "529d545581bcd5d99875bed06fed208da09a43f0667683adae1fb7d8cc513078",
+  "reviewer": "Codex: substantive inspection of all 28 saved answers, not an external judge or automatic keyword score.",
+  "correct_factual_answers": {
+    "baseline": 10,
+    "enhanced": 10
+  },
+  "correct_abstentions": {
+    "baseline": 4,
+    "enhanced": 4
+  },
+  "rows": [
+    {
+      "id": "Q01",
+      "mode": "baseline",
+      "verdict": "correct_fact_with_source",
+      "note": "Matches predefined reference; no conflicting additions."
+    },
+    {
+      "id": "Q02",
+      "mode": "baseline",
+      "verdict": "correct_fact_with_source",
+      "note": "Matches predefined reference; no conflicting additions."
+    },
+    {
+      "id": "Q03",
+      "mode": "baseline",
+      "verdict": "correct_fact_with_source",
+      "note": "Matches predefined reference; no conflicting additions."
+    },
+    {
+      "id": "Q04",
+      "mode": "baseline",
+      "verdict": "correct_fact_with_source",
+      "note": "Matches predefined reference; no conflicting additions."
+    },
+    {
+      "id": "Q05",
+      "mode": "baseline",
+      "verdict": "correct_fact_with_source",
+      "note": "Matches predefined reference; no conflicting additions."
+    },
+    {
+      "id": "Q06",
+      "mode": "baseline",
+      "verdict": "correct_fact_with_source",
+      "note": "Matches predefined reference; no conflicting additions."
+    },
+    {
+      "id": "Q07",
+      "mode": "baseline",
+      "verdict": "correct_fact_with_source",
+      "note": "Matches predefined reference; no conflicting additions."
+    },
+    {
+      "id": "Q08",
+      "mode": "baseline",
+      "verdict": "correct_fact_with_source",
+      "note": "Matches predefined reference; no conflicting additions."
+    },
+    {
+      "id": "Q09",
+      "mode": "baseline",
+      "verdict": "correct_fact_with_source",
+      "note": "Matches predefined reference; no conflicting additions."
+    },
+    {
+      "id": "Q10",
+      "mode": "baseline",
+      "verdict": "correct_fact_with_source",
+      "note": "Matches predefined reference; no conflicting additions."
+    },
+    {
+      "id": "Q11",
+      "mode": "baseline",
+      "verdict": "correct_abstention",
+      "note": "Acknowledges no supporting information; does not invent the requested fact."
+    },
+    {
+      "id": "Q12",
+      "mode": "baseline",
+      "verdict": "correct_abstention",
+      "note": "Acknowledges no supporting information; does not invent the requested fact."
+    },
+    {
+      "id": "Q13",
+      "mode": "baseline",
+      "verdict": "correct_abstention",
+      "note": "Acknowledges no supporting information; does not invent the requested fact."
+    },
+    {
+      "id": "Q14",
+      "mode": "baseline",
+      "verdict": "correct_abstention",
+      "note": "Acknowledges no supporting information; does not invent the requested fact."
+    },
+    {
+      "id": "Q01",
+      "mode": "enhanced",
+      "verdict": "correct_fact_with_source",
+      "note": "Matches predefined reference; no conflicting additions."
+    },
+    {
+      "id": "Q02",
+      "mode": "enhanced",
+      "verdict": "correct_fact_with_source",
+      "note": "Matches predefined reference; no conflicting additions."
+    },
+    {
+      "id": "Q03",
+      "mode": "enhanced",
+      "verdict": "correct_fact_with_source",
+      "note": "Matches predefined reference; no conflicting additions."
+    },
+    {
+      "id": "Q04",
+      "mode": "enhanced",
+      "verdict": "correct_fact_with_source",
+      "note": "Matches predefined reference; no conflicting additions."
+    },
+    {
+      "id": "Q05",
+      "mode": "enhanced",
+      "verdict": "correct_fact_with_source",
+      "note": "Matches predefined reference; no conflicting additions."
+    },
+    {
+      "id": "Q06",
+      "mode": "enhanced",
+      "verdict": "correct_fact_with_source",
+      "note": "Matches predefined reference; no conflicting additions."
+    },
+    {
+      "id": "Q07",
+      "mode": "enhanced",
+      "verdict": "correct_fact_with_source",
+      "note": "Matches predefined reference; no conflicting additions."
+    },
+    {
+      "id": "Q08",
+      "mode": "enhanced",
+      "verdict": "correct_fact_with_source",
+      "note": "Matches predefined reference; no conflicting additions."
+    },
+    {
+      "id": "Q09",
+      "mode": "enhanced",
+      "verdict": "correct_fact_with_source",
+      "note": "Matches predefined reference; no conflicting additions."
+    },
+    {
+      "id": "Q10",
+      "mode": "enhanced",
+      "verdict": "correct_fact_with_source",
+      "note": "Matches predefined reference; no conflicting additions."
+    },
+    {
+      "id": "Q11",
+      "mode": "enhanced",
+      "verdict": "correct_abstention",
+      "note": "Acknowledges no supporting information; does not invent the requested fact."
+    },
+    {
+      "id": "Q12",
+      "mode": "enhanced",
+      "verdict": "correct_abstention",
+      "note": "Acknowledges no supporting information; does not invent the requested fact."
+    },
+    {
+      "id": "Q13",
+      "mode": "enhanced",
+      "verdict": "correct_abstention",
+      "note": "Acknowledges no supporting information; does not invent the requested fact."
+    },
+    {
+      "id": "Q14",
+      "mode": "enhanced",
+      "verdict": "correct_abstention",
+      "note": "Acknowledges no supporting information; does not invent the requested fact."
+    }
+  ]
+}
