@@ -1,0 +1,11 @@
+{
+  "servers": [
+    { "name": "github", "transport": "builtin-github" },
+    {
+      "name": "git",
+      "transport": "http",
+      "url": "http://127.0.0.1:18080/mcp",
+      "token_env": "GIT_MCP_TOKEN"
+    }
+  ]
+}

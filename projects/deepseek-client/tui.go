@@ -434,8 +434,16 @@ func executeQuestionCommand(ctx context.Context, token string, prompt string, st
 	return func() tea.Msg {
 		var output strings.Builder
 		var errorOutput strings.Builder
+		var trace *tuiToolTrace
+		if state.Tools != nil && !state.ToolsDisabled {
+			trace = &tuiToolTrace{ToolExecutor: state.Tools}
+			state.Tools = trace
+		}
 		lastStatus := executeQuestion(ctx, token, prompt, state, &output, &errorOutput, ask)
 		text := strings.TrimSpace(output.String())
+		if trace != nil && len(trace.calls) > 0 {
+			text = trace.render(token) + "\n\n" + text
+		}
 		if errorOutput.Len() > 0 {
 			errorText := errorStyle.Render(strings.TrimSpace(errorOutput.String()))
 			if text == "" {
