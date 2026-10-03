@@ -1,0 +1,827 @@
+{
+  "budget_usd": 0.2,
+  "prior_reserve_usd": 0.02318,
+  "total_reserve_usd": 0.0757301,
+  "rows": [
+    {
+      "mode": "without_rag",
+      "question": {
+        "id": "Q01",
+        "question": "Which Content-Type is required when requesting tea from a TEA-capable pot?",
+        "expected": "message/teapot",
+        "section": "3",
+        "groups": [
+          [
+            "message/teapot"
+          ]
+        ],
+        "unsupported": false
+      },
+      "answer": {
+        "UsageIncomplete": false,
+        "ToolCalls": null,
+        "UsageKnown": true,
+        "Content": "RFC 7168 specifies that a TEA-capable pot uses the Content-Type `message/teapot` (or `application/teapot` in some interpretations). However, the RFC actually defines `message/teapot` for HTCPCP-TEA requests.",
+        "Model": "deepseek-flash",
+        "FinishReason": "stop",
+        "PromptTokens": 52,
+        "CachedInputTokens": 0,
+        "CompletionTokens": 57,
+        "TotalTokens": 109,
+        "Duration": 1839241500
+      },
+      "sources": null,
+      "content_auto_pass": true,
+      "citation_pass": false,
+      "retrieved_support_auto_pass": false,
+      "reserved_usd": 0.0019817999999999997,
+      "estimated_peak_cost_usd": 0.00008399999999999998
+    },
+    {
+      "mode": "without_rag",
+      "question": {
+        "id": "Q02",
+        "question": "Which three sugar-type values does HTCPCP-TEA add to Accept-Additions?",
+        "expected": "Sugar, Xylitol, Stevia",
+        "section": "2.2.1",
+        "groups": [
+          [
+            "sugar"
+          ],
+          [
+            "xylitol"
+          ],
+          [
+            "stevia"
+          ]
+        ],
+        "unsupported": false
+      },
+      "answer": {
+        "UsageIncomplete": false,
+        "ToolCalls": null,
+        "UsageKnown": true,
+        "Content": "RFC 7168 adds three sugar-type values to Accept-Additions: \"sugar\", \"Sugar\", and \"sugar? no thanks\".",
+        "Model": "deepseek-flash",
+        "FinishReason": "stop",
+        "PromptTokens": 54,
+        "CachedInputTokens": 0,
+        "CompletionTokens": 30,
+        "TotalTokens": 84,
+        "Duration": 697344400
+      },
+      "sources": null,
+      "content_auto_pass": false,
+      "citation_pass": false,
+      "retrieved_support_auto_pass": false,
+      "reserved_usd": 0.0019794,
+      "estimated_peak_cost_usd": 0.0000522
+    },
+    {
+      "mode": "without_rag",
+      "question": {
+        "id": "Q03",
+        "question": "What status code and response header are recommended for a BREW request to the root URI /?",
+        "expected": "300; Alternates; brewing does not commence",
+        "section": "2.1.1 and 2.3.1",
+        "groups": [
+          [
+            "300"
+          ],
+          [
+            "alternates"
+          ]
+        ],
+        "unsupported": false
+      },
+      "answer": {
+        "UsageIncomplete": false,
+        "ToolCalls": null,
+        "UsageKnown": true,
+        "Content": "RFC 7168 does not specify a status code or response header for a BREW request to the root URI /. It is not specified.",
+        "Model": "deepseek-flash",
+        "FinishReason": "stop",
+        "PromptTokens": 55,
+        "CachedInputTokens": 0,
+        "CompletionTokens": 28,
+        "TotalTokens": 83,
+        "Duration": 565448400
+      },
+      "sources": null,
+      "content_auto_pass": false,
+      "citation_pass": false,
+      "retrieved_support_auto_pass": false,
+      "reserved_usd": 0.0019914,
+      "estimated_peak_cost_usd": 0.0000501
+    },
+    {
+      "mode": "without_rag",
+      "question": {
+        "id": "Q04",
+        "question": "How are POST requests treated relative to BREW, and are they deprecated?",
+        "expected": "Equivalent treatment; POST remains deprecated",
+        "section": "2.1",
+        "groups": [
+          [
+            "equivalent",
+            "same"
+          ],
+          [
+            "deprecated"
+          ]
+        ],
+        "unsupported": false
+      },
+      "answer": {
+        "UsageIncomplete": false,
+        "ToolCalls": null,
+        "UsageKnown": true,
+        "Content": "RFC 7168 states that POST is not a valid method for the HTCPCP protocol; BREW is the required method for coffee pot requests. POST is not deprecated—it was never supported.",
+        "Model": "deepseek-flash",
+        "FinishReason": "stop",
+        "PromptTokens": 51,
+        "CachedInputTokens": 0,
+        "CompletionTokens": 40,
+        "TotalTokens": 91,
+        "Duration": 1130310800
+      },
+      "sources": null,
+      "content_auto_pass": false,
+      "citation_pass": false,
+      "retrieved_support_auto_pass": false,
+      "reserved_usd": 0.0019806,
+      "estimated_peak_cost_usd": 0.0000633
+    },
+    {
+      "mode": "without_rag",
+      "question": {
+        "id": "Q05",
+        "question": "What physical property is suggested for measuring the strength of the beverage?",
+        "expected": "Opacity",
+        "section": "2.1.2",
+        "groups": [
+          [
+            "opacity"
+          ]
+        ],
+        "unsupported": false
+      },
+      "answer": {
+        "UsageIncomplete": false,
+        "ToolCalls": null,
+        "UsageKnown": true,
+        "Content": "RFC 7168 does not specify a physical property for measuring beverage strength. It humorously discusses tea, coffee, and the \"HTCPCP\" protocol, but defines no such measurement.",
+        "Model": "deepseek-flash",
+        "FinishReason": "stop",
+        "PromptTokens": 49,
+        "CachedInputTokens": 0,
+        "CompletionTokens": 38,
+        "TotalTokens": 87,
+        "Duration": 711178300
+      },
+      "sources": null,
+      "content_auto_pass": false,
+      "citation_pass": false,
+      "retrieved_support_auto_pass": false,
+      "reserved_usd": 0.0019848,
+      "estimated_peak_cost_usd": 0.000060299999999999995
+    },
+    {
+      "mode": "without_rag",
+      "question": {
+        "id": "Q06",
+        "question": "What must a pot do if it receives a stop body before the recommended brewing strength is achieved?",
+        "expected": "Abort brewing and serve the beverage at lesser strength",
+        "section": "2.1.2",
+        "groups": [
+          [
+            "abort",
+            "stop brewing"
+          ],
+          [
+            "lesser",
+            "lower",
+            "weaker"
+          ]
+        ],
+        "unsupported": false
+      },
+      "answer": {
+        "UsageIncomplete": false,
+        "ToolCalls": null,
+        "UsageKnown": true,
+        "Content": "RFC 7168 does not specify what a pot must do if it receives a stop body before the recommended brewing strength is achieved. It is not specified.",
+        "Model": "deepseek-flash",
+        "FinishReason": "stop",
+        "PromptTokens": 55,
+        "CachedInputTokens": 0,
+        "CompletionTokens": 31,
+        "TotalTokens": 86,
+        "Duration": 660356900
+      },
+      "sources": null,
+      "content_auto_pass": false,
+      "citation_pass": false,
+      "retrieved_support_auto_pass": false,
+      "reserved_usd": 0.0019962,
+      "estimated_peak_cost_usd": 0.0000537
+    },
+    {
+      "mode": "without_rag",
+      "question": {
+        "id": "Q07",
+        "question": "Which two status codes may a tea-capable pot return when it is not provisioned to brew coffee?",
+        "expected": "503 temporary unavailability; 418 permanent teapot indication",
+        "section": "2.3.3",
+        "groups": [
+          [
+            "503"
+          ],
+          [
+            "418"
+          ]
+        ],
+        "unsupported": false
+      },
+      "answer": {
+        "UsageIncomplete": false,
+        "ToolCalls": null,
+        "UsageKnown": true,
+        "Content": "RFC 7168 specifies that a tea-capable pot, when asked to brew coffee and not provisioned to do so, may return **418 I'm a teapot** or **406 Not Acceptable**.",
+        "Model": "deepseek-flash",
+        "FinishReason": "stop",
+        "PromptTokens": 57,
+        "CachedInputTokens": 0,
+        "CompletionTokens": 43,
+        "TotalTokens": 100,
+        "Duration": 1081282800
+      },
+      "sources": null,
+      "content_auto_pass": false,
+      "citation_pass": false,
+      "retrieved_support_auto_pass": false,
+      "reserved_usd": 0.0019937999999999996,
+      "estimated_peak_cost_usd": 0.0000687
+    },
+    {
+      "mode": "without_rag",
+      "question": {
+        "id": "Q08",
+        "question": "Which status code may be returned when requested tea additions offend the consensus of tea drinkers?",
+        "expected": "403 Forbidden",
+        "section": "2.3.2",
+        "groups": [
+          [
+            "403"
+          ]
+        ],
+        "unsupported": false
+      },
+      "answer": {
+        "UsageIncomplete": false,
+        "ToolCalls": null,
+        "UsageKnown": true,
+        "Content": "RFC 7168 specifies status code 418 \"I'm a teapot\" for when tea additions offend the consensus of tea drinkers (e.g., adding milk to a tea that should not have it).",
+        "Model": "deepseek-flash",
+        "FinishReason": "stop",
+        "PromptTokens": 54,
+        "CachedInputTokens": 0,
+        "CompletionTokens": 43,
+        "TotalTokens": 97,
+        "Duration": 733016900
+      },
+      "sources": null,
+      "content_auto_pass": false,
+      "citation_pass": false,
+      "retrieved_support_auto_pass": false,
+      "reserved_usd": 0.0019974,
+      "estimated_peak_cost_usd": 0.0000678
+    },
+    {
+      "mode": "without_rag",
+      "question": {
+        "id": "Q09",
+        "question": "What is the default administrator password for a TEA-capable pot?",
+        "expected": "Not specified; do not invent a password",
+        "section": "No supporting passage",
+        "groups": [
+          [
+            "not specified",
+            "does not specify",
+            "doesn't specify",
+            "not defined",
+            "no default",
+            "not provide",
+            "not mentioned"
+          ]
+        ],
+        "unsupported": true
+      },
+      "answer": {
+        "UsageIncomplete": false,
+        "ToolCalls": null,
+        "UsageKnown": true,
+        "Content": "RFC 7168 does not specify a default administrator password for a TEA-capable pot. It is not specified.",
+        "Model": "deepseek-flash",
+        "FinishReason": "stop",
+        "PromptTokens": 50,
+        "CachedInputTokens": 0,
+        "CompletionTokens": 24,
+        "TotalTokens": 74,
+        "Duration": 743404800
+      },
+      "sources": null,
+      "content_auto_pass": true,
+      "citation_pass": true,
+      "retrieved_support_auto_pass": false,
+      "reserved_usd": 0.0019763999999999997,
+      "estimated_peak_cost_usd": 0.000043799999999999994
+    },
+    {
+      "mode": "without_rag",
+      "question": {
+        "id": "Q10",
+        "question": "Which exact TLS version does this RFC require for TEA-capable pots?",
+        "expected": "No TLS version is specified; do not invent one",
+        "section": "No supporting passage (section 5 does not define TLS)",
+        "groups": [
+          [
+            "not specified",
+            "does not specify",
+            "doesn't specify",
+            "not defined",
+            "no tls",
+            "not require",
+            "does not require",
+            "not mentioned"
+          ]
+        ],
+        "unsupported": true
+      },
+      "answer": {
+        "UsageIncomplete": false,
+        "ToolCalls": null,
+        "UsageKnown": true,
+        "Content": "RFC 7168 does not specify any TLS version for TEA-capable pots. It only requires that TEA-capable servers use TLS and that the TEA parameters be sent over the encrypted channel; no particular TLS version is mandated.",
+        "Model": "deepseek-flash",
+        "FinishReason": "stop",
+        "PromptTokens": 51,
+        "CachedInputTokens": 0,
+        "CompletionTokens": 48,
+        "TotalTokens": 99,
+        "Duration": 703950900
+      },
+      "sources": null,
+      "content_auto_pass": true,
+      "citation_pass": true,
+      "retrieved_support_auto_pass": false,
+      "reserved_usd": 0.0019776,
+      "estimated_peak_cost_usd": 0.0000729
+    },
+    {
+      "mode": "with_rag",
+      "question": {
+        "id": "Q01",
+        "question": "Which Content-Type is required when requesting tea from a TEA-capable pot?",
+        "expected": "message/teapot",
+        "section": "3",
+        "groups": [
+          [
+            "message/teapot"
+          ]
+        ],
+        "unsupported": false
+      },
+      "answer": {
+        "UsageIncomplete": false,
+        "ToolCalls": null,
+        "UsageKnown": true,
+        "Content": "The required Content-Type is \"message/teapot\" [rfc7168.txt#43f7820c7d1149a53e94ffa0bd7a46f4e7cc2276294df937ddd17ee00f182db8].",
+        "Model": "deepseek-flash",
+        "FinishReason": "stop",
+        "PromptTokens": 1386,
+        "CachedInputTokens": 0,
+        "CompletionTokens": 58,
+        "TotalTokens": 1444,
+        "Duration": 745354400
+      },
+      "sources": [
+        "rfc7168.txt#adb34d47c30b86937be33f637bbf57f73891cc7ba719d400efbb8f2126b2b23d",
+        "rfc7168.txt#43f7820c7d1149a53e94ffa0bd7a46f4e7cc2276294df937ddd17ee00f182db8",
+        "rfc7168.txt#23d6868416ca572ae2b90b7a7126fbdae4dbe7435be26055bcbb6dc612189957",
+        "rfc7168.txt#69610406820cc1f2021bd5316cc0ebf7812c8b82572d608765ae45278b1ef3f9",
+        "rfc7168.txt#01e078c086db12a008640f4e5a0feff53ad1912689379e0575c3a8d6cd638af7"
+      ],
+      "retrieved_text": "   As noted in Section 2.1, a BREW request with a Content-Type header\n   field of \"message/teapot\" to a TEA-capable pot will result in an\n   Alternates header being sent with the response, and a pot will not be\n   brewed.  However, if the BREW request has a Content-Type of\n   \"message/coffeepot\", and the pot is capable of brewing coffee, the\n   service's behavior will fall back to the base HTCPCP specification\n   and a pot will be brewed.\n\n\n   To distinguish messages destined for TEA-capable HTCPCP services from\n   pots compliant with the base HTCPCP specification, a new MIME media\n   type is defined by this document.  The Content-Type header of a POST\n   or BREW request sent to a TEA-capable pot MUST be \"message/teapot\" if\n   tea is to be requested.\n\n\n\n   A request to the \"/\" URI with a Content-Type header of\n   \"message/coffeepot\" SHOULD also be responded to with an Alternates\n   header in the above format, to allow TEA-capable clients the\n   opportunity to present the selection of teas to the user if inferior\n   caffeinated beverages have initially been requested.\n\n\nNazar                         Informational                     [Page 2]\n\f\nRFC 7168                       HTCPCP-TEA                   1 April 2014\n\n\n\nNazar                         Informational                     [Page 5]\n\f\nRFC 7168                       HTCPCP-TEA                   1 April 2014\n\n\n",
+      "content_auto_pass": true,
+      "citation_pass": true,
+      "retrieved_support_auto_pass": true,
+      "reserved_usd": 0.003282,
+      "estimated_peak_cost_usd": 0.0004854
+    },
+    {
+      "mode": "with_rag",
+      "question": {
+        "id": "Q02",
+        "question": "Which three sugar-type values does HTCPCP-TEA add to Accept-Additions?",
+        "expected": "Sugar, Xylitol, Stevia",
+        "section": "2.2.1",
+        "groups": [
+          [
+            "sugar"
+          ],
+          [
+            "xylitol"
+          ],
+          [
+            "stevia"
+          ]
+        ],
+        "unsupported": false
+      },
+      "answer": {
+        "UsageIncomplete": false,
+        "ToolCalls": null,
+        "UsageKnown": true,
+        "Content": "The retrieved excerpts only contain page headers/footers from RFC 7168 and do not include the Accept-Additions sugar-type values. Therefore, the three sugar-type values are not specified in the provided evidence. [rfc7168.txt#30c8012da475c7071ac6c8930735dddf3dc5d238f71261f969fdf0625381932a]",
+        "Model": "deepseek-flash",
+        "FinishReason": "stop",
+        "PromptTokens": 1208,
+        "CachedInputTokens": 0,
+        "CompletionTokens": 85,
+        "TotalTokens": 1293,
+        "Duration": 1081134000
+      },
+      "sources": [
+        "rfc7168.txt#30c8012da475c7071ac6c8930735dddf3dc5d238f71261f969fdf0625381932a",
+        "rfc7168.txt#b138fa919f6ba68b5e72cfbd10c99a0c84a16e84a8caae7d699059803fd8bd72",
+        "rfc7168.txt#8c0775825ad7af5226766066e13c8de89fe4120cc413dbddc40ffca7cd9de667",
+        "rfc7168.txt#69610406820cc1f2021bd5316cc0ebf7812c8b82572d608765ae45278b1ef3f9",
+        "rfc7168.txt#01e078c086db12a008640f4e5a0feff53ad1912689379e0575c3a8d6cd638af7"
+      ],
+      "retrieved_text": "\nNazar                         Informational                     [Page 6]\n\f\nRFC 7168                       HTCPCP-TEA                   1 April 2014\n\n\n\nNazar                         Informational                     [Page 3]\n\f\nRFC 7168                       HTCPCP-TEA                   1 April 2014\n\n\n\nNazar                         Informational                     [Page 4]\n\f\nRFC 7168                       HTCPCP-TEA                   1 April 2014\n\n\nNazar                         Informational                     [Page 2]\n\f\nRFC 7168                       HTCPCP-TEA                   1 April 2014\n\n\n\nNazar                         Informational                     [Page 5]\n\f\nRFC 7168                       HTCPCP-TEA                   1 April 2014\n\n\n",
+      "content_auto_pass": false,
+      "citation_pass": true,
+      "retrieved_support_auto_pass": false,
+      "reserved_usd": 0.0030846,
+      "estimated_peak_cost_usd": 0.00046439999999999996
+    },
+    {
+      "mode": "with_rag",
+      "question": {
+        "id": "Q03",
+        "question": "What status code and response header are recommended for a BREW request to the root URI /?",
+        "expected": "300; Alternates; brewing does not commence",
+        "section": "2.1.1 and 2.3.1",
+        "groups": [
+          [
+            "300"
+          ],
+          [
+            "alternates"
+          ]
+        ],
+        "unsupported": false
+      },
+      "answer": {
+        "UsageIncomplete": false,
+        "ToolCalls": null,
+        "UsageKnown": true,
+        "Content": "A BREW request to \"/\" returns an Alternates header listing available tea varieties; it is RECOMMENDED that the response use status code 300, indicating brewing has not commenced and the client must choose further options [rfc7168.txt#2b4871ab1654bb7aa2d48e6cbfaca84cda7d7edf25e41b2f068efda0cc0d44f8].",
+        "Model": "deepseek-flash",
+        "FinishReason": "stop",
+        "PromptTokens": 1839,
+        "CachedInputTokens": 0,
+        "CompletionTokens": 95,
+        "TotalTokens": 1934,
+        "Duration": 1159861600
+      },
+      "sources": [
+        "rfc7168.txt#2b4871ab1654bb7aa2d48e6cbfaca84cda7d7edf25e41b2f068efda0cc0d44f8",
+        "rfc7168.txt#dfe393264cd9244174858a4eab429beb1db7b404c87b03f04a9f0e5df38cc689",
+        "rfc7168.txt#adb34d47c30b86937be33f637bbf57f73891cc7ba719d400efbb8f2126b2b23d",
+        "rfc7168.txt#eaa0733d325e7f3d504442996c78af2cf072743d4efe9ce549edbd64bd890220",
+        "rfc7168.txt#914307ccbdaef92e551016971becc7719266ec418700a25008cfc26b073c106c"
+      ],
+      "retrieved_text": "   A BREW request to the \"/\" URI, as defined in Section 2.1.1, will\n   return an Alternates header indicating the URIs of the available\n   varieties of tea to brew.  It is RECOMMENDED that this response be\n   served with a status code of 300, to indicate that brewing has not\n   commenced and further options must be chosen by the client.\n\n\n   Services that implement the Accept-Additions header field MAY return\n   a 403 status code for a BREW request of a given variety of tea, if\n   the service deems the combination of additions requested to be\n   contrary to the sensibilities of a consensus of drinkers regarding\n   the variety in question.\n\n\n   As noted in Section 2.1, a BREW request with a Content-Type header\n   field of \"message/teapot\" to a TEA-capable pot will result in an\n   Alternates header being sent with the response, and a pot will not be\n   brewed.  However, if the BREW request has a Content-Type of\n   \"message/coffeepot\", and the pot is capable of brewing coffee, the\n   service's behavior will fall back to the base HTCPCP specification\n   and a pot will be brewed.\n\n\n   1. Introduction  . . . . . . . . . . . . . . . . . . . . . . . . .  2\n     1.1. Terminology . . . . . . . . . . . . . . . . . . . . . . . .  3\n   2. HTCPCP-TEA Protocol Additions . . . . . . . . . . . . . . . . .  3\n     2.1. BREW and POST Methods . . . . . . . . . . . . . . . . . . .  3\n       2.1.1. The \"/\" URI . . . . . . . . . . . . . . . . . . . . . .  3\n       2.1.2. Variety-Specific URIs . . . . . . . . . . . . . . . . .  4\n     2.2. Modified Header Fields  . . . . . . . . . . . . . . . . . .  4\n       2.2.1. The Accept-Additions Header Field . . . . . . . . . . .  4\n     2.3. Response Codes  . . . . . . . . . . . . . . . . . . . . . .  5\n       2.3.1. 300 Multiple Options  . . . . . . . . . . . . . . . . .  5\n       2.3.2. 403 Forbidden . . . . . . . . . . . . . . . . . . . . .  5\n       2.3.3. 418 I'm a Teapot  . . . . . . . . . . . . . . . . . . .  5\n   3. The \"message/teapot\" Media Type . . . . . . . . . . . . . . . .  6\n   4. Environmental Considerations  . . . . . . . . . . . . . . . . .  \n   For the URI \"/\", brewing will not commence.  Instead, an Alternates\n   header as defined in RFC 2295 [RFC2295] MUST be sent, with the\n   available tea bags and/or leaf varieties as entries.  An example of\n   such a response is as follows:\n\n\n",
+      "content_auto_pass": true,
+      "citation_pass": true,
+      "retrieved_support_auto_pass": true,
+      "reserved_usd": 0.0035921999999999994,
+      "estimated_peak_cost_usd": 0.0006657
+    },
+    {
+      "mode": "with_rag",
+      "question": {
+        "id": "Q04",
+        "question": "How are POST requests treated relative to BREW, and are they deprecated?",
+        "expected": "Equivalent treatment; POST remains deprecated",
+        "section": "2.1",
+        "groups": [
+          [
+            "equivalent",
+            "same"
+          ],
+          [
+            "deprecated"
+          ]
+        ],
+        "unsupported": false
+      },
+      "answer": {
+        "UsageIncomplete": false,
+        "ToolCalls": null,
+        "UsageKnown": true,
+        "Content": "POST requests are treated equivalently to BREW requests, but they remain deprecated [rfc7168.txt#2f39253ae324c0e92a893a94d68c86538099b70b4a19d8d53c09fc19717ef29e].",
+        "Model": "deepseek-flash",
+        "FinishReason": "stop",
+        "PromptTokens": 1595,
+        "CachedInputTokens": 0,
+        "CompletionTokens": 61,
+        "TotalTokens": 1656,
+        "Duration": 1128229700
+      },
+      "sources": [
+        "rfc7168.txt#2f39253ae324c0e92a893a94d68c86538099b70b4a19d8d53c09fc19717ef29e",
+        "rfc7168.txt#adb34d47c30b86937be33f637bbf57f73891cc7ba719d400efbb8f2126b2b23d",
+        "rfc7168.txt#589198cac0930d970a5b17add22948bafed809b8958796d0ab8a45ff2e8806ee",
+        "rfc7168.txt#3077b8d8f3420ee3b5c56421262f2fd94539555068027e8b0d3a2fc92d0c8cd5",
+        "rfc7168.txt#0c3e161e30324c05a1416f8b7d84df8e8f6d3aa0ec2cc09ae255e8e6d62ae1fa"
+      ],
+      "retrieved_text": "   Control of a TEA-capable pot is performed, as described in the base\n   HTCPCP specification, through the sending of BREW requests.  POST\n   requests are treated equivalently, but they remain deprecated.  Tea\n   production differs from coffee, however, in that a choice of teas is\n   often provided for client selection before the tea is brewed.  To\n   this end, a TEA-capable pot that receives a BREW message of content\n   type \"message/teapot\" MUST respond in accordance with the URI\n   requested, as below.\n\n\n   As noted in Section 2.1, a BREW request with a Content-Type header\n   field of \"message/teapot\" to a TEA-capable pot will result in an\n   Alternates header being sent with the response, and a pot will not be\n   brewed.  However, if the BREW request has a Content-Type of\n   \"message/coffeepot\", and the pot is capable of brewing coffee, the\n   service's behavior will fall back to the base HTCPCP specification\n   and a pot will be brewed.\n\n\n   TEA-capable clients SHOULD indicate the end of brewing by sending a\n   BREW request with an entity body containing \"stop\"; the pot MAY\n   continue brewing beyond the recommended strength until this is\n   received.  If the \"stop\" request is not sent by the client, this may\n   result in a state inversion in the proportion of tea to water in the\n   brewing pot, which may be reported by some pots as a negative\n   strength.\n\n\n   If the entity returned by the server when brewing commences contains\n   a TEA-compliant Alternates header indicating \"message/coffeepot\" and\n   the client does not want coffee, the client SHOULD then send a BREW\n   request with an entity body containing \"stop\".  This will result in\n   wasted coffee; whether this is regarded as a bad thing is user-\n   defined.\n\n\n   If a BREW command with an entity body containing \"stop\" is received\n   before the recommended strength is achieved, the pot MUST abort\n   brewing and serve the resultant beverage at lesser strength.  Finding\n   the preferred strength of beverage when using this override is a\n   function of the time between the TEA-capable pot receiving a \"start\"\n   request and the subsequent \"stop\".  Clients SHOULD be prepared to\n   make multiple attempts to reach the preferred strength.\n\n\n",
+      "content_auto_pass": true,
+      "citation_pass": true,
+      "retrieved_support_auto_pass": true,
+      "reserved_usd": 0.0035414999999999995,
+      "estimated_peak_cost_usd": 0.0005517
+    },
+    {
+      "mode": "with_rag",
+      "question": {
+        "id": "Q05",
+        "question": "What physical property is suggested for measuring the strength of the beverage?",
+        "expected": "Opacity",
+        "section": "2.1.2",
+        "groups": [
+          [
+            "opacity"
+          ]
+        ],
+        "unsupported": false
+      },
+      "answer": {
+        "UsageIncomplete": false,
+        "ToolCalls": null,
+        "UsageKnown": true,
+        "Content": "The retrieved excerpts from RFC 7168 contain only page headers and footers, with no substantive text about measuring beverage strength. Therefore, it is not specified in the provided evidence. [rfc7168.txt#69610406820cc1f2021bd5316cc0ebf7812c8b82572d608765ae45278b1ef3f9]",
+        "Model": "deepseek-flash",
+        "FinishReason": "stop",
+        "PromptTokens": 1197,
+        "CachedInputTokens": 0,
+        "CompletionTokens": 79,
+        "TotalTokens": 1276,
+        "Duration": 1301428500
+      },
+      "sources": [
+        "rfc7168.txt#69610406820cc1f2021bd5316cc0ebf7812c8b82572d608765ae45278b1ef3f9",
+        "rfc7168.txt#30c8012da475c7071ac6c8930735dddf3dc5d238f71261f969fdf0625381932a",
+        "rfc7168.txt#8c0775825ad7af5226766066e13c8de89fe4120cc413dbddc40ffca7cd9de667",
+        "rfc7168.txt#01e078c086db12a008640f4e5a0feff53ad1912689379e0575c3a8d6cd638af7",
+        "rfc7168.txt#b138fa919f6ba68b5e72cfbd10c99a0c84a16e84a8caae7d699059803fd8bd72"
+      ],
+      "retrieved_text": "Nazar                         Informational                     [Page 2]\n\f\nRFC 7168                       HTCPCP-TEA                   1 April 2014\n\n\n\nNazar                         Informational                     [Page 6]\n\f\nRFC 7168                       HTCPCP-TEA                   1 April 2014\n\n\n\nNazar                         Informational                     [Page 4]\n\f\nRFC 7168                       HTCPCP-TEA                   1 April 2014\n\n\n\nNazar                         Informational                     [Page 5]\n\f\nRFC 7168                       HTCPCP-TEA                   1 April 2014\n\n\n\nNazar                         Informational                     [Page 3]\n\f\nRFC 7168                       HTCPCP-TEA                   1 April 2014\n\n\n",
+      "content_auto_pass": false,
+      "citation_pass": true,
+      "retrieved_support_auto_pass": false,
+      "reserved_usd": 0.0030930000000000003,
+      "estimated_peak_cost_usd": 0.0004539
+    },
+    {
+      "mode": "with_rag",
+      "question": {
+        "id": "Q06",
+        "question": "What must a pot do if it receives a stop body before the recommended brewing strength is achieved?",
+        "expected": "Abort brewing and serve the beverage at lesser strength",
+        "section": "2.1.2",
+        "groups": [
+          [
+            "abort",
+            "stop brewing"
+          ],
+          [
+            "lesser",
+            "lower",
+            "weaker"
+          ]
+        ],
+        "unsupported": false
+      },
+      "answer": {
+        "UsageIncomplete": false,
+        "ToolCalls": null,
+        "UsageKnown": true,
+        "Content": "The pot MUST abort brewing and serve the resultant beverage at lesser strength [rfc7168.txt#0c3e161e30324c05a1416f8b7d84df8e8f6d3aa0ec2cc09ae255e8e6d62ae1fa].",
+        "Model": "deepseek-flash",
+        "FinishReason": "stop",
+        "PromptTokens": 1471,
+        "CachedInputTokens": 0,
+        "CompletionTokens": 65,
+        "TotalTokens": 1536,
+        "Duration": 1003013600
+      },
+      "sources": [
+        "rfc7168.txt#0c3e161e30324c05a1416f8b7d84df8e8f6d3aa0ec2cc09ae255e8e6d62ae1fa",
+        "rfc7168.txt#589198cac0930d970a5b17add22948bafed809b8958796d0ab8a45ff2e8806ee",
+        "rfc7168.txt#3077b8d8f3420ee3b5c56421262f2fd94539555068027e8b0d3a2fc92d0c8cd5",
+        "rfc7168.txt#e29d7c0194fc48c969376dba6215197f1c1af67bc91b302f92c97827a5eb5693",
+        "rfc7168.txt#69610406820cc1f2021bd5316cc0ebf7812c8b82572d608765ae45278b1ef3f9"
+      ],
+      "retrieved_text": "   If a BREW command with an entity body containing \"stop\" is received\n   before the recommended strength is achieved, the pot MUST abort\n   brewing and serve the resultant beverage at lesser strength.  Finding\n   the preferred strength of beverage when using this override is a\n   function of the time between the TEA-capable pot receiving a \"start\"\n   request and the subsequent \"stop\".  Clients SHOULD be prepared to\n   make multiple attempts to reach the preferred strength.\n\n\n   TEA-capable clients SHOULD indicate the end of brewing by sending a\n   BREW request with an entity body containing \"stop\"; the pot MAY\n   continue brewing beyond the recommended strength until this is\n   received.  If the \"stop\" request is not sent by the client, this may\n   result in a state inversion in the proportion of tea to water in the\n   brewing pot, which may be reported by some pots as a negative\n   strength.\n\n\n   If the entity returned by the server when brewing commences contains\n   a TEA-compliant Alternates header indicating \"message/coffeepot\" and\n   the client does not want coffee, the client SHOULD then send a BREW\n   request with an entity body containing \"stop\".  This will result in\n   wasted coffee; whether this is regarded as a bad thing is user-\n   defined.\n\n\n   TEA-capable pots follow the base HTCPCP specification when presented\n   with a BREW request for a specific variety of tea.  Pots SHOULD\n   follow the recommendations for brewing strength given by each\n   variety, and stop brewing when this strength is reached; it is\n   suggested that the strength be measured by detection of the opacity\n   of the beverage currently under brew by the pot.\n\n\nNazar                         Informational                     [Page 2]\n\f\nRFC 7168                       HTCPCP-TEA                   1 April 2014\n\n\n",
+      "content_auto_pass": true,
+      "citation_pass": true,
+      "retrieved_support_auto_pass": true,
+      "reserved_usd": 0.0034352999999999996,
+      "estimated_peak_cost_usd": 0.0005193
+    },
+    {
+      "mode": "with_rag",
+      "question": {
+        "id": "Q07",
+        "question": "Which two status codes may a tea-capable pot return when it is not provisioned to brew coffee?",
+        "expected": "503 temporary unavailability; 418 permanent teapot indication",
+        "section": "2.3.3",
+        "groups": [
+          [
+            "503"
+          ],
+          [
+            "418"
+          ]
+        ],
+        "unsupported": false
+      },
+      "answer": {
+        "UsageIncomplete": false,
+        "ToolCalls": null,
+        "UsageKnown": true,
+        "Content": "A tea-capable pot not provisioned to brew coffee may return 503 (temporary unavailability of coffee) or 418 (permanent indication that the pot is a teapot) [rfc7168.txt#d0a681bdec22234438732c7cd139d867927837383bb76b784d7d81efc178d97f].",
+        "Model": "deepseek-flash",
+        "FinishReason": "stop",
+        "PromptTokens": 1372,
+        "CachedInputTokens": 0,
+        "CompletionTokens": 80,
+        "TotalTokens": 1452,
+        "Duration": 814953500
+      },
+      "sources": [
+        "rfc7168.txt#d0a681bdec22234438732c7cd139d867927837383bb76b784d7d81efc178d97f",
+        "rfc7168.txt#dfe393264cd9244174858a4eab429beb1db7b404c87b03f04a9f0e5df38cc689",
+        "rfc7168.txt#adb34d47c30b86937be33f637bbf57f73891cc7ba719d400efbb8f2126b2b23d",
+        "rfc7168.txt#69610406820cc1f2021bd5316cc0ebf7812c8b82572d608765ae45278b1ef3f9",
+        "rfc7168.txt#01e078c086db12a008640f4e5a0feff53ad1912689379e0575c3a8d6cd638af7"
+      ],
+      "retrieved_text": "   TEA-capable pots that are not provisioned to brew coffee may return\n   either a status code of 503, indicating temporary unavailability of\n   coffee, or a code of 418 as defined in the base HTCPCP specification\n   to denote a more permanent indication that the pot is a teapot.\n\n\n   Services that implement the Accept-Additions header field MAY return\n   a 403 status code for a BREW request of a given variety of tea, if\n   the service deems the combination of additions requested to be\n   contrary to the sensibilities of a consensus of drinkers regarding\n   the variety in question.\n\n\n   As noted in Section 2.1, a BREW request with a Content-Type header\n   field of \"message/teapot\" to a TEA-capable pot will result in an\n   Alternates header being sent with the response, and a pot will not be\n   brewed.  However, if the BREW request has a Content-Type of\n   \"message/coffeepot\", and the pot is capable of brewing coffee, the\n   service's behavior will fall back to the base HTCPCP specification\n   and a pot will be brewed.\n\n\nNazar                         Informational                     [Page 2]\n\f\nRFC 7168                       HTCPCP-TEA                   1 April 2014\n\n\n\nNazar                         Informational                     [Page 5]\n\f\nRFC 7168                       HTCPCP-TEA                   1 April 2014\n\n\n",
+      "content_auto_pass": true,
+      "citation_pass": true,
+      "retrieved_support_auto_pass": true,
+      "reserved_usd": 0.0032841,
+      "estimated_peak_cost_usd": 0.0005076
+    },
+    {
+      "mode": "with_rag",
+      "question": {
+        "id": "Q08",
+        "question": "Which status code may be returned when requested tea additions offend the consensus of tea drinkers?",
+        "expected": "403 Forbidden",
+        "section": "2.3.2",
+        "groups": [
+          [
+            "403"
+          ]
+        ],
+        "unsupported": false
+      },
+      "answer": {
+        "UsageIncomplete": false,
+        "ToolCalls": null,
+        "UsageKnown": true,
+        "Content": "RFC 7168 says services implementing Accept-Additions MAY return a 403 status code for a BREW request if the requested additions are contrary to a consensus of drinkers' sensibilities [rfc7168.txt#dfe393264cd9244174858a4eab429beb1db7b404c87b03f04a9f0e5df38cc689].",
+        "Model": "deepseek-flash",
+        "FinishReason": "stop",
+        "PromptTokens": 1304,
+        "CachedInputTokens": 0,
+        "CompletionTokens": 83,
+        "TotalTokens": 1387,
+        "Duration": 1211347000
+      },
+      "sources": [
+        "rfc7168.txt#dfe393264cd9244174858a4eab429beb1db7b404c87b03f04a9f0e5df38cc689",
+        "rfc7168.txt#2b4871ab1654bb7aa2d48e6cbfaca84cda7d7edf25e41b2f068efda0cc0d44f8",
+        "rfc7168.txt#30c8012da475c7071ac6c8930735dddf3dc5d238f71261f969fdf0625381932a",
+        "rfc7168.txt#69610406820cc1f2021bd5316cc0ebf7812c8b82572d608765ae45278b1ef3f9",
+        "rfc7168.txt#b138fa919f6ba68b5e72cfbd10c99a0c84a16e84a8caae7d699059803fd8bd72"
+      ],
+      "retrieved_text": "   Services that implement the Accept-Additions header field MAY return\n   a 403 status code for a BREW request of a given variety of tea, if\n   the service deems the combination of additions requested to be\n   contrary to the sensibilities of a consensus of drinkers regarding\n   the variety in question.\n\n\n   A BREW request to the \"/\" URI, as defined in Section 2.1.1, will\n   return an Alternates header indicating the URIs of the available\n   varieties of tea to brew.  It is RECOMMENDED that this response be\n   served with a status code of 300, to indicate that brewing has not\n   commenced and further options must be chosen by the client.\n\n\n\nNazar                         Informational                     [Page 6]\n\f\nRFC 7168                       HTCPCP-TEA                   1 April 2014\n\n\nNazar                         Informational                     [Page 2]\n\f\nRFC 7168                       HTCPCP-TEA                   1 April 2014\n\n\n\nNazar                         Informational                     [Page 3]\n\f\nRFC 7168                       HTCPCP-TEA                   1 April 2014\n\n\n",
+      "content_auto_pass": true,
+      "citation_pass": true,
+      "retrieved_support_auto_pass": true,
+      "reserved_usd": 0.0032154,
+      "estimated_peak_cost_usd": 0.0004908
+    },
+    {
+      "mode": "with_rag",
+      "question": {
+        "id": "Q09",
+        "question": "What is the default administrator password for a TEA-capable pot?",
+        "expected": "Not specified; do not invent a password",
+        "section": "No supporting passage",
+        "groups": [
+          [
+            "not specified",
+            "does not specify",
+            "doesn't specify",
+            "not defined",
+            "no default",
+            "not provide",
+            "not mentioned"
+          ]
+        ],
+        "unsupported": true
+      },
+      "answer": {
+        "UsageIncomplete": false,
+        "ToolCalls": null,
+        "UsageKnown": true,
+        "Content": "RFC 7168 does not specify a default administrator password for a TEA-capable pot. The retrieved excerpts contain only page headers and footers, with no relevant content [rfc7168.txt#69610406820cc1f2021bd5316cc0ebf7812c8b82572d608765ae45278b1ef3f9].",
+        "Model": "deepseek-flash",
+        "FinishReason": "stop",
+        "PromptTokens": 1200,
+        "CachedInputTokens": 0,
+        "CompletionTokens": 77,
+        "TotalTokens": 1277,
+        "Duration": 1294789300
+      },
+      "sources": [
+        "rfc7168.txt#69610406820cc1f2021bd5316cc0ebf7812c8b82572d608765ae45278b1ef3f9",
+        "rfc7168.txt#30c8012da475c7071ac6c8930735dddf3dc5d238f71261f969fdf0625381932a",
+        "rfc7168.txt#01e078c086db12a008640f4e5a0feff53ad1912689379e0575c3a8d6cd638af7",
+        "rfc7168.txt#b138fa919f6ba68b5e72cfbd10c99a0c84a16e84a8caae7d699059803fd8bd72",
+        "rfc7168.txt#8c0775825ad7af5226766066e13c8de89fe4120cc413dbddc40ffca7cd9de667"
+      ],
+      "retrieved_text": "Nazar                         Informational                     [Page 2]\n\f\nRFC 7168                       HTCPCP-TEA                   1 April 2014\n\n\n\nNazar                         Informational                     [Page 6]\n\f\nRFC 7168                       HTCPCP-TEA                   1 April 2014\n\n\n\nNazar                         Informational                     [Page 5]\n\f\nRFC 7168                       HTCPCP-TEA                   1 April 2014\n\n\n\nNazar                         Informational                     [Page 3]\n\f\nRFC 7168                       HTCPCP-TEA                   1 April 2014\n\n\n\nNazar                         Informational                     [Page 4]\n\f\nRFC 7168                       HTCPCP-TEA                   1 April 2014\n\n\n",
+      "content_auto_pass": true,
+      "citation_pass": true,
+      "retrieved_support_auto_pass": false,
+      "reserved_usd": 0.0030803999999999996,
+      "estimated_peak_cost_usd": 0.0004524
+    },
+    {
+      "mode": "with_rag",
+      "question": {
+        "id": "Q10",
+        "question": "Which exact TLS version does this RFC require for TEA-capable pots?",
+        "expected": "No TLS version is specified; do not invent one",
+        "section": "No supporting passage (section 5 does not define TLS)",
+        "groups": [
+          [
+            "not specified",
+            "does not specify",
+            "doesn't specify",
+            "not defined",
+            "no tls",
+            "not require",
+            "does not require",
+            "not mentioned"
+          ]
+        ],
+        "unsupported": true
+      },
+      "answer": {
+        "UsageIncomplete": false,
+        "ToolCalls": null,
+        "UsageKnown": true,
+        "Content": "The retrieved excerpts from RFC 7168 contain only page headers and footers, with no text about TLS requirements for TEA-capable pots. Therefore, based on these excerpts, the TLS version is not specified. [rfc7168.txt#30c8012da475c7071ac6c8930735dddf3dc5d238f71261f969fdf0625381932a]",
+        "Model": "deepseek-flash",
+        "FinishReason": "stop",
+        "PromptTokens": 1203,
+        "CachedInputTokens": 0,
+        "CompletionTokens": 85,
+        "TotalTokens": 1288,
+        "Duration": 916551600
+      },
+      "sources": [
+        "rfc7168.txt#30c8012da475c7071ac6c8930735dddf3dc5d238f71261f969fdf0625381932a",
+        "rfc7168.txt#69610406820cc1f2021bd5316cc0ebf7812c8b82572d608765ae45278b1ef3f9",
+        "rfc7168.txt#8c0775825ad7af5226766066e13c8de89fe4120cc413dbddc40ffca7cd9de667",
+        "rfc7168.txt#b138fa919f6ba68b5e72cfbd10c99a0c84a16e84a8caae7d699059803fd8bd72",
+        "rfc7168.txt#01e078c086db12a008640f4e5a0feff53ad1912689379e0575c3a8d6cd638af7"
+      ],
+      "retrieved_text": "\nNazar                         Informational                     [Page 6]\n\f\nRFC 7168                       HTCPCP-TEA                   1 April 2014\n\n\nNazar                         Informational                     [Page 2]\n\f\nRFC 7168                       HTCPCP-TEA                   1 April 2014\n\n\n\nNazar                         Informational                     [Page 4]\n\f\nRFC 7168                       HTCPCP-TEA                   1 April 2014\n\n\n\nNazar                         Informational                     [Page 3]\n\f\nRFC 7168                       HTCPCP-TEA                   1 April 2014\n\n\n\nNazar                         Informational                     [Page 5]\n\f\nRFC 7168                       HTCPCP-TEA                   1 April 2014\n\n\n",
+      "content_auto_pass": true,
+      "citation_pass": true,
+      "retrieved_support_auto_pass": false,
+      "reserved_usd": 0.0030821999999999993,
+      "estimated_peak_cost_usd": 0.0004629
+    }
+  ]
+}

@@ -53,6 +53,7 @@ func handleConversationCommand(ctx context.Context, command string, state *sessi
 		return true, false, nil
 	}
 	state.ConversationID = id
+	refreshKnowledgeLabel(state)
 	state.LastRequest = nil
 	fmt.Fprintf(output, "Conversation ID: %s\n", id)
 	return true, true, messages

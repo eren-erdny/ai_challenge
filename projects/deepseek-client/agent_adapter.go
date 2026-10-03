@@ -2,9 +2,11 @@ package main
 
 import (
 	"context"
+	"encoding/json"
 	"fmt"
 	"io"
 	"strings"
+	"time"
 
 	"github.com/eren-erdny/ai_challenge/projects/deepseek-client/agent"
 )
@@ -14,6 +16,30 @@ func executeQuestion(ctx context.Context, token, prompt string, state sessionSta
 	target := agent.Target{Profile: state.ActiveProfile, BaseURL: state.API.BaseURL, Model: state.Model, SendThinkingDisabled: isDeepSeekEndpoint(state.API.BaseURL)}
 	target.ContextWindow, target.MaxOutputTokens = state.API.ContextWindow, state.API.MaxOutputTokens
 	request := agent.Request{Prompt: prompt, Mode: state.Mode, Target: target, Temperature: state.Temperature, Strategy: state.Strategy, Control: state.Control, UserProfile: state.UserProfile}
+	if state.Knowledge != nil && !state.ToolsDisabled && prompt != "/compress" {
+		searchContext, cancel := context.WithTimeout(ctx, 3*time.Minute)
+		evidence, err := state.Knowledge.Search(searchContext, conversationID(state.ConversationID), prompt)
+		cancel()
+		if err != nil {
+			fmt.Fprintf(errorOutput, "Поиск по базе знаний не выполнен: %v. Обновите базу через F2 / /kb или отключите её для этого чата.\n", err)
+			return nil
+		}
+		request.Evidence = evidence
+		if evidence != "" {
+			var found struct {
+				Results []struct {
+					Source  string `json:"source"`
+					ChunkID string `json:"chunk_id"`
+				} `json:"results"`
+			}
+			if json.Unmarshal([]byte(evidence), &found) == nil {
+				fmt.Fprintf(output, "[База знаний: %s · найдено фрагментов: %d]\n", state.KnowledgeLabel, len(found.Results))
+				for _, hit := range found.Results {
+					fmt.Fprintf(output, "[%s#%s]\n", toolPreview(hit.Source, token), hit.ChunkID)
+				}
+			}
+		}
+	}
 	credentials := map[string]string{target.Profile: token}
 	if state.Mode == modeModelBenchmark && prompt != "/compress" {
 		targets, err := buildModelBenchmarkTargets(state, token)
@@ -42,7 +68,11 @@ func executeQuestion(ctx context.Context, token, prompt string, state sessionSta
 		runner = runner.WithMemoryLayers(state.Memory)
 	}
 	if !state.ToolsDisabled {
-		runner = runner.WithTools(state.Tools)
+		tools := state.Tools
+		if request.Evidence != "" && tools != nil {
+			tools = knowledgeToolFilter{ToolExecutor: tools}
+		}
+		runner = runner.WithTools(tools)
 	}
 	var result agent.Result
 	var err error
@@ -70,6 +100,25 @@ func executeQuestion(ctx context.Context, token, prompt string, state sessionSta
 		return &requestStatus{Profile: last.Target.Profile, BaseURL: last.Target.BaseURL, Result: last.Answer, Tokens: &last.Tokens}
 	}
 	return nil
+}
+
+// A selected managed base must not be mixed with an unrelated legacy HTTP base.
+type knowledgeToolFilter struct{ agent.ToolExecutor }
+
+func (f knowledgeToolFilter) Definitions() []agent.ToolDefinition {
+	var result []agent.ToolDefinition
+	for _, definition := range f.ToolExecutor.Definitions() {
+		if definition.Function.Name != "rag_search" {
+			result = append(result, definition)
+		}
+	}
+	return result
+}
+func (f knowledgeToolFilter) Execute(ctx context.Context, name, args string) (string, error) {
+	if name == "rag_search" {
+		return "", fmt.Errorf("use evidence from the selected knowledge base")
+	}
+	return f.ToolExecutor.Execute(ctx, name, args)
 }
 
 func renderAgentResult(output io.Writer, result agent.Result) {

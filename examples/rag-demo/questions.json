@@ -1,0 +1,17 @@
+{
+  "assignment": 22,
+  "source_url": "https://www.rfc-editor.org/rfc/rfc7168.txt",
+  "source_file": "rfc7168.txt",
+  "questions": [
+    {"id": "Q01", "question": "Which Content-Type is required when requesting tea from a TEA-capable pot?", "expected": "message/teapot", "section": "3", "groups": [["message/teapot"]]},
+    {"id": "Q02", "question": "Which three sugar-type values does HTCPCP-TEA add to Accept-Additions?", "expected": "Sugar, Xylitol, Stevia", "section": "2.2.1", "groups": [["sugar"], ["xylitol"], ["stevia"]]},
+    {"id": "Q03", "question": "What status code and response header are recommended for a BREW request to the root URI /?", "expected": "300; Alternates; brewing does not commence", "section": "2.1.1 and 2.3.1", "groups": [["300"], ["alternates"]]},
+    {"id": "Q04", "question": "How are POST requests treated relative to BREW, and are they deprecated?", "expected": "Equivalent treatment; POST remains deprecated", "section": "2.1", "groups": [["equivalent", "same"], ["deprecated"]]},
+    {"id": "Q05", "question": "What physical property is suggested for measuring the strength of the beverage?", "expected": "Opacity", "section": "2.1.2", "groups": [["opacity"]]},
+    {"id": "Q06", "question": "What must a pot do if it receives a stop body before the recommended brewing strength is achieved?", "expected": "Abort brewing and serve the beverage at lesser strength", "section": "2.1.2", "groups": [["abort", "stop brewing"], ["lesser", "lower", "weaker"]]},
+    {"id": "Q07", "question": "Which two status codes may a tea-capable pot return when it is not provisioned to brew coffee?", "expected": "503 temporary unavailability; 418 permanent teapot indication", "section": "2.3.3", "groups": [["503"], ["418"]]},
+    {"id": "Q08", "question": "Which status code may be returned when requested tea additions offend the consensus of tea drinkers?", "expected": "403 Forbidden", "section": "2.3.2", "groups": [["403"]]},
+    {"id": "Q09", "question": "What is the default administrator password for a TEA-capable pot?", "expected": "Not specified; do not invent a password", "section": "No supporting passage", "unsupported": true, "groups": [["not specified", "does not specify", "doesn't specify", "not defined", "no default", "not provide", "not mentioned"]]},
+    {"id": "Q10", "question": "Which exact TLS version does this RFC require for TEA-capable pots?", "expected": "No TLS version is specified; do not invent one", "section": "No supporting passage (section 5 does not define TLS)", "unsupported": true, "groups": [["not specified", "does not specify", "doesn't specify", "not defined", "no tls", "not require", "does not require", "not mentioned"]]}
+  ]
+}

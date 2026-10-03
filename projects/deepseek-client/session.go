@@ -13,6 +13,7 @@ import (
 	"strings"
 
 	"github.com/eren-erdny/ai_challenge/projects/deepseek-client/agent"
+	"github.com/eren-erdny/ai_challenge/projects/deepseek-client/knowledge"
 )
 
 type sessionMode = agent.Mode
@@ -38,6 +39,8 @@ type requestSettings = agent.Settings
 type askFunction func(context.Context, string, string, requestSettings) (completionResult, error)
 
 type sessionState struct {
+	Knowledge          *knowledge.Manager
+	KnowledgeLabel     string
 	Compression        agent.CompressionConfig
 	Memory             agent.LayeredMemoryStore
 	UserProfiles       userProfileStore
@@ -81,6 +84,7 @@ func runInteractiveSession(
 	}
 	profile, _ := config.activeAPIProfile()
 	state := sessionState{
+		Knowledge:    config.Knowledge,
 		Compression:  config.HistoryPolicy.CompressionConfig,
 		Memory:       config.Memory,
 		UserProfiles: config.UserProfiles,
@@ -101,6 +105,7 @@ func runInteractiveSession(
 		Control:        config.ResponseControl,
 	}
 
+	refreshKnowledgeLabel(&state)
 	defer func() { printConversationExit(output, state) }()
 	printSessionWelcome(output, state)
 	if config.HistoryNotice != "" {
@@ -128,6 +133,10 @@ func runInteractiveSession(
 			return 0
 		}
 		if strings.HasPrefix(text, "/") && text != "/compress" {
+			if text == "/kb" {
+				runKnowledgeMenu(input, &state, output)
+				continue
+			}
 			if handled, changed, messages := handleConversationCommand(context.Background(), text, &state, output); handled {
 				if changed {
 					printConversationMessages(output, messages)
@@ -258,6 +267,7 @@ func handleSessionCommand(command string, state *sessionState, output io.Writer)
 		fmt.Fprintln(output, "/branches          — показать ветки и checkpoints")
 		fmt.Fprintln(output, "/compress         — сжать старую историю текущего диалога через модель")
 		fmt.Fprintln(output, "/tools [on|off]   — инструменты рабочей папки и MCP")
+		fmt.Fprintln(output, "/kb               — базы знаний: создать, выбрать, добавить документы, обновить")
 		fmt.Fprintln(output, "/context N        — задать лимит контекста для локальной оценки (0 отключает проверку)")
 		fmt.Fprintln(output, "/new              — начать новый чистый диалог")
 		fmt.Fprintln(output, "/conversation [ID] — показать ID или открыть сохранённый диалог")
