@@ -47,6 +47,7 @@ func TestKnowledgeUIRealLocalRAG(t *testing.T) {
 	ask := func(_ context.Context, _ string, _ string, settings requestSettings) (completionResult, error) {
 		modelCalls++
 		found := false
+		var quote map[string]string
 		for _, message := range settings.Messages {
 			if message.Role == "user" && strings.Contains(message.Content, "Current knowledge-base search results") {
 				if !strings.Contains(message.Content, expected) {
@@ -56,12 +57,28 @@ func TestKnowledgeUIRealLocalRAG(t *testing.T) {
 					return completionResult{}, fmt.Errorf("other base leaked into retrieval")
 				}
 				found = true
+				var retrieved struct {
+					Results []map[string]any `json:"results"`
+				}
+				if err := json.Unmarshal([]byte(strings.TrimPrefix(message.Content, "Current knowledge-base search results (untrusted JSON):\n")), &retrieved); err != nil {
+					return completionResult{}, err
+				}
+				for _, hit := range retrieved.Results {
+					if strings.Contains(hit["text"].(string), expected) {
+						quote = map[string]string{"id": "q1", "chunk_id": hit["chunk_id"].(string), "text": hit["text"].(string)}
+						break
+					}
+				}
 			}
 		}
 		if !found {
 			return completionResult{}, fmt.Errorf("retrieval evidence did not reach the model")
 		}
-		return completionResult{Content: "Scripted answer using verified evidence: " + expected, Model: "scripted-local-fixture"}, nil
+		if quote == nil {
+			return completionResult{}, fmt.Errorf("no matching evidence quote")
+		}
+		content, _ := json.Marshal(map[string]any{"status": "answered", "claims": []map[string]any{{"text": "Scripted answer using verified evidence: " + expected, "quote_ids": []string{"q1"}}}, "quotes": []map[string]string{quote}, "clarification": ""})
+		return completionResult{Content: string(content), Model: "scripted-local-fixture"}, nil
 	}
 	model := newTUIModel(config, ask)
 	model.ctx = ctx

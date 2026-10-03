@@ -1,0 +1,15 @@
+{
+  "factual_answers": 8,
+  "correct_abstentions": 2,
+  "factual_answers_with_sources": 8,
+  "factual_answers_with_quotes": 8,
+  "reviewed_claims": 16,
+  "supported_claims": 16,
+  "exact_quotes": 15,
+  "calls": 9,
+  "input_tokens": 21905,
+  "output_tokens": 2015,
+  "budget_usd": 0.2,
+  "reserved_usd": 0.0457776,
+  "estimated_peak_usd": 0.008688444
+}

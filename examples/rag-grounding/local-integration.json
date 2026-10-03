@@ -1,0 +1,19 @@
+{
+  "backend": "real Ollama + Qdrant Local + cached multilingual reranker",
+  "checks": [
+    "create two bases",
+    "automatic evidence in model input",
+    "switch back",
+    "add source",
+    "remove source",
+    "update source",
+    "restart restores selection",
+    "independent chat selection",
+    "disable retrieval"
+  ],
+  "generation": "scripted fixture; no provider request",
+  "result": "PASS",
+  "scripted_model_calls": 7,
+  "ui": "TUI wizard and asynchronous index command",
+  "user_documents_used": false
+}

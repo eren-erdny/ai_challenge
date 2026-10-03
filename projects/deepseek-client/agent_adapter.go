@@ -110,7 +110,7 @@ func executeQuestion(ctx context.Context, token, prompt string, state sessionSta
 		fmt.Fprintf(errorOutput, "ошибка запроса: %s\n", message)
 	}
 	if last := result.Last(); last != nil {
-		return &requestStatus{Profile: last.Target.Profile, BaseURL: last.Target.BaseURL, Result: last.Answer, Tokens: &last.Tokens}
+		return &requestStatus{Profile: last.Target.Profile, BaseURL: last.Target.BaseURL, Result: last.Answer, Tokens: &last.Tokens, Grounding: last.Grounding}
 	}
 	return nil
 }
@@ -203,10 +203,20 @@ func renderAgentResult(output io.Writer, result agent.Result) {
 		fmt.Fprintln(output, strings.Repeat("-", 40))
 		printAgentResponse(output, *result.Analysis)
 	}
+	if result.Analysis == nil && (result.Mode == agent.ModelBenchmark || result.Mode == agent.TemperatureBenchmark) && len(result.Responses) > 0 && result.Responses[0].Grounding != nil {
+		fmt.Fprintln(output, "[RAG: показаны проверенные ответы и метрики; дополнительный свободный ответ судьи отключён]")
+	}
 }
 
 func printAgentResponse(output io.Writer, response agent.Response) {
 	printSingleAnswer(output, response.Answer, response.Validation)
+	if g := response.Grounding; g != nil {
+		if g.Local {
+			fmt.Fprintln(output, "[Недостаточно контекста · ответ клиента · LLM-вызовов: 0]")
+		} else if g.Status == "answered" {
+			fmt.Fprintf(output, "[RAG: %d утверждений · %d цитат · %d источников; источники и точность цитат проверены]\n", len(g.Claims), len(g.Quotes), len(g.Sources))
+		}
+	}
 	if check := response.Invariant; check != nil {
 		if check.Refused {
 			fmt.Fprintf(output, "Инварианты: запрос отклонён (%d конфликтов из %d правил)\n", len(check.Violations), check.Active)

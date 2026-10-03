@@ -65,10 +65,11 @@ type sessionState struct {
 }
 
 type requestStatus struct {
-	Tokens  *agent.TokenReport
-	Profile string
-	BaseURL string
-	Result  completionResult
+	Grounding *agent.GroundedAnswer
+	Tokens    *agent.TokenReport
+	Profile   string
+	BaseURL   string
+	Result    completionResult
 }
 
 func runInteractiveSession(

@@ -35,6 +35,7 @@ type Target struct {
 }
 
 type Settings struct {
+	JSONOutput           bool
 	Tools                []ToolDefinition
 	MaxOutputTokens      int
 	Model                string
@@ -86,6 +87,7 @@ type Request struct {
 }
 
 type Response struct {
+	Grounding   *GroundedAnswer
 	FileContext string
 	Tokens      TokenReport
 	Target      Target

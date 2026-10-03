@@ -48,21 +48,22 @@ func TestKnowledgeEvidenceIsUntrustedAndCountedBeforeLLM(t *testing.T) {
 			if m.Role == "user" && strings.Contains(m.Content, evidence) {
 				found = true
 			}
-			if m.Role == "system" && strings.Contains(m.Content, "untrusted evidence") {
+			if m.Role == "system" && strings.Contains(m.Content, "UNTRUSTED DATA") {
 				guard = true
 			}
 		}
 		if !found || !guard || prompt != "Retention?" {
 			t.Fatal("knowledge context missing or promoted to instructions")
 		}
-		return agent.Completion{Content: "Fourteen days [manual.md#abc]"}, nil
+		return agent.Completion{Content: `{"status":"answered","claims":[{"text":"Fourteen days","quote_ids":["q1"]}],"quotes":[{"id":"q1","chunk_id":"abc","text":"Retention is fourteen days"}],"clarification":""}`}, nil
 	})
 	result, err := agent.New(client).Run(context.Background(), agent.Request{Prompt: "Retention?", Evidence: evidence, Target: agent.Target{Model: "fixture", ContextWindow: 10000}})
 	if err != nil || calls != 1 || result.Last().Tokens.InputEstimate == 0 {
 		t.Fatalf("bad evidence request %v", err)
 	}
 	calls = 0
-	_, err = agent.New(client).Run(context.Background(), agent.Request{Prompt: "Retention?", Evidence: strings.Repeat(evidence, 100), Target: agent.Target{Model: "fixture", ContextWindow: 30}})
+	largeEvidence := strings.Replace(evidence, "Retention is fourteen days", strings.Repeat("Retention is fourteen days. ", 100), 1)
+	_, err = agent.New(client).Run(context.Background(), agent.Request{Prompt: "Retention?", Evidence: largeEvidence, Target: agent.Target{Model: "fixture", ContextWindow: 30}})
 	if err == nil || calls != 0 {
 		t.Fatal("evidence bypassed context budget")
 	}
