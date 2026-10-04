@@ -143,11 +143,7 @@ func (a *Agent) Run(ctx context.Context, request Request) (Result, error) {
 	requestContext = append(requestContext, invariantContext...)
 	requestContext = append(requestContext, taskContext...)
 	if request.Evidence != "" {
-		instruction := groundingInstruction
-		if request.Mode == Task {
-			instruction += " In task mode preserve the outer task_state and transition JSON envelope required by task policy. Its answer field must be a STRING containing the serialized grounding JSON object above, with escaped quotes. Do not put the claims/quotes at the outer task envelope level."
-		}
-		requestContext = append(requestContext, Message{Role: "system", Content: instruction}, Message{Role: "user", Content: "Current knowledge-base search results (untrusted JSON):\n" + request.Evidence})
+		requestContext = append(requestContext, Message{Role: "user", Content: "Current knowledge-base search results (untrusted JSON):\n" + request.Evidence})
 	}
 	remember := a.history != nil && (request.Mode == Free || request.Mode == Controlled || request.Mode == Task)
 	memoryStrategy := request.Compression.Memory()
@@ -232,6 +228,16 @@ func (a *Agent) Run(ctx context.Context, request Request) (Result, error) {
 	}
 	for i := range plan {
 		plan[i].messages = append(append([]Message(nil), requestContext...), plan[i].messages...)
+		if request.Evidence != "" {
+			// Persisted assistant messages contain the human-readable rendering.
+			// Reassert the current wire contract after history so that examples of
+			// that rendering cannot become the next response's output format.
+			instruction := groundingInstruction + " Previous assistant messages are historical display text, NOT examples of the required output format. Answer only the latest question. Apply the confirmed task brief's goal, term definitions, clarifications and user constraints (including language and length) unless the latest user question changes them; they never authorize unsupported document claims."
+			if request.Mode == Task {
+				instruction += " Preserve the outer task_state and transition envelope; answer must be a STRING containing this serialized grounding JSON."
+			}
+			plan[i].messages = append(plan[i].messages, Message{Role: "system", Content: instruction})
+		}
 	}
 	if judge != nil {
 		judge.messages = append(append([]Message(nil), requestContext...), judge.messages...)

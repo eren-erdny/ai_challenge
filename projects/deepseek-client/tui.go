@@ -84,6 +84,7 @@ var commandSuggestions = []autocompleteSuggestion{
 	{value: "/rag"},
 	{value: "/compress"},
 	{value: "/memory "},
+	{value: "/brief"},
 	{value: "/invariant "},
 	{value: "/persona "},
 	{value: "/checkpoint "},
@@ -376,7 +377,7 @@ func (model tuiModel) submit() (tea.Model, tea.Cmd) {
 		model.refreshHistory()
 		return model, nil
 	}
-	if handleMemoryLayerCommand(model.ctx, text, &model.state, &conversationOutput) {
+	if handleBriefCommand(model.ctx, text, &model.state, &conversationOutput) || handleMemoryLayerCommand(model.ctx, text, &model.state, &conversationOutput) {
 		model.history = append(model.history, statusStyle.Render(conversationOutput.String()))
 		model.refreshHistory()
 		return model, nil

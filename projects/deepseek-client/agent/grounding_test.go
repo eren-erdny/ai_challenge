@@ -137,6 +137,10 @@ func TestGroundingRejectedBeforeHistoryAndDisplay(t *testing.T) {
 			if !s.JSONOutput {
 				t.Fatal("missing JSON request mode")
 			}
+			last := len(s.Messages) - 1
+			if last < 2 || s.Messages[last].Content != "retention?" || s.Messages[last-1].Role != "system" || !strings.Contains(s.Messages[last-1].Content, "NOT examples of the required output format") {
+				t.Fatal("current JSON policy must follow rendered history and precede the new question")
+			}
 			return agent.Completion{Content: tc.content, FinishReason: tc.reason, UsageKnown: true, PromptTokens: 10, CompletionTokens: 5}, nil
 		}), store)
 		result, err := runner.Run(ctx, agent.Request{Prompt: "retention?", ConversationID: "test", Target: agent.Target{Model: "test"}, Evidence: evidence})

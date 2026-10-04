@@ -17,8 +17,13 @@ func executeQuestion(ctx context.Context, token, prompt string, state sessionSta
 	target.ContextWindow, target.MaxOutputTokens = state.API.ContextWindow, state.API.MaxOutputTokens
 	request := agent.Request{Prompt: prompt, Mode: state.Mode, Target: target, Temperature: state.Temperature, Strategy: state.Strategy, Control: state.Control, UserProfile: state.UserProfile}
 	if state.Knowledge != nil && !state.ToolsDisabled && prompt != "/compress" {
+		query, err := contextualKnowledgeQuery(ctx, state, prompt)
+		if err != nil {
+			fmt.Fprintf(errorOutput, "Контекст поиска недоступен: %v. Проверьте /brief и историю диалога.\n", err)
+			return nil
+		}
 		searchContext, cancel := context.WithTimeout(ctx, 3*time.Minute)
-		evidence, err := state.Knowledge.Search(searchContext, conversationID(state.ConversationID), prompt)
+		evidence, err := state.Knowledge.Search(searchContext, conversationID(state.ConversationID), query)
 		cancel()
 		if err != nil {
 			fmt.Fprintf(errorOutput, "Поиск по базе знаний не выполнен: %v. Обновите базу через F2 / /kb или отключите её для этого чата.\n", err)
@@ -41,7 +46,7 @@ func executeQuestion(ctx context.Context, token, prompt string, state sessionSta
 			if json.Unmarshal([]byte(evidence), &found) == nil {
 				fmt.Fprintf(output, "[База знаний: %s · найдено фрагментов: %d]\n", state.KnowledgeLabel, len(found.Results))
 				fmt.Fprintf(output, "[Поиск: %d кандидатов → %d после фильтра → %d в контекст; отсечено %d]\n", found.CandidateCount, found.RetainedCount, len(found.Results), found.FilteredCount)
-				if found.SearchQuery != "" && found.SearchQuery != found.Query {
+				if found.SearchQuery != "" && found.SearchQuery != prompt {
 					fmt.Fprintf(output, "[Поисковый запрос: %s]\n", toolPreview(found.SearchQuery, token))
 				}
 				if found.NoEvidence {
@@ -215,6 +220,9 @@ func printAgentResponse(output io.Writer, response agent.Response) {
 			fmt.Fprintln(output, "[Недостаточно контекста · ответ клиента · LLM-вызовов: 0]")
 		} else if g.Status == "answered" {
 			fmt.Fprintf(output, "[RAG: %d утверждений · %d цитат · %d источников; источники и точность цитат проверены]\n", len(g.Claims), len(g.Quotes), len(g.Sources))
+		}
+		if g.Status == "unknown" {
+			fmt.Fprintln(output, "Источники: нет подтверждающих фрагментов для ответа.")
 		}
 	}
 	if check := response.Invariant; check != nil {

@@ -1,0 +1,592 @@
+{
+  "budget_usd": 0.2,
+  "total_reserve_usd": 0.1737408,
+  "prior_reserve_usd": 0.1583271,
+  "prior_answers_sha256": "670aba074ba103ae7282c35e1e86db11e9ab738f26047bc996d174711802f8af",
+  "calls": 3,
+  "rows": [
+    {
+      "id": "live-01",
+      "scenario": "http-api",
+      "query": "What does signal indicate now?",
+      "retrieval": {
+        "query": "What does HTTP 431 Request Header Fields Too Large indicate now?",
+        "search_query": "What does HTTP 431 Request Header Fields Too Large indicate now?",
+        "rewrite": true,
+        "min_similarity": 0.49,
+        "score_type": "cosine",
+        "retained_count": 7,
+        "filtered_count": 13,
+        "cosine_retained_count": 20,
+        "min_rerank_score": -3,
+        "rerank_score_type": "raw_logit",
+        "no_evidence": false,
+        "candidates": 20,
+        "strategy": "structured",
+        "reranking": true,
+        "candidate_count": 20,
+        "top_k": 5,
+        "retrieval_seconds": 0.015372300003946293,
+        "rerank_seconds": 0.8188391000003321,
+        "results": [
+          {
+            "chunk_id": "72649411207e74ce22e6992c9e6b618da6dc6dd4cff0c500b0e216317c095f75",
+            "source": "rfc6585.md",
+            "file": "rfc6585.md",
+            "title": "RFC 6585: Additional HTTP Status Codes",
+            "section": "RFC 6585: Additional HTTP Status Codes / 5. 431 Request Header Fields Too Large",
+            "page": null,
+            "strategy": "structured",
+            "start_char": 4859,
+            "end_char": 5754,
+            "text": "## 5. 431 Request Header Fields Too Large\n\n   The 431 status code indicates that the server is unwilling to process\n   the request because its header fields are too large.  The request MAY\n   be resubmitted after reducing the size of the request header fields.\n\n   It can be used both when the set of request header fields in total is\n   too large, and when a single header field is at fault.  In the latter\n   case, the response representation SHOULD specify which header field\n   was too large.\n\n   For example:\n\n   HTTP/1.1 431 Request Header Fields Too Large\n   Content-Type: text/html\n\n   <html>\n      <head>\n         <title>Request Header Fields Too Large</title>\n      </head>\n      <body>\n         <h1>Request Header Fields Too Large</h1>\n         <p>The \"Example\" header was too large.</p>\n      </body>\n   </html>\n\n   Responses with the 431 status code MUST NOT be stored by a cache.\n\n",
+            "tokens": 197,
+            "vector_score": 0.9069220316572091,
+            "rerank_score": 10.937811851501465
+          },
+          {
+            "chunk_id": "6962b2c209ebd898adc0ea57f5cccd5203d296dba2152481315722cfb35baaba",
+            "source": "rfc6585.md",
+            "file": "rfc6585.md",
+            "title": "RFC 6585: Additional HTTP Status Codes",
+            "section": "RFC 6585: Additional HTTP Status Codes / 8. IANA Considerations",
+            "page": null,
+            "strategy": "structured",
+            "start_char": 9922,
+            "end_char": 10392,
+            "text": "## 8. IANA Considerations\n\n   The HTTP Status Codes registry has been updated with the following\n   entries:\n\n      Value: 428\n      Description: Precondition Required\n      Reference: [RFC6585]\n\n      Value: 429\n      Description: Too Many Requests\n      Reference: [RFC6585]\n\n      Value: 431\n      Description: Request Header Fields Too Large\n      Reference: [RFC6585]\n\n      Value: 511\n      Description: Network Authentication Required\n      Reference: [RFC6585]\n\n",
+            "tokens": 87,
+            "vector_score": 0.7313127906393736,
+            "rerank_score": 4.363775730133057
+          },
+          {
+            "chunk_id": "79b3ef3631444c40fc2107028a8c1e5da29783a8f2f945b354363d739ab77a11",
+            "source": "rfc6585.md",
+            "file": "rfc6585.md",
+            "title": "RFC 6585: Additional HTTP Status Codes",
+            "section": "RFC 6585: Additional HTTP Status Codes / 7. Security Considerations / 7.3. 431 Request Header Fields Too Large",
+            "page": null,
+            "strategy": "structured",
+            "start_char": 8924,
+            "end_char": 9126,
+            "text": "### 7.3. 431 Request Header Fields Too Large\n\n   Servers are not required to use the 431 status code; when under\n   attack, it may be more appropriate to just drop connections, or take\n   other steps.\n\n",
+            "tokens": 45,
+            "vector_score": 0.8431824160666131,
+            "rerank_score": 4.207607269287109
+          },
+          {
+            "chunk_id": "34df5f0df9993a9326c2dd285d7b40b97cbca62b046071353e791988705d0dfd",
+            "source": "rfc6585.md",
+            "file": "rfc6585.md",
+            "title": "RFC 6585: Additional HTTP Status Codes",
+            "section": "RFC 6585: Additional HTTP Status Codes / 4. 429 Too Many Requests",
+            "page": null,
+            "strategy": "structured",
+            "start_char": 3670,
+            "end_char": 4859,
+            "text": "## 4. 429 Too Many Requests\n\n   The 429 status code indicates that the user has sent too many\n   requests in a given amount of time (\"rate limiting\").\n\n   The response representations SHOULD include details explaining the\n   condition, and MAY include a Retry-After header indicating how long\n   to wait before making a new request.\n\n   For example:\n\n   HTTP/1.1 429 Too Many Requests\n   Content-Type: text/html\n   Retry-After: 3600\n\n   <html>\n      <head>\n         <title>Too Many Requests</title>\n      </head>\n      <body>\n         <h1>Too Many Requests</h1>\n         <p>I only allow 50 requests per hour to this Web site per\n            logged in user.  Try again soon.</p>\n      </body>\n   </html>\n\n   Note that this specification does not define how the origin server\n   identifies the user, nor how it counts requests.  For example, an\n   origin server that is limiting request rates can do so based upon\n   counts of requests on a per-resource basis, across the entire server,\n   or even among a set of servers.  Likewise, it might identify the user\n   by its authentication credentials, or a stateful cookie.\n\n   Responses with the 429 status code MUST NOT be stored by a cache.\n\n",
+            "tokens": 256,
+            "vector_score": 0.6942767750880632,
+            "rerank_score": 0.2002875804901123
+          },
+          {
+            "chunk_id": "ca5ec7f63e53792ca01f7cff347d159b3174d4d14cb2f54ea4dab9c9f8fb53cf",
+            "source": "rfc6585.md",
+            "file": "rfc6585.md",
+            "title": "RFC 6585: Additional HTTP Status Codes",
+            "section": "RFC 6585: Additional HTTP Status Codes / 3. 428 Precondition Required",
+            "page": null,
+            "strategy": "structured",
+            "start_char": 2677,
+            "end_char": 3670,
+            "text": "## 3. 428 Precondition Required\n\n   The 428 status code indicates that the origin server requires the\n   request to be conditional.\n\n   Its typical use is to avoid the \"lost update\" problem, where a client\n   GETs a resource's state, modifies it, and PUTs it back to the server,\n   when meanwhile a third party has modified the state on the server,\n   leading to a conflict.  By requiring requests to be conditional, the\n   server can assure that clients are working with the correct copies.\n\n   Responses using this status code SHOULD explain how to resubmit the\n   request successfully.  For example:\n\n   HTTP/1.1 428 Precondition Required\n   Content-Type: text/html\n\n   <html>\n      <head>\n         <title>Precondition Required</title>\n      </head>\n      <body>\n         <h1>Precondition Required</h1>\n         <p>This request is required to be conditional;\n         try using \"If-Match\".</p>\n      </body>\n   </html>\n\n   Responses with the 428 status code MUST NOT be stored by a cache.\n\n",
+            "tokens": 220,
+            "vector_score": 0.6228863460259582,
+            "rerank_score": -1.275047779083252
+          }
+        ]
+      },
+      "brief": {
+        "goal": "Draft a response-code checklist for an HTTP API.",
+        "constraints": {
+          "style": "Answer in English with at most two short factual claims. Preserve MAY, SHOULD, MUST, negation and conditions."
+        },
+        "terms": {
+          "signal": "HTTP 431 Request Header Fields Too Large"
+        },
+        "clarifications": {
+          "focus": "Header-size errors are now the selected signal.",
+          "scope": "Use the public RFC corpus for this checklist, not general knowledge."
+        }
+      },
+      "raw_answer": {
+        "UsageIncomplete": false,
+        "ToolCalls": null,
+        "UsageKnown": true,
+        "Content": "{\"status\":\"answered\",\"claims\":[{\"text\":\"The 431 status code indicates that the server is unwilling to process the request because its header fields are too large.\",\"quote_ids\":[\"q1\"]},{\"text\":\"The request MAY be resubmitted after reducing the size of the request header fields.\",\"quote_ids\":[\"q2\"]}],\"quotes\":[{\"id\":\"q1\",\"chunk_id\":\"72649411207e74ce22e6992c9e6b618da6dc6dd4cff0c500b0e216317c095f75\",\"text\":\"The 431 status code indicates that the server is unwilling to process\\n   the request because its header fields are too large.\"},{\"id\":\"q2\",\"chunk_id\":\"72649411207e74ce22e6992c9e6b618da6dc6dd4cff0c500b0e216317c095f75\",\"text\":\"The request MAY\\n   be resubmitted after reducing the size of the request header fields.\"}],\"clarification\":\"\"}",
+        "Model": "deepseek-flash",
+        "FinishReason": "stop",
+        "PromptTokens": 3124,
+        "CachedInputTokens": 0,
+        "CompletionTokens": 225,
+        "TotalTokens": 3349,
+        "Duration": 1476343900
+      },
+      "grounding": {
+        "status": "answered",
+        "answer": "The 431 status code indicates that the server is unwilling to process the request because its header fields are too large. [q1]\nThe request MAY be resubmitted after reducing the size of the request header fields. [q2]",
+        "claims": [
+          {
+            "text": "The 431 status code indicates that the server is unwilling to process the request because its header fields are too large.",
+            "quote_ids": [
+              "q1"
+            ]
+          },
+          {
+            "text": "The request MAY be resubmitted after reducing the size of the request header fields.",
+            "quote_ids": [
+              "q2"
+            ]
+          }
+        ],
+        "quotes": [
+          {
+            "id": "q1",
+            "chunk_id": "72649411207e74ce22e6992c9e6b618da6dc6dd4cff0c500b0e216317c095f75",
+            "text": "The 431 status code indicates that the server is unwilling to process the request because its header fields are too large."
+          },
+          {
+            "id": "q2",
+            "chunk_id": "72649411207e74ce22e6992c9e6b618da6dc6dd4cff0c500b0e216317c095f75",
+            "text": "The request MAY be resubmitted after reducing the size of the request header fields."
+          }
+        ],
+        "sources": [
+          {
+            "source": "rfc6585.md",
+            "section": "RFC 6585: Additional HTTP Status Codes / 5. 431 Request Header Fields Too Large",
+            "chunk_id": "72649411207e74ce22e6992c9e6b618da6dc6dd4cff0c500b0e216317c095f75"
+          }
+        ],
+        "clarification": "",
+        "local": false
+      },
+      "history_before": 24,
+      "history_after": 26,
+      "history_messages_sent": 0,
+      "input_byte_envelope": 13653,
+      "brief_sent": true,
+      "reopened": false,
+      "calls": 1,
+      "reserved_usd": 0.005017499999999999,
+      "estimated_peak_usd": 0.0012071999999999999,
+      "visible": "2 · НОВЫЙ ВОПРОС С ИСПРАВЛЕННЫМ signal\nНовый поиск → текущие чанки + память + окно истории → ответ с источниками.\n\n\u001b[1;38;5;39mВы\u001b[m\nWhat does signal indicate now?\n\n\u001b[1;38;5;42mDeepSeek\u001b[m\n[База знаний: HW25 isolated public RFCs · найдено фрагментов: 5]\n[Поиск: 20 кандидатов → 7 после фильтра → 5 в контекст; отсечено 13]\n[Поисковый запрос: What does HTTP 431 Request Header Fields Too Large indicate now?]\n[rfc6585.md#72649411207e74ce22e6992c9e6b618da6dc6dd4cff0c500b0e216317c095f75]\n[rfc6585.md#6962b2c209ebd898adc0ea57f5cccd5203d296dba2152481315722cfb35baaba]\n[rfc6585.md#79b3ef3631444c40fc2107028a8c1e5da29783a8f2f945b354363d739ab77a11]\n[rfc6585.md#34df5f0df9993a9326c2dd285d7b40b97cbca62b046071353e791988705d0dfd]\n[rfc6585.md#ca5ec7f63e53792ca01f7cff347d159b3174d4d14cb2f54ea4dab9c9f8fb53cf]\nThe 431 status code indicates that the server is unwilling to process the request because its header fields are too large. [q1]\nThe request MAY be resubmitted after reducing the size of the request header fields. [q2]\n\nЦитаты:\n[q1] «The 431 status code indicates that the server is unwilling to process the request because its header fields are too large.» [rfc6585.md#72649411207e74ce22e6992c9e6b618da6dc6dd4cff0c500b0e216317c095f75]\n[q2] «The request MAY be resubmitted after reducing the size of the request header fields.» [rfc6585.md#72649411207e74ce22e6992c9e6b618da6dc6dd4cff0c500b0e216317c095f75]\n\nИсточники:\n[rfc6585.md#72649411207e74ce22e6992c9e6b618da6dc6dd4cff0c500b0e216317c095f75]\n  Раздел: RFC 6585: Additional HTTP Status Codes / 5. 431 Request Header Fields Too Large\n[RAG: 2 утверждений · 2 цитат · 1 источников; источники и точность цитат проверены]"
+    },
+    {
+      "id": "live-02",
+      "scenario": "http-api",
+      "query": "Can it be stored by a cache?",
+      "retrieval": {
+        "query": "What does HTTP 431 Request Header Fields Too Large indicate now?\nFollow-up question: Can it be stored by a cache?",
+        "search_query": "What does HTTP 431 Request Header Fields Too Large indicate now?\nFollow-up question: Can it be stored by a cache?",
+        "rewrite": true,
+        "min_similarity": 0.49,
+        "score_type": "cosine",
+        "retained_count": 5,
+        "filtered_count": 15,
+        "cosine_retained_count": 20,
+        "min_rerank_score": -3,
+        "rerank_score_type": "raw_logit",
+        "no_evidence": false,
+        "candidates": 20,
+        "strategy": "structured",
+        "reranking": true,
+        "candidate_count": 20,
+        "top_k": 5,
+        "retrieval_seconds": 0.014039599998795893,
+        "rerank_seconds": 0.8315819999988889,
+        "results": [
+          {
+            "chunk_id": "72649411207e74ce22e6992c9e6b618da6dc6dd4cff0c500b0e216317c095f75",
+            "source": "rfc6585.md",
+            "file": "rfc6585.md",
+            "title": "RFC 6585: Additional HTTP Status Codes",
+            "section": "RFC 6585: Additional HTTP Status Codes / 5. 431 Request Header Fields Too Large",
+            "page": null,
+            "strategy": "structured",
+            "start_char": 4859,
+            "end_char": 5754,
+            "text": "## 5. 431 Request Header Fields Too Large\n\n   The 431 status code indicates that the server is unwilling to process\n   the request because its header fields are too large.  The request MAY\n   be resubmitted after reducing the size of the request header fields.\n\n   It can be used both when the set of request header fields in total is\n   too large, and when a single header field is at fault.  In the latter\n   case, the response representation SHOULD specify which header field\n   was too large.\n\n   For example:\n\n   HTTP/1.1 431 Request Header Fields Too Large\n   Content-Type: text/html\n\n   <html>\n      <head>\n         <title>Request Header Fields Too Large</title>\n      </head>\n      <body>\n         <h1>Request Header Fields Too Large</h1>\n         <p>The \"Example\" header was too large.</p>\n      </body>\n   </html>\n\n   Responses with the 431 status code MUST NOT be stored by a cache.\n\n",
+            "tokens": 197,
+            "vector_score": 0.8837967287882438,
+            "rerank_score": 10.691705703735352
+          },
+          {
+            "chunk_id": "34df5f0df9993a9326c2dd285d7b40b97cbca62b046071353e791988705d0dfd",
+            "source": "rfc6585.md",
+            "file": "rfc6585.md",
+            "title": "RFC 6585: Additional HTTP Status Codes",
+            "section": "RFC 6585: Additional HTTP Status Codes / 4. 429 Too Many Requests",
+            "page": null,
+            "strategy": "structured",
+            "start_char": 3670,
+            "end_char": 4859,
+            "text": "## 4. 429 Too Many Requests\n\n   The 429 status code indicates that the user has sent too many\n   requests in a given amount of time (\"rate limiting\").\n\n   The response representations SHOULD include details explaining the\n   condition, and MAY include a Retry-After header indicating how long\n   to wait before making a new request.\n\n   For example:\n\n   HTTP/1.1 429 Too Many Requests\n   Content-Type: text/html\n   Retry-After: 3600\n\n   <html>\n      <head>\n         <title>Too Many Requests</title>\n      </head>\n      <body>\n         <h1>Too Many Requests</h1>\n         <p>I only allow 50 requests per hour to this Web site per\n            logged in user.  Try again soon.</p>\n      </body>\n   </html>\n\n   Note that this specification does not define how the origin server\n   identifies the user, nor how it counts requests.  For example, an\n   origin server that is limiting request rates can do so based upon\n   counts of requests on a per-resource basis, across the entire server,\n   or even among a set of servers.  Likewise, it might identify the user\n   by its authentication credentials, or a stateful cookie.\n\n   Responses with the 429 status code MUST NOT be stored by a cache.\n\n",
+            "tokens": 256,
+            "vector_score": 0.6802526068942991,
+            "rerank_score": 2.0024139881134033
+          },
+          {
+            "chunk_id": "79b3ef3631444c40fc2107028a8c1e5da29783a8f2f945b354363d739ab77a11",
+            "source": "rfc6585.md",
+            "file": "rfc6585.md",
+            "title": "RFC 6585: Additional HTTP Status Codes",
+            "section": "RFC 6585: Additional HTTP Status Codes / 7. Security Considerations / 7.3. 431 Request Header Fields Too Large",
+            "page": null,
+            "strategy": "structured",
+            "start_char": 8924,
+            "end_char": 9126,
+            "text": "### 7.3. 431 Request Header Fields Too Large\n\n   Servers are not required to use the 431 status code; when under\n   attack, it may be more appropriate to just drop connections, or take\n   other steps.\n\n",
+            "tokens": 45,
+            "vector_score": 0.811840148599315,
+            "rerank_score": 0.38244855403900146
+          },
+          {
+            "chunk_id": "6962b2c209ebd898adc0ea57f5cccd5203d296dba2152481315722cfb35baaba",
+            "source": "rfc6585.md",
+            "file": "rfc6585.md",
+            "title": "RFC 6585: Additional HTTP Status Codes",
+            "section": "RFC 6585: Additional HTTP Status Codes / 8. IANA Considerations",
+            "page": null,
+            "strategy": "structured",
+            "start_char": 9922,
+            "end_char": 10392,
+            "text": "## 8. IANA Considerations\n\n   The HTTP Status Codes registry has been updated with the following\n   entries:\n\n      Value: 428\n      Description: Precondition Required\n      Reference: [RFC6585]\n\n      Value: 429\n      Description: Too Many Requests\n      Reference: [RFC6585]\n\n      Value: 431\n      Description: Request Header Fields Too Large\n      Reference: [RFC6585]\n\n      Value: 511\n      Description: Network Authentication Required\n      Reference: [RFC6585]\n\n",
+            "tokens": 87,
+            "vector_score": 0.7096181191991705,
+            "rerank_score": 0.13540926575660706
+          },
+          {
+            "chunk_id": "ca5ec7f63e53792ca01f7cff347d159b3174d4d14cb2f54ea4dab9c9f8fb53cf",
+            "source": "rfc6585.md",
+            "file": "rfc6585.md",
+            "title": "RFC 6585: Additional HTTP Status Codes",
+            "section": "RFC 6585: Additional HTTP Status Codes / 3. 428 Precondition Required",
+            "page": null,
+            "strategy": "structured",
+            "start_char": 2677,
+            "end_char": 3670,
+            "text": "## 3. 428 Precondition Required\n\n   The 428 status code indicates that the origin server requires the\n   request to be conditional.\n\n   Its typical use is to avoid the \"lost update\" problem, where a client\n   GETs a resource's state, modifies it, and PUTs it back to the server,\n   when meanwhile a third party has modified the state on the server,\n   leading to a conflict.  By requiring requests to be conditional, the\n   server can assure that clients are working with the correct copies.\n\n   Responses using this status code SHOULD explain how to resubmit the\n   request successfully.  For example:\n\n   HTTP/1.1 428 Precondition Required\n   Content-Type: text/html\n\n   <html>\n      <head>\n         <title>Precondition Required</title>\n      </head>\n      <body>\n         <h1>Precondition Required</h1>\n         <p>This request is required to be conditional;\n         try using \"If-Match\".</p>\n      </body>\n   </html>\n\n   Responses with the 428 status code MUST NOT be stored by a cache.\n\n",
+            "tokens": 220,
+            "vector_score": 0.6403606057681425,
+            "rerank_score": -0.26667550206184387
+          }
+        ]
+      },
+      "brief": {
+        "goal": "Draft a response-code checklist for an HTTP API.",
+        "constraints": {
+          "style": "Answer in English with at most two short factual claims. Preserve MAY, SHOULD, MUST, negation and conditions."
+        },
+        "terms": {
+          "signal": "HTTP 431 Request Header Fields Too Large"
+        },
+        "clarifications": {
+          "focus": "Header-size errors are now the selected signal.",
+          "scope": "Use the public RFC corpus for this checklist, not general knowledge."
+        }
+      },
+      "raw_answer": {
+        "UsageIncomplete": false,
+        "ToolCalls": null,
+        "UsageKnown": true,
+        "Content": "{\"status\":\"answered\",\"claims\":[{\"text\":\"Responses with the 431 status code MUST NOT be stored by a cache.\",\"quote_ids\":[\"q1\"]}],\"quotes\":[{\"id\":\"q1\",\"chunk_id\":\"72649411207e74ce22e6992c9e6b618da6dc6dd4cff0c500b0e216317c095f75\",\"text\":\"Responses with the 431 status code MUST NOT be stored by a cache.\"}],\"clarification\":\"\"}",
+        "Model": "deepseek-flash",
+        "FinishReason": "stop",
+        "PromptTokens": 3129,
+        "CachedInputTokens": 0,
+        "CompletionTokens": 112,
+        "TotalTokens": 3241,
+        "Duration": 853033200
+      },
+      "grounding": {
+        "status": "answered",
+        "answer": "Responses with the 431 status code MUST NOT be stored by a cache. [q1]",
+        "claims": [
+          {
+            "text": "Responses with the 431 status code MUST NOT be stored by a cache.",
+            "quote_ids": [
+              "q1"
+            ]
+          }
+        ],
+        "quotes": [
+          {
+            "id": "q1",
+            "chunk_id": "72649411207e74ce22e6992c9e6b618da6dc6dd4cff0c500b0e216317c095f75",
+            "text": "Responses with the 431 status code MUST NOT be stored by a cache."
+          }
+        ],
+        "sources": [
+          {
+            "source": "rfc6585.md",
+            "section": "RFC 6585: Additional HTTP Status Codes / 5. 431 Request Header Fields Too Large",
+            "chunk_id": "72649411207e74ce22e6992c9e6b618da6dc6dd4cff0c500b0e216317c095f75"
+          }
+        ],
+        "clarification": "",
+        "local": false
+      },
+      "history_before": 26,
+      "history_after": 28,
+      "history_messages_sent": 0,
+      "input_byte_envelope": 13608,
+      "brief_sent": true,
+      "reopened": false,
+      "calls": 1,
+      "reserved_usd": 0.005004,
+      "estimated_peak_usd": 0.0010731,
+      "visible": "2 · КОРОТКОЕ ПРОДОЛЖЕНИЕ: it → 431\nНовый поиск → текущие чанки + память + окно истории → ответ с источниками.\n\n\u001b[1;38;5;39mВы\u001b[m\nCan it be stored by a cache?\n\n\u001b[1;38;5;42mDeepSeek\u001b[m\n[База знаний: HW25 isolated public RFCs · найдено фрагментов: 5]\n[Поиск: 20 кандидатов → 5 после фильтра → 5 в контекст; отсечено 15]\n[Поисковый запрос: What does HTTP 431 Request Header Fields Too Large indicate now?\nFollow-up question: Can it be stored by a cache?]\n[rfc6585.md#72649411207e74ce22e6992c9e6b618da6dc6dd4cff0c500b0e216317c095f75]\n[rfc6585.md#34df5f0df9993a9326c2dd285d7b40b97cbca62b046071353e791988705d0dfd]\n[rfc6585.md#79b3ef3631444c40fc2107028a8c1e5da29783a8f2f945b354363d739ab77a11]\n[rfc6585.md#6962b2c209ebd898adc0ea57f5cccd5203d296dba2152481315722cfb35baaba]\n[rfc6585.md#ca5ec7f63e53792ca01f7cff347d159b3174d4d14cb2f54ea4dab9c9f8fb53cf]\nResponses with the 431 status code MUST NOT be stored by a cache. [q1]\n\nЦитаты:\n[q1] «Responses with the 431 status code MUST NOT be stored by a cache.» [rfc6585.md#72649411207e74ce22e6992c9e6b618da6dc6dd4cff0c500b0e216317c095f75]\n\nИсточники:\n[rfc6585.md#72649411207e74ce22e6992c9e6b618da6dc6dd4cff0c500b0e216317c095f75]\n  Раздел: RFC 6585: Additional HTTP Status Codes / 5. 431 Request Header Fields Too Large\n[RAG: 1 утверждений · 1 цитат · 1 источников; источники и точность цитат проверены]"
+    },
+    {
+      "id": "live-03",
+      "scenario": "tea-checklist",
+      "query": "For our checklist, which codes can device use for coffee when it is not provisioned to brew coffee?",
+      "retrieval": {
+        "query": "For our checklist, which codes can TEA-capable pot use for coffee when it is not provisioned to brew coffee?",
+        "search_query": "For our checklist, which codes can TEA-capable pot use for coffee when it is not provisioned to brew coffee?",
+        "rewrite": true,
+        "min_similarity": 0.49,
+        "score_type": "cosine",
+        "retained_count": 12,
+        "filtered_count": 8,
+        "cosine_retained_count": 20,
+        "min_rerank_score": -3,
+        "rerank_score_type": "raw_logit",
+        "no_evidence": false,
+        "candidates": 20,
+        "strategy": "structured",
+        "reranking": true,
+        "candidate_count": 20,
+        "top_k": 5,
+        "retrieval_seconds": 0.014101900000241585,
+        "rerank_seconds": 0.7703581000023405,
+        "results": [
+          {
+            "chunk_id": "181e1f90ac27f083d11e36665c39c9825de675e4bafe7178bb540ceb37be690d",
+            "source": "rfc7168.md",
+            "file": "rfc7168.md",
+            "title": "RFC 7168: The Hyper Text Coffee Pot Control Protocol for Tea Efflux Appliances",
+            "section": "RFC 7168: The Hyper Text Coffee Pot Control Protocol for Tea Efflux Appliances / 2. HTCPCP-TEA Protocol Additions / 2.3. Response Codes / 2.3.3. 418 I'm a Teapot",
+            "page": null,
+            "strategy": "structured",
+            "start_char": 8766,
+            "end_char": 9078,
+            "text": "#### 2.3.3. 418 I'm a Teapot\n\n   TEA-capable pots that are not provisioned to brew coffee may return\n   either a status code of 503, indicating temporary unavailability of\n   coffee, or a code of 418 as defined in the base HTCPCP specification\n   to denote a more permanent indication that the pot is a teapot.\n\n",
+            "tokens": 79,
+            "vector_score": 0.840614603808648,
+            "rerank_score": 10.501709938049316
+          },
+          {
+            "chunk_id": "e751b42624fb8ee9f7c00c6a61b54e188b24caf358683963118b1643ac941c1f",
+            "source": "rfc2324.md",
+            "file": "rfc2324.md",
+            "title": "RFC 2324: Hyper Text Coffee Pot Control Protocol (HTCPCP/1.0)",
+            "section": "RFC 2324: Hyper Text Coffee Pot Control Protocol (HTCPCP/1.0) / 2. HTCPCP Protocol / 2.3. HTCPCP return codes / 2.3.2. 418 I'm a teapot",
+            "page": null,
+            "strategy": "structured",
+            "start_char": 7737,
+            "end_char": 7920,
+            "text": "#### 2.3.2. 418 I'm a teapot\n\n   Any attempt to brew coffee with a teapot should result in the error\n   code \"418 I'm a teapot\". The resulting entity body MAY be short and\n   stout.\n\n",
+            "tokens": 54,
+            "vector_score": 0.723395585222657,
+            "rerank_score": 3.4383811950683594
+          },
+          {
+            "chunk_id": "5ae60e885a26f576bdbfcce6fa78c74455920d4e87b5e44b8f43686a7605ee2e",
+            "source": "rfc7168.md",
+            "file": "rfc7168.md",
+            "title": "RFC 7168: The Hyper Text Coffee Pot Control Protocol for Tea Efflux Appliances",
+            "section": "RFC 7168: The Hyper Text Coffee Pot Control Protocol for Tea Efflux Appliances / 4. Environmental Considerations",
+            "page": null,
+            "strategy": "structured",
+            "start_char": 9434,
+            "end_char": 10448,
+            "text": "## 4. Environmental Considerations\n\n   As noted in Section 2.1, a BREW request with a Content-Type header\n   field of \"message/teapot\" to a TEA-capable pot will result in an\n   Alternates header being sent with the response, and a pot will not be\n   brewed.  However, if the BREW request has a Content-Type of\n   \"message/coffeepot\", and the pot is capable of brewing coffee, the\n   service's behavior will fall back to the base HTCPCP specification\n   and a pot will be brewed.\n\n   If the entity returned by the server when brewing commences contains\n   a TEA-compliant Alternates header indicating \"message/coffeepot\" and\n   the client does not want coffee, the client SHOULD then send a BREW\n   request with an entity body containing \"stop\".  This will result in\n   wasted coffee; whether this is regarded as a bad thing is user-\n   defined.\n\n   Such waste can be prevented by TEA-capable clients, by first\n   requesting a BREW of type \"message/teapot\" and then allowing\n   selection of an available beverage.\n\n",
+            "tokens": 215,
+            "vector_score": 0.7868436224399592,
+            "rerank_score": 2.319600820541382
+          },
+          {
+            "chunk_id": "ae3f3bfc1ce0c56db5c7213adc078a1d47246ed0957ab89c2df87738ddf00491",
+            "source": "rfc7168.md",
+            "file": "rfc7168.md",
+            "title": "RFC 7168: The Hyper Text Coffee Pot Control Protocol for Tea Efflux Appliances",
+            "section": "RFC 7168: The Hyper Text Coffee Pot Control Protocol for Tea Efflux Appliances / 2. HTCPCP-TEA Protocol Additions / 2.1. BREW and POST Methods / 2.1.1. The \"/\" URI",
+            "page": null,
+            "strategy": "structured",
+            "start_char": 3991,
+            "end_char": 5340,
+            "text": "#### 2.1.1. The \"/\" URI\n\n   For the URI \"/\", brewing will not commence.  Instead, an Alternates\n   header as defined in RFC 2295 [RFC2295] MUST be sent, with the\n   available tea bags and/or leaf varieties as entries.  An example of\n   such a response is as follows:\n\n      Alternates: {\"/darjeeling\" {type message/teapot}},\n                  {\"/earl-grey\" {type message/teapot}},\n                  {\"/peppermint\" {type message/teapot}}\n\n   The following example demonstrates the possibility of\n   interoperability of a TEA-capable pot that also complies with the\n   base HTCPCP specification:\n\n      Alternates: {\"/\" {type message/coffeepot}},\n                  {\"/pot-0/darjeeling\" {type message/teapot}},\n                  {\"/pot-0/earl-grey\" {type message/teapot}},\n                  {\"/pot-1/peppermint\" {type message/teapot}}\n\n   TEA-capable HTCPCP clients MUST check the contents of the Alternates\n   header returned by a BREW request, and provide a specific URI for\n   subsequent requests of the \"message/teapot\" type.\n\n   A request to the \"/\" URI with a Content-Type header of\n   \"message/coffeepot\" SHOULD also be responded to with an Alternates\n   header in the above format, to allow TEA-capable clients the\n   opportunity to present the selection of teas to the user if inferior\n   caffeinated beverages have initially been requested.\n\n",
+            "tokens": 337,
+            "vector_score": 0.7447358046442774,
+            "rerank_score": 0.4283245801925659
+          },
+          {
+            "chunk_id": "4a4b36682595be4967b9f4680d67222ea52d77a59b5ca86263c062d6bac91053",
+            "source": "rfc7168.md",
+            "file": "rfc7168.md",
+            "title": "RFC 7168: The Hyper Text Coffee Pot Control Protocol for Tea Efflux Appliances",
+            "section": "RFC 7168: The Hyper Text Coffee Pot Control Protocol for Tea Efflux Appliances / 2. HTCPCP-TEA Protocol Additions / 2.1. BREW and POST Methods / 2.1.2. Variety-Specific URIs",
+            "page": null,
+            "strategy": "structured",
+            "start_char": 5340,
+            "end_char": 6676,
+            "text": "#### 2.1.2. Variety-Specific URIs\n\n   TEA-capable pots follow the base HTCPCP specification when presented\n   with a BREW request for a specific variety of tea.  Pots SHOULD\n   follow the recommendations for brewing strength given by each\n   variety, and stop brewing when this strength is reached; it is\n   suggested that the strength be measured by detection of the opacity\n   of the beverage currently under brew by the pot.\n\n   TEA-capable clients SHOULD indicate the end of brewing by sending a\n   BREW request with an entity body containing \"stop\"; the pot MAY\n   continue brewing beyond the recommended strength until this is\n   received.  If the \"stop\" request is not sent by the client, this may\n   result in a state inversion in the proportion of tea to water in the\n   brewing pot, which may be reported by some pots as a negative\n   strength.\n\n   If a BREW command with an entity body containing \"stop\" is received\n   before the recommended strength is achieved, the pot MUST abort\n   brewing and serve the resultant beverage at lesser strength.  Finding\n   the preferred strength of beverage when using this override is a\n   function of the time between the TEA-capable pot receiving a \"start\"\n   request and the subsequent \"stop\".  Clients SHOULD be prepared to\n   make multiple attempts to reach the preferred strength.\n\n",
+            "tokens": 255,
+            "vector_score": 0.7613603245393216,
+            "rerank_score": -0.5589392781257629
+          }
+        ]
+      },
+      "brief": {
+        "goal": "Draft a response-code decision checklist for a TEA-capable pot.",
+        "constraints": {
+          "style": "Answer in English with at most two short factual claims. Preserve MAY, SHOULD, MUST, negation and conditions."
+        },
+        "terms": {
+          "device": "TEA-capable pot"
+        },
+        "clarifications": {
+          "focus": "Keep temporary 503 distinct from the more permanent 418 indication.",
+          "scope": "Use the public RFC corpus for this checklist, not general knowledge."
+        }
+      },
+      "raw_answer": {
+        "UsageIncomplete": false,
+        "ToolCalls": null,
+        "UsageKnown": true,
+        "Content": "{\"status\":\"answered\",\"claims\":[{\"text\":\"A TEA-capable pot that is not provisioned to brew coffee may return either a status code of 503, indicating temporary unavailability of coffee, or a code of 418 to denote a more permanent indication that the pot is a teapot.\",\"quote_ids\":[\"q1\"]}],\"quotes\":[{\"id\":\"q1\",\"chunk_id\":\"181e1f90ac27f083d11e36665c39c9825de675e4bafe7178bb540ceb37be690d\",\"text\":\"TEA-capable pots that are not provisioned to brew coffee may return\\n   either a status code of 503, indicating temporary unavailability of\\n   coffee, or a code of 418 as defined in the base HTCPCP specification\\n   to denote a more permanent indication that the pot is a teapot.\"}],\"clarification\":\"\"}",
+        "Model": "deepseek-flash",
+        "FinishReason": "stop",
+        "PromptTokens": 3487,
+        "CachedInputTokens": 0,
+        "CompletionTokens": 196,
+        "TotalTokens": 3683,
+        "Duration": 1189281400
+      },
+      "grounding": {
+        "status": "answered",
+        "answer": "A TEA-capable pot that is not provisioned to brew coffee may return either a status code of 503, indicating temporary unavailability of coffee, or a code of 418 to denote a more permanent indication that the pot is a teapot. [q1]",
+        "claims": [
+          {
+            "text": "A TEA-capable pot that is not provisioned to brew coffee may return either a status code of 503, indicating temporary unavailability of coffee, or a code of 418 to denote a more permanent indication that the pot is a teapot.",
+            "quote_ids": [
+              "q1"
+            ]
+          }
+        ],
+        "quotes": [
+          {
+            "id": "q1",
+            "chunk_id": "181e1f90ac27f083d11e36665c39c9825de675e4bafe7178bb540ceb37be690d",
+            "text": "TEA-capable pots that are not provisioned to brew coffee may return either a status code of 503, indicating temporary unavailability of coffee, or a code of 418 as defined in the base HTCPCP specification to denote a more permanent indication that the pot is a teapot."
+          }
+        ],
+        "sources": [
+          {
+            "source": "rfc7168.md",
+            "section": "RFC 7168: The Hyper Text Coffee Pot Control Protocol for Tea Efflux Appliances / 2. HTCPCP-TEA Protocol Additions / 2.3. Response Codes / 2.3.3. 418 I'm a Teapot",
+            "chunk_id": "181e1f90ac27f083d11e36665c39c9825de675e4bafe7178bb540ceb37be690d"
+          }
+        ],
+        "clarification": "",
+        "local": false
+      },
+      "history_before": 24,
+      "history_after": 26,
+      "history_messages_sent": 0,
+      "input_byte_envelope": 14902,
+      "brief_sent": true,
+      "reopened": false,
+      "calls": 1,
+      "reserved_usd": 0.005392199999999999,
+      "estimated_peak_usd": 0.0012813,
+      "visible": "4 · ДРУГОЙ ЧАТ: device → TEA-capable pot\nНовый поиск → текущие чанки + память + окно истории → ответ с источниками.\n\n\u001b[1;38;5;39mВы\u001b[m\nFor our checklist, which codes can device use for coffee when it is not provisioned to brew coffee?\n\n\u001b[1;38;5;42mDeepSeek\u001b[m\n[База знаний: HW25 isolated public RFCs · найдено фрагментов: 5]\n[Поиск: 20 кандидатов → 12 после фильтра → 5 в контекст; отсечено 8]\n[Поисковый запрос: For our checklist, which codes can TEA-capable pot use for coffee when it is not provisioned to brew coffee?]\n[rfc7168.md#181e1f90ac27f083d11e36665c39c9825de675e4bafe7178bb540ceb37be690d]\n[rfc2324.md#e751b42624fb8ee9f7c00c6a61b54e188b24caf358683963118b1643ac941c1f]\n[rfc7168.md#5ae60e885a26f576bdbfcce6fa78c74455920d4e87b5e44b8f43686a7605ee2e]\n[rfc7168.md#ae3f3bfc1ce0c56db5c7213adc078a1d47246ed0957ab89c2df87738ddf00491]\n[rfc7168.md#4a4b36682595be4967b9f4680d67222ea52d77a59b5ca86263c062d6bac91053]\nA TEA-capable pot that is not provisioned to brew coffee may return either a status code of 503, indicating temporary unavailability of coffee, or a code of 418 to denote a more permanent indication that the pot is a teapot. [q1]\n\nЦитаты:\n[q1] «TEA-capable pots that are not provisioned to brew coffee may return either a status code of 503, indicating temporary unavailability of coffee, or a code of 418 as defined in the base HTCPCP specification to denote a more permanent indication that the pot is a teapot.» [rfc7168.md#181e1f90ac27f083d11e36665c39c9825de675e4bafe7178bb540ceb37be690d]\n\nИсточники:\n[rfc7168.md#181e1f90ac27f083d11e36665c39c9825de675e4bafe7178bb540ceb37be690d]\n  Раздел: RFC 7168: The Hyper Text Coffee Pot Control Protocol for Tea Efflux Appliances / 2. HTCPCP-TEA Protocol Additions / 2.3. Response Codes / 2.3.3. 418 I'm a Teapot\n[RAG: 1 утверждений · 1 цитат · 1 источников; источники и точность цитат проверены]"
+    },
+    {
+      "id": "live-04",
+      "scenario": "tea-checklist",
+      "query": "What is the distance from Earth to the Moon?",
+      "retrieval": {
+        "query": "What is the distance from Earth to the Moon?",
+        "search_query": "What is the distance from Earth to the Moon?",
+        "rewrite": true,
+        "min_similarity": 0.49,
+        "score_type": "cosine",
+        "retained_count": 0,
+        "filtered_count": 20,
+        "cosine_retained_count": 4,
+        "min_rerank_score": -3,
+        "rerank_score_type": "raw_logit",
+        "no_evidence": true,
+        "candidates": 20,
+        "strategy": "structured",
+        "reranking": true,
+        "candidate_count": 20,
+        "top_k": 5,
+        "retrieval_seconds": 0.014236900002288166,
+        "rerank_seconds": 0.0907900999955018,
+        "results": []
+      },
+      "brief": {
+        "goal": "Draft a response-code decision checklist for a TEA-capable pot.",
+        "constraints": {
+          "style": "Answer in English with at most two short factual claims. Preserve MAY, SHOULD, MUST, negation and conditions."
+        },
+        "terms": {
+          "device": "TEA-capable pot"
+        },
+        "clarifications": {
+          "focus": "Keep temporary 503 distinct from the more permanent 418 indication.",
+          "scope": "Use the public RFC corpus for this checklist, not general knowledge."
+        }
+      },
+      "raw_answer": {
+        "UsageIncomplete": false,
+        "ToolCalls": null,
+        "UsageKnown": false,
+        "Content": "",
+        "Model": "",
+        "FinishReason": "",
+        "PromptTokens": 0,
+        "CachedInputTokens": 0,
+        "CompletionTokens": 0,
+        "TotalTokens": 0,
+        "Duration": 0
+      },
+      "grounding": {
+        "status": "unknown",
+        "answer": "Не знаю: в выбранной базе знаний недостаточно подтверждений для ответа.",
+        "claims": [],
+        "quotes": [],
+        "sources": [],
+        "clarification": "Уточните вопрос или добавьте документ с нужной информацией.",
+        "local": true
+      },
+      "history_before": 26,
+      "history_after": 28,
+      "history_messages_sent": 0,
+      "input_byte_envelope": 0,
+      "brief_sent": false,
+      "reopened": false,
+      "calls": 0,
+      "reserved_usd": 0,
+      "estimated_peak_usd": 0,
+      "visible": "5 · ВОПРОС ВНЕ БАЗЫ: НЕ ВЫДУМЫВАЕМ\nНовый поиск → текущие чанки + память + окно истории → ответ с источниками.\n\n\u001b[1;38;5;39mВы\u001b[m\nWhat is the distance from Earth to the Moon?\n\n\u001b[1;38;5;42mDeepSeek\u001b[m\n[База знаний: HW25 isolated public RFCs · найдено фрагментов: 0]\n[Поиск: 20 кандидатов → 0 после фильтра → 0 в контекст; отсечено 20]\n[В базе не найдено подтверждающих фрагментов]\nНе знаю: в выбранной базе знаний недостаточно подтверждений для ответа.\nУточните вопрос или добавьте документ с нужной информацией.\n[Недостаточно контекста · ответ клиента · LLM-вызовов: 0]\nИсточники: нет подтверждающих фрагментов для ответа.",
+      "trace_note": "Local brief remains persisted; zero LLM calls, so no brief was sent. Export corrects temporary wrapper bookkeeping flag; model output unchanged."
+    }
+  ],
+  "stores_and_tui_reopened": true,
+  "second_chat_isolated": true
+}

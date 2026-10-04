@@ -1,0 +1,65 @@
+{
+  "recording_answers_sha256": "95ec740f15c06bff243b72ba234ff4cc568e5717e69f09f8d6c8d91923c8341e",
+  "method": "Finite manual semantic review by coding assistant of all four new claims and their bound quotes; independent exact-match/provenance checks. No paid judge.",
+  "rows": [
+    {
+      "id": "live-01",
+      "goal_consistent": true,
+      "constraints_met": true,
+      "claims": [
+        {
+          "text": "The 431 status code indicates that the server is unwilling to process the request because its header fields are too large.",
+          "quote_ids": [
+            "q1"
+          ],
+          "supported": true
+        },
+        {
+          "text": "The request MAY be resubmitted after reducing the size of the request header fields.",
+          "quote_ids": [
+            "q2"
+          ],
+          "supported": true
+        }
+      ],
+      "notes": "Current corrected term 431; header cause and MAY retry supported."
+    },
+    {
+      "id": "live-02",
+      "goal_consistent": true,
+      "constraints_met": true,
+      "claims": [
+        {
+          "text": "Responses with the 431 status code MUST NOT be stored by a cache.",
+          "quote_ids": [
+            "q1"
+          ],
+          "supported": true
+        }
+      ],
+      "notes": "it resolves current 431; MUST NOT cache preserved."
+    },
+    {
+      "id": "live-03",
+      "goal_consistent": true,
+      "constraints_met": true,
+      "claims": [
+        {
+          "text": "A TEA-capable pot that is not provisioned to brew coffee may return either a status code of 503, indicating temporary unavailability of coffee, or a code of 418 to denote a more permanent indication that the pot is a teapot.",
+          "quote_ids": [
+            "q1"
+          ],
+          "supported": true
+        }
+      ],
+      "notes": "Independent device scope, not-provisioned condition, optional 503/418 alternatives and temporary/more-permanent distinction preserved."
+    },
+    {
+      "id": "live-04",
+      "goal_consistent": true,
+      "constraints_met": true,
+      "claims": [],
+      "notes": "Appropriate local unknown with clarification; explicit absence of sources, no astronomy invented."
+    }
+  ]
+}

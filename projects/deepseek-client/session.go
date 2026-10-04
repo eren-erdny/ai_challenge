@@ -153,7 +153,7 @@ func runInteractiveSession(
 				}
 				continue
 			}
-			if handleMemoryLayerCommand(context.Background(), text, &state, output) {
+			if handleBriefCommand(context.Background(), text, &state, output) || handleMemoryLayerCommand(context.Background(), text, &state, output) {
 				continue
 			}
 			if handleInvariantCommand(context.Background(), text, &state, output) {
@@ -261,6 +261,7 @@ func handleSessionCommand(command string, state *sessionState, output io.Writer)
 	case "/help":
 		fmt.Fprintln(output, "/persona create|use|show|list|set|add-constraint|remove-constraint|delete — профиль пользователя")
 		fmt.Fprintln(output, "/memory STRATEGY   — full|summary|sliding|facts|branching")
+		fmt.Fprintln(output, "/brief show | goal TEXT | topic TEXT | constraint KEY TEXT | term KEY TEXT | clarify KEY TEXT — память задачи текущего чата")
 		fmt.Fprintln(output, "/memory show [LAYER] — показать short-term, working и long-term")
 		fmt.Fprintln(output, "/memory set working|long-term KEY VALUE — явно сохранить запись")
 		fmt.Fprintln(output, "/memory delete working|long-term KEY — удалить запись")

@@ -1,0 +1,425 @@
+{
+  "answers_sha256": "670aba074ba103ae7282c35e1e86db11e9ab738f26047bc996d174711802f8af",
+  "method": "Finite manual review by coding assistant of each claim, its bound quotes, retrieved section, predefined expectation, task scope and constraint; no model judge. Exact provenance separately checked by report.py.",
+  "rows": [
+    {
+      "id": "http-api-01",
+      "expected_met": true,
+      "goal_consistent": true,
+      "constraints_met": true,
+      "notes": "Claim(s) preserve the quoted meaning, modality and code. English, no more than two claims; scope remains the respective response-code checklist.",
+      "claims": [
+        {
+          "text": "The 429 status code indicates that the user has sent too many requests in a given amount of time (\"rate limiting\").",
+          "quote_ids": [
+            "q1"
+          ],
+          "supported": true
+        },
+        {
+          "text": "Responses with the 429 status code MUST NOT be stored by a cache.",
+          "quote_ids": [
+            "q2"
+          ],
+          "supported": true
+        }
+      ]
+    },
+    {
+      "id": "http-api-02",
+      "expected_met": true,
+      "goal_consistent": true,
+      "constraints_met": true,
+      "notes": "Claim(s) preserve the quoted meaning, modality and code. English, no more than two claims; scope remains the respective response-code checklist.",
+      "claims": [
+        {
+          "text": "Responses with the 429 status code MUST NOT be stored by a cache.",
+          "quote_ids": [
+            "q1"
+          ],
+          "supported": true
+        }
+      ]
+    },
+    {
+      "id": "http-api-03",
+      "expected_met": true,
+      "goal_consistent": true,
+      "constraints_met": true,
+      "notes": "MAY remains optional; no inferred requirement. Rate-limiting subject is the current signal 429.",
+      "claims": [
+        {
+          "text": "No — the response MAY include a Retry-After header indicating how long to wait before making a new request.",
+          "quote_ids": [
+            "q1"
+          ],
+          "supported": true
+        }
+      ]
+    },
+    {
+      "id": "http-api-04",
+      "expected_met": true,
+      "goal_consistent": true,
+      "constraints_met": true,
+      "notes": "Claim(s) preserve the quoted meaning, modality and code. English, no more than two claims; scope remains the respective response-code checklist.",
+      "claims": [
+        {
+          "text": "The 428 status code indicates that the origin server requires the request to be conditional.",
+          "quote_ids": [
+            "q1"
+          ],
+          "supported": true
+        },
+        {
+          "text": "Its typical use is to avoid the \"lost update\" problem, where a client GETs a resource's state, modifies it, and PUTs it back to the server, when meanwhile a third party has modified the state on the server, leading to a conflict.",
+          "quote_ids": [
+            "q2"
+          ],
+          "supported": true
+        }
+      ]
+    },
+    {
+      "id": "http-api-05",
+      "expected_met": true,
+      "goal_consistent": true,
+      "constraints_met": true,
+      "notes": "Claim(s) preserve the quoted meaning, modality and code. English, no more than two claims; scope remains the respective response-code checklist.",
+      "claims": [
+        {
+          "text": "Responses with the 428 status code MUST NOT be stored by a cache.",
+          "quote_ids": [
+            "q1"
+          ],
+          "supported": true
+        }
+      ]
+    },
+    {
+      "id": "http-api-06",
+      "expected_met": false,
+      "goal_consistent": true,
+      "constraints_met": true,
+      "notes": "Cause and individual/combined headers are supported. Expected retry detail omitted here; present in HTTP-07/09. Partial completeness.",
+      "claims": [
+        {
+          "text": "The 431 status code indicates that the server is unwilling to process the request because its header fields are too large.",
+          "quote_ids": [
+            "q1"
+          ],
+          "supported": true
+        },
+        {
+          "text": "It can be used both when the set of request header fields in total is too large, and when a single header field is at fault.",
+          "quote_ids": [
+            "q2"
+          ],
+          "supported": true
+        }
+      ]
+    },
+    {
+      "id": "http-api-07",
+      "expected_met": true,
+      "goal_consistent": true,
+      "constraints_met": true,
+      "notes": "Corrected signal now resolves 431 rather than old 429; reason and optional retry supported.",
+      "claims": [
+        {
+          "text": "The 431 status code indicates that the server is unwilling to process the request because its header fields are too large.",
+          "quote_ids": [
+            "q1"
+          ],
+          "supported": true
+        },
+        {
+          "text": "The request MAY be resubmitted after reducing the size of the request header fields.",
+          "quote_ids": [
+            "q2"
+          ],
+          "supported": true
+        }
+      ]
+    },
+    {
+      "id": "http-api-08",
+      "expected_met": true,
+      "goal_consistent": true,
+      "constraints_met": true,
+      "notes": "Claim(s) preserve the quoted meaning, modality and code. English, no more than two claims; scope remains the respective response-code checklist.",
+      "claims": [
+        {
+          "text": "Responses with the 431 status code MUST NOT be stored by a cache.",
+          "quote_ids": [
+            "q1"
+          ],
+          "supported": true
+        }
+      ]
+    },
+    {
+      "id": "http-api-09",
+      "expected_met": true,
+      "goal_consistent": true,
+      "constraints_met": true,
+      "notes": "Claim(s) preserve the quoted meaning, modality and code. English, no more than two claims; scope remains the respective response-code checklist.",
+      "claims": [
+        {
+          "text": "The request MAY be resubmitted after reducing the size of the request header fields.",
+          "quote_ids": [
+            "q1"
+          ],
+          "supported": true
+        }
+      ]
+    },
+    {
+      "id": "http-api-10",
+      "expected_met": true,
+      "goal_consistent": true,
+      "constraints_met": true,
+      "notes": "The preceding sentence in this same chunk identifies a single header as the latter case; SHOULD preserved.",
+      "claims": [
+        {
+          "text": "When a single header field is at fault, the response representation SHOULD specify which header field was too large.",
+          "quote_ids": [
+            "q1"
+          ],
+          "supported": true
+        }
+      ]
+    },
+    {
+      "id": "http-api-11",
+      "expected_met": true,
+      "goal_consistent": true,
+      "constraints_met": true,
+      "notes": "Claim(s) preserve the quoted meaning, modality and code. English, no more than two claims; scope remains the respective response-code checklist.",
+      "claims": [
+        {
+          "text": "The 511 status code indicates that the client needs to authenticate to gain network access.",
+          "quote_ids": [
+            "q1"
+          ],
+          "supported": true
+        },
+        {
+          "text": "The 511 status SHOULD NOT be generated by origin servers; it is intended for use by intercepting proxies that are interposed as a means of controlling access to the network.",
+          "quote_ids": [
+            "q2"
+          ],
+          "supported": true
+        }
+      ]
+    },
+    {
+      "id": "http-api-12",
+      "expected_met": true,
+      "goal_consistent": true,
+      "constraints_met": true,
+      "notes": "Claim(s) preserve the quoted meaning, modality and code. English, no more than two claims; scope remains the respective response-code checklist.",
+      "claims": [
+        {
+          "text": "Responses with the 511 status code MUST NOT be stored by a cache.",
+          "quote_ids": [
+            "q1"
+          ],
+          "supported": true
+        }
+      ]
+    },
+    {
+      "id": "tea-checklist-01",
+      "expected_met": true,
+      "goal_consistent": true,
+      "constraints_met": true,
+      "notes": "Claim(s) preserve the quoted meaning, modality and code. English, no more than two claims; scope remains the respective response-code checklist.",
+      "claims": [
+        {
+          "text": "The Content-Type header of a POST or BREW request sent to a TEA-capable pot MUST be \"message/teapot\" if tea is to be requested.",
+          "quote_ids": [
+            "q1"
+          ],
+          "supported": true
+        }
+      ]
+    },
+    {
+      "id": "tea-checklist-02",
+      "expected_met": true,
+      "goal_consistent": true,
+      "constraints_met": true,
+      "notes": "Root URI does not commence brewing; Alternates MUST preserved, quoted header options match.",
+      "claims": [
+        {
+          "text": "For the \"/\" URI, brewing will not commence; instead, an Alternates header as defined in RFC 2295 MUST be sent, with the available tea bags and/or leaf varieties as entries.",
+          "quote_ids": [
+            "q1"
+          ],
+          "supported": true
+        }
+      ]
+    },
+    {
+      "id": "tea-checklist-03",
+      "expected_met": true,
+      "goal_consistent": true,
+      "constraints_met": true,
+      "notes": "300 is RECOMMENDED, never mandatory. Root choices, not brewing, preserved.",
+      "claims": [
+        {
+          "text": "A BREW request to the \"/\" URI will return an Alternates header indicating the URIs of the available varieties of tea to brew, and it is RECOMMENDED that this response be served with a status code of 300, to indicate that brewing has not commenced and further options must be chosen by the client.",
+          "quote_ids": [
+            "q1"
+          ],
+          "supported": true
+        }
+      ]
+    },
+    {
+      "id": "tea-checklist-04",
+      "expected_met": true,
+      "goal_consistent": true,
+      "constraints_met": true,
+      "notes": "MAY and condition concerning unacceptable additions both preserved.",
+      "claims": [
+        {
+          "text": "Services that implement the Accept-Additions header field MAY return a 403 status code for a BREW request of a given variety of tea, if the service deems the combination of additions requested to be contrary to the sensibilities of a consensus of drinkers regarding the variety in question.",
+          "quote_ids": [
+            "q1"
+          ],
+          "supported": true
+        }
+      ]
+    },
+    {
+      "id": "tea-checklist-05",
+      "expected_met": true,
+      "goal_consistent": true,
+      "constraints_met": true,
+      "notes": "Not provisioned to brew coffee condition and alternatives 503 temporary/418 more permanent preserved.",
+      "claims": [
+        {
+          "text": "TEA-capable pots that are not provisioned to brew coffee may return either a status code of 503, indicating temporary unavailability of coffee, or a code of 418 to denote a more permanent indication that the pot is a teapot.",
+          "quote_ids": [
+            "q1"
+          ],
+          "supported": true
+        }
+      ]
+    },
+    {
+      "id": "tea-checklist-06",
+      "expected_met": true,
+      "goal_consistent": true,
+      "constraints_met": true,
+      "notes": "Continuation refers to preceding two codes for unprovisioned coffee; 503 temporary matches the quote.",
+      "claims": [
+        {
+          "text": "A status code of 503 indicates temporary unavailability of coffee.",
+          "quote_ids": [
+            "q1"
+          ],
+          "supported": true
+        }
+      ]
+    },
+    {
+      "id": "tea-checklist-07",
+      "expected_met": true,
+      "goal_consistent": true,
+      "constraints_met": true,
+      "notes": "The other code correctly refers to 418; more permanent is relative, not an invented unconditional prohibition.",
+      "claims": [
+        {
+          "text": "A code of 418 denotes a more permanent indication that the pot is a teapot.",
+          "quote_ids": [
+            "q1"
+          ],
+          "supported": true
+        }
+      ]
+    },
+    {
+      "id": "tea-checklist-08",
+      "expected_met": true,
+      "goal_consistent": true,
+      "constraints_met": true,
+      "notes": "ABNF sugar-type alternatives establish Sugar/Xylitol/Stevia; quotation and section identify HTCPCP-TEA.",
+      "claims": [
+        {
+          "text": "HTCPCP-TEA adds the sugar-type values \"Sugar\", \"Xylitol\" and \"Stevia\".",
+          "quote_ids": [
+            "q1"
+          ],
+          "supported": true
+        }
+      ]
+    },
+    {
+      "id": "tea-checklist-09",
+      "expected_met": true,
+      "goal_consistent": true,
+      "constraints_met": true,
+      "notes": "Equivalence to BREW and deprecation both stated by quoted section.",
+      "claims": [
+        {
+          "text": "POST requests are treated equivalently to BREW requests, but they remain deprecated.",
+          "quote_ids": [
+            "q1"
+          ],
+          "supported": true
+        }
+      ]
+    },
+    {
+      "id": "tea-checklist-10",
+      "expected_met": true,
+      "goal_consistent": true,
+      "constraints_met": true,
+      "notes": "BREW body stop BEFORE recommended strength triggers MUST abort and weaker beverage, preserving all conditions.",
+      "claims": [
+        {
+          "text": "If a BREW command with an entity body containing \"stop\" is received before the recommended strength is achieved, the pot MUST abort brewing and serve the resultant beverage at lesser strength.",
+          "quote_ids": [
+            "q1"
+          ],
+          "supported": true
+        }
+      ]
+    },
+    {
+      "id": "tea-checklist-11",
+      "expected_met": true,
+      "goal_consistent": true,
+      "constraints_met": true,
+      "notes": "Claim(s) preserve the quoted meaning, modality and code. English, no more than two claims; scope remains the respective response-code checklist.",
+      "claims": [
+        {
+          "text": "For the URI \"/\", brewing will not commence.",
+          "quote_ids": [
+            "q1"
+          ],
+          "supported": true
+        }
+      ]
+    },
+    {
+      "id": "tea-checklist-12",
+      "expected_met": true,
+      "goal_consistent": true,
+      "constraints_met": true,
+      "notes": "Final question stays with task decision checklist; unprovisioned condition and both alternatives preserved.",
+      "claims": [
+        {
+          "text": "A TEA-capable pot that is not provisioned to brew coffee may return either a status code of 503, indicating temporary unavailability of coffee, or a code of 418 to denote a more permanent indication that the pot is a teapot.",
+          "quote_ids": [
+            "q1"
+          ],
+          "supported": true
+        }
+      ]
+    }
+  ]
+}
