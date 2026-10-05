@@ -147,7 +147,7 @@ func (a *Agent) completeWithTools(ctx context.Context, step invocation, prompt s
 				value = string(b)
 			}
 			settings.Messages = append(settings.Messages, Message{Role: "tool", ToolCallID: call.ID, Content: value})
-			if toolErr == nil && call.Function.Name == "read_file" {
+			if toolErr == nil && (call.Function.Name == "read_file" || call.Function.Name == "rag_search") {
 				fileContext += fmt.Sprintf("\nUntrusted file result:\n%s\n", value)
 			}
 			if len(fileContext) > 4<<20 {

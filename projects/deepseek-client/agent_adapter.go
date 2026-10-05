@@ -2,9 +2,11 @@ package main
 
 import (
 	"context"
+	"encoding/json"
 	"fmt"
 	"io"
 	"strings"
+	"time"
 
 	"github.com/eren-erdny/ai_challenge/projects/deepseek-client/agent"
 )
@@ -14,6 +16,48 @@ func executeQuestion(ctx context.Context, token, prompt string, state sessionSta
 	target := agent.Target{Profile: state.ActiveProfile, BaseURL: state.API.BaseURL, Model: state.Model, SendThinkingDisabled: isDeepSeekEndpoint(state.API.BaseURL)}
 	target.ContextWindow, target.MaxOutputTokens = state.API.ContextWindow, state.API.MaxOutputTokens
 	request := agent.Request{Prompt: prompt, Mode: state.Mode, Target: target, Temperature: state.Temperature, Strategy: state.Strategy, Control: state.Control, UserProfile: state.UserProfile}
+	if state.Knowledge != nil && !state.ToolsDisabled && prompt != "/compress" {
+		query, err := contextualKnowledgeQuery(ctx, state, prompt)
+		if err != nil {
+			fmt.Fprintf(errorOutput, "Контекст поиска недоступен: %v. Проверьте /brief и историю диалога.\n", err)
+			return nil
+		}
+		searchContext, cancel := context.WithTimeout(ctx, 3*time.Minute)
+		evidence, err := state.Knowledge.Search(searchContext, conversationID(state.ConversationID), query)
+		cancel()
+		if err != nil {
+			fmt.Fprintf(errorOutput, "Поиск по базе знаний не выполнен: %v. Обновите базу через F2 / /kb или отключите её для этого чата.\n", err)
+			return nil
+		}
+		request.Evidence = evidence
+		if evidence != "" {
+			var found struct {
+				CandidateCount int    `json:"candidate_count"`
+				RetainedCount  int    `json:"retained_count"`
+				FilteredCount  int    `json:"filtered_count"`
+				SearchQuery    string `json:"search_query"`
+				Query          string `json:"query"`
+				NoEvidence     bool   `json:"no_evidence"`
+				Results        []struct {
+					Source  string `json:"source"`
+					ChunkID string `json:"chunk_id"`
+				} `json:"results"`
+			}
+			if json.Unmarshal([]byte(evidence), &found) == nil {
+				fmt.Fprintf(output, "[База знаний: %s · найдено фрагментов: %d]\n", state.KnowledgeLabel, len(found.Results))
+				fmt.Fprintf(output, "[Поиск: %d кандидатов → %d после фильтра → %d в контекст; отсечено %d]\n", found.CandidateCount, found.RetainedCount, len(found.Results), found.FilteredCount)
+				if found.SearchQuery != "" && found.SearchQuery != prompt {
+					fmt.Fprintf(output, "[Поисковый запрос: %s]\n", toolPreview(found.SearchQuery, token))
+				}
+				if found.NoEvidence {
+					fmt.Fprintln(output, "[В базе не найдено подтверждающих фрагментов]")
+				}
+				for _, hit := range found.Results {
+					fmt.Fprintf(output, "[%s#%s]\n", toolPreview(hit.Source, token), hit.ChunkID)
+				}
+			}
+		}
+	}
 	credentials := map[string]string{target.Profile: token}
 	if state.Mode == modeModelBenchmark && prompt != "/compress" {
 		targets, err := buildModelBenchmarkTargets(state, token)
@@ -42,7 +86,11 @@ func executeQuestion(ctx context.Context, token, prompt string, state sessionSta
 		runner = runner.WithMemoryLayers(state.Memory)
 	}
 	if !state.ToolsDisabled {
-		runner = runner.WithTools(state.Tools)
+		tools := state.Tools
+		if request.Evidence != "" && tools != nil {
+			tools = knowledgeToolFilter{ToolExecutor: tools}
+		}
+		runner = runner.WithTools(tools)
 	}
 	var result agent.Result
 	var err error
@@ -67,9 +115,28 @@ func executeQuestion(ctx context.Context, token, prompt string, state sessionSta
 		fmt.Fprintf(errorOutput, "ошибка запроса: %s\n", message)
 	}
 	if last := result.Last(); last != nil {
-		return &requestStatus{Profile: last.Target.Profile, BaseURL: last.Target.BaseURL, Result: last.Answer, Tokens: &last.Tokens}
+		return &requestStatus{Profile: last.Target.Profile, BaseURL: last.Target.BaseURL, Result: last.Answer, Tokens: &last.Tokens, Grounding: last.Grounding}
 	}
 	return nil
+}
+
+// A selected managed base must not be mixed with an unrelated legacy HTTP base.
+type knowledgeToolFilter struct{ agent.ToolExecutor }
+
+func (f knowledgeToolFilter) Definitions() []agent.ToolDefinition {
+	var result []agent.ToolDefinition
+	for _, definition := range f.ToolExecutor.Definitions() {
+		if definition.Function.Name != "rag_search" {
+			result = append(result, definition)
+		}
+	}
+	return result
+}
+func (f knowledgeToolFilter) Execute(ctx context.Context, name, args string) (string, error) {
+	if name == "rag_search" {
+		return "", fmt.Errorf("use evidence from the selected knowledge base")
+	}
+	return f.ToolExecutor.Execute(ctx, name, args)
 }
 
 func renderAgentResult(output io.Writer, result agent.Result) {
@@ -141,10 +208,23 @@ func renderAgentResult(output io.Writer, result agent.Result) {
 		fmt.Fprintln(output, strings.Repeat("-", 40))
 		printAgentResponse(output, *result.Analysis)
 	}
+	if result.Analysis == nil && (result.Mode == agent.ModelBenchmark || result.Mode == agent.TemperatureBenchmark) && len(result.Responses) > 0 && result.Responses[0].Grounding != nil {
+		fmt.Fprintln(output, "[RAG: показаны проверенные ответы и метрики; дополнительный свободный ответ судьи отключён]")
+	}
 }
 
 func printAgentResponse(output io.Writer, response agent.Response) {
 	printSingleAnswer(output, response.Answer, response.Validation)
+	if g := response.Grounding; g != nil {
+		if g.Local {
+			fmt.Fprintln(output, "[Недостаточно контекста · ответ клиента · LLM-вызовов: 0]")
+		} else if g.Status == "answered" {
+			fmt.Fprintf(output, "[RAG: %d утверждений · %d цитат · %d источников; источники и точность цитат проверены]\n", len(g.Claims), len(g.Quotes), len(g.Sources))
+		}
+		if g.Status == "unknown" {
+			fmt.Fprintln(output, "Источники: нет подтверждающих фрагментов для ответа.")
+		}
+	}
 	if check := response.Invariant; check != nil {
 		if check.Refused {
 			fmt.Fprintf(output, "Инварианты: запрос отклонён (%d конфликтов из %d правил)\n", len(check.Violations), check.Active)

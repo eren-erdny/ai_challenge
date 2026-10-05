@@ -21,6 +21,7 @@ import (
 	"github.com/eren-erdny/ai_challenge/projects/deepseek-client/invariants"
 	"github.com/eren-erdny/ai_challenge/projects/deepseek-client/llm"
 	"github.com/eren-erdny/ai_challenge/projects/deepseek-client/memorylayers"
+	"github.com/eren-erdny/ai_challenge/projects/deepseek-client/ragtools"
 	"github.com/eren-erdny/ai_challenge/projects/deepseek-client/taskstates"
 	"github.com/eren-erdny/ai_challenge/projects/deepseek-client/userprofiles"
 )
@@ -87,6 +88,15 @@ func run(input *bufio.Reader) int {
 	}
 	defer mcpClient.Close()
 	config.Tools = mcpClient
+	config.Knowledge = newKnowledgeManager(filepath.Dir(configPath))
+	defer config.Knowledge.Close()
+	if address := os.Getenv("RAG_URL"); address != "" {
+		config.Tools, err = ragtools.New(address, config.Tools)
+		if err != nil {
+			fmt.Fprintln(os.Stderr, err)
+			return 1
+		}
+	}
 	config.History = store
 	config.ConversationID, config.InitialMessages, err = store.Active(context.Background())
 	if err != nil {
@@ -109,6 +119,9 @@ func run(input *bufio.Reader) int {
 func handleCommand(args []string, output io.Writer, errorOutput io.Writer) (bool, int) {
 	if len(args) == 0 {
 		return false, 0
+	}
+	if handled, code := handleRAGCommand(args, output, errorOutput); handled {
+		return true, code
 	}
 	if handled, code := handleMCPCommand(args, output, errorOutput); handled {
 		return true, code

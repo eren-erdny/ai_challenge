@@ -1,0 +1,321 @@
+[
+  {
+    "id": "http-api",
+    "goal": "Draft a response-code checklist for an HTTP API.",
+    "setup": [
+      "/brief goal Draft a response-code checklist for an HTTP API.",
+      "/brief constraint style Answer in English with at most two short factual claims. Preserve MAY, SHOULD, MUST, negation and conditions.",
+      "/brief term signal HTTP 429 Too Many Requests",
+      "/brief clarify scope Use the public RFC corpus for this checklist, not general knowledge."
+    ],
+    "questions": [
+      {
+        "id": "http-api-01",
+        "query": "What does signal indicate?",
+        "expected": "Too many requests in a given time / rate limiting.",
+        "evidence": [
+          {
+            "source": "rfc6585.md",
+            "text": "The 429 status code indicates that the user has sent too many requests in a given amount of time (\"rate limiting\")."
+          }
+        ],
+        "before": []
+      },
+      {
+        "id": "http-api-02",
+        "query": "Can it be stored by a cache?",
+        "expected": "429 responses MUST NOT be cached.",
+        "evidence": [
+          {
+            "source": "rfc6585.md",
+            "text": "Responses with the 429 status code MUST NOT be stored by a cache."
+          }
+        ],
+        "before": []
+      },
+      {
+        "id": "http-api-03",
+        "query": "Is Retry-After mandatory for signal?",
+        "expected": "No: 429 MAY include Retry-After; do not turn MAY into MUST.",
+        "evidence": [
+          {
+            "source": "rfc6585.md",
+            "text": "MAY include a Retry-After header indicating how long to wait before making a new request."
+          }
+        ],
+        "before": []
+      },
+      {
+        "id": "http-api-04",
+        "query": "What does HTTP 428 Precondition Required mean?",
+        "expected": "The origin server requires the request to be conditional.",
+        "evidence": [
+          {
+            "source": "rfc6585.md",
+            "text": "The 428 status code indicates that the origin server requires the request to be conditional."
+          }
+        ],
+        "before": []
+      },
+      {
+        "id": "http-api-05",
+        "query": "Can that response be cached?",
+        "expected": "428 responses MUST NOT be cached.",
+        "evidence": [
+          {
+            "source": "rfc6585.md",
+            "text": "Responses with the 428 status code MUST NOT be stored by a cache."
+          }
+        ],
+        "before": []
+      },
+      {
+        "id": "http-api-06",
+        "query": "What causes HTTP 431 Request Header Fields Too Large?",
+        "expected": "Header fields are too large; request may be retried after reducing them.",
+        "evidence": [
+          {
+            "source": "rfc6585.md",
+            "text": "The 431 status code indicates that the server is unwilling to process the request because its header fields are too large."
+          }
+        ],
+        "before": []
+      },
+      {
+        "id": "http-api-07",
+        "query": "What does signal indicate now?",
+        "expected": "Use the corrected term: 431, not the old 429 meaning.",
+        "evidence": [
+          {
+            "source": "rfc6585.md",
+            "text": "The 431 status code indicates that the server is unwilling to process the request because its header fields are too large."
+          }
+        ],
+        "before": [
+          "/brief term signal HTTP 431 Request Header Fields Too Large",
+          "/brief clarify focus Header-size errors are now the selected signal."
+        ]
+      },
+      {
+        "id": "http-api-08",
+        "query": "Can it be stored by a cache?",
+        "expected": "The corrected signal is 431; it MUST NOT be cached.",
+        "evidence": [
+          {
+            "source": "rfc6585.md",
+            "text": "Responses with the 431 status code MUST NOT be stored by a cache."
+          }
+        ],
+        "before": []
+      },
+      {
+        "id": "http-api-09",
+        "query": "How can a client retry an HTTP 431 request successfully?",
+        "expected": "It MAY resubmit after reducing request header fields.",
+        "evidence": [
+          {
+            "source": "rfc6585.md",
+            "text": "The request MAY be resubmitted after reducing the size of the request header fields."
+          }
+        ],
+        "before": []
+      },
+      {
+        "id": "http-api-10",
+        "query": "For HTTP 431 caused by one large header, what SHOULD the response specify?",
+        "expected": "It SHOULD specify which header field was too large.",
+        "evidence": [
+          {
+            "source": "rfc6585.md",
+            "text": "the response representation SHOULD specify which header field was too large."
+          }
+        ],
+        "before": []
+      },
+      {
+        "id": "http-api-11",
+        "query": "What does HTTP 511 Network Authentication Required indicate?",
+        "expected": "Client needs authentication to gain network access.",
+        "evidence": [
+          {
+            "source": "rfc6585.md",
+            "text": "The 511 status code indicates that the client needs to authenticate to gain network access."
+          }
+        ],
+        "before": []
+      },
+      {
+        "id": "http-api-12",
+        "query": "For our API checklist, can HTTP 511 responses be stored by a cache?",
+        "expected": "For the API checklist: 511 responses MUST NOT be cached.",
+        "evidence": [
+          {
+            "source": "rfc6585.md",
+            "text": "Responses with the 511 status code MUST NOT be stored by a cache."
+          }
+        ],
+        "before": []
+      }
+    ],
+    "reopen_after": 6
+  },
+  {
+    "id": "tea-checklist",
+    "goal": "Draft a response-code decision checklist for a TEA-capable pot.",
+    "setup": [
+      "/brief goal Draft a response-code decision checklist for a TEA-capable pot.",
+      "/brief constraint style Answer in English with at most two short factual claims. Preserve MAY, SHOULD, MUST, negation and conditions.",
+      "/brief term device TEA-capable pot",
+      "/brief clarify scope Use the public RFC corpus for this checklist, not general knowledge."
+    ],
+    "questions": [
+      {
+        "id": "tea-checklist-01",
+        "query": "Which Content-Type requests tea from device?",
+        "expected": "message/teapot.",
+        "evidence": [
+          {
+            "source": "rfc7168.md",
+            "text": "MUST be \"message/teapot\""
+          }
+        ],
+        "before": []
+      },
+      {
+        "id": "tea-checklist-02",
+        "query": "Which header is required for an HTCPCP-TEA BREW request to the / URI?",
+        "expected": "Alternates header with available tea entries.",
+        "evidence": [
+          {
+            "source": "rfc7168.md",
+            "text": "an Alternates header as defined in RFC 2295 [RFC2295] MUST be sent"
+          }
+        ],
+        "before": []
+      },
+      {
+        "id": "tea-checklist-03",
+        "query": "What does HTTP 300 indicate for an HTCPCP-TEA BREW request to /?",
+        "expected": "Brewing has not commenced; the client must choose further options.",
+        "evidence": [
+          {
+            "source": "rfc7168.md",
+            "text": "to indicate that brewing has not commenced and further options must be chosen by the client."
+          }
+        ],
+        "before": []
+      },
+      {
+        "id": "tea-checklist-04",
+        "query": "When MAY an HTCPCP-TEA service return 403 for requested additions?",
+        "expected": "When their combination is contrary to drinkers consensus for that tea variety.",
+        "evidence": [
+          {
+            "source": "rfc7168.md",
+            "text": "if the service deems the combination of additions requested to be contrary to the sensibilities of a consensus of drinkers regarding the variety in question."
+          }
+        ],
+        "before": []
+      },
+      {
+        "id": "tea-checklist-05",
+        "query": "For TEA-capable pots not provisioned to brew coffee, which two codes may be returned?",
+        "expected": "503 or 418; preserve the condition and both options.",
+        "evidence": [
+          {
+            "source": "rfc7168.md",
+            "text": "TEA-capable pots that are not provisioned to brew coffee may return either a status code of 503, indicating temporary unavailability of coffee, or a code of 418 as defined in the base HTCPCP specification to denote a more permanent indication that the pot is a teapot."
+          }
+        ],
+        "before": []
+      },
+      {
+        "id": "tea-checklist-06",
+        "query": "Which of those codes indicates temporary unavailability?",
+        "expected": "503 means temporary unavailability of coffee.",
+        "evidence": [
+          {
+            "source": "rfc7168.md",
+            "text": "TEA-capable pots that are not provisioned to brew coffee may return either a status code of 503, indicating temporary unavailability of coffee, or a code of 418 as defined in the base HTCPCP specification to denote a more permanent indication that the pot is a teapot."
+          }
+        ],
+        "before": []
+      },
+      {
+        "id": "tea-checklist-07",
+        "query": "What does that other code indicate?",
+        "expected": "418 means a more permanent indication that the pot is a teapot.",
+        "evidence": [
+          {
+            "source": "rfc7168.md",
+            "text": "TEA-capable pots that are not provisioned to brew coffee may return either a status code of 503, indicating temporary unavailability of coffee, or a code of 418 as defined in the base HTCPCP specification to denote a more permanent indication that the pot is a teapot."
+          }
+        ],
+        "before": [
+          "/brief clarify focus Keep temporary 503 distinct from the more permanent 418 indication."
+        ]
+      },
+      {
+        "id": "tea-checklist-08",
+        "query": "Which sugar-type values are added by HTCPCP-TEA?",
+        "expected": "Sugar, Xylitol, Stevia.",
+        "evidence": [
+          {
+            "source": "rfc7168.md",
+            "text": "sugar-type = ( \"Sugar\" | \"Xylitol\" | \"Stevia\" )"
+          }
+        ],
+        "before": []
+      },
+      {
+        "id": "tea-checklist-09",
+        "query": "How does HTCPCP-TEA treat POST compared with BREW?",
+        "expected": "Equivalently, but POST remains deprecated.",
+        "evidence": [
+          {
+            "source": "rfc7168.md",
+            "text": "POST requests are treated equivalently, but they remain deprecated."
+          }
+        ],
+        "before": []
+      },
+      {
+        "id": "tea-checklist-10",
+        "query": "If an HTCPCP-TEA stop request arrives before recommended strength, what MUST device do?",
+        "expected": "Abort brewing and serve the weaker beverage.",
+        "evidence": [
+          {
+            "source": "rfc7168.md",
+            "text": "the pot MUST abort brewing and serve the resultant beverage at lesser strength."
+          }
+        ],
+        "before": []
+      },
+      {
+        "id": "tea-checklist-11",
+        "query": "Does an HTCPCP-TEA request to the / URI start brewing?",
+        "expected": "No, / does not commence brewing.",
+        "evidence": [
+          {
+            "source": "rfc7168.md",
+            "text": "For the URI \"/\", brewing will not commence."
+          }
+        ],
+        "before": []
+      },
+      {
+        "id": "tea-checklist-12",
+        "query": "For our checklist, which codes can device use for coffee when it is not provisioned to brew coffee?",
+        "expected": "503 temporary coffee unavailability or 418 more permanent teapot indication.",
+        "evidence": [
+          {
+            "source": "rfc7168.md",
+            "text": "TEA-capable pots that are not provisioned to brew coffee may return either a status code of 503, indicating temporary unavailability of coffee, or a code of 418 as defined in the base HTCPCP specification to denote a more permanent indication that the pot is a teapot."
+          }
+        ],
+        "before": []
+      }
+    ],
+    "reopen_after": 6
+  }
+]

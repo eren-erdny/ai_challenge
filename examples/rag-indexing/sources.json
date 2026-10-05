@@ -1,0 +1,58 @@
+{
+  "sources": [
+    {
+      "rfc": 2324,
+      "title": "Hyper Text Coffee Pot Control Protocol (HTCPCP/1.0)",
+      "source_url": "https://www.rfc-editor.org/rfc/rfc2324.txt",
+      "original": "sources\\rfc2324.txt",
+      "indexed_file": "corpus\\rfc2324.md",
+      "original_pages": 10,
+      "original_sha256": "b11329c3fd6dbe9dddcb8dd90f18a4bf441858a6b5bfaccae5f91e5c7d2b3596",
+      "indexed_sha256": "8d250c7ce5e1980e84757b182c73d68bb44c45dbcc83e2f086daa930b1a53318",
+      "characters": 18284,
+      "words": 2549,
+      "removed": {
+        "page_footers": 10,
+        "running_headers": 9,
+        "contents_lines": 0
+      }
+    },
+    {
+      "rfc": 6585,
+      "title": "Additional HTTP Status Codes",
+      "source_url": "https://www.rfc-editor.org/rfc/rfc6585.txt",
+      "original": "sources\\rfc6585.txt",
+      "indexed_file": "corpus\\rfc6585.md",
+      "original_pages": 10,
+      "original_sha256": "f6d55d1b491cd515c35827cf9181753b23b2a68c4df14e56d83dc445b3876e58",
+      "indexed_sha256": "a9cc238612ac18e2c509f4e4b442f6aab621f0ed4512a9f43361f2613c9ef693",
+      "characters": 14891,
+      "words": 2001,
+      "removed": {
+        "page_footers": 10,
+        "running_headers": 9,
+        "contents_lines": 14
+      }
+    },
+    {
+      "rfc": 7168,
+      "title": "The Hyper Text Coffee Pot Control Protocol for Tea Efflux Appliances",
+      "source_url": "https://www.rfc-editor.org/rfc/rfc7168.txt",
+      "original": "sources\\rfc7168.txt",
+      "indexed_file": "corpus\\rfc7168.md",
+      "original_pages": 7,
+      "original_sha256": "9087cd8dd9f00bd9da0fed69b5ab06c8deedb1b845f5e7a6ee13763a59388517",
+      "indexed_sha256": "bee29320fa825c985a308470af2bf618f43ca520453dc238207cfb0ffebf7491",
+      "characters": 12186,
+      "words": 1750,
+      "removed": {
+        "page_footers": 7,
+        "running_headers": 6,
+        "contents_lines": 22
+      }
+    }
+  ],
+  "total_original_pages": 27,
+  "total_words": 6300,
+  "note": "Original page markers establish volume. Indexed copies preserve copyright notices and section content; only pagination and table-of-contents duplicates are removed."
+}

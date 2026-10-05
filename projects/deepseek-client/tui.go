@@ -56,6 +56,10 @@ type tuiModel struct {
 	activityFrame   int
 	activityGen     int
 	personaSetup    int
+	knowledgeStage  string
+	knowledgeBusy   bool
+	knowledgeName   string
+	knowledgeAction string
 }
 
 var (
@@ -76,8 +80,11 @@ var (
 )
 
 var commandSuggestions = []autocompleteSuggestion{
+	{value: "/kb"},
+	{value: "/rag"},
 	{value: "/compress"},
 	{value: "/memory "},
+	{value: "/brief"},
 	{value: "/invariant "},
 	{value: "/persona "},
 	{value: "/checkpoint "},
@@ -132,6 +139,7 @@ func newTUIModel(config appConfig, ask askFunction) tuiModel {
 	}
 	profile, _ := config.activeAPIProfile()
 	state := sessionState{
+		Knowledge:    config.Knowledge,
 		Compression:  config.HistoryPolicy.CompressionConfig,
 		Memory:       config.Memory,
 		UserProfiles: config.UserProfiles,
@@ -152,8 +160,9 @@ func newTUIModel(config appConfig, ask askFunction) tuiModel {
 		Control:        config.ResponseControl,
 	}
 
+	refreshKnowledgeLabel(&state)
 	input := textarea.New()
-	input.Placeholder = "Введите запрос или /help"
+	input.Placeholder = "Введите запрос · F2: базы знаний · /help"
 	input.Prompt = "┃ "
 	input.CharLimit = 50_000
 	input.SetWidth(80)
@@ -197,6 +206,14 @@ func (model tuiModel) Init() tea.Cmd {
 
 func (model tuiModel) Update(message tea.Msg) (tea.Model, tea.Cmd) {
 	switch message := message.(type) {
+	case knowledgeMessage:
+		model.busy = false
+		model.knowledgeBusy = false
+		model.activityFrame = 0
+		refreshKnowledgeLabel(&model.state)
+		model.history = append(model.history, message.text)
+		model.refreshHistory()
+		return model, nil
 	case tea.WindowSizeMsg:
 		model.resize(message.Width, message.Height)
 		return model, nil
@@ -241,6 +258,11 @@ func (model tuiModel) Update(message tea.Msg) (tea.Model, tea.Cmd) {
 				model.cancel()
 			}
 			return model, tea.Quit
+		case "f2":
+			if !model.busy {
+				return model.openKnowledge()
+			}
+			return model, nil
 		case "up", "down":
 			suggestions := model.autocompleteSuggestions()
 			if len(suggestions) > 0 {
@@ -287,14 +309,20 @@ func (model tuiModel) Update(message tea.Msg) (tea.Model, tea.Cmd) {
 
 func (model tuiModel) submit() (tea.Model, tea.Cmd) {
 	text := normalizePastedText(model.textarea.Value())
-	if text == "" && model.personaSetup == 0 {
+	if text == "" && model.personaSetup == 0 && model.knowledgeStage == "" {
 		return model, nil
 	}
-	if text == "" {
+	if text == "" && model.personaSetup != 0 {
 		text = "-"
 	}
 	model.textarea.Reset()
 	model.suggestionIndex = 0
+	if model.knowledgeStage != "" {
+		return model.submitKnowledge(text)
+	}
+	if text == "/kb" {
+		return model.openKnowledge()
+	}
 	if model.personaSetup != 0 {
 		next, err := applyPersonaWizardAnswer(model.ctx, &model.state, model.personaSetup, text)
 		if err != nil {
@@ -349,7 +377,7 @@ func (model tuiModel) submit() (tea.Model, tea.Cmd) {
 		model.refreshHistory()
 		return model, nil
 	}
-	if handleMemoryLayerCommand(model.ctx, text, &model.state, &conversationOutput) {
+	if handleBriefCommand(model.ctx, text, &model.state, &conversationOutput) || handleMemoryLayerCommand(model.ctx, text, &model.state, &conversationOutput) {
 		model.history = append(model.history, statusStyle.Render(conversationOutput.String()))
 		model.refreshHistory()
 		return model, nil
@@ -462,7 +490,7 @@ func (model *tuiModel) resize(width, height int) {
 	contentWidth := max(30, width-panelFrameWidth)
 	model.textarea.SetWidth(contentWidth)
 	model.viewport.SetWidth(contentWidth)
-	availableHeight := max(4, height-model.textarea.Height()-12)
+	availableHeight := max(4, height-model.textarea.Height()-13)
 	model.viewport.SetHeight(min(historyViewportHeight, availableHeight))
 	model.refreshHistory()
 }
@@ -479,7 +507,11 @@ func (model tuiModel) View() tea.View {
 	help := model.helpLine()
 	dialogContent := titleStyle.Render("Диалог") + "\n" + model.viewport.View()
 	dialogPanel := panelStyle.Width(model.viewport.Width()).Render(dialogContent)
-	composerContent := titleStyle.Render("Ввод и настройки") + "\n" +
+	knowledgeLabel := model.state.KnowledgeLabel
+	if model.state.ToolsDisabled && knowledgeLabel != "выключена" {
+		knowledgeLabel += " (поиск отключён)"
+	}
+	composerContent := titleStyle.Render("Ввод и настройки") + "\n" + statusStyle.MaxWidth(model.viewport.Width()).MaxHeight(1).Render("База знаний: "+knowledgeLabel+" · F2: управление") + "\n" +
 		model.textarea.View() + "\n" + model.compactSettings(activity)
 	composerPanel := panelStyle.Width(model.viewport.Width()).Render(composerContent)
 	body := dialogPanel + "\n" + composerPanel + "\n" + statusStyle.Render(help)
@@ -488,7 +520,7 @@ func (model tuiModel) View() tea.View {
 	cursorPosition := model.textarea.Cursor()
 	if cursorPosition != nil {
 		cursorPosition.X += 2
-		cursorPosition.Y += lipgloss.Height(dialogPanel) + 2
+		cursorPosition.Y += lipgloss.Height(dialogPanel) + 3
 	}
 	view.Cursor = cursorPosition
 	view.AltScreen = true
@@ -586,7 +618,7 @@ func matchingSuggestions(candidates []autocompleteSuggestion, prefix string) []a
 func (model tuiModel) helpLine() string {
 	suggestions := model.autocompleteSuggestions()
 	if len(suggestions) == 0 {
-		return "Enter отправить  •  Ctrl+J перенос  •  Колесо/PgUp/PgDn история  •  Esc выход"
+		return "Enter отправить  •  F2 базы знаний  •  Ctrl+J перенос  •  Колесо/PgUp/PgDn история  •  Esc выход"
 	}
 
 	index := model.suggestionIndex % len(suggestions)
@@ -617,6 +649,9 @@ func (model tuiModel) activityText() string {
 	activity := "готов"
 	if model.busy {
 		activity = fmt.Sprintf("обрабатываю запрос%-3s", strings.Repeat(".", model.activityFrame))
+		if model.knowledgeBusy {
+			activity = fmt.Sprintf("подготавливаю базу%-3s", strings.Repeat(".", model.activityFrame))
+		}
 	}
 	return activity
 }

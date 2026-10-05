@@ -1,0 +1,9 @@
+{
+  "factual_answers": 8,
+  "fixture_calls": 9,
+  "kind": "offline replay of previously saved real DeepSeek outputs; no new model generations",
+  "provider_calls": 0,
+  "questions": 10,
+  "result": "PASS",
+  "unknown_answers": 2
+}

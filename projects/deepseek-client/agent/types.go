@@ -35,6 +35,7 @@ type Target struct {
 }
 
 type Settings struct {
+	JSONOutput           bool
 	Tools                []ToolDefinition
 	MaxOutputTokens      int
 	Model                string
@@ -72,6 +73,7 @@ func (f ClientFunc) Complete(ctx context.Context, target Target, prompt string, 
 }
 
 type Request struct {
+	Evidence       string
 	Compression    CompressionConfig
 	UserProfile    UserProfile
 	ConversationID string
@@ -85,6 +87,7 @@ type Request struct {
 }
 
 type Response struct {
+	Grounding   *GroundedAnswer
 	FileContext string
 	Tokens      TokenReport
 	Target      Target

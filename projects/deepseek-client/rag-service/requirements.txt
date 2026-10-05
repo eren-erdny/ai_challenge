@@ -1,0 +1,6 @@
+qdrant-client==1.19.1
+transformers==4.57.6
+torch==2.14.1
+pypdf==6.19.0
+sentencepiece==0.2.2
+httpx==0.28.1

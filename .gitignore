@@ -12,3 +12,10 @@ config/config.json
 /raw/
 /wiki/
 /docs/llm-wiki/
+
+# Local RAG environment, models, corpus index and generated reports
+/projects/deepseek-client/rag-service/.venv/
+/projects/deepseek-client/rag-service/data/
+/projects/deepseek-client/rag-service/reports/
+__pycache__/
+/artifacts/hw21/

@@ -1,0 +1,221 @@
+{
+  "answers_sha256": "e25847b07daeea067e03a2b4654cfe9a51ccf599b804677366a5f1bb5aeaa42d",
+  "reviewer": "Codex semantic review of each saved claim against its linked quotes and source section",
+  "method": "Manual inspection, no second LLM API call or keyword-only semantic scoring",
+  "limit": "This finite corpus/question set does not prove semantic entailment for future answers.",
+  "rows": [
+    {
+      "id": "Q01",
+      "expected_met": true,
+      "claims": [
+        {
+          "index": 1,
+          "text": "The WHEN method tells the coffee pot that sufficient milk has been introduced into the coffee.",
+          "quote_ids": [
+            "q1",
+            "q2"
+          ],
+          "supported": true,
+          "reason": "The WHEN method claim is supported by the sufficient-milk sentence and the explicit WHEN method sentence."
+        }
+      ],
+      "abstention_reason": ""
+    },
+    {
+      "id": "Q02",
+      "expected_met": true,
+      "claims": [
+        {
+          "index": 1,
+          "text": "The Content-Type header of a POST or BREW request sent to a TEA-capable pot MUST be \"message/teapot\" if tea is to be requested.",
+          "quote_ids": [
+            "q1"
+          ],
+          "supported": true,
+          "reason": "The required Content-Type is quoted with its POST/BREW and tea condition."
+        },
+        {
+          "index": 2,
+          "text": "A TEA-capable pot that receives a BREW message of content type \"message/teapot\" MUST respond in accordance with the URI requested.",
+          "quote_ids": [
+            "q2"
+          ],
+          "supported": true,
+          "reason": "The extra URI-response statement repeats its cited requirement without broadening scope."
+        }
+      ],
+      "abstention_reason": ""
+    },
+    {
+      "id": "Q03",
+      "expected_met": true,
+      "claims": [
+        {
+          "index": 1,
+          "text": "HTCPCP-TEA updates the Accept-Additions header field to allow addition-type options including sugar-type.",
+          "quote_ids": [
+            "q1"
+          ],
+          "supported": true,
+          "reason": "The updated addition-type grammar includes sugar-type; the source section identifies the Accept-Additions field."
+        },
+        {
+          "index": 2,
+          "text": "The permitted sugar-type additions are \"Sugar\", \"Xylitol\", and \"Stevia\".",
+          "quote_ids": [
+            "q2"
+          ],
+          "supported": true,
+          "reason": "All three sugar alternatives match the quoted grammar; no fourth alternative is invented."
+        }
+      ],
+      "abstention_reason": ""
+    },
+    {
+      "id": "Q04",
+      "expected_met": true,
+      "claims": [
+        {
+          "index": 1,
+          "text": "Coffee pots SHOULD use the Network Time Protocol [NTP] to synchronize their clocks to a globally accurate time standard.",
+          "quote_ids": [
+            "q1"
+          ],
+          "supported": true,
+          "reason": "SHOULD, NTP and synchronization to globally accurate time are all retained."
+        }
+      ],
+      "abstention_reason": ""
+    },
+    {
+      "id": "Q05",
+      "expected_met": true,
+      "claims": [
+        {
+          "index": 1,
+          "text": "The 428 status code indicates that the origin server requires the request to be conditional.",
+          "quote_ids": [
+            "q1"
+          ],
+          "supported": true,
+          "reason": "428 requires the request to be conditional."
+        },
+        {
+          "index": 2,
+          "text": "Its typical use is to avoid the \"lost update\" problem.",
+          "quote_ids": [
+            "q2"
+          ],
+          "supported": true,
+          "reason": "Typical lost-update prevention matches the quote; it is not made an unconditional guarantee."
+        },
+        {
+          "index": 3,
+          "text": "The 428 status code is optional; clients cannot rely upon its use to prevent \"lost update\" conflicts.",
+          "quote_ids": [
+            "q3"
+          ],
+          "supported": true,
+          "reason": "The optional-code caveat and inability to rely upon it match the security-section quote."
+        }
+      ],
+      "abstention_reason": ""
+    },
+    {
+      "id": "Q06",
+      "expected_met": true,
+      "claims": [
+        {
+          "index": 1,
+          "text": "HTTP 429 responses MAY include a Retry-After header indicating how long to wait before making a new request.",
+          "quote_ids": [
+            "q1"
+          ],
+          "supported": true,
+          "reason": "MAY and waiting-time meaning match; it is not changed to MUST."
+        },
+        {
+          "index": 2,
+          "text": "The 429 status code indicates that the user has sent too many requests in a given amount of time (\"rate limiting\").",
+          "quote_ids": [
+            "q2"
+          ],
+          "supported": true,
+          "reason": "The rate-limiting description is quoted exactly."
+        },
+        {
+          "index": 3,
+          "text": "Responses with the 429 status code MUST NOT be stored by a cache.",
+          "quote_ids": [
+            "q3"
+          ],
+          "supported": true,
+          "reason": "The extra cache prohibition preserves MUST NOT and code 429."
+        }
+      ],
+      "abstention_reason": ""
+    },
+    {
+      "id": "Q07",
+      "expected_met": true,
+      "claims": [
+        {
+          "index": 1,
+          "text": "Responses with the 431 status code MUST NOT be stored by a cache.",
+          "quote_ids": [
+            "q1"
+          ],
+          "supported": true,
+          "reason": "The complete 431 prohibition is quoted and the MUST NOT negation is unchanged."
+        }
+      ],
+      "abstention_reason": ""
+    },
+    {
+      "id": "Q08",
+      "expected_met": true,
+      "claims": [
+        {
+          "index": 1,
+          "text": "TEA-capable pots that are not provisioned to brew coffee may return either a status code of 503 or a code of 418.",
+          "quote_ids": [
+            "q1"
+          ],
+          "supported": true,
+          "reason": "The not-provisioned-to-brew-coffee condition and optional 503/418 alternatives are retained."
+        },
+        {
+          "index": 2,
+          "text": "503 indicates temporary unavailability of coffee.",
+          "quote_ids": [
+            "q1"
+          ],
+          "supported": true,
+          "reason": "503 is correctly described as temporary coffee unavailability."
+        },
+        {
+          "index": 3,
+          "text": "418 is defined in the base HTCPCP specification to denote a more permanent indication that the pot is a teapot.",
+          "quote_ids": [
+            "q1"
+          ],
+          "supported": true,
+          "reason": "418 is correctly described as the more permanent teapot indication; the answer never claims it is mandatory."
+        }
+      ],
+      "abstention_reason": ""
+    },
+    {
+      "id": "Q09",
+      "expected_met": true,
+      "claims": [],
+      "abstention_reason": "No supporting astronomy context; local refusal and clarification, zero provider calls."
+    },
+    {
+      "id": "Q10",
+      "expected_met": true,
+      "claims": [],
+      "abstention_reason": "Security-related chunks do not mandate any AES key length; model chose unknown and asked for clarification."
+    }
+  ]
+}

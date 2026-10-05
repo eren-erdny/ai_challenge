@@ -14,14 +14,18 @@ import (
 )
 
 type ChatRequest struct {
-	Tools       []agent.ToolDefinition `json:"tools,omitempty"`
-	Model       string                 `json:"model"`
-	Messages    []chatMessage          `json:"messages"`
-	Thinking    *ThinkingMode          `json:"thinking,omitempty"`
-	Temperature float64                `json:"temperature"`
-	Stream      bool                   `json:"stream"`
-	MaxTokens   int                    `json:"max_tokens,omitempty"`
-	Stop        []string               `json:"stop,omitempty"`
+	ResponseFormat *ResponseFormat        `json:"response_format,omitempty"`
+	Tools          []agent.ToolDefinition `json:"tools,omitempty"`
+	Model          string                 `json:"model"`
+	Messages       []chatMessage          `json:"messages"`
+	Thinking       *ThinkingMode          `json:"thinking,omitempty"`
+	Temperature    float64                `json:"temperature"`
+	Stream         bool                   `json:"stream"`
+	MaxTokens      int                    `json:"max_tokens,omitempty"`
+	Stop           []string               `json:"stop,omitempty"`
+}
+type ResponseFormat struct {
+	Type string `json:"type"`
 }
 type ThinkingMode struct {
 	Type string `json:"type"`
@@ -176,6 +180,9 @@ func BuildChatRequest(prompt string, settings agent.Settings) ChatRequest {
 	}
 	if settings.SendThinkingDisabled {
 		payload.Thinking = &ThinkingMode{Type: "disabled"}
+	}
+	if settings.JSONOutput {
+		payload.ResponseFormat = &ResponseFormat{Type: "json_object"}
 	}
 
 	if settings.Control != nil {

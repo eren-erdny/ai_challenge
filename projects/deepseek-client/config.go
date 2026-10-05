@@ -15,6 +15,7 @@ import (
 	"strings"
 
 	"github.com/eren-erdny/ai_challenge/projects/deepseek-client/agent"
+	"github.com/eren-erdny/ai_challenge/projects/deepseek-client/knowledge"
 	"golang.org/x/term"
 )
 
@@ -27,6 +28,7 @@ const (
 )
 
 type appConfig struct {
+	Knowledge          *knowledge.Manager       `json:"-"`
 	Tools              agent.ToolExecutor       `json:"-"`
 	Memory             agent.LayeredMemoryStore `json:"-"`
 	UserProfiles       userProfileStore         `json:"-"`

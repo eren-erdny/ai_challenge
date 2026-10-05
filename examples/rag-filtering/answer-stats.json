@@ -1,0 +1,20 @@
+{
+  "summary": [
+    {
+      "mode": "baseline",
+      "input_tokens": 31990,
+      "output_tokens": 845,
+      "mean_chunks": 5.0,
+      "supported_citations": 10
+    },
+    {
+      "mode": "enhanced",
+      "input_tokens": 25284,
+      "output_tokens": 874,
+      "mean_chunks": 3.5,
+      "supported_citations": 10
+    }
+  ],
+  "input_reduction": 0.20962800875273524,
+  "estimated_peak_usd": 0.019244999999999998
+}

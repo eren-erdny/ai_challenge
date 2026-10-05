@@ -1,0 +1,1256 @@
+{
+  "kind": "Two real DeepSeek conversations through actual TUI submit/update; no desktop recording",
+  "budget_usd": 0.2,
+  "reserved_usd": 0.0344166,
+  "provider_calls": 7,
+  "pricing": "https://api-docs.deepseek.com/quick_start/pricing/?tab=case-studies checked 2026-10-04; maximum Flash USD/1M: .30 input, .006 cache, 1.20 output",
+  "rows": [
+    {
+      "id": "http-api-01",
+      "scenario": "http-api",
+      "query": "What does signal indicate?",
+      "retrieval": {
+        "query": "What does HTTP 429 Too Many Requests indicate?",
+        "search_query": "What does HTTP 429 Too Many Requests indicate?",
+        "rewrite": true,
+        "min_similarity": 0.49,
+        "score_type": "cosine",
+        "retained_count": 6,
+        "filtered_count": 14,
+        "cosine_retained_count": 20,
+        "min_rerank_score": -3,
+        "rerank_score_type": "raw_logit",
+        "no_evidence": false,
+        "candidates": 20,
+        "strategy": "structured",
+        "reranking": true,
+        "candidate_count": 20,
+        "top_k": 5,
+        "retrieval_seconds": 0.022739799998817034,
+        "rerank_seconds": 0.7782771999991382,
+        "results": [
+          {
+            "chunk_id": "34df5f0df9993a9326c2dd285d7b40b97cbca62b046071353e791988705d0dfd",
+            "source": "rfc6585.md",
+            "file": "rfc6585.md",
+            "title": "RFC 6585: Additional HTTP Status Codes",
+            "section": "RFC 6585: Additional HTTP Status Codes / 4. 429 Too Many Requests",
+            "page": null,
+            "strategy": "structured",
+            "start_char": 3670,
+            "end_char": 4859,
+            "text": "## 4. 429 Too Many Requests\n\n   The 429 status code indicates that the user has sent too many\n   requests in a given amount of time (\"rate limiting\").\n\n   The response representations SHOULD include details explaining the\n   condition, and MAY include a Retry-After header indicating how long\n   to wait before making a new request.\n\n   For example:\n\n   HTTP/1.1 429 Too Many Requests\n   Content-Type: text/html\n   Retry-After: 3600\n\n   \u003chtml\u003e\n      \u003chead\u003e\n         \u003ctitle\u003eToo Many Requests\u003c/title\u003e\n      \u003c/head\u003e\n      \u003cbody\u003e\n         \u003ch1\u003eToo Many Requests\u003c/h1\u003e\n         \u003cp\u003eI only allow 50 requests per hour to this Web site per\n            logged in user.  Try again soon.\u003c/p\u003e\n      \u003c/body\u003e\n   \u003c/html\u003e\n\n   Note that this specification does not define how the origin server\n   identifies the user, nor how it counts requests.  For example, an\n   origin server that is limiting request rates can do so based upon\n   counts of requests on a per-resource basis, across the entire server,\n   or even among a set of servers.  Likewise, it might identify the user\n   by its authentication credentials, or a stateful cookie.\n\n   Responses with the 429 status code MUST NOT be stored by a cache.\n\n",
+            "tokens": 256,
+            "vector_score": 0.8794516066245391,
+            "rerank_score": 10.894943237304688
+          },
+          {
+            "chunk_id": "d9a715419df5df90110baa2de60c51dca266633701e4aba6392ee7f55d3dcbbd",
+            "source": "rfc6585.md",
+            "file": "rfc6585.md",
+            "title": "RFC 6585: Additional HTTP Status Codes",
+            "section": "RFC 6585: Additional HTTP Status Codes / 7. Security Considerations / 7.2. 429 Too Many Requests",
+            "page": null,
+            "strategy": "structured",
+            "start_char": 8537,
+            "end_char": 8924,
+            "text": "### 7.2. 429 Too Many Requests\n\n   When a server is under attack or just receiving a very large number\n   of requests from a single party, responding to each with a 429 status\n   code will consume resources.\n\n   Therefore, servers are not required to use the 429 status code; when\n   limiting resource usage, it may be more appropriate to just drop\n   connections, or take other steps.\n\n",
+            "tokens": 79,
+            "vector_score": 0.826407743839729,
+            "rerank_score": 5.359935283660889
+          },
+          {
+            "chunk_id": "72649411207e74ce22e6992c9e6b618da6dc6dd4cff0c500b0e216317c095f75",
+            "source": "rfc6585.md",
+            "file": "rfc6585.md",
+            "title": "RFC 6585: Additional HTTP Status Codes",
+            "section": "RFC 6585: Additional HTTP Status Codes / 5. 431 Request Header Fields Too Large",
+            "page": null,
+            "strategy": "structured",
+            "start_char": 4859,
+            "end_char": 5754,
+            "text": "## 5. 431 Request Header Fields Too Large\n\n   The 431 status code indicates that the server is unwilling to process\n   the request because its header fields are too large.  The request MAY\n   be resubmitted after reducing the size of the request header fields.\n\n   It can be used both when the set of request header fields in total is\n   too large, and when a single header field is at fault.  In the latter\n   case, the response representation SHOULD specify which header field\n   was too large.\n\n   For example:\n\n   HTTP/1.1 431 Request Header Fields Too Large\n   Content-Type: text/html\n\n   \u003chtml\u003e\n      \u003chead\u003e\n         \u003ctitle\u003eRequest Header Fields Too Large\u003c/title\u003e\n      \u003c/head\u003e\n      \u003cbody\u003e\n         \u003ch1\u003eRequest Header Fields Too Large\u003c/h1\u003e\n         \u003cp\u003eThe \"Example\" header was too large.\u003c/p\u003e\n      \u003c/body\u003e\n   \u003c/html\u003e\n\n   Responses with the 431 status code MUST NOT be stored by a cache.\n\n",
+            "tokens": 197,
+            "vector_score": 0.70745278548329,
+            "rerank_score": 3.0953662395477295
+          },
+          {
+            "chunk_id": "6962b2c209ebd898adc0ea57f5cccd5203d296dba2152481315722cfb35baaba",
+            "source": "rfc6585.md",
+            "file": "rfc6585.md",
+            "title": "RFC 6585: Additional HTTP Status Codes",
+            "section": "RFC 6585: Additional HTTP Status Codes / 8. IANA Considerations",
+            "page": null,
+            "strategy": "structured",
+            "start_char": 9922,
+            "end_char": 10392,
+            "text": "## 8. IANA Considerations\n\n   The HTTP Status Codes registry has been updated with the following\n   entries:\n\n      Value: 428\n      Description: Precondition Required\n      Reference: [RFC6585]\n\n      Value: 429\n      Description: Too Many Requests\n      Reference: [RFC6585]\n\n      Value: 431\n      Description: Request Header Fields Too Large\n      Reference: [RFC6585]\n\n      Value: 511\n      Description: Network Authentication Required\n      Reference: [RFC6585]\n\n",
+            "tokens": 87,
+            "vector_score": 0.69221178107561,
+            "rerank_score": 3.0624144077301025
+          },
+          {
+            "chunk_id": "ca5ec7f63e53792ca01f7cff347d159b3174d4d14cb2f54ea4dab9c9f8fb53cf",
+            "source": "rfc6585.md",
+            "file": "rfc6585.md",
+            "title": "RFC 6585: Additional HTTP Status Codes",
+            "section": "RFC 6585: Additional HTTP Status Codes / 3. 428 Precondition Required",
+            "page": null,
+            "strategy": "structured",
+            "start_char": 2677,
+            "end_char": 3670,
+            "text": "## 3. 428 Precondition Required\n\n   The 428 status code indicates that the origin server requires the\n   request to be conditional.\n\n   Its typical use is to avoid the \"lost update\" problem, where a client\n   GETs a resource's state, modifies it, and PUTs it back to the server,\n   when meanwhile a third party has modified the state on the server,\n   leading to a conflict.  By requiring requests to be conditional, the\n   server can assure that clients are working with the correct copies.\n\n   Responses using this status code SHOULD explain how to resubmit the\n   request successfully.  For example:\n\n   HTTP/1.1 428 Precondition Required\n   Content-Type: text/html\n\n   \u003chtml\u003e\n      \u003chead\u003e\n         \u003ctitle\u003ePrecondition Required\u003c/title\u003e\n      \u003c/head\u003e\n      \u003cbody\u003e\n         \u003ch1\u003ePrecondition Required\u003c/h1\u003e\n         \u003cp\u003eThis request is required to be conditional;\n         try using \"If-Match\".\u003c/p\u003e\n      \u003c/body\u003e\n   \u003c/html\u003e\n\n   Responses with the 428 status code MUST NOT be stored by a cache.\n\n",
+            "tokens": 220,
+            "vector_score": 0.6570201637489606,
+            "rerank_score": 0.5046858787536621
+          }
+        ]
+      },
+      "brief": {
+        "goal": "Draft a response-code checklist for an HTTP API.",
+        "constraints": {
+          "style": "Answer in English with at most two short factual claims. Preserve MAY, SHOULD, MUST, negation and conditions."
+        },
+        "terms": {
+          "signal": "HTTP 429 Too Many Requests"
+        },
+        "clarifications": {
+          "scope": "Use the public RFC corpus for this checklist, not general knowledge."
+        }
+      },
+      "raw_answer": {
+        "UsageIncomplete": false,
+        "ToolCalls": null,
+        "UsageKnown": true,
+        "Content": "{\"status\":\"answered\",\"claims\":[{\"text\":\"The 429 status code indicates that the user has sent too many requests in a given amount of time (\\\"rate limiting\\\").\",\"quote_ids\":[\"q1\"]},{\"text\":\"The response representations SHOULD include details explaining the condition, and MAY include a Retry-After header indicating how long to wait before making a new request.\",\"quote_ids\":[\"q2\"]}],\"quotes\":[{\"id\":\"q1\",\"chunk_id\":\"34df5f0df9993a9326c2dd285d7b40b97cbca62b046071353e791988705d0dfd\",\"text\":\"The 429 status code indicates that the user has sent too many\\n   requests in a given amount of time (\\\"rate limiting\\\").\"},{\"id\":\"q2\",\"chunk_id\":\"34df5f0df9993a9326c2dd285d7b40b97cbca62b046071353e791988705d0dfd\",\"text\":\"The response representations SHOULD include details explaining the\\n   condition, and MAY include a Retry-After header indicating how long\\n   to wait before making a new request.\"}],\"clarification\":\"\"}",
+        "Model": "deepseek-flash",
+        "FinishReason": "stop",
+        "PromptTokens": 2603,
+        "CachedInputTokens": 128,
+        "CompletionTokens": 260,
+        "TotalTokens": 2863,
+        "Duration": 1534278700
+      },
+      "grounding": {
+        "status": "answered",
+        "answer": "The 429 status code indicates that the user has sent too many requests in a given amount of time (\"rate limiting\"). [q1]\nThe response representations SHOULD include details explaining the condition, and MAY include a Retry-After header indicating how long to wait before making a new request. [q2]",
+        "claims": [
+          {
+            "text": "The 429 status code indicates that the user has sent too many requests in a given amount of time (\"rate limiting\").",
+            "quote_ids": [
+              "q1"
+            ]
+          },
+          {
+            "text": "The response representations SHOULD include details explaining the condition, and MAY include a Retry-After header indicating how long to wait before making a new request.",
+            "quote_ids": [
+              "q2"
+            ]
+          }
+        ],
+        "quotes": [
+          {
+            "id": "q1",
+            "chunk_id": "34df5f0df9993a9326c2dd285d7b40b97cbca62b046071353e791988705d0dfd",
+            "text": "The 429 status code indicates that the user has sent too many requests in a given amount of time (\"rate limiting\")."
+          },
+          {
+            "id": "q2",
+            "chunk_id": "34df5f0df9993a9326c2dd285d7b40b97cbca62b046071353e791988705d0dfd",
+            "text": "The response representations SHOULD include details explaining the condition, and MAY include a Retry-After header indicating how long to wait before making a new request."
+          }
+        ],
+        "sources": [
+          {
+            "source": "rfc6585.md",
+            "section": "RFC 6585: Additional HTTP Status Codes / 4. 429 Too Many Requests",
+            "chunk_id": "34df5f0df9993a9326c2dd285d7b40b97cbca62b046071353e791988705d0dfd"
+          }
+        ],
+        "clarification": "",
+        "local": false
+      },
+      "history_before": 0,
+      "history_after": 2,
+      "history_messages_sent": 0,
+      "input_byte_envelope": 11612,
+      "brief_sent": true,
+      "reopened": false,
+      "calls": 1,
+      "reserved_usd": 0.0044052,
+      "estimated_peak_usd": 0.001055268,
+      "visible": "[База знаний: Day 25 public RFCs · найдено фрагментов: 5]\n[Поиск: 20 кандидатов → 6 после фильтра → 5 в контекст; отсечено 14]\n[Поисковый запрос: What does HTTP 429 Too Many Requests indicate?]\n[rfc6585.md#34df5f0df9993a9326c2dd285d7b40b97cbca62b046071353e791988705d0dfd]\n[rfc6585.md#d9a715419df5df90110baa2de60c51dca266633701e4aba6392ee7f55d3dcbbd]\n[rfc6585.md#72649411207e74ce22e6992c9e6b618da6dc6dd4cff0c500b0e216317c095f75]\n[rfc6585.md#6962b2c209ebd898adc0ea57f5cccd5203d296dba2152481315722cfb35baaba]\n[rfc6585.md#ca5ec7f63e53792ca01f7cff347d159b3174d4d14cb2f54ea4dab9c9f8fb53cf]\nThe 429 status code indicates that the user has sent too many requests in a given amount of time (\"rate limiting\"). [q1]\nThe response representations SHOULD include details explaining the condition, and MAY include a Retry-After header indicating how long to wait before making a new request. [q2]\n\nЦитаты:\n[q1] «The 429 status code indicates that the user has sent too many requests in a given amount of time (\"rate limiting\").» [rfc6585.md#34df5f0df9993a9326c2dd285d7b40b97cbca62b046071353e791988705d0dfd]\n[q2] «The response representations SHOULD include details explaining the condition, and MAY include a Retry-After header indicating how long to wait before making a new request.» [rfc6585.md#34df5f0df9993a9326c2dd285d7b40b97cbca62b046071353e791988705d0dfd]\n\nИсточники:\n[rfc6585.md#34df5f0df9993a9326c2dd285d7b40b97cbca62b046071353e791988705d0dfd]\n  Раздел: RFC 6585: Additional HTTP Status Codes / 4. 429 Too Many Requests\n[RAG: 2 утверждений · 2 цитат · 1 источников; источники и точность цитат проверены]"
+    },
+    {
+      "id": "http-api-02",
+      "scenario": "http-api",
+      "query": "Can it be stored by a cache?",
+      "retrieval": {
+        "query": "What does HTTP 429 Too Many Requests indicate?\nFollow-up question: Can it be stored by a cache?",
+        "search_query": "What does HTTP 429 Too Many Requests indicate?\nFollow-up question: Can it be stored by a cache?",
+        "rewrite": true,
+        "min_similarity": 0.49,
+        "score_type": "cosine",
+        "retained_count": 5,
+        "filtered_count": 15,
+        "cosine_retained_count": 20,
+        "min_rerank_score": -3,
+        "rerank_score_type": "raw_logit",
+        "no_evidence": false,
+        "candidates": 20,
+        "strategy": "structured",
+        "reranking": true,
+        "candidate_count": 20,
+        "top_k": 5,
+        "retrieval_seconds": 0.03854360000696033,
+        "rerank_seconds": 0.8504508999976679,
+        "results": [
+          {
+            "chunk_id": "34df5f0df9993a9326c2dd285d7b40b97cbca62b046071353e791988705d0dfd",
+            "source": "rfc6585.md",
+            "file": "rfc6585.md",
+            "title": "RFC 6585: Additional HTTP Status Codes",
+            "section": "RFC 6585: Additional HTTP Status Codes / 4. 429 Too Many Requests",
+            "page": null,
+            "strategy": "structured",
+            "start_char": 3670,
+            "end_char": 4859,
+            "text": "## 4. 429 Too Many Requests\n\n   The 429 status code indicates that the user has sent too many\n   requests in a given amount of time (\"rate limiting\").\n\n   The response representations SHOULD include details explaining the\n   condition, and MAY include a Retry-After header indicating how long\n   to wait before making a new request.\n\n   For example:\n\n   HTTP/1.1 429 Too Many Requests\n   Content-Type: text/html\n   Retry-After: 3600\n\n   \u003chtml\u003e\n      \u003chead\u003e\n         \u003ctitle\u003eToo Many Requests\u003c/title\u003e\n      \u003c/head\u003e\n      \u003cbody\u003e\n         \u003ch1\u003eToo Many Requests\u003c/h1\u003e\n         \u003cp\u003eI only allow 50 requests per hour to this Web site per\n            logged in user.  Try again soon.\u003c/p\u003e\n      \u003c/body\u003e\n   \u003c/html\u003e\n\n   Note that this specification does not define how the origin server\n   identifies the user, nor how it counts requests.  For example, an\n   origin server that is limiting request rates can do so based upon\n   counts of requests on a per-resource basis, across the entire server,\n   or even among a set of servers.  Likewise, it might identify the user\n   by its authentication credentials, or a stateful cookie.\n\n   Responses with the 429 status code MUST NOT be stored by a cache.\n\n",
+            "tokens": 256,
+            "vector_score": 0.8400975183412055,
+            "rerank_score": 9.88872241973877
+          },
+          {
+            "chunk_id": "72649411207e74ce22e6992c9e6b618da6dc6dd4cff0c500b0e216317c095f75",
+            "source": "rfc6585.md",
+            "file": "rfc6585.md",
+            "title": "RFC 6585: Additional HTTP Status Codes",
+            "section": "RFC 6585: Additional HTTP Status Codes / 5. 431 Request Header Fields Too Large",
+            "page": null,
+            "strategy": "structured",
+            "start_char": 4859,
+            "end_char": 5754,
+            "text": "## 5. 431 Request Header Fields Too Large\n\n   The 431 status code indicates that the server is unwilling to process\n   the request because its header fields are too large.  The request MAY\n   be resubmitted after reducing the size of the request header fields.\n\n   It can be used both when the set of request header fields in total is\n   too large, and when a single header field is at fault.  In the latter\n   case, the response representation SHOULD specify which header field\n   was too large.\n\n   For example:\n\n   HTTP/1.1 431 Request Header Fields Too Large\n   Content-Type: text/html\n\n   \u003chtml\u003e\n      \u003chead\u003e\n         \u003ctitle\u003eRequest Header Fields Too Large\u003c/title\u003e\n      \u003c/head\u003e\n      \u003cbody\u003e\n         \u003ch1\u003eRequest Header Fields Too Large\u003c/h1\u003e\n         \u003cp\u003eThe \"Example\" header was too large.\u003c/p\u003e\n      \u003c/body\u003e\n   \u003c/html\u003e\n\n   Responses with the 431 status code MUST NOT be stored by a cache.\n\n",
+            "tokens": 197,
+            "vector_score": 0.7041600128536636,
+            "rerank_score": 4.823625087738037
+          },
+          {
+            "chunk_id": "ca5ec7f63e53792ca01f7cff347d159b3174d4d14cb2f54ea4dab9c9f8fb53cf",
+            "source": "rfc6585.md",
+            "file": "rfc6585.md",
+            "title": "RFC 6585: Additional HTTP Status Codes",
+            "section": "RFC 6585: Additional HTTP Status Codes / 3. 428 Precondition Required",
+            "page": null,
+            "strategy": "structured",
+            "start_char": 2677,
+            "end_char": 3670,
+            "text": "## 3. 428 Precondition Required\n\n   The 428 status code indicates that the origin server requires the\n   request to be conditional.\n\n   Its typical use is to avoid the \"lost update\" problem, where a client\n   GETs a resource's state, modifies it, and PUTs it back to the server,\n   when meanwhile a third party has modified the state on the server,\n   leading to a conflict.  By requiring requests to be conditional, the\n   server can assure that clients are working with the correct copies.\n\n   Responses using this status code SHOULD explain how to resubmit the\n   request successfully.  For example:\n\n   HTTP/1.1 428 Precondition Required\n   Content-Type: text/html\n\n   \u003chtml\u003e\n      \u003chead\u003e\n         \u003ctitle\u003ePrecondition Required\u003c/title\u003e\n      \u003c/head\u003e\n      \u003cbody\u003e\n         \u003ch1\u003ePrecondition Required\u003c/h1\u003e\n         \u003cp\u003eThis request is required to be conditional;\n         try using \"If-Match\".\u003c/p\u003e\n      \u003c/body\u003e\n   \u003c/html\u003e\n\n   Responses with the 428 status code MUST NOT be stored by a cache.\n\n",
+            "tokens": 220,
+            "vector_score": 0.6787175545281489,
+            "rerank_score": 1.850122332572937
+          },
+          {
+            "chunk_id": "d9a715419df5df90110baa2de60c51dca266633701e4aba6392ee7f55d3dcbbd",
+            "source": "rfc6585.md",
+            "file": "rfc6585.md",
+            "title": "RFC 6585: Additional HTTP Status Codes",
+            "section": "RFC 6585: Additional HTTP Status Codes / 7. Security Considerations / 7.2. 429 Too Many Requests",
+            "page": null,
+            "strategy": "structured",
+            "start_char": 8537,
+            "end_char": 8924,
+            "text": "### 7.2. 429 Too Many Requests\n\n   When a server is under attack or just receiving a very large number\n   of requests from a single party, responding to each with a 429 status\n   code will consume resources.\n\n   Therefore, servers are not required to use the 429 status code; when\n   limiting resource usage, it may be more appropriate to just drop\n   connections, or take other steps.\n\n",
+            "tokens": 79,
+            "vector_score": 0.8018681160110703,
+            "rerank_score": 0.26117515563964844
+          },
+          {
+            "chunk_id": "6962b2c209ebd898adc0ea57f5cccd5203d296dba2152481315722cfb35baaba",
+            "source": "rfc6585.md",
+            "file": "rfc6585.md",
+            "title": "RFC 6585: Additional HTTP Status Codes",
+            "section": "RFC 6585: Additional HTTP Status Codes / 8. IANA Considerations",
+            "page": null,
+            "strategy": "structured",
+            "start_char": 9922,
+            "end_char": 10392,
+            "text": "## 8. IANA Considerations\n\n   The HTTP Status Codes registry has been updated with the following\n   entries:\n\n      Value: 428\n      Description: Precondition Required\n      Reference: [RFC6585]\n\n      Value: 429\n      Description: Too Many Requests\n      Reference: [RFC6585]\n\n      Value: 431\n      Description: Request Header Fields Too Large\n      Reference: [RFC6585]\n\n      Value: 511\n      Description: Network Authentication Required\n      Reference: [RFC6585]\n\n",
+            "tokens": 87,
+            "vector_score": 0.67233650059738,
+            "rerank_score": -1.5125796794891357
+          }
+        ]
+      },
+      "brief": {
+        "goal": "Draft a response-code checklist for an HTTP API.",
+        "constraints": {
+          "style": "Answer in English with at most two short factual claims. Preserve MAY, SHOULD, MUST, negation and conditions."
+        },
+        "terms": {
+          "signal": "HTTP 429 Too Many Requests"
+        },
+        "clarifications": {
+          "scope": "Use the public RFC corpus for this checklist, not general knowledge."
+        }
+      },
+      "raw_answer": {
+        "UsageIncomplete": false,
+        "ToolCalls": null,
+        "UsageKnown": true,
+        "Content": "{\"status\":\"answered\",\"claims\":[{\"text\":\"Responses with the 429 status code MUST NOT be stored by a cache.\",\"quote_ids\":[\"q1\"]}],\"quotes\":[{\"id\":\"q1\",\"chunk_id\":\"34df5f0df9993a9326c2dd285d7b40b97cbca62b046071353e791988705d0dfd\",\"text\":\"Responses with the 429 status code MUST NOT be stored by a cache.\"}],\"clarification\":\"\"}",
+        "Model": "deepseek-flash",
+        "FinishReason": "stop",
+        "PromptTokens": 2930,
+        "CachedInputTokens": 128,
+        "CompletionTokens": 111,
+        "TotalTokens": 3041,
+        "Duration": 861914500
+      },
+      "grounding": {
+        "status": "answered",
+        "answer": "Responses with the 429 status code MUST NOT be stored by a cache. [q1]",
+        "claims": [
+          {
+            "text": "Responses with the 429 status code MUST NOT be stored by a cache.",
+            "quote_ids": [
+              "q1"
+            ]
+          }
+        ],
+        "quotes": [
+          {
+            "id": "q1",
+            "chunk_id": "34df5f0df9993a9326c2dd285d7b40b97cbca62b046071353e791988705d0dfd",
+            "text": "Responses with the 429 status code MUST NOT be stored by a cache."
+          }
+        ],
+        "sources": [
+          {
+            "source": "rfc6585.md",
+            "section": "RFC 6585: Additional HTTP Status Codes / 4. 429 Too Many Requests",
+            "chunk_id": "34df5f0df9993a9326c2dd285d7b40b97cbca62b046071353e791988705d0dfd"
+          }
+        ],
+        "clarification": "",
+        "local": false
+      },
+      "history_before": 2,
+      "history_after": 4,
+      "history_messages_sent": 2,
+      "input_byte_envelope": 12826,
+      "brief_sent": true,
+      "reopened": false,
+      "calls": 1,
+      "reserved_usd": 0.0047694,
+      "estimated_peak_usd": 0.000974568,
+      "visible": "[База знаний: Day 25 public RFCs · найдено фрагментов: 5]\n[Поиск: 20 кандидатов → 5 после фильтра → 5 в контекст; отсечено 15]\n[Поисковый запрос: What does HTTP 429 Too Many Requests indicate?\nFollow-up question: Can it be stored by a cache?]\n[rfc6585.md#34df5f0df9993a9326c2dd285d7b40b97cbca62b046071353e791988705d0dfd]\n[rfc6585.md#72649411207e74ce22e6992c9e6b618da6dc6dd4cff0c500b0e216317c095f75]\n[rfc6585.md#ca5ec7f63e53792ca01f7cff347d159b3174d4d14cb2f54ea4dab9c9f8fb53cf]\n[rfc6585.md#d9a715419df5df90110baa2de60c51dca266633701e4aba6392ee7f55d3dcbbd]\n[rfc6585.md#6962b2c209ebd898adc0ea57f5cccd5203d296dba2152481315722cfb35baaba]\nResponses with the 429 status code MUST NOT be stored by a cache. [q1]\n\nЦитаты:\n[q1] «Responses with the 429 status code MUST NOT be stored by a cache.» [rfc6585.md#34df5f0df9993a9326c2dd285d7b40b97cbca62b046071353e791988705d0dfd]\n\nИсточники:\n[rfc6585.md#34df5f0df9993a9326c2dd285d7b40b97cbca62b046071353e791988705d0dfd]\n  Раздел: RFC 6585: Additional HTTP Status Codes / 4. 429 Too Many Requests\n[RAG: 1 утверждений · 1 цитат · 1 источников; источники и точность цитат проверены]"
+    },
+    {
+      "id": "http-api-03",
+      "scenario": "http-api",
+      "query": "Is Retry-After mandatory for signal?",
+      "retrieval": {
+        "query": "Is Retry-After mandatory for HTTP 429 Too Many Requests?",
+        "search_query": "Is Retry-After mandatory for HTTP 429 Too Many Requests?",
+        "rewrite": true,
+        "min_similarity": 0.49,
+        "score_type": "cosine",
+        "retained_count": 6,
+        "filtered_count": 14,
+        "cosine_retained_count": 20,
+        "min_rerank_score": -3,
+        "rerank_score_type": "raw_logit",
+        "no_evidence": false,
+        "candidates": 20,
+        "strategy": "structured",
+        "reranking": true,
+        "candidate_count": 20,
+        "top_k": 5,
+        "retrieval_seconds": 0.038976700001512654,
+        "rerank_seconds": 0.6445153000022401,
+        "results": [
+          {
+            "chunk_id": "34df5f0df9993a9326c2dd285d7b40b97cbca62b046071353e791988705d0dfd",
+            "source": "rfc6585.md",
+            "file": "rfc6585.md",
+            "title": "RFC 6585: Additional HTTP Status Codes",
+            "section": "RFC 6585: Additional HTTP Status Codes / 4. 429 Too Many Requests",
+            "page": null,
+            "strategy": "structured",
+            "start_char": 3670,
+            "end_char": 4859,
+            "text": "## 4. 429 Too Many Requests\n\n   The 429 status code indicates that the user has sent too many\n   requests in a given amount of time (\"rate limiting\").\n\n   The response representations SHOULD include details explaining the\n   condition, and MAY include a Retry-After header indicating how long\n   to wait before making a new request.\n\n   For example:\n\n   HTTP/1.1 429 Too Many Requests\n   Content-Type: text/html\n   Retry-After: 3600\n\n   \u003chtml\u003e\n      \u003chead\u003e\n         \u003ctitle\u003eToo Many Requests\u003c/title\u003e\n      \u003c/head\u003e\n      \u003cbody\u003e\n         \u003ch1\u003eToo Many Requests\u003c/h1\u003e\n         \u003cp\u003eI only allow 50 requests per hour to this Web site per\n            logged in user.  Try again soon.\u003c/p\u003e\n      \u003c/body\u003e\n   \u003c/html\u003e\n\n   Note that this specification does not define how the origin server\n   identifies the user, nor how it counts requests.  For example, an\n   origin server that is limiting request rates can do so based upon\n   counts of requests on a per-resource basis, across the entire server,\n   or even among a set of servers.  Likewise, it might identify the user\n   by its authentication credentials, or a stateful cookie.\n\n   Responses with the 429 status code MUST NOT be stored by a cache.\n\n",
+            "tokens": 256,
+            "vector_score": 0.8313967050642079,
+            "rerank_score": 9.76593017578125
+          },
+          {
+            "chunk_id": "d9a715419df5df90110baa2de60c51dca266633701e4aba6392ee7f55d3dcbbd",
+            "source": "rfc6585.md",
+            "file": "rfc6585.md",
+            "title": "RFC 6585: Additional HTTP Status Codes",
+            "section": "RFC 6585: Additional HTTP Status Codes / 7. Security Considerations / 7.2. 429 Too Many Requests",
+            "page": null,
+            "strategy": "structured",
+            "start_char": 8537,
+            "end_char": 8924,
+            "text": "### 7.2. 429 Too Many Requests\n\n   When a server is under attack or just receiving a very large number\n   of requests from a single party, responding to each with a 429 status\n   code will consume resources.\n\n   Therefore, servers are not required to use the 429 status code; when\n   limiting resource usage, it may be more appropriate to just drop\n   connections, or take other steps.\n\n",
+            "tokens": 79,
+            "vector_score": 0.7628888620549099,
+            "rerank_score": 3.283092975616455
+          },
+          {
+            "chunk_id": "72649411207e74ce22e6992c9e6b618da6dc6dd4cff0c500b0e216317c095f75",
+            "source": "rfc6585.md",
+            "file": "rfc6585.md",
+            "title": "RFC 6585: Additional HTTP Status Codes",
+            "section": "RFC 6585: Additional HTTP Status Codes / 5. 431 Request Header Fields Too Large",
+            "page": null,
+            "strategy": "structured",
+            "start_char": 4859,
+            "end_char": 5754,
+            "text": "## 5. 431 Request Header Fields Too Large\n\n   The 431 status code indicates that the server is unwilling to process\n   the request because its header fields are too large.  The request MAY\n   be resubmitted after reducing the size of the request header fields.\n\n   It can be used both when the set of request header fields in total is\n   too large, and when a single header field is at fault.  In the latter\n   case, the response representation SHOULD specify which header field\n   was too large.\n\n   For example:\n\n   HTTP/1.1 431 Request Header Fields Too Large\n   Content-Type: text/html\n\n   \u003chtml\u003e\n      \u003chead\u003e\n         \u003ctitle\u003eRequest Header Fields Too Large\u003c/title\u003e\n      \u003c/head\u003e\n      \u003cbody\u003e\n         \u003ch1\u003eRequest Header Fields Too Large\u003c/h1\u003e\n         \u003cp\u003eThe \"Example\" header was too large.\u003c/p\u003e\n      \u003c/body\u003e\n   \u003c/html\u003e\n\n   Responses with the 431 status code MUST NOT be stored by a cache.\n\n",
+            "tokens": 197,
+            "vector_score": 0.6417237342622483,
+            "rerank_score": 1.8092992305755615
+          },
+          {
+            "chunk_id": "6962b2c209ebd898adc0ea57f5cccd5203d296dba2152481315722cfb35baaba",
+            "source": "rfc6585.md",
+            "file": "rfc6585.md",
+            "title": "RFC 6585: Additional HTTP Status Codes",
+            "section": "RFC 6585: Additional HTTP Status Codes / 8. IANA Considerations",
+            "page": null,
+            "strategy": "structured",
+            "start_char": 9922,
+            "end_char": 10392,
+            "text": "## 8. IANA Considerations\n\n   The HTTP Status Codes registry has been updated with the following\n   entries:\n\n      Value: 428\n      Description: Precondition Required\n      Reference: [RFC6585]\n\n      Value: 429\n      Description: Too Many Requests\n      Reference: [RFC6585]\n\n      Value: 431\n      Description: Request Header Fields Too Large\n      Reference: [RFC6585]\n\n      Value: 511\n      Description: Network Authentication Required\n      Reference: [RFC6585]\n\n",
+            "tokens": 87,
+            "vector_score": 0.665180689483823,
+            "rerank_score": -0.11359281837940216
+          },
+          {
+            "chunk_id": "ca5ec7f63e53792ca01f7cff347d159b3174d4d14cb2f54ea4dab9c9f8fb53cf",
+            "source": "rfc6585.md",
+            "file": "rfc6585.md",
+            "title": "RFC 6585: Additional HTTP Status Codes",
+            "section": "RFC 6585: Additional HTTP Status Codes / 3. 428 Precondition Required",
+            "page": null,
+            "strategy": "structured",
+            "start_char": 2677,
+            "end_char": 3670,
+            "text": "## 3. 428 Precondition Required\n\n   The 428 status code indicates that the origin server requires the\n   request to be conditional.\n\n   Its typical use is to avoid the \"lost update\" problem, where a client\n   GETs a resource's state, modifies it, and PUTs it back to the server,\n   when meanwhile a third party has modified the state on the server,\n   leading to a conflict.  By requiring requests to be conditional, the\n   server can assure that clients are working with the correct copies.\n\n   Responses using this status code SHOULD explain how to resubmit the\n   request successfully.  For example:\n\n   HTTP/1.1 428 Precondition Required\n   Content-Type: text/html\n\n   \u003chtml\u003e\n      \u003chead\u003e\n         \u003ctitle\u003ePrecondition Required\u003c/title\u003e\n      \u003c/head\u003e\n      \u003cbody\u003e\n         \u003ch1\u003ePrecondition Required\u003c/h1\u003e\n         \u003cp\u003eThis request is required to be conditional;\n         try using \"If-Match\".\u003c/p\u003e\n      \u003c/body\u003e\n   \u003c/html\u003e\n\n   Responses with the 428 status code MUST NOT be stored by a cache.\n\n",
+            "tokens": 220,
+            "vector_score": 0.6772050835315199,
+            "rerank_score": -0.4879615902900696
+          }
+        ]
+      },
+      "brief": {
+        "goal": "Draft a response-code checklist for an HTTP API.",
+        "constraints": {
+          "style": "Answer in English with at most two short factual claims. Preserve MAY, SHOULD, MUST, negation and conditions."
+        },
+        "terms": {
+          "signal": "HTTP 429 Too Many Requests"
+        },
+        "clarifications": {
+          "scope": "Use the public RFC corpus for this checklist, not general knowledge."
+        }
+      },
+      "raw_answer": {
+        "UsageIncomplete": false,
+        "ToolCalls": null,
+        "UsageKnown": true,
+        "Content": "{\"status\":\"answered\",\"claims\":[{\"text\":\"The response representations SHOULD include details explaining the condition, and MAY include a Retry-After header indicating how long to wait before making a new request.\",\"quote_ids\":[\"q1\"]}],\"quotes\":[{\"id\":\"q1\",\"chunk_id\":\"34df5f0df9993a9326c2dd285d7b40b97cbca62b046071353e791988705d0dfd\",\"text\":\"The response representations SHOULD include details explaining the\\n   condition, and MAY include a Retry-After header indicating how long\\n   to wait before making a new request.\"}],\"clarification\":\"\"}",
+        "Model": "deepseek-flash",
+        "FinishReason": "stop",
+        "PromptTokens": 3083,
+        "CachedInputTokens": 128,
+        "CompletionTokens": 145,
+        "TotalTokens": 3228,
+        "Duration": 1095778300
+      },
+      "grounding": {
+        "status": "answered",
+        "answer": "The response representations SHOULD include details explaining the condition, and MAY include a Retry-After header indicating how long to wait before making a new request. [q1]",
+        "claims": [
+          {
+            "text": "The response representations SHOULD include details explaining the condition, and MAY include a Retry-After header indicating how long to wait before making a new request.",
+            "quote_ids": [
+              "q1"
+            ]
+          }
+        ],
+        "quotes": [
+          {
+            "id": "q1",
+            "chunk_id": "34df5f0df9993a9326c2dd285d7b40b97cbca62b046071353e791988705d0dfd",
+            "text": "The response representations SHOULD include details explaining the condition, and MAY include a Retry-After header indicating how long to wait before making a new request."
+          }
+        ],
+        "sources": [
+          {
+            "source": "rfc6585.md",
+            "section": "RFC 6585: Additional HTTP Status Codes / 4. 429 Too Many Requests",
+            "chunk_id": "34df5f0df9993a9326c2dd285d7b40b97cbca62b046071353e791988705d0dfd"
+          }
+        ],
+        "clarification": "",
+        "local": false
+      },
+      "history_before": 4,
+      "history_after": 6,
+      "history_messages_sent": 4,
+      "input_byte_envelope": 13341,
+      "brief_sent": true,
+      "reopened": false,
+      "calls": 1,
+      "reserved_usd": 0.004923899999999999,
+      "estimated_peak_usd": 0.001061268,
+      "visible": "[База знаний: Day 25 public RFCs · найдено фрагментов: 5]\n[Поиск: 20 кандидатов → 6 после фильтра → 5 в контекст; отсечено 14]\n[Поисковый запрос: Is Retry-After mandatory for HTTP 429 Too Many Requests?]\n[rfc6585.md#34df5f0df9993a9326c2dd285d7b40b97cbca62b046071353e791988705d0dfd]\n[rfc6585.md#d9a715419df5df90110baa2de60c51dca266633701e4aba6392ee7f55d3dcbbd]\n[rfc6585.md#72649411207e74ce22e6992c9e6b618da6dc6dd4cff0c500b0e216317c095f75]\n[rfc6585.md#6962b2c209ebd898adc0ea57f5cccd5203d296dba2152481315722cfb35baaba]\n[rfc6585.md#ca5ec7f63e53792ca01f7cff347d159b3174d4d14cb2f54ea4dab9c9f8fb53cf]\nThe response representations SHOULD include details explaining the condition, and MAY include a Retry-After header indicating how long to wait before making a new request. [q1]\n\nЦитаты:\n[q1] «The response representations SHOULD include details explaining the condition, and MAY include a Retry-After header indicating how long to wait before making a new request.» [rfc6585.md#34df5f0df9993a9326c2dd285d7b40b97cbca62b046071353e791988705d0dfd]\n\nИсточники:\n[rfc6585.md#34df5f0df9993a9326c2dd285d7b40b97cbca62b046071353e791988705d0dfd]\n  Раздел: RFC 6585: Additional HTTP Status Codes / 4. 429 Too Many Requests\n[RAG: 1 утверждений · 1 цитат · 1 источников; источники и точность цитат проверены]"
+    },
+    {
+      "id": "http-api-04",
+      "scenario": "http-api",
+      "query": "What does HTTP 428 Precondition Required mean?",
+      "retrieval": {
+        "query": "What does HTTP 428 Precondition Required mean?",
+        "search_query": "What does HTTP 428 Precondition Required mean?",
+        "rewrite": true,
+        "min_similarity": 0.49,
+        "score_type": "cosine",
+        "retained_count": 5,
+        "filtered_count": 15,
+        "cosine_retained_count": 20,
+        "min_rerank_score": -3,
+        "rerank_score_type": "raw_logit",
+        "no_evidence": false,
+        "candidates": 20,
+        "strategy": "structured",
+        "reranking": true,
+        "candidate_count": 20,
+        "top_k": 5,
+        "retrieval_seconds": 0.015390199994726572,
+        "rerank_seconds": 0.6764156999997795,
+        "results": [
+          {
+            "chunk_id": "ca5ec7f63e53792ca01f7cff347d159b3174d4d14cb2f54ea4dab9c9f8fb53cf",
+            "source": "rfc6585.md",
+            "file": "rfc6585.md",
+            "title": "RFC 6585: Additional HTTP Status Codes",
+            "section": "RFC 6585: Additional HTTP Status Codes / 3. 428 Precondition Required",
+            "page": null,
+            "strategy": "structured",
+            "start_char": 2677,
+            "end_char": 3670,
+            "text": "## 3. 428 Precondition Required\n\n   The 428 status code indicates that the origin server requires the\n   request to be conditional.\n\n   Its typical use is to avoid the \"lost update\" problem, where a client\n   GETs a resource's state, modifies it, and PUTs it back to the server,\n   when meanwhile a third party has modified the state on the server,\n   leading to a conflict.  By requiring requests to be conditional, the\n   server can assure that clients are working with the correct copies.\n\n   Responses using this status code SHOULD explain how to resubmit the\n   request successfully.  For example:\n\n   HTTP/1.1 428 Precondition Required\n   Content-Type: text/html\n\n   \u003chtml\u003e\n      \u003chead\u003e\n         \u003ctitle\u003ePrecondition Required\u003c/title\u003e\n      \u003c/head\u003e\n      \u003cbody\u003e\n         \u003ch1\u003ePrecondition Required\u003c/h1\u003e\n         \u003cp\u003eThis request is required to be conditional;\n         try using \"If-Match\".\u003c/p\u003e\n      \u003c/body\u003e\n   \u003c/html\u003e\n\n   Responses with the 428 status code MUST NOT be stored by a cache.\n\n",
+            "tokens": 220,
+            "vector_score": 0.847687780600667,
+            "rerank_score": 10.917752265930176
+          },
+          {
+            "chunk_id": "fb1f9875bafaeaeab2a28878f11ec7757573545b365e8266812a1230dfb14ca3",
+            "source": "rfc6585.md",
+            "file": "rfc6585.md",
+            "title": "RFC 6585: Additional HTTP Status Codes",
+            "section": "RFC 6585: Additional HTTP Status Codes / 7. Security Considerations / 7.1. 428 Precondition Required",
+            "page": null,
+            "strategy": "structured",
+            "start_char": 8392,
+            "end_char": 8537,
+            "text": "### 7.1. 428 Precondition Required\n\n   The 428 status code is optional; clients cannot rely upon its use to\n   prevent \"lost update\" conflicts.\n\n",
+            "tokens": 35,
+            "vector_score": 0.8182900271688418,
+            "rerank_score": 6.515040874481201
+          },
+          {
+            "chunk_id": "6962b2c209ebd898adc0ea57f5cccd5203d296dba2152481315722cfb35baaba",
+            "source": "rfc6585.md",
+            "file": "rfc6585.md",
+            "title": "RFC 6585: Additional HTTP Status Codes",
+            "section": "RFC 6585: Additional HTTP Status Codes / 8. IANA Considerations",
+            "page": null,
+            "strategy": "structured",
+            "start_char": 9922,
+            "end_char": 10392,
+            "text": "## 8. IANA Considerations\n\n   The HTTP Status Codes registry has been updated with the following\n   entries:\n\n      Value: 428\n      Description: Precondition Required\n      Reference: [RFC6585]\n\n      Value: 429\n      Description: Too Many Requests\n      Reference: [RFC6585]\n\n      Value: 431\n      Description: Request Header Fields Too Large\n      Reference: [RFC6585]\n\n      Value: 511\n      Description: Network Authentication Required\n      Reference: [RFC6585]\n\n",
+            "tokens": 87,
+            "vector_score": 0.7243975901893326,
+            "rerank_score": 3.5510034561157227
+          },
+          {
+            "chunk_id": "72649411207e74ce22e6992c9e6b618da6dc6dd4cff0c500b0e216317c095f75",
+            "source": "rfc6585.md",
+            "file": "rfc6585.md",
+            "title": "RFC 6585: Additional HTTP Status Codes",
+            "section": "RFC 6585: Additional HTTP Status Codes / 5. 431 Request Header Fields Too Large",
+            "page": null,
+            "strategy": "structured",
+            "start_char": 4859,
+            "end_char": 5754,
+            "text": "## 5. 431 Request Header Fields Too Large\n\n   The 431 status code indicates that the server is unwilling to process\n   the request because its header fields are too large.  The request MAY\n   be resubmitted after reducing the size of the request header fields.\n\n   It can be used both when the set of request header fields in total is\n   too large, and when a single header field is at fault.  In the latter\n   case, the response representation SHOULD specify which header field\n   was too large.\n\n   For example:\n\n   HTTP/1.1 431 Request Header Fields Too Large\n   Content-Type: text/html\n\n   \u003chtml\u003e\n      \u003chead\u003e\n         \u003ctitle\u003eRequest Header Fields Too Large\u003c/title\u003e\n      \u003c/head\u003e\n      \u003cbody\u003e\n         \u003ch1\u003eRequest Header Fields Too Large\u003c/h1\u003e\n         \u003cp\u003eThe \"Example\" header was too large.\u003c/p\u003e\n      \u003c/body\u003e\n   \u003c/html\u003e\n\n   Responses with the 431 status code MUST NOT be stored by a cache.\n\n",
+            "tokens": 197,
+            "vector_score": 0.6180151484548846,
+            "rerank_score": 0.5277404189109802
+          },
+          {
+            "chunk_id": "34df5f0df9993a9326c2dd285d7b40b97cbca62b046071353e791988705d0dfd",
+            "source": "rfc6585.md",
+            "file": "rfc6585.md",
+            "title": "RFC 6585: Additional HTTP Status Codes",
+            "section": "RFC 6585: Additional HTTP Status Codes / 4. 429 Too Many Requests",
+            "page": null,
+            "strategy": "structured",
+            "start_char": 3670,
+            "end_char": 4859,
+            "text": "## 4. 429 Too Many Requests\n\n   The 429 status code indicates that the user has sent too many\n   requests in a given amount of time (\"rate limiting\").\n\n   The response representations SHOULD include details explaining the\n   condition, and MAY include a Retry-After header indicating how long\n   to wait before making a new request.\n\n   For example:\n\n   HTTP/1.1 429 Too Many Requests\n   Content-Type: text/html\n   Retry-After: 3600\n\n   \u003chtml\u003e\n      \u003chead\u003e\n         \u003ctitle\u003eToo Many Requests\u003c/title\u003e\n      \u003c/head\u003e\n      \u003cbody\u003e\n         \u003ch1\u003eToo Many Requests\u003c/h1\u003e\n         \u003cp\u003eI only allow 50 requests per hour to this Web site per\n            logged in user.  Try again soon.\u003c/p\u003e\n      \u003c/body\u003e\n   \u003c/html\u003e\n\n   Note that this specification does not define how the origin server\n   identifies the user, nor how it counts requests.  For example, an\n   origin server that is limiting request rates can do so based upon\n   counts of requests on a per-resource basis, across the entire server,\n   or even among a set of servers.  Likewise, it might identify the user\n   by its authentication credentials, or a stateful cookie.\n\n   Responses with the 429 status code MUST NOT be stored by a cache.\n\n",
+            "tokens": 256,
+            "vector_score": 0.6716919926638099,
+            "rerank_score": -1.3543148040771484
+          }
+        ]
+      },
+      "brief": {
+        "goal": "Draft a response-code checklist for an HTTP API.",
+        "constraints": {
+          "style": "Answer in English with at most two short factual claims. Preserve MAY, SHOULD, MUST, negation and conditions."
+        },
+        "terms": {
+          "signal": "HTTP 429 Too Many Requests"
+        },
+        "clarifications": {
+          "scope": "Use the public RFC corpus for this checklist, not general knowledge."
+        }
+      },
+      "raw_answer": {
+        "UsageIncomplete": false,
+        "ToolCalls": null,
+        "UsageKnown": true,
+        "Content": "{\"status\":\"answered\",\"claims\":[{\"text\":\"The 428 status code indicates that the origin server requires the request to be conditional.\",\"quote_ids\":[\"q1\"]},{\"text\":\"Its typical use is to avoid the \\\"lost update\\\" problem, where a client GETs a resource's state, modifies it, and PUTs it back to the server, when meanwhile a third party has modified the state on the server, leading to a conflict.\",\"quote_ids\":[\"q2\"]},{\"text\":\"By requiring requests to be conditional, the server can assure that clients are working with the correct copies.\",\"quote_ids\":[\"q3\"]},{\"text\":\"Responses using this status code SHOULD explain how to resubmit the request successfully.\",\"quote_ids\":[\"q4\"]},{\"text\":\"Responses with the 428 status code MUST NOT be stored by a cache.\",\"quote_ids\":[\"q5\"]},{\"text\":\"The 428 status code is optional; clients cannot rely upon its use to prevent \\\"lost update\\\" conflicts.\",\"quote_ids\":[\"q6\"]}],\"quotes\":[{\"id\":\"q1\",\"chunk_id\":\"ca5ec7f63e53792ca01f7cff347d159b3174d4d14cb2f54ea4dab9c9f8fb53cf\",\"text\":\"The 428 status code indicates that the origin server requires the\\n   request to be conditional.\"},{\"id\":\"q2\",\"chunk_id\":\"ca5ec7f63e53792ca01f7cff347d159b3174d4d14cb2f54ea4dab9c9f8fb53cf\",\"text\":\"Its typical use is to avoid the \\\"lost update\\\" problem, where a client\\n   GETs a resource's state, modifies it, and PUTs it back to the server,\\n   when meanwhile a third party has modified the state on the server,\\n   leading to a conflict.\"},{\"id\":\"q3\",\"chunk_id\":\"ca5ec7f63e53792ca01f7cff347d159b3174d4d14cb2f54ea4dab9c9f8fb53cf\",\"text\":\"By requiring requests to be conditional, the\\n   server can assure that clients are working with the correct copies.\"},{\"id\":\"q4\",\"chunk_id\":\"ca5ec7f63e53792ca01f7cff347d159b3174d4d14cb2f54ea4dab9c9f8fb53cf\",\"text\":\"Responses using this status code SHOULD explain how to resubmit the\\n   request successfully.\"},{\"id\":\"q5\",\"chunk_id\":\"ca5ec7f63e53792ca01f7cff347d159b3174d4d14cb2f54ea4dab9c9f8fb53cf\",\"text\":\"Responses with the 428 status code MUST NOT be stored by a cache.\"},{\"id\":\"q6\",\"chunk_id\":\"fb1f9875bafaeaeab2a28878f11ec7757573545b365e8266812a1230dfb14ca3\",\"text\":\"The 428 status code is optional; clients cannot rely upon its use to\\n   prevent \\\"lost update\\\" conflicts.\"}],\"clarification\":\"\"}",
+        "Model": "deepseek-flash",
+        "FinishReason": "stop",
+        "PromptTokens": 2924,
+        "CachedInputTokens": 128,
+        "CompletionTokens": 709,
+        "TotalTokens": 3633,
+        "Duration": 2323538700
+      },
+      "grounding": {
+        "status": "answered",
+        "answer": "The 428 status code indicates that the origin server requires the request to be conditional. [q1]\nIts typical use is to avoid the \"lost update\" problem, where a client GETs a resource's state, modifies it, and PUTs it back to the server, when meanwhile a third party has modified the state on the server, leading to a conflict. [q2]\nBy requiring requests to be conditional, the server can assure that clients are working with the correct copies. [q3]\nResponses using this status code SHOULD explain how to resubmit the request successfully. [q4]\nResponses with the 428 status code MUST NOT be stored by a cache. [q5]\nThe 428 status code is optional; clients cannot rely upon its use to prevent \"lost update\" conflicts. [q6]",
+        "claims": [
+          {
+            "text": "The 428 status code indicates that the origin server requires the request to be conditional.",
+            "quote_ids": [
+              "q1"
+            ]
+          },
+          {
+            "text": "Its typical use is to avoid the \"lost update\" problem, where a client GETs a resource's state, modifies it, and PUTs it back to the server, when meanwhile a third party has modified the state on the server, leading to a conflict.",
+            "quote_ids": [
+              "q2"
+            ]
+          },
+          {
+            "text": "By requiring requests to be conditional, the server can assure that clients are working with the correct copies.",
+            "quote_ids": [
+              "q3"
+            ]
+          },
+          {
+            "text": "Responses using this status code SHOULD explain how to resubmit the request successfully.",
+            "quote_ids": [
+              "q4"
+            ]
+          },
+          {
+            "text": "Responses with the 428 status code MUST NOT be stored by a cache.",
+            "quote_ids": [
+              "q5"
+            ]
+          },
+          {
+            "text": "The 428 status code is optional; clients cannot rely upon its use to prevent \"lost update\" conflicts.",
+            "quote_ids": [
+              "q6"
+            ]
+          }
+        ],
+        "quotes": [
+          {
+            "id": "q1",
+            "chunk_id": "ca5ec7f63e53792ca01f7cff347d159b3174d4d14cb2f54ea4dab9c9f8fb53cf",
+            "text": "The 428 status code indicates that the origin server requires the request to be conditional."
+          },
+          {
+            "id": "q2",
+            "chunk_id": "ca5ec7f63e53792ca01f7cff347d159b3174d4d14cb2f54ea4dab9c9f8fb53cf",
+            "text": "Its typical use is to avoid the \"lost update\" problem, where a client GETs a resource's state, modifies it, and PUTs it back to the server, when meanwhile a third party has modified the state on the server, leading to a conflict."
+          },
+          {
+            "id": "q3",
+            "chunk_id": "ca5ec7f63e53792ca01f7cff347d159b3174d4d14cb2f54ea4dab9c9f8fb53cf",
+            "text": "By requiring requests to be conditional, the server can assure that clients are working with the correct copies."
+          },
+          {
+            "id": "q4",
+            "chunk_id": "ca5ec7f63e53792ca01f7cff347d159b3174d4d14cb2f54ea4dab9c9f8fb53cf",
+            "text": "Responses using this status code SHOULD explain how to resubmit the request successfully."
+          },
+          {
+            "id": "q5",
+            "chunk_id": "ca5ec7f63e53792ca01f7cff347d159b3174d4d14cb2f54ea4dab9c9f8fb53cf",
+            "text": "Responses with the 428 status code MUST NOT be stored by a cache."
+          },
+          {
+            "id": "q6",
+            "chunk_id": "fb1f9875bafaeaeab2a28878f11ec7757573545b365e8266812a1230dfb14ca3",
+            "text": "The 428 status code is optional; clients cannot rely upon its use to prevent \"lost update\" conflicts."
+          }
+        ],
+        "sources": [
+          {
+            "source": "rfc6585.md",
+            "section": "RFC 6585: Additional HTTP Status Codes / 3. 428 Precondition Required",
+            "chunk_id": "ca5ec7f63e53792ca01f7cff347d159b3174d4d14cb2f54ea4dab9c9f8fb53cf"
+          },
+          {
+            "source": "rfc6585.md",
+            "section": "RFC 6585: Additional HTTP Status Codes / 7. Security Considerations / 7.1. 428 Precondition Required",
+            "chunk_id": "fb1f9875bafaeaeab2a28878f11ec7757573545b365e8266812a1230dfb14ca3"
+          }
+        ],
+        "clarification": "",
+        "local": false
+      },
+      "history_before": 6,
+      "history_after": 8,
+      "history_messages_sent": 4,
+      "input_byte_envelope": 12786,
+      "brief_sent": true,
+      "reopened": false,
+      "calls": 1,
+      "reserved_usd": 0.0047574,
+      "estimated_peak_usd": 0.001690368,
+      "visible": "[База знаний: Day 25 public RFCs · найдено фрагментов: 5]\n[Поиск: 20 кандидатов → 5 после фильтра → 5 в контекст; отсечено 15]\n[rfc6585.md#ca5ec7f63e53792ca01f7cff347d159b3174d4d14cb2f54ea4dab9c9f8fb53cf]\n[rfc6585.md#fb1f9875bafaeaeab2a28878f11ec7757573545b365e8266812a1230dfb14ca3]\n[rfc6585.md#6962b2c209ebd898adc0ea57f5cccd5203d296dba2152481315722cfb35baaba]\n[rfc6585.md#72649411207e74ce22e6992c9e6b618da6dc6dd4cff0c500b0e216317c095f75]\n[rfc6585.md#34df5f0df9993a9326c2dd285d7b40b97cbca62b046071353e791988705d0dfd]\nThe 428 status code indicates that the origin server requires the request to be conditional. [q1]\nIts typical use is to avoid the \"lost update\" problem, where a client GETs a resource's state, modifies it, and PUTs it back to the server, when meanwhile a third party has modified the state on the server, leading to a conflict. [q2]\nBy requiring requests to be conditional, the server can assure that clients are working with the correct copies. [q3]\nResponses using this status code SHOULD explain how to resubmit the request successfully. [q4]\nResponses with the 428 status code MUST NOT be stored by a cache. [q5]\nThe 428 status code is optional; clients cannot rely upon its use to prevent \"lost update\" conflicts. [q6]\n\nЦитаты:\n[q1] «The 428 status code indicates that the origin server requires the request to be conditional.» [rfc6585.md#ca5ec7f63e53792ca01f7cff347d159b3174d4d14cb2f54ea4dab9c9f8fb53cf]\n[q2] «Its typical use is to avoid the \"lost update\" problem, where a client GETs a resource's state, modifies it, and PUTs it back to the server, when meanwhile a third party has modified the state on the server, leading to a conflict.» [rfc6585.md#ca5ec7f63e53792ca01f7cff347d159b3174d4d14cb2f54ea4dab9c9f8fb53cf]\n[q3] «By requiring requests to be conditional, the server can assure that clients are working with the correct copies.» [rfc6585.md#ca5ec7f63e53792ca01f7cff347d159b3174d4d14cb2f54ea4dab9c9f8fb53cf]\n[q4] «Responses using this status code SHOULD explain how to resubmit the request successfully.» [rfc6585.md#ca5ec7f63e53792ca01f7cff347d159b3174d4d14cb2f54ea4dab9c9f8fb53cf]\n[q5] «Responses with the 428 status code MUST NOT be stored by a cache.» [rfc6585.md#ca5ec7f63e53792ca01f7cff347d159b3174d4d14cb2f54ea4dab9c9f8fb53cf]\n[q6] «The 428 status code is optional; clients cannot rely upon its use to prevent \"lost update\" conflicts.» [rfc6585.md#fb1f9875bafaeaeab2a28878f11ec7757573545b365e8266812a1230dfb14ca3]\n\nИсточники:\n[rfc6585.md#ca5ec7f63e53792ca01f7cff347d159b3174d4d14cb2f54ea4dab9c9f8fb53cf]\n  Раздел: RFC 6585: Additional HTTP Status Codes / 3. 428 Precondition Required\n[rfc6585.md#fb1f9875bafaeaeab2a28878f11ec7757573545b365e8266812a1230dfb14ca3]\n  Раздел: RFC 6585: Additional HTTP Status Codes / 7. Security Considerations / 7.1. 428 Precondition Required\n[RAG: 6 утверждений · 6 цитат · 2 источников; источники и точность цитат проверены]"
+    },
+    {
+      "id": "http-api-05",
+      "scenario": "http-api",
+      "query": "Can that response be cached?",
+      "retrieval": {
+        "query": "What does HTTP 428 Precondition Required mean?\nFollow-up question: Can that response be cached?",
+        "search_query": "What does HTTP 428 Precondition Required mean?\nFollow-up question: Can that response be cached?",
+        "rewrite": true,
+        "min_similarity": 0.49,
+        "score_type": "cosine",
+        "retained_count": 5,
+        "filtered_count": 15,
+        "cosine_retained_count": 20,
+        "min_rerank_score": -3,
+        "rerank_score_type": "raw_logit",
+        "no_evidence": false,
+        "candidates": 20,
+        "strategy": "structured",
+        "reranking": true,
+        "candidate_count": 20,
+        "top_k": 5,
+        "retrieval_seconds": 0.018611200001032557,
+        "rerank_seconds": 0.7036519999965094,
+        "results": [
+          {
+            "chunk_id": "ca5ec7f63e53792ca01f7cff347d159b3174d4d14cb2f54ea4dab9c9f8fb53cf",
+            "source": "rfc6585.md",
+            "file": "rfc6585.md",
+            "title": "RFC 6585: Additional HTTP Status Codes",
+            "section": "RFC 6585: Additional HTTP Status Codes / 3. 428 Precondition Required",
+            "page": null,
+            "strategy": "structured",
+            "start_char": 2677,
+            "end_char": 3670,
+            "text": "## 3. 428 Precondition Required\n\n   The 428 status code indicates that the origin server requires the\n   request to be conditional.\n\n   Its typical use is to avoid the \"lost update\" problem, where a client\n   GETs a resource's state, modifies it, and PUTs it back to the server,\n   when meanwhile a third party has modified the state on the server,\n   leading to a conflict.  By requiring requests to be conditional, the\n   server can assure that clients are working with the correct copies.\n\n   Responses using this status code SHOULD explain how to resubmit the\n   request successfully.  For example:\n\n   HTTP/1.1 428 Precondition Required\n   Content-Type: text/html\n\n   \u003chtml\u003e\n      \u003chead\u003e\n         \u003ctitle\u003ePrecondition Required\u003c/title\u003e\n      \u003c/head\u003e\n      \u003cbody\u003e\n         \u003ch1\u003ePrecondition Required\u003c/h1\u003e\n         \u003cp\u003eThis request is required to be conditional;\n         try using \"If-Match\".\u003c/p\u003e\n      \u003c/body\u003e\n   \u003c/html\u003e\n\n   Responses with the 428 status code MUST NOT be stored by a cache.\n\n",
+            "tokens": 220,
+            "vector_score": 0.8478590276449167,
+            "rerank_score": 9.776524543762207
+          },
+          {
+            "chunk_id": "72649411207e74ce22e6992c9e6b618da6dc6dd4cff0c500b0e216317c095f75",
+            "source": "rfc6585.md",
+            "file": "rfc6585.md",
+            "title": "RFC 6585: Additional HTTP Status Codes",
+            "section": "RFC 6585: Additional HTTP Status Codes / 5. 431 Request Header Fields Too Large",
+            "page": null,
+            "strategy": "structured",
+            "start_char": 4859,
+            "end_char": 5754,
+            "text": "## 5. 431 Request Header Fields Too Large\n\n   The 431 status code indicates that the server is unwilling to process\n   the request because its header fields are too large.  The request MAY\n   be resubmitted after reducing the size of the request header fields.\n\n   It can be used both when the set of request header fields in total is\n   too large, and when a single header field is at fault.  In the latter\n   case, the response representation SHOULD specify which header field\n   was too large.\n\n   For example:\n\n   HTTP/1.1 431 Request Header Fields Too Large\n   Content-Type: text/html\n\n   \u003chtml\u003e\n      \u003chead\u003e\n         \u003ctitle\u003eRequest Header Fields Too Large\u003c/title\u003e\n      \u003c/head\u003e\n      \u003cbody\u003e\n         \u003ch1\u003eRequest Header Fields Too Large\u003c/h1\u003e\n         \u003cp\u003eThe \"Example\" header was too large.\u003c/p\u003e\n      \u003c/body\u003e\n   \u003c/html\u003e\n\n   Responses with the 431 status code MUST NOT be stored by a cache.\n\n",
+            "tokens": 197,
+            "vector_score": 0.6716567689090676,
+            "rerank_score": 2.302832841873169
+          },
+          {
+            "chunk_id": "fb1f9875bafaeaeab2a28878f11ec7757573545b365e8266812a1230dfb14ca3",
+            "source": "rfc6585.md",
+            "file": "rfc6585.md",
+            "title": "RFC 6585: Additional HTTP Status Codes",
+            "section": "RFC 6585: Additional HTTP Status Codes / 7. Security Considerations / 7.1. 428 Precondition Required",
+            "page": null,
+            "strategy": "structured",
+            "start_char": 8392,
+            "end_char": 8537,
+            "text": "### 7.1. 428 Precondition Required\n\n   The 428 status code is optional; clients cannot rely upon its use to\n   prevent \"lost update\" conflicts.\n\n",
+            "tokens": 35,
+            "vector_score": 0.796534217868497,
+            "rerank_score": 1.0466158390045166
+          },
+          {
+            "chunk_id": "34df5f0df9993a9326c2dd285d7b40b97cbca62b046071353e791988705d0dfd",
+            "source": "rfc6585.md",
+            "file": "rfc6585.md",
+            "title": "RFC 6585: Additional HTTP Status Codes",
+            "section": "RFC 6585: Additional HTTP Status Codes / 4. 429 Too Many Requests",
+            "page": null,
+            "strategy": "structured",
+            "start_char": 3670,
+            "end_char": 4859,
+            "text": "## 4. 429 Too Many Requests\n\n   The 429 status code indicates that the user has sent too many\n   requests in a given amount of time (\"rate limiting\").\n\n   The response representations SHOULD include details explaining the\n   condition, and MAY include a Retry-After header indicating how long\n   to wait before making a new request.\n\n   For example:\n\n   HTTP/1.1 429 Too Many Requests\n   Content-Type: text/html\n   Retry-After: 3600\n\n   \u003chtml\u003e\n      \u003chead\u003e\n         \u003ctitle\u003eToo Many Requests\u003c/title\u003e\n      \u003c/head\u003e\n      \u003cbody\u003e\n         \u003ch1\u003eToo Many Requests\u003c/h1\u003e\n         \u003cp\u003eI only allow 50 requests per hour to this Web site per\n            logged in user.  Try again soon.\u003c/p\u003e\n      \u003c/body\u003e\n   \u003c/html\u003e\n\n   Note that this specification does not define how the origin server\n   identifies the user, nor how it counts requests.  For example, an\n   origin server that is limiting request rates can do so based upon\n   counts of requests on a per-resource basis, across the entire server,\n   or even among a set of servers.  Likewise, it might identify the user\n   by its authentication credentials, or a stateful cookie.\n\n   Responses with the 429 status code MUST NOT be stored by a cache.\n\n",
+            "tokens": 256,
+            "vector_score": 0.7051546091414866,
+            "rerank_score": 0.6026539206504822
+          },
+          {
+            "chunk_id": "6962b2c209ebd898adc0ea57f5cccd5203d296dba2152481315722cfb35baaba",
+            "source": "rfc6585.md",
+            "file": "rfc6585.md",
+            "title": "RFC 6585: Additional HTTP Status Codes",
+            "section": "RFC 6585: Additional HTTP Status Codes / 8. IANA Considerations",
+            "page": null,
+            "strategy": "structured",
+            "start_char": 9922,
+            "end_char": 10392,
+            "text": "## 8. IANA Considerations\n\n   The HTTP Status Codes registry has been updated with the following\n   entries:\n\n      Value: 428\n      Description: Precondition Required\n      Reference: [RFC6585]\n\n      Value: 429\n      Description: Too Many Requests\n      Reference: [RFC6585]\n\n      Value: 431\n      Description: Request Header Fields Too Large\n      Reference: [RFC6585]\n\n      Value: 511\n      Description: Network Authentication Required\n      Reference: [RFC6585]\n\n",
+            "tokens": 87,
+            "vector_score": 0.7169269955765447,
+            "rerank_score": -0.33571553230285645
+          }
+        ]
+      },
+      "brief": {
+        "goal": "Draft a response-code checklist for an HTTP API.",
+        "constraints": {
+          "style": "Answer in English with at most two short factual claims. Preserve MAY, SHOULD, MUST, negation and conditions."
+        },
+        "terms": {
+          "signal": "HTTP 429 Too Many Requests"
+        },
+        "clarifications": {
+          "scope": "Use the public RFC corpus for this checklist, not general knowledge."
+        }
+      },
+      "raw_answer": {
+        "UsageIncomplete": false,
+        "ToolCalls": null,
+        "UsageKnown": true,
+        "Content": "{\"status\":\"answered\",\"claims\":[{\"text\":\"Responses with the 428 status code MUST NOT be stored by a cache.\",\"quote_ids\":[\"q1\"]}],\"quotes\":[{\"id\":\"q1\",\"chunk_id\":\"ca5ec7f63e53792ca01f7cff347d159b3174d4d14cb2f54ea4dab9c9f8fb53cf\",\"text\":\"Responses with the 428 status code MUST NOT be stored by a cache.\"}],\"clarification\":\"\"}",
+        "Model": "deepseek-flash",
+        "FinishReason": "stop",
+        "PromptTokens": 3566,
+        "CachedInputTokens": 128,
+        "CompletionTokens": 116,
+        "TotalTokens": 3682,
+        "Duration": 1248926200
+      },
+      "grounding": {
+        "status": "answered",
+        "answer": "Responses with the 428 status code MUST NOT be stored by a cache. [q1]",
+        "claims": [
+          {
+            "text": "Responses with the 428 status code MUST NOT be stored by a cache.",
+            "quote_ids": [
+              "q1"
+            ]
+          }
+        ],
+        "quotes": [
+          {
+            "id": "q1",
+            "chunk_id": "ca5ec7f63e53792ca01f7cff347d159b3174d4d14cb2f54ea4dab9c9f8fb53cf",
+            "text": "Responses with the 428 status code MUST NOT be stored by a cache."
+          }
+        ],
+        "sources": [
+          {
+            "source": "rfc6585.md",
+            "section": "RFC 6585: Additional HTTP Status Codes / 3. 428 Precondition Required",
+            "chunk_id": "ca5ec7f63e53792ca01f7cff347d159b3174d4d14cb2f54ea4dab9c9f8fb53cf"
+          }
+        ],
+        "clarification": "",
+        "local": false
+      },
+      "history_before": 8,
+      "history_after": 10,
+      "history_messages_sent": 4,
+      "input_byte_envelope": 14783,
+      "brief_sent": true,
+      "reopened": false,
+      "calls": 1,
+      "reserved_usd": 0.005356499999999999,
+      "estimated_peak_usd": 0.0011713679999999999,
+      "visible": "[База знаний: Day 25 public RFCs · найдено фрагментов: 5]\n[Поиск: 20 кандидатов → 5 после фильтра → 5 в контекст; отсечено 15]\n[Поисковый запрос: What does HTTP 428 Precondition Required mean?\nFollow-up question: Can that response be cached?]\n[rfc6585.md#ca5ec7f63e53792ca01f7cff347d159b3174d4d14cb2f54ea4dab9c9f8fb53cf]\n[rfc6585.md#72649411207e74ce22e6992c9e6b618da6dc6dd4cff0c500b0e216317c095f75]\n[rfc6585.md#fb1f9875bafaeaeab2a28878f11ec7757573545b365e8266812a1230dfb14ca3]\n[rfc6585.md#34df5f0df9993a9326c2dd285d7b40b97cbca62b046071353e791988705d0dfd]\n[rfc6585.md#6962b2c209ebd898adc0ea57f5cccd5203d296dba2152481315722cfb35baaba]\nResponses with the 428 status code MUST NOT be stored by a cache. [q1]\n\nЦитаты:\n[q1] «Responses with the 428 status code MUST NOT be stored by a cache.» [rfc6585.md#ca5ec7f63e53792ca01f7cff347d159b3174d4d14cb2f54ea4dab9c9f8fb53cf]\n\nИсточники:\n[rfc6585.md#ca5ec7f63e53792ca01f7cff347d159b3174d4d14cb2f54ea4dab9c9f8fb53cf]\n  Раздел: RFC 6585: Additional HTTP Status Codes / 3. 428 Precondition Required\n[RAG: 1 утверждений · 1 цитат · 1 источников; источники и точность цитат проверены]"
+    },
+    {
+      "id": "http-api-06",
+      "scenario": "http-api",
+      "query": "What causes HTTP 431 Request Header Fields Too Large?",
+      "retrieval": {
+        "query": "What causes HTTP 431 Request Header Fields Too Large?",
+        "search_query": "What causes HTTP 431 Request Header Fields Too Large?",
+        "rewrite": true,
+        "min_similarity": 0.49,
+        "score_type": "cosine",
+        "retained_count": 6,
+        "filtered_count": 14,
+        "cosine_retained_count": 20,
+        "min_rerank_score": -3,
+        "rerank_score_type": "raw_logit",
+        "no_evidence": false,
+        "candidates": 20,
+        "strategy": "structured",
+        "reranking": true,
+        "candidate_count": 20,
+        "top_k": 5,
+        "retrieval_seconds": 0.01833980000083102,
+        "rerank_seconds": 0.8225654999987455,
+        "results": [
+          {
+            "chunk_id": "72649411207e74ce22e6992c9e6b618da6dc6dd4cff0c500b0e216317c095f75",
+            "source": "rfc6585.md",
+            "file": "rfc6585.md",
+            "title": "RFC 6585: Additional HTTP Status Codes",
+            "section": "RFC 6585: Additional HTTP Status Codes / 5. 431 Request Header Fields Too Large",
+            "page": null,
+            "strategy": "structured",
+            "start_char": 4859,
+            "end_char": 5754,
+            "text": "## 5. 431 Request Header Fields Too Large\n\n   The 431 status code indicates that the server is unwilling to process\n   the request because its header fields are too large.  The request MAY\n   be resubmitted after reducing the size of the request header fields.\n\n   It can be used both when the set of request header fields in total is\n   too large, and when a single header field is at fault.  In the latter\n   case, the response representation SHOULD specify which header field\n   was too large.\n\n   For example:\n\n   HTTP/1.1 431 Request Header Fields Too Large\n   Content-Type: text/html\n\n   \u003chtml\u003e\n      \u003chead\u003e\n         \u003ctitle\u003eRequest Header Fields Too Large\u003c/title\u003e\n      \u003c/head\u003e\n      \u003cbody\u003e\n         \u003ch1\u003eRequest Header Fields Too Large\u003c/h1\u003e\n         \u003cp\u003eThe \"Example\" header was too large.\u003c/p\u003e\n      \u003c/body\u003e\n   \u003c/html\u003e\n\n   Responses with the 431 status code MUST NOT be stored by a cache.\n\n",
+            "tokens": 197,
+            "vector_score": 0.8871285758179859,
+            "rerank_score": 10.75974178314209
+          },
+          {
+            "chunk_id": "79b3ef3631444c40fc2107028a8c1e5da29783a8f2f945b354363d739ab77a11",
+            "source": "rfc6585.md",
+            "file": "rfc6585.md",
+            "title": "RFC 6585: Additional HTTP Status Codes",
+            "section": "RFC 6585: Additional HTTP Status Codes / 7. Security Considerations / 7.3. 431 Request Header Fields Too Large",
+            "page": null,
+            "strategy": "structured",
+            "start_char": 8924,
+            "end_char": 9126,
+            "text": "### 7.3. 431 Request Header Fields Too Large\n\n   Servers are not required to use the 431 status code; when under\n   attack, it may be more appropriate to just drop connections, or take\n   other steps.\n\n",
+            "tokens": 45,
+            "vector_score": 0.8128099448668424,
+            "rerank_score": 3.0429635047912598
+          },
+          {
+            "chunk_id": "6962b2c209ebd898adc0ea57f5cccd5203d296dba2152481315722cfb35baaba",
+            "source": "rfc6585.md",
+            "file": "rfc6585.md",
+            "title": "RFC 6585: Additional HTTP Status Codes",
+            "section": "RFC 6585: Additional HTTP Status Codes / 8. IANA Considerations",
+            "page": null,
+            "strategy": "structured",
+            "start_char": 9922,
+            "end_char": 10392,
+            "text": "## 8. IANA Considerations\n\n   The HTTP Status Codes registry has been updated with the following\n   entries:\n\n      Value: 428\n      Description: Precondition Required\n      Reference: [RFC6585]\n\n      Value: 429\n      Description: Too Many Requests\n      Reference: [RFC6585]\n\n      Value: 431\n      Description: Request Header Fields Too Large\n      Reference: [RFC6585]\n\n      Value: 511\n      Description: Network Authentication Required\n      Reference: [RFC6585]\n\n",
+            "tokens": 87,
+            "vector_score": 0.6928152493157368,
+            "rerank_score": 0.530048668384552
+          },
+          {
+            "chunk_id": "780bc9a67735785ea1ef3a368f275d45a12fae7b162c274cbf7a570d5314a69b",
+            "source": "rfc7168.md",
+            "file": "rfc7168.md",
+            "title": "RFC 7168: The Hyper Text Coffee Pot Control Protocol for Tea Efflux Appliances",
+            "section": "RFC 7168: The Hyper Text Coffee Pot Control Protocol for Tea Efflux Appliances / 2. HTCPCP-TEA Protocol Additions / 2.2. Modified Header Fields / 2.2.1. The Accept-Additions Header Field",
+            "page": null,
+            "strategy": "structured",
+            "start_char": 6807,
+            "end_char": 7745,
+            "text": "#### 2.2.1. The Accept-Additions Header Field\n\n   It has been observed that some users of blended teas have an\n   occasional preference for teas brewed as an emulsion of cane sugar\n   with hints of water.  To allow for this circumstance, the Accept-\n   Additions header field defined in the base HTCPCP specification is\n   updated to allow the following options:\n\n      addition-type   = ( \"*\"\n                        | milk-type\n                        | syrup-type\n                        | sweetener-type\n                        | spice-type\n                        | alcohol-type\n                        | sugar-type\n                        ) *( \";\" parameter )\n      sugar-type      = ( \"Sugar\" | \"Xylitol\" | \"Stevia\" )\n\n   Implementers should be aware that excessive use of the Sugar addition\n   may cause the BREW request to exceed the segment size allowed by the\n   transport layer, causing fragmentation and a delay in brewing.\n\n",
+            "tokens": 175,
+            "vector_score": 0.5717692231928029,
+            "rerank_score": -2.499091863632202
+          },
+          {
+            "chunk_id": "d9a715419df5df90110baa2de60c51dca266633701e4aba6392ee7f55d3dcbbd",
+            "source": "rfc6585.md",
+            "file": "rfc6585.md",
+            "title": "RFC 6585: Additional HTTP Status Codes",
+            "section": "RFC 6585: Additional HTTP Status Codes / 7. Security Considerations / 7.2. 429 Too Many Requests",
+            "page": null,
+            "strategy": "structured",
+            "start_char": 8537,
+            "end_char": 8924,
+            "text": "### 7.2. 429 Too Many Requests\n\n   When a server is under attack or just receiving a very large number\n   of requests from a single party, responding to each with a 429 status\n   code will consume resources.\n\n   Therefore, servers are not required to use the 429 status code; when\n   limiting resource usage, it may be more appropriate to just drop\n   connections, or take other steps.\n\n",
+            "tokens": 79,
+            "vector_score": 0.6170187778119783,
+            "rerank_score": -2.8036985397338867
+          }
+        ]
+      },
+      "brief": {
+        "goal": "Draft a response-code checklist for an HTTP API.",
+        "constraints": {
+          "style": "Answer in English with at most two short factual claims. Preserve MAY, SHOULD, MUST, negation and conditions."
+        },
+        "terms": {
+          "signal": "HTTP 429 Too Many Requests"
+        },
+        "clarifications": {
+          "scope": "Use the public RFC corpus for this checklist, not general knowledge."
+        }
+      },
+      "raw_answer": {
+        "UsageIncomplete": false,
+        "ToolCalls": null,
+        "UsageKnown": true,
+        "Content": "{\"status\":\"answered\",\"claims\":[{\"text\":\"The 431 status code indicates that the server is unwilling to process the request because its header fields are too large.\",\"quote_ids\":[\"q1\"]},{\"text\":\"It can be used both when the set of request header fields in total is too large, and when a single header field is at fault.\",\"quote_ids\":[\"q2\"]},{\"text\":\"In the latter case, the response representation SHOULD specify which header field was too large.\",\"quote_ids\":[\"q3\"]},{\"text\":\"The request MAY be resubmitted after reducing the size of the request header fields.\",\"quote_ids\":[\"q4\"]},{\"text\":\"Responses with the 431 status code MUST NOT be stored by a cache.\",\"quote_ids\":[\"q5\"]}],\"quotes\":[{\"id\":\"q1\",\"chunk_id\":\"72649411207e74ce22e6992c9e6b618da6dc6dd4cff0c500b0e216317c095f75\",\"text\":\"The 431 status code indicates that the server is unwilling to process\\n   the request because its header fields are too large.\"},{\"id\":\"q2\",\"chunk_id\":\"72649411207e74ce22e6992c9e6b618da6dc6dd4cff0c500b0e216317c095f75\",\"text\":\"It can be used both when the set of request header fields in total is\\n   too large, and when a single header field is at fault.\"},{\"id\":\"q3\",\"chunk_id\":\"72649411207e74ce22e6992c9e6b618da6dc6dd4cff0c500b0e216317c095f75\",\"text\":\"In the latter\\n   case, the response representation SHOULD specify which header field\\n   was too large.\"},{\"id\":\"q4\",\"chunk_id\":\"72649411207e74ce22e6992c9e6b618da6dc6dd4cff0c500b0e216317c095f75\",\"text\":\"The request MAY\\n   be resubmitted after reducing the size of the request header fields.\"},{\"id\":\"q5\",\"chunk_id\":\"72649411207e74ce22e6992c9e6b618da6dc6dd4cff0c500b0e216317c095f75\",\"text\":\"Responses with the 431 status code MUST NOT be stored by a cache.\"}],\"clarification\":\"\"}",
+        "Model": "deepseek-flash",
+        "FinishReason": "stop",
+        "PromptTokens": 3319,
+        "CachedInputTokens": 128,
+        "CompletionTokens": 538,
+        "TotalTokens": 3857,
+        "Duration": 2132588700
+      },
+      "grounding": {
+        "status": "answered",
+        "answer": "The 431 status code indicates that the server is unwilling to process the request because its header fields are too large. [q1]\nIt can be used both when the set of request header fields in total is too large, and when a single header field is at fault. [q2]\nIn the latter case, the response representation SHOULD specify which header field was too large. [q3]\nThe request MAY be resubmitted after reducing the size of the request header fields. [q4]\nResponses with the 431 status code MUST NOT be stored by a cache. [q5]",
+        "claims": [
+          {
+            "text": "The 431 status code indicates that the server is unwilling to process the request because its header fields are too large.",
+            "quote_ids": [
+              "q1"
+            ]
+          },
+          {
+            "text": "It can be used both when the set of request header fields in total is too large, and when a single header field is at fault.",
+            "quote_ids": [
+              "q2"
+            ]
+          },
+          {
+            "text": "In the latter case, the response representation SHOULD specify which header field was too large.",
+            "quote_ids": [
+              "q3"
+            ]
+          },
+          {
+            "text": "The request MAY be resubmitted after reducing the size of the request header fields.",
+            "quote_ids": [
+              "q4"
+            ]
+          },
+          {
+            "text": "Responses with the 431 status code MUST NOT be stored by a cache.",
+            "quote_ids": [
+              "q5"
+            ]
+          }
+        ],
+        "quotes": [
+          {
+            "id": "q1",
+            "chunk_id": "72649411207e74ce22e6992c9e6b618da6dc6dd4cff0c500b0e216317c095f75",
+            "text": "The 431 status code indicates that the server is unwilling to process the request because its header fields are too large."
+          },
+          {
+            "id": "q2",
+            "chunk_id": "72649411207e74ce22e6992c9e6b618da6dc6dd4cff0c500b0e216317c095f75",
+            "text": "It can be used both when the set of request header fields in total is too large, and when a single header field is at fault."
+          },
+          {
+            "id": "q3",
+            "chunk_id": "72649411207e74ce22e6992c9e6b618da6dc6dd4cff0c500b0e216317c095f75",
+            "text": "In the latter case, the response representation SHOULD specify which header field was too large."
+          },
+          {
+            "id": "q4",
+            "chunk_id": "72649411207e74ce22e6992c9e6b618da6dc6dd4cff0c500b0e216317c095f75",
+            "text": "The request MAY be resubmitted after reducing the size of the request header fields."
+          },
+          {
+            "id": "q5",
+            "chunk_id": "72649411207e74ce22e6992c9e6b618da6dc6dd4cff0c500b0e216317c095f75",
+            "text": "Responses with the 431 status code MUST NOT be stored by a cache."
+          }
+        ],
+        "sources": [
+          {
+            "source": "rfc6585.md",
+            "section": "RFC 6585: Additional HTTP Status Codes / 5. 431 Request Header Fields Too Large",
+            "chunk_id": "72649411207e74ce22e6992c9e6b618da6dc6dd4cff0c500b0e216317c095f75"
+          }
+        ],
+        "clarification": "",
+        "local": false
+      },
+      "history_before": 10,
+      "history_after": 12,
+      "history_messages_sent": 4,
+      "input_byte_envelope": 13897,
+      "brief_sent": true,
+      "reopened": false,
+      "calls": 1,
+      "reserved_usd": 0.005090699999999999,
+      "estimated_peak_usd": 0.0016036680000000002,
+      "visible": "[База знаний: Day 25 public RFCs · найдено фрагментов: 5]\n[Поиск: 20 кандидатов → 6 после фильтра → 5 в контекст; отсечено 14]\n[rfc6585.md#72649411207e74ce22e6992c9e6b618da6dc6dd4cff0c500b0e216317c095f75]\n[rfc6585.md#79b3ef3631444c40fc2107028a8c1e5da29783a8f2f945b354363d739ab77a11]\n[rfc6585.md#6962b2c209ebd898adc0ea57f5cccd5203d296dba2152481315722cfb35baaba]\n[rfc7168.md#780bc9a67735785ea1ef3a368f275d45a12fae7b162c274cbf7a570d5314a69b]\n[rfc6585.md#d9a715419df5df90110baa2de60c51dca266633701e4aba6392ee7f55d3dcbbd]\nThe 431 status code indicates that the server is unwilling to process the request because its header fields are too large. [q1]\nIt can be used both when the set of request header fields in total is too large, and when a single header field is at fault. [q2]\nIn the latter case, the response representation SHOULD specify which header field was too large. [q3]\nThe request MAY be resubmitted after reducing the size of the request header fields. [q4]\nResponses with the 431 status code MUST NOT be stored by a cache. [q5]\n\nЦитаты:\n[q1] «The 431 status code indicates that the server is unwilling to process the request because its header fields are too large.» [rfc6585.md#72649411207e74ce22e6992c9e6b618da6dc6dd4cff0c500b0e216317c095f75]\n[q2] «It can be used both when the set of request header fields in total is too large, and when a single header field is at fault.» [rfc6585.md#72649411207e74ce22e6992c9e6b618da6dc6dd4cff0c500b0e216317c095f75]\n[q3] «In the latter case, the response representation SHOULD specify which header field was too large.» [rfc6585.md#72649411207e74ce22e6992c9e6b618da6dc6dd4cff0c500b0e216317c095f75]\n[q4] «The request MAY be resubmitted after reducing the size of the request header fields.» [rfc6585.md#72649411207e74ce22e6992c9e6b618da6dc6dd4cff0c500b0e216317c095f75]\n[q5] «Responses with the 431 status code MUST NOT be stored by a cache.» [rfc6585.md#72649411207e74ce22e6992c9e6b618da6dc6dd4cff0c500b0e216317c095f75]\n\nИсточники:\n[rfc6585.md#72649411207e74ce22e6992c9e6b618da6dc6dd4cff0c500b0e216317c095f75]\n  Раздел: RFC 6585: Additional HTTP Status Codes / 5. 431 Request Header Fields Too Large\n[RAG: 5 утверждений · 5 цитат · 1 источников; источники и точность цитат проверены]"
+    },
+    {
+      "id": "http-api-07",
+      "scenario": "http-api",
+      "query": "What does signal indicate now?",
+      "retrieval": {
+        "query": "What does HTTP 431 Request Header Fields Too Large indicate now?",
+        "search_query": "What does HTTP 431 Request Header Fields Too Large indicate now?",
+        "rewrite": true,
+        "min_similarity": 0.49,
+        "score_type": "cosine",
+        "retained_count": 7,
+        "filtered_count": 13,
+        "cosine_retained_count": 20,
+        "min_rerank_score": -3,
+        "rerank_score_type": "raw_logit",
+        "no_evidence": false,
+        "candidates": 20,
+        "strategy": "structured",
+        "reranking": true,
+        "candidate_count": 20,
+        "top_k": 5,
+        "retrieval_seconds": 1.2066906999971252,
+        "rerank_seconds": 0.861802200000966,
+        "results": [
+          {
+            "chunk_id": "72649411207e74ce22e6992c9e6b618da6dc6dd4cff0c500b0e216317c095f75",
+            "source": "rfc6585.md",
+            "file": "rfc6585.md",
+            "title": "RFC 6585: Additional HTTP Status Codes",
+            "section": "RFC 6585: Additional HTTP Status Codes / 5. 431 Request Header Fields Too Large",
+            "page": null,
+            "strategy": "structured",
+            "start_char": 4859,
+            "end_char": 5754,
+            "text": "## 5. 431 Request Header Fields Too Large\n\n   The 431 status code indicates that the server is unwilling to process\n   the request because its header fields are too large.  The request MAY\n   be resubmitted after reducing the size of the request header fields.\n\n   It can be used both when the set of request header fields in total is\n   too large, and when a single header field is at fault.  In the latter\n   case, the response representation SHOULD specify which header field\n   was too large.\n\n   For example:\n\n   HTTP/1.1 431 Request Header Fields Too Large\n   Content-Type: text/html\n\n   \u003chtml\u003e\n      \u003chead\u003e\n         \u003ctitle\u003eRequest Header Fields Too Large\u003c/title\u003e\n      \u003c/head\u003e\n      \u003cbody\u003e\n         \u003ch1\u003eRequest Header Fields Too Large\u003c/h1\u003e\n         \u003cp\u003eThe \"Example\" header was too large.\u003c/p\u003e\n      \u003c/body\u003e\n   \u003c/html\u003e\n\n   Responses with the 431 status code MUST NOT be stored by a cache.\n\n",
+            "tokens": 197,
+            "vector_score": 0.9069220316572091,
+            "rerank_score": 10.937811851501465
+          },
+          {
+            "chunk_id": "6962b2c209ebd898adc0ea57f5cccd5203d296dba2152481315722cfb35baaba",
+            "source": "rfc6585.md",
+            "file": "rfc6585.md",
+            "title": "RFC 6585: Additional HTTP Status Codes",
+            "section": "RFC 6585: Additional HTTP Status Codes / 8. IANA Considerations",
+            "page": null,
+            "strategy": "structured",
+            "start_char": 9922,
+            "end_char": 10392,
+            "text": "## 8. IANA Considerations\n\n   The HTTP Status Codes registry has been updated with the following\n   entries:\n\n      Value: 428\n      Description: Precondition Required\n      Reference: [RFC6585]\n\n      Value: 429\n      Description: Too Many Requests\n      Reference: [RFC6585]\n\n      Value: 431\n      Description: Request Header Fields Too Large\n      Reference: [RFC6585]\n\n      Value: 511\n      Description: Network Authentication Required\n      Reference: [RFC6585]\n\n",
+            "tokens": 87,
+            "vector_score": 0.7313127906393736,
+            "rerank_score": 4.363775730133057
+          },
+          {
+            "chunk_id": "79b3ef3631444c40fc2107028a8c1e5da29783a8f2f945b354363d739ab77a11",
+            "source": "rfc6585.md",
+            "file": "rfc6585.md",
+            "title": "RFC 6585: Additional HTTP Status Codes",
+            "section": "RFC 6585: Additional HTTP Status Codes / 7. Security Considerations / 7.3. 431 Request Header Fields Too Large",
+            "page": null,
+            "strategy": "structured",
+            "start_char": 8924,
+            "end_char": 9126,
+            "text": "### 7.3. 431 Request Header Fields Too Large\n\n   Servers are not required to use the 431 status code; when under\n   attack, it may be more appropriate to just drop connections, or take\n   other steps.\n\n",
+            "tokens": 45,
+            "vector_score": 0.843182416066613,
+            "rerank_score": 4.207607269287109
+          },
+          {
+            "chunk_id": "34df5f0df9993a9326c2dd285d7b40b97cbca62b046071353e791988705d0dfd",
+            "source": "rfc6585.md",
+            "file": "rfc6585.md",
+            "title": "RFC 6585: Additional HTTP Status Codes",
+            "section": "RFC 6585: Additional HTTP Status Codes / 4. 429 Too Many Requests",
+            "page": null,
+            "strategy": "structured",
+            "start_char": 3670,
+            "end_char": 4859,
+            "text": "## 4. 429 Too Many Requests\n\n   The 429 status code indicates that the user has sent too many\n   requests in a given amount of time (\"rate limiting\").\n\n   The response representations SHOULD include details explaining the\n   condition, and MAY include a Retry-After header indicating how long\n   to wait before making a new request.\n\n   For example:\n\n   HTTP/1.1 429 Too Many Requests\n   Content-Type: text/html\n   Retry-After: 3600\n\n   \u003chtml\u003e\n      \u003chead\u003e\n         \u003ctitle\u003eToo Many Requests\u003c/title\u003e\n      \u003c/head\u003e\n      \u003cbody\u003e\n         \u003ch1\u003eToo Many Requests\u003c/h1\u003e\n         \u003cp\u003eI only allow 50 requests per hour to this Web site per\n            logged in user.  Try again soon.\u003c/p\u003e\n      \u003c/body\u003e\n   \u003c/html\u003e\n\n   Note that this specification does not define how the origin server\n   identifies the user, nor how it counts requests.  For example, an\n   origin server that is limiting request rates can do so based upon\n   counts of requests on a per-resource basis, across the entire server,\n   or even among a set of servers.  Likewise, it might identify the user\n   by its authentication credentials, or a stateful cookie.\n\n   Responses with the 429 status code MUST NOT be stored by a cache.\n\n",
+            "tokens": 256,
+            "vector_score": 0.694276775088063,
+            "rerank_score": 0.2002875804901123
+          },
+          {
+            "chunk_id": "ca5ec7f63e53792ca01f7cff347d159b3174d4d14cb2f54ea4dab9c9f8fb53cf",
+            "source": "rfc6585.md",
+            "file": "rfc6585.md",
+            "title": "RFC 6585: Additional HTTP Status Codes",
+            "section": "RFC 6585: Additional HTTP Status Codes / 3. 428 Precondition Required",
+            "page": null,
+            "strategy": "structured",
+            "start_char": 2677,
+            "end_char": 3670,
+            "text": "## 3. 428 Precondition Required\n\n   The 428 status code indicates that the origin server requires the\n   request to be conditional.\n\n   Its typical use is to avoid the \"lost update\" problem, where a client\n   GETs a resource's state, modifies it, and PUTs it back to the server,\n   when meanwhile a third party has modified the state on the server,\n   leading to a conflict.  By requiring requests to be conditional, the\n   server can assure that clients are working with the correct copies.\n\n   Responses using this status code SHOULD explain how to resubmit the\n   request successfully.  For example:\n\n   HTTP/1.1 428 Precondition Required\n   Content-Type: text/html\n\n   \u003chtml\u003e\n      \u003chead\u003e\n         \u003ctitle\u003ePrecondition Required\u003c/title\u003e\n      \u003c/head\u003e\n      \u003cbody\u003e\n         \u003ch1\u003ePrecondition Required\u003c/h1\u003e\n         \u003cp\u003eThis request is required to be conditional;\n         try using \"If-Match\".\u003c/p\u003e\n      \u003c/body\u003e\n   \u003c/html\u003e\n\n   Responses with the 428 status code MUST NOT be stored by a cache.\n\n",
+            "tokens": 220,
+            "vector_score": 0.6228863460259582,
+            "rerank_score": -1.275047779083252
+          }
+        ]
+      },
+      "brief": {
+        "goal": "Draft a response-code checklist for an HTTP API.",
+        "constraints": {
+          "style": "Answer in English with at most two short factual claims. Preserve MAY, SHOULD, MUST, negation and conditions."
+        },
+        "terms": {
+          "signal": "HTTP 431 Request Header Fields Too Large"
+        },
+        "clarifications": {
+          "focus": "Header-size errors are now the selected signal.",
+          "scope": "Use the public RFC corpus for this checklist, not general knowledge."
+        }
+      },
+      "raw_answer": {
+        "UsageIncomplete": false,
+        "ToolCalls": null,
+        "UsageKnown": true,
+        "Content": "                        [q1]\nThe request MAY be resubmitted after reducing the size of the request header fields. [q2]\nIt can be used both when the set of request header fields in total is too large, and when a single header field is at fault. [q3]\nIn the latter case, the response representation SHOULD specify which header field was too large. [q4]\nResponses with the 431 status code MUST NOT be stored by a cache. [q5]\n\nЦитаты:\n[q1] «The 431 status code indicates that the server is unwilling to process the request because its header fields are too large.» [rfc6585.md#72649411207e74ce22e6992c9e6b618da6dc6dd4cff0c500b0e216317c095f75]\n[q2] «The request MAY be resubmitted after reducing the size of the request header fields.» [rfc6585.md#72649411207e74ce22e6992c9e6b618da6dc6dd4cff0c500b0e216317c095f75]\n[q3] «It can be used both when the set of request header fields in total is too large, and when a single header field is at fault.» [rfc6585.md#72649411207e74ce22e6992c9e6b618da6dc6dd4cff0c500b0e216317c095f75]\n[q4] «In the latter case, the response representation SHOULD specify which header field was too large.» [rfc6585.md#72649411207e74ce22e6992c9e6b618da6dc6dd4cff0c500b0e216317c095f75]\n[q5] «Responses with the 431 status code MUST NOT be stored by a cache.» [rfc6585.md#72649411207e74ce22e6992c9e6b618da6dc6dd4cff0c500b0e216317c095f75]\n\nИсточники:\n[rfc6585.md#72649411207e74ce22e6992c9e6b618da6dc6dd4cff0c500b0e216317c095f75]\n  Раздел: RFC 6585: Additional HTTP Status Codes / 5. 431 Request Header Fields Too Large",
+        "Model": "deepseek-flash",
+        "FinishReason": "stop",
+        "PromptTokens": 3322,
+        "CachedInputTokens": 128,
+        "CompletionTokens": 545,
+        "TotalTokens": 3867,
+        "Duration": 2025975200
+      },
+      "grounding": null,
+      "history_before": 12,
+      "history_after": 12,
+      "history_messages_sent": 4,
+      "input_byte_envelope": 13973,
+      "brief_sent": true,
+      "reopened": true,
+      "calls": 1,
+      "reserved_usd": 0.005113499999999999,
+      "estimated_peak_usd": 0.0016129679999999998,
+      "visible": "[База знаний: Day 25 public RFCs · найдено фрагментов: 5]\n[Поиск: 20 кандидатов → 7 после фильтра → 5 в контекст; отсечено 13]\n[Поисковый запрос: What does HTTP 431 Request Header Fields Too Large indicate now?]\n[rfc6585.md#72649411207e74ce22e6992c9e6b618da6dc6dd4cff0c500b0e216317c095f75]\n[rfc6585.md#6962b2c209ebd898adc0ea57f5cccd5203d296dba2152481315722cfb35baaba]\n[rfc6585.md#79b3ef3631444c40fc2107028a8c1e5da29783a8f2f945b354363d739ab77a11]\n[rfc6585.md#34df5f0df9993a9326c2dd285d7b40b97cbca62b046071353e791988705d0dfd]\n[rfc6585.md#ca5ec7f63e53792ca01f7cff347d159b3174d4d14cb2f54ea4dab9c9f8fb53cf]\n\n\u001b[38;5;203mошибка запроса: RAG answer rejected before saving: RAG response must be one JSON object with unique keys\u001b[m",
+      "error": "turn failed retrieval, grounding, memory or persistence checks"
+    }
+  ],
+  "reopens": 1,
+  "return_to_first_chat": false
+}
