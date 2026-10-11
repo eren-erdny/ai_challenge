@@ -15,6 +15,7 @@ import (
 func executeQuestion(ctx context.Context, token, prompt string, state sessionState, output, errorOutput io.Writer, ask askFunction) *requestStatus {
 	target := agent.Target{Profile: state.ActiveProfile, BaseURL: state.API.BaseURL, Model: state.Model, SendThinkingDisabled: isDeepSeekEndpoint(state.API.BaseURL)}
 	target.ContextWindow, target.MaxOutputTokens = state.API.ContextWindow, state.API.MaxOutputTokens
+	target.ReasoningEffort = state.API.ReasoningEffort
 	request := agent.Request{Prompt: prompt, Mode: state.Mode, Target: target, Temperature: state.Temperature, Strategy: state.Strategy, Control: state.Control, UserProfile: state.UserProfile}
 	if state.Knowledge != nil && !state.ToolsDisabled && prompt != "/compress" {
 		query, err := contextualKnowledgeQuery(ctx, state, prompt)
@@ -66,7 +67,7 @@ func executeQuestion(ctx context.Context, token, prompt string, state sessionSta
 			return nil
 		}
 		for _, item := range targets {
-			request.Targets = append(request.Targets, agent.Target{Profile: item.ProfileName, BaseURL: item.Profile.BaseURL, Model: item.Model, SendThinkingDisabled: isDeepSeekEndpoint(item.Profile.BaseURL), ContextWindow: item.Profile.ContextWindow, MaxOutputTokens: item.Profile.MaxOutputTokens})
+			request.Targets = append(request.Targets, agent.Target{Profile: item.ProfileName, BaseURL: item.Profile.BaseURL, Model: item.Model, SendThinkingDisabled: isDeepSeekEndpoint(item.Profile.BaseURL), ContextWindow: item.Profile.ContextWindow, MaxOutputTokens: item.Profile.MaxOutputTokens, ReasoningEffort: item.Profile.ReasoningEffort})
 			credentials[item.ProfileName] = item.Token
 		}
 	}

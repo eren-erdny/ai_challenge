@@ -1,0 +1,21 @@
+{
+  "path": "C:\\Users\\erdni\\Videos\\ai_challenge_hw26.mp4",
+  "duration_seconds": 113.77,
+  "width": 2560,
+  "height": 1440,
+  "fps": 60,
+  "bytes": 6512967,
+  "sha256": "a02eac646b105d7bac2211b0e36a487ff09b5c9d4e506b0844507bcede769e0a",
+  "full_decode_exit_code": 0,
+  "inspected_frame_seconds": [
+    18,
+    50,
+    85,
+    110
+  ],
+  "three_real_responses": true,
+  "automated_tui_input": true,
+  "temporary_stage_overlay": true,
+  "microphone_and_desktop_muted_during_capture": true,
+  "original_scene_and_audio_restored": true
+}

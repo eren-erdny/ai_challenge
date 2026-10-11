@@ -1,0 +1,85 @@
+{
+  "endpoint": "http://127.0.0.1:11434/v1",
+  "model": "batiai/gemma4-12b:iq3",
+  "reasoning_effort": "none",
+  "started": "2026-10-10T11:51:59Z",
+  "answers": [
+    {
+      "id": "simple",
+      "prompt": "Назови столицу Франции. Ответь одним словом.",
+      "completion": {
+        "UsageIncomplete": false,
+        "ToolCalls": null,
+        "UsageKnown": true,
+        "Content": "Париж",
+        "Model": "batiai/gemma4-12b:iq3",
+        "FinishReason": "stop",
+        "PromptTokens": 39,
+        "CachedInputTokens": 0,
+        "CompletionTokens": 4,
+        "TotalTokens": 43,
+        "Duration": 110754500
+      },
+      "visible": "Париж"
+    },
+    {
+      "id": "reasoning",
+      "prompt": "Купили 3 тетради по 80 рублей и 2 ручки по 35 рублей. На всю покупку скидка 10%. Сколько заплатили? Покажи короткий расчёт.",
+      "completion": {
+        "UsageIncomplete": false,
+        "ToolCalls": null,
+        "UsageKnown": true,
+        "Content": "Вот краткий расчёт:\n\n1. **Тетради:** $3 \\times 80 = 240$ руб.\n2. **Ручки:** $2 \\times 35 = 70$ руб.\n3. **Итого (без скидки):** $240 + 70 = 310$ руб.\n4. **Скидка (10%):** $310 \\times 0,1 = 31$ руб.\n5. **Итого к оплате:** $310 - 31 = 279$ руб.\n\n**Ответ: 279 рублей.**",
+        "Model": "batiai/gemma4-12b:iq3",
+        "FinishReason": "stop",
+        "PromptTokens": 69,
+        "CachedInputTokens": 0,
+        "CompletionTokens": 146,
+        "TotalTokens": 215,
+        "Duration": 1537853800
+      },
+      "visible": "Вот краткий расчёт:\n\n1. **Тетради:** $3 \\times 80 = 240$ руб.\n2. **Ручки:** $2 \\times 35 = 70$ руб.\n3. **Итого (без скидки):** $240 + 70 = 310$ руб.\n4. **Скидка (10%):** $310 \\times 0,1 = 31$ руб.\n5. **Итого к оплате:** $310 - 31 = 279$ руб.\n\n**Ответ: 279 рублей.**"
+    },
+    {
+      "id": "code",
+      "prompt": "Напиши Python-функцию brackets_balanced(s), которая проверяет баланс и правильную вложенность (), [] и {} с помощью стека. Остальные символы игнорируй. Пустая строка допустима. Верни только код функции в блоке Python, без пояснений.",
+      "completion": {
+        "UsageIncomplete": false,
+        "ToolCalls": null,
+        "UsageKnown": true,
+        "Content": "```python\ndef brackets_balanced(s):\n    stack = []\n    pairs = {')': '(', ']': '[', '}': '{'}\n    \n    for char in s:\n        if char in \"([{\":\n            stack.append(char)\n        elif char in \")]}\":\n            if not stack or stack.pop() != pairs[char]:\n                return False\n    \n    return len(stack) == 0\n```",
+        "Model": "batiai/gemma4-12b:iq3",
+        "FinishReason": "stop",
+        "PromptTokens": 88,
+        "CachedInputTokens": 0,
+        "CompletionTokens": 102,
+        "TotalTokens": 190,
+        "Duration": 1071626700
+      },
+      "visible": "```python\ndef brackets_balanced(s):\n    stack = []\n    pairs = {')': '(', ']': '[', '}': '{'}\n\n    for char in s:\n        if char in \"([{\":\n            stack.append(char)\n        elif char in \")]}\":\n            if not stack or stack.pop() != pairs[char]:\n                return False\n\n    return len(stack) == 0\n```"
+    }
+  ],
+  "running_models": {
+    "models": [
+      {
+        "name": "batiai/gemma4-12b:iq3",
+        "model": "batiai/gemma4-12b:iq3",
+        "size": 6030926807,
+        "digest": "46c3e602a4541e775750cd4fa90cef5055cb1e220620ad4e3c335ffb4571e80a",
+        "details": {
+          "parent_model": "",
+          "format": "gguf",
+          "family": "gemma4",
+          "families": [
+            "gemma4"
+          ],
+          "parameter_size": "11.9B",
+          "quantization_level": "unknown"
+        },
+        "expires_at": "2026-10-10T14:57:02.4081868+03:00",
+        "size_vram": 6030926807,
+        "context_length": 131072
+      }
+    ]
+  }
+}

@@ -480,7 +480,7 @@ func cloneControl(control *Control) *Control {
 }
 
 func (a *Agent) prepare(prompt string, step invocation) (Settings, int) {
-	settings := Settings{Model: step.target.Model, BaseURL: step.target.BaseURL, SendThinkingDisabled: step.target.SendThinkingDisabled,
+	settings := Settings{Model: step.target.Model, BaseURL: step.target.BaseURL, ReasoningEffort: step.target.ReasoningEffort, SendThinkingDisabled: step.target.SendThinkingDisabled,
 		Temperature: step.temperature, Strategy: step.strategy, Control: cloneControl(step.control)}
 	settings.JSONOutput = step.grounding != nil
 	if step.grounding != nil && settings.Control != nil {

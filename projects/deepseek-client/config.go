@@ -67,6 +67,7 @@ func validateHistory(config historyConfig) error {
 }
 
 type apiProfile struct {
+	ReasoningEffort string `json:"reasoning_effort,omitempty"`
 	ContextWindow   int    `json:"context_window,omitempty"`
 	MaxOutputTokens int    `json:"max_output_tokens,omitempty"`
 	BaseURL         string `json:"base_url"`

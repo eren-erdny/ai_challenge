@@ -14,15 +14,16 @@ import (
 )
 
 type ChatRequest struct {
-	ResponseFormat *ResponseFormat        `json:"response_format,omitempty"`
-	Tools          []agent.ToolDefinition `json:"tools,omitempty"`
-	Model          string                 `json:"model"`
-	Messages       []chatMessage          `json:"messages"`
-	Thinking       *ThinkingMode          `json:"thinking,omitempty"`
-	Temperature    float64                `json:"temperature"`
-	Stream         bool                   `json:"stream"`
-	MaxTokens      int                    `json:"max_tokens,omitempty"`
-	Stop           []string               `json:"stop,omitempty"`
+	ReasoningEffort string                 `json:"reasoning_effort,omitempty"`
+	ResponseFormat  *ResponseFormat        `json:"response_format,omitempty"`
+	Tools           []agent.ToolDefinition `json:"tools,omitempty"`
+	Model           string                 `json:"model"`
+	Messages        []chatMessage          `json:"messages"`
+	Thinking        *ThinkingMode          `json:"thinking,omitempty"`
+	Temperature     float64                `json:"temperature"`
+	Stream          bool                   `json:"stream"`
+	MaxTokens       int                    `json:"max_tokens,omitempty"`
+	Stop            []string               `json:"stop,omitempty"`
 }
 type ResponseFormat struct {
 	Type string `json:"type"`
@@ -77,6 +78,7 @@ func New(httpClient *http.Client, credentials map[string]string) *Client {
 func (c *Client) Complete(ctx context.Context, target agent.Target, prompt string, settings agent.Settings) (agent.Completion, error) {
 	token := c.credentials[target.Profile]
 	settings.Model, settings.BaseURL, settings.SendThinkingDisabled = target.Model, target.BaseURL, target.SendThinkingDisabled
+	settings.ReasoningEffort = target.ReasoningEffort
 	safe := func(message string) string {
 		if token != "" {
 			return strings.ReplaceAll(message, token, "[redacted]")
@@ -171,12 +173,13 @@ func (c *Client) Complete(ctx context.Context, target agent.Target, prompt strin
 }
 func BuildChatRequest(prompt string, settings agent.Settings) ChatRequest {
 	payload := ChatRequest{
-		Tools:       settings.Tools,
-		Model:       settings.Model,
-		Messages:    []chatMessage{{Role: "user", Content: prompt}},
-		Temperature: settings.Temperature,
-		Stream:      false,
-		MaxTokens:   settings.MaxOutputTokens,
+		ReasoningEffort: settings.ReasoningEffort,
+		Tools:           settings.Tools,
+		Model:           settings.Model,
+		Messages:        []chatMessage{{Role: "user", Content: prompt}},
+		Temperature:     settings.Temperature,
+		Stream:          false,
+		MaxTokens:       settings.MaxOutputTokens,
 	}
 	if settings.SendThinkingDisabled {
 		payload.Thinking = &ThinkingMode{Type: "disabled"}
