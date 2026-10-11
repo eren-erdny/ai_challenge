@@ -1,0 +1,26 @@
+{
+  "active_profile": "ollama_rag",
+  "profiles": {
+    "ollama_rag": {
+      "base_url": "http://127.0.0.1:11434/v1",
+      "api_key_env": "",
+      "model": "qwen3.5:4b-rag",
+      "reasoning_effort": "none",
+      "context_window": 16384,
+      "max_output_tokens": 2048
+    }
+  },
+  "generation": {
+    "temperature": 0,
+    "strategy": "standard"
+  },
+  "response_control": {
+    "enabled": false
+  },
+  "history": {
+    "strategy": "full",
+    "keep_last": 0,
+    "auto_compress": false,
+    "retention_days": 30
+  }
+}

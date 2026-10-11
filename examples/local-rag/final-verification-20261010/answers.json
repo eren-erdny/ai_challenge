@@ -1,0 +1,646 @@
+{
+  "model": "qwen3.5:4b",
+  "endpoint": "http://127.0.0.1:11434/v1",
+  "started": "2026-10-10T12:46:33Z",
+  "manifest": {
+    "source_root": "C:\\Users\\erdni\\Documents\\projects\\hw1\\examples\\rag-indexing\\corpus",
+    "source_roots": [
+      "C:\\Users\\erdni\\Documents\\projects\\hw1\\examples\\rag-indexing\\corpus"
+    ],
+    "corpus_sha256": "538eb5d3b698b6773b7a4ec9df045669e677ba3894ff0af5df80187d9f5686bd",
+    "files": 3,
+    "text_units": 3,
+    "pdf_pages": 0,
+    "characters": 45358,
+    "skipped_files": [],
+    "tokenizer": "nomic-ai/nomic-embed-text-v1.5",
+    "size": 400,
+    "overlap": 60,
+    "stats": {
+      "fixed": {
+        "chunks": 30,
+        "min_tokens": 200,
+        "max_tokens": 400,
+        "mean_tokens": 387.26666666666665,
+        "total_tokens_with_overlap": 11618,
+        "chunking_seconds": 0.04911029999493621
+      },
+      "structured": {
+        "chunks": 72,
+        "min_tokens": 5,
+        "max_tokens": 400,
+        "mean_tokens": 143.02777777777777,
+        "total_tokens_with_overlap": 10298,
+        "chunking_seconds": 0.047986800003855024
+      }
+    },
+    "embedding": {
+      "model": "nomic-embed-text:latest",
+      "digest": "0a109f422b47e3a30ba2b10eca18548e944e8a23073ee3f3e947efcf3c45e59f"
+    },
+    "collections": {
+      "fixed": {
+        "name": "chunks_fixed_4e122ff89c71",
+        "dimension": 768
+      },
+      "structured": {
+        "name": "chunks_structured_447705e7a311",
+        "dimension": 768
+      }
+    },
+    "qdrant_path": "C:\\Users\\erdni\\Documents\\projects\\hw1\\artifacts\\hw21\\qdrant",
+    "index_seconds": {
+      "fixed": 1.486767400005192,
+      "structured": 0.8971909999963827
+    },
+    "backend": "local"
+  },
+  "startup_seconds": 11.730387499999999,
+  "cloud_generation_calls": 0,
+  "rows": [
+    {
+      "id": "Q01",
+      "run": 1,
+      "query": "Which method tells the coffee pot that enough milk has been added?",
+      "retrieval": {
+        "query": "Which method tells the coffee pot that enough milk has been added?",
+        "search_query": "Which method tells the coffee pot that enough milk has been added?",
+        "rewrite": true,
+        "min_similarity": 0.49,
+        "score_type": "cosine",
+        "retained_count": 2,
+        "filtered_count": 18,
+        "cosine_retained_count": 20,
+        "min_rerank_score": -3,
+        "rerank_score_type": "raw_logit",
+        "no_evidence": false,
+        "candidates": 20,
+        "strategy": "structured",
+        "reranking": true,
+        "candidate_count": 20,
+        "top_k": 5,
+        "retrieval_seconds": 0.02329379999991943,
+        "rerank_seconds": 0.8004049000001032,
+        "results": [
+          {
+            "chunk_id": "ebeb735ad069845816100d378b606edd19053b1153a0d3bbe0c0918a91e02615",
+            "source": "rfc2324.md",
+            "file": "rfc2324.md",
+            "title": "RFC 2324: Hyper Text Coffee Pot Control Protocol (HTCPCP/1.0)",
+            "section": "RFC 2324: Hyper Text Coffee Pot Control Protocol (HTCPCP/1.0) / 2. HTCPCP Protocol / 2.1. HTCPCP Added Methods / 2.1.4. WHEN method",
+            "page": null,
+            "strategy": "structured",
+            "start_char": 4340,
+            "end_char": 4645,
+            "text": "#### 2.1.4. WHEN method\n\n   When coffee is poured, and milk is offered, it is necessary for the\n   holder of the recipient of milk to say \"when\" at the time when\n   sufficient milk has been introduced into the coffee. For this\n   purpose, the \"WHEN\" method has been added to HTCPCP. Enough? Say\n   WHEN.\n\n",
+            "tokens": 74,
+            "vector_score": 0.7892162271836579,
+            "rerank_score": 6.692489147186279
+          },
+          {
+            "chunk_id": "79a87edbe7a850e44fe1ff705f8716ecdb7e955a14fd544915f0165a57f619c9",
+            "source": "rfc2324.md",
+            "file": "rfc2324.md",
+            "title": "RFC 2324: Hyper Text Coffee Pot Control Protocol (HTCPCP/1.0)",
+            "section": "RFC 2324: Hyper Text Coffee Pot Control Protocol (HTCPCP/1.0) / 2. HTCPCP Protocol / 2.1. HTCPCP Added Methods / 2.1.1. The BREW method, and the use of POST",
+            "page": null,
+            "strategy": "structured",
+            "start_char": 2858,
+            "end_char": 3624,
+            "text": "#### 2.1.1. The BREW method, and the use of POST\n\n   Commands to control a coffee pot are sent from client to coffee\n   server using either the BREW or POST method, and a message body with\n   Content-Type set to \"application/coffee-pot-command\".\n\n   A coffee pot server MUST accept both the BREW and POST method\n   equivalently.  However, the use of POST for causing actions to happen\n   is deprecated.\n\n   Coffee pots heat water using electronic mechanisms, so there is no\n   fire. Thus, no firewalls are necessary, and firewall control policy\n   is irrelevant. However, POST may be a trademark for coffee, and so\n   the BREW method has been added. The BREW method may be used with\n   other HTTP-based protocols (e.g., the Hyper Text Brewery Control\n   Protocol).\n\n",
+            "tokens": 167,
+            "vector_score": 0.6981169200615507,
+            "rerank_score": -0.6713998317718506
+          }
+        ]
+      },
+      "raw_answer": {
+        "UsageIncomplete": false,
+        "ToolCalls": null,
+        "UsageKnown": true,
+        "Content": "{\"status\":\"answered\",\"claims\":[{\"text\":\"The WHEN method is used to indicate when sufficient milk has been introduced into the coffee.\",\"quote_ids\":[\"q1\"]},{\"text\":\"When coffee is poured and milk is offered, the holder of the recipient of milk must say \\\"when\\\" at the time when sufficient milk has been introduced.\",\"quote_ids\":[\"q2\"]},{\"text\":\"For this purpose, the WHEN method has been added to HTCPCP.\",\"quote_ids\":[\"q3\"]},{\"text\":\"Enough? Say WHEN.\",\"quote_ids\":[\"q4\"]}],\"quotes\":[{\"id\":\"q1\",\"chunk_id\":\"ebeb735ad069845816100d378b606edd19053b1153a0d3bbe0c0918a91e02615\",\"text\":\"#### 2.1.4. WHEN method\\n\\n   When coffee is poured, and milk is offered, it is necessary for the\\n   holder of the recipient of milk to say \\\"when\\\" at the time when\\n   sufficient milk has been introduced into the coffee. For this\\n   purpose, the \\\"WHEN\\\" method has been added to HTCPCP. Enough? Say\\n   WHEN.\\n\\n\"},{\"id\":\"q2\",\"chunk_id\":\"ebeb735ad069845816100d378b606edd19053b1153a0d3bbe0c0918a91e02615\",\"text\":\"#### 2.1.4. WHEN method\\n\\n   When coffee is poured, and milk is offered, it is necessary for the\\n   holder of the recipient of milk to say \\\"when\\\" at the time when\\n   sufficient milk has been introduced into the coffee. For this\\n   purpose, the \\\"WHEN\\\" method has been added to HTCPCP. Enough? Say\\n   WHEN.\\n\\n\"},{\"id\":\"q3\",\"chunk_id\":\"ebeb735ad069845816100d378b606edd19053b1153a0d3bbe0c0918a91e02615\",\"text\":\"#### 2.1.4. WHEN method\\n\\n   When coffee is poured, and milk is offered, it is necessary for the\\n   holder of the recipient of milk to say \\\"when\\\" at the time when\\n   sufficient milk has been introduced into the coffee. For this\\n   purpose, the \\\"WHEN\\\" method has been added to HTCPCP. Enough? Say\\n   WHEN.\\n\\n\"},{\"id\":\"q4\",\"chunk_id\":\"ebeb735ad069845816100d378b606edd19053b1153a0d3bbe0c0918a91e02615\",\"text\":\"#### 2.1.4. WHEN method\\n\\n   When coffee is poured, and milk is offered, it is necessary for the\\n   holder of the recipient of milk to say \\\"when\\\" at the time when\\n   sufficient milk has been introduced into the coffee. For this\\n   purpose, the \\\"WHEN\\\" method has been added to HTCPCP. Enough? Say\\n   WHEN.\\n\\n\"}],\"clarification\":\"\"}",
+        "Model": "qwen3.5:4b",
+        "FinishReason": "stop",
+        "PromptTokens": 1489,
+        "CachedInputTokens": 0,
+        "CompletionTokens": 736,
+        "TotalTokens": 2225,
+        "Duration": 19533692200
+      },
+      "grounding": {
+        "status": "answered",
+        "answer": "The WHEN method is used to indicate when sufficient milk has been introduced into the coffee. [q1]\nWhen coffee is poured and milk is offered, the holder of the recipient of milk must say \"when\" at the time when sufficient milk has been introduced. [q2]\nFor this purpose, the WHEN method has been added to HTCPCP. [q3]\nEnough? Say WHEN. [q4]",
+        "claims": [
+          {
+            "text": "The WHEN method is used to indicate when sufficient milk has been introduced into the coffee.",
+            "quote_ids": [
+              "q1"
+            ]
+          },
+          {
+            "text": "When coffee is poured and milk is offered, the holder of the recipient of milk must say \"when\" at the time when sufficient milk has been introduced.",
+            "quote_ids": [
+              "q2"
+            ]
+          },
+          {
+            "text": "For this purpose, the WHEN method has been added to HTCPCP.",
+            "quote_ids": [
+              "q3"
+            ]
+          },
+          {
+            "text": "Enough? Say WHEN.",
+            "quote_ids": [
+              "q4"
+            ]
+          }
+        ],
+        "quotes": [
+          {
+            "id": "q1",
+            "chunk_id": "ebeb735ad069845816100d378b606edd19053b1153a0d3bbe0c0918a91e02615",
+            "text": "#### 2.1.4. WHEN method When coffee is poured, and milk is offered, it is necessary for the holder of the recipient of milk to say \"when\" at the time when sufficient milk has been introduced into the coffee. For this purpose, the \"WHEN\" method has been added to HTCPCP. Enough? Say WHEN."
+          },
+          {
+            "id": "q2",
+            "chunk_id": "ebeb735ad069845816100d378b606edd19053b1153a0d3bbe0c0918a91e02615",
+            "text": "#### 2.1.4. WHEN method When coffee is poured, and milk is offered, it is necessary for the holder of the recipient of milk to say \"when\" at the time when sufficient milk has been introduced into the coffee. For this purpose, the \"WHEN\" method has been added to HTCPCP. Enough? Say WHEN."
+          },
+          {
+            "id": "q3",
+            "chunk_id": "ebeb735ad069845816100d378b606edd19053b1153a0d3bbe0c0918a91e02615",
+            "text": "#### 2.1.4. WHEN method When coffee is poured, and milk is offered, it is necessary for the holder of the recipient of milk to say \"when\" at the time when sufficient milk has been introduced into the coffee. For this purpose, the \"WHEN\" method has been added to HTCPCP. Enough? Say WHEN."
+          },
+          {
+            "id": "q4",
+            "chunk_id": "ebeb735ad069845816100d378b606edd19053b1153a0d3bbe0c0918a91e02615",
+            "text": "#### 2.1.4. WHEN method When coffee is poured, and milk is offered, it is necessary for the holder of the recipient of milk to say \"when\" at the time when sufficient milk has been introduced into the coffee. For this purpose, the \"WHEN\" method has been added to HTCPCP. Enough? Say WHEN."
+          }
+        ],
+        "sources": [
+          {
+            "source": "rfc2324.md",
+            "section": "RFC 2324: Hyper Text Coffee Pot Control Protocol (HTCPCP/1.0) / 2. HTCPCP Protocol / 2.1. HTCPCP Added Methods / 2.1.4. WHEN method",
+            "chunk_id": "ebeb735ad069845816100d378b606edd19053b1153a0d3bbe0c0918a91e02615"
+          }
+        ],
+        "clarification": "",
+        "local": false
+      },
+      "visible": "[База знаний: Готовый локальный индекс · найдено фрагментов: 2]\n[Поиск: 20 кандидатов → 2 после фильтра → 2 в контекст; отсечено 18]\n[rfc2324.md#ebeb735ad069845816100d378b606edd19053b1153a0d3bbe0c0918a91e02615]\n[rfc2324.md#79a87edbe7a850e44fe1ff705f8716ecdb7e955a14fd544915f0165a57f619c9]\nThe WHEN method is used to indicate when sufficient milk has been introduced into the coffee. [q1]\nWhen coffee is poured and milk is offered, the holder of the recipient of milk must say \"when\" at the time when sufficient milk has been introduced. [q2]\nFor this purpose, the WHEN method has been added to HTCPCP. [q3]\nEnough? Say WHEN. [q4]\n\nЦитаты:\n[q1] «#### 2.1.4. WHEN method When coffee is poured, and milk is offered, it is necessary for the holder of the recipient of milk to say \"when\" at the time when sufficient milk has been introduced into the coffee. For this purpose, the \"WHEN\" method has been added to HTCPCP. Enough? Say WHEN.» [rfc2324.md#ebeb735ad069845816100d378b606edd19053b1153a0d3bbe0c0918a91e02615]\n[q2] «#### 2.1.4. WHEN method When coffee is poured, and milk is offered, it is necessary for the holder of the recipient of milk to say \"when\" at the time when sufficient milk has been introduced into the coffee. For this purpose, the \"WHEN\" method has been added to HTCPCP. Enough? Say WHEN.» [rfc2324.md#ebeb735ad069845816100d378b606edd19053b1153a0d3bbe0c0918a91e02615]\n[q3] «#### 2.1.4. WHEN method When coffee is poured, and milk is offered, it is necessary for the holder of the recipient of milk to say \"when\" at the time when sufficient milk has been introduced into the coffee. For this purpose, the \"WHEN\" method has been added to HTCPCP. Enough? Say WHEN.» [rfc2324.md#ebeb735ad069845816100d378b606edd19053b1153a0d3bbe0c0918a91e02615]\n[q4] «#### 2.1.4. WHEN method When coffee is poured, and milk is offered, it is necessary for the holder of the recipient of milk to say \"when\" at the time when sufficient milk has been introduced into the coffee. For this purpose, the \"WHEN\" method has been added to HTCPCP. Enough? Say WHEN.» [rfc2324.md#ebeb735ad069845816100d378b606edd19053b1153a0d3bbe0c0918a91e02615]\n\nИсточники:\n[rfc2324.md#ebeb735ad069845816100d378b606edd19053b1153a0d3bbe0c0918a91e02615]\n  Раздел: RFC 2324: Hyper Text Coffee Pot Control Protocol (HTCPCP/1.0) / 2. HTCPCP Protocol / 2.1. HTCPCP Added Methods / 2.1.4. WHEN method\n[RAG: 4 утверждений · 4 цитат · 1 источников; источники и точность цитат проверены]",
+      "calls": 1,
+      "total_seconds": 20.3729884
+    },
+    {
+      "id": "Q02",
+      "run": 1,
+      "query": "What content type requests tea from a TEA-capable pot?",
+      "retrieval": {
+        "query": "What content type requests tea from a TEA-capable pot?",
+        "search_query": "What content type requests tea from a TEA-capable pot?",
+        "rewrite": true,
+        "min_similarity": 0.49,
+        "score_type": "cosine",
+        "retained_count": 12,
+        "filtered_count": 8,
+        "cosine_retained_count": 20,
+        "min_rerank_score": -3,
+        "rerank_score_type": "raw_logit",
+        "no_evidence": false,
+        "candidates": 20,
+        "strategy": "structured",
+        "reranking": true,
+        "candidate_count": 20,
+        "top_k": 5,
+        "retrieval_seconds": 0.0351516000000629,
+        "rerank_seconds": 0.718954300000405,
+        "results": [
+          {
+            "chunk_id": "81cb1b3c60eb63eb0eee2e358b41ceb1ab87a3f3b27626ad12c3b51a93b1d1f5",
+            "source": "rfc7168.md",
+            "file": "rfc7168.md",
+            "title": "RFC 7168: The Hyper Text Coffee Pot Control Protocol for Tea Efflux Appliances",
+            "section": "RFC 7168: The Hyper Text Coffee Pot Control Protocol for Tea Efflux Appliances / 3. The \"message/teapot\" Media Type",
+            "page": null,
+            "strategy": "structured",
+            "start_char": 9078,
+            "end_char": 9434,
+            "text": "## 3. The \"message/teapot\" Media Type\n\n   To distinguish messages destined for TEA-capable HTCPCP services from\n   pots compliant with the base HTCPCP specification, a new MIME media\n   type is defined by this document.  The Content-Type header of a POST\n   or BREW request sent to a TEA-capable pot MUST be \"message/teapot\" if\n   tea is to be requested.\n\n",
+            "tokens": 83,
+            "vector_score": 0.8093907867516753,
+            "rerank_score": 9.461723327636719
+          },
+          {
+            "chunk_id": "5ae60e885a26f576bdbfcce6fa78c74455920d4e87b5e44b8f43686a7605ee2e",
+            "source": "rfc7168.md",
+            "file": "rfc7168.md",
+            "title": "RFC 7168: The Hyper Text Coffee Pot Control Protocol for Tea Efflux Appliances",
+            "section": "RFC 7168: The Hyper Text Coffee Pot Control Protocol for Tea Efflux Appliances / 4. Environmental Considerations",
+            "page": null,
+            "strategy": "structured",
+            "start_char": 9434,
+            "end_char": 10448,
+            "text": "## 4. Environmental Considerations\n\n   As noted in Section 2.1, a BREW request with a Content-Type header\n   field of \"message/teapot\" to a TEA-capable pot will result in an\n   Alternates header being sent with the response, and a pot will not be\n   brewed.  However, if the BREW request has a Content-Type of\n   \"message/coffeepot\", and the pot is capable of brewing coffee, the\n   service's behavior will fall back to the base HTCPCP specification\n   and a pot will be brewed.\n\n   If the entity returned by the server when brewing commences contains\n   a TEA-compliant Alternates header indicating \"message/coffeepot\" and\n   the client does not want coffee, the client SHOULD then send a BREW\n   request with an entity body containing \"stop\".  This will result in\n   wasted coffee; whether this is regarded as a bad thing is user-\n   defined.\n\n   Such waste can be prevented by TEA-capable clients, by first\n   requesting a BREW of type \"message/teapot\" and then allowing\n   selection of an available beverage.\n\n",
+            "tokens": 215,
+            "vector_score": 0.7855121315417428,
+            "rerank_score": 8.724299430847168
+          },
+          {
+            "chunk_id": "6e437a9fea7d3e9a71c29b7395d208ce043a090eb018b7075cee09bc292ac5e2",
+            "source": "rfc7168.md",
+            "file": "rfc7168.md",
+            "title": "RFC 7168: The Hyper Text Coffee Pot Control Protocol for Tea Efflux Appliances",
+            "section": "RFC 7168: The Hyper Text Coffee Pot Control Protocol for Tea Efflux Appliances / 2. HTCPCP-TEA Protocol Additions / 2.1. BREW and POST Methods",
+            "page": null,
+            "strategy": "structured",
+            "start_char": 3446,
+            "end_char": 3991,
+            "text": "### 2.1. BREW and POST Methods\n\n   Control of a TEA-capable pot is performed, as described in the base\n   HTCPCP specification, through the sending of BREW requests.  POST\n   requests are treated equivalently, but they remain deprecated.  Tea\n   production differs from coffee, however, in that a choice of teas is\n   often provided for client selection before the tea is brewed.  To\n   this end, a TEA-capable pot that receives a BREW message of content\n   type \"message/teapot\" MUST respond in accordance with the URI\n   requested, as below.\n\n",
+            "tokens": 117,
+            "vector_score": 0.7919786753763169,
+            "rerank_score": 7.953942775726318
+          },
+          {
+            "chunk_id": "ae3f3bfc1ce0c56db5c7213adc078a1d47246ed0957ab89c2df87738ddf00491",
+            "source": "rfc7168.md",
+            "file": "rfc7168.md",
+            "title": "RFC 7168: The Hyper Text Coffee Pot Control Protocol for Tea Efflux Appliances",
+            "section": "RFC 7168: The Hyper Text Coffee Pot Control Protocol for Tea Efflux Appliances / 2. HTCPCP-TEA Protocol Additions / 2.1. BREW and POST Methods / 2.1.1. The \"/\" URI",
+            "page": null,
+            "strategy": "structured",
+            "start_char": 3991,
+            "end_char": 5340,
+            "text": "#### 2.1.1. The \"/\" URI\n\n   For the URI \"/\", brewing will not commence.  Instead, an Alternates\n   header as defined in RFC 2295 [RFC2295] MUST be sent, with the\n   available tea bags and/or leaf varieties as entries.  An example of\n   such a response is as follows:\n\n      Alternates: {\"/darjeeling\" {type message/teapot}},\n                  {\"/earl-grey\" {type message/teapot}},\n                  {\"/peppermint\" {type message/teapot}}\n\n   The following example demonstrates the possibility of\n   interoperability of a TEA-capable pot that also complies with the\n   base HTCPCP specification:\n\n      Alternates: {\"/\" {type message/coffeepot}},\n                  {\"/pot-0/darjeeling\" {type message/teapot}},\n                  {\"/pot-0/earl-grey\" {type message/teapot}},\n                  {\"/pot-1/peppermint\" {type message/teapot}}\n\n   TEA-capable HTCPCP clients MUST check the contents of the Alternates\n   header returned by a BREW request, and provide a specific URI for\n   subsequent requests of the \"message/teapot\" type.\n\n   A request to the \"/\" URI with a Content-Type header of\n   \"message/coffeepot\" SHOULD also be responded to with an Alternates\n   header in the above format, to allow TEA-capable clients the\n   opportunity to present the selection of teas to the user if inferior\n   caffeinated beverages have initially been requested.\n\n",
+            "tokens": 337,
+            "vector_score": 0.7793786688204424,
+            "rerank_score": 5.471770286560059
+          },
+          {
+            "chunk_id": "4a4b36682595be4967b9f4680d67222ea52d77a59b5ca86263c062d6bac91053",
+            "source": "rfc7168.md",
+            "file": "rfc7168.md",
+            "title": "RFC 7168: The Hyper Text Coffee Pot Control Protocol for Tea Efflux Appliances",
+            "section": "RFC 7168: The Hyper Text Coffee Pot Control Protocol for Tea Efflux Appliances / 2. HTCPCP-TEA Protocol Additions / 2.1. BREW and POST Methods / 2.1.2. Variety-Specific URIs",
+            "page": null,
+            "strategy": "structured",
+            "start_char": 5340,
+            "end_char": 6676,
+            "text": "#### 2.1.2. Variety-Specific URIs\n\n   TEA-capable pots follow the base HTCPCP specification when presented\n   with a BREW request for a specific variety of tea.  Pots SHOULD\n   follow the recommendations for brewing strength given by each\n   variety, and stop brewing when this strength is reached; it is\n   suggested that the strength be measured by detection of the opacity\n   of the beverage currently under brew by the pot.\n\n   TEA-capable clients SHOULD indicate the end of brewing by sending a\n   BREW request with an entity body containing \"stop\"; the pot MAY\n   continue brewing beyond the recommended strength until this is\n   received.  If the \"stop\" request is not sent by the client, this may\n   result in a state inversion in the proportion of tea to water in the\n   brewing pot, which may be reported by some pots as a negative\n   strength.\n\n   If a BREW command with an entity body containing \"stop\" is received\n   before the recommended strength is achieved, the pot MUST abort\n   brewing and serve the resultant beverage at lesser strength.  Finding\n   the preferred strength of beverage when using this override is a\n   function of the time between the TEA-capable pot receiving a \"start\"\n   request and the subsequent \"stop\".  Clients SHOULD be prepared to\n   make multiple attempts to reach the preferred strength.\n\n",
+            "tokens": 255,
+            "vector_score": 0.7632452564368271,
+            "rerank_score": 4.254114151000977
+          }
+        ]
+      },
+      "raw_answer": {
+        "UsageIncomplete": false,
+        "ToolCalls": null,
+        "UsageKnown": true,
+        "Content": "{\"status\":\"answered\",\"claims\":[{\"text\":\"The Content-Type header of a POST or BREW request sent to a TEA-capable pot MUST be \\\"message/teapot\\\" if tea is to be requested.\",\"quote_ids\":[\"q1\"]},{\"text\":\"A BREW request with a Content-Type header field of \\\"message/teapot\\\" to a TEA-capable pot will result in an Alternates header being sent with the response, and a pot will not be brewed.\",\"quote_ids\":[\"q2\"]},{\"text\":\"A TEA-capable pot that receives a BREW message of content type \\\"message/teapot\\\" MUST respond in accordance with the URI requested.\",\"quote_ids\":[\"q3\"]},{\"text\":\"TEA-capable clients MUST check the contents of the Alternates header returned by a BREW request, and provide a specific URI for subsequent requests of the \\\"message/teapot\\\" type.\",\"quote_ids\":[\"q4\"]},{\"text\":\"If a BREW command with an entity body containing \\\"stop\\\" is received before the recommended strength is achieved, the pot MUST abort brewing and serve the resultant beverage at lesser strength.\",\"quote_ids\":[\"q5\"]}],\"quotes\":[{\"id\":\"q1\",\"chunk_id\":\"81cb1b3c60eb63eb0eee2e358b41ceb1ab87a3f3b27626ad12c3b51a93b1d1f5\",\"text\":\"To distinguish messages destined for TEA-capable HTCPCP services from pots compliant with the base HTCPCP specification, a new MIME media type is defined by this document. The Content-Type header of a POST or BREW request sent to a TEA-capable pot MUST be \\\"message/teapot\\\" if tea is to be requested.\"},{\"id\":\"q2\",\"chunk_id\":\"5ae60e885a26f576bdbfcce6fa78c74455920d4e87b5e44b8f43686a7605ee2e\",\"text\":\"As noted in Section 2.1, a BREW request with a Content-Type header field of \\\"message/teapot\\\" to a TEA-capable pot will result in an Alternates header being sent with the response, and a pot will not be brewed.\"},{\"id\":\"q3\",\"chunk_id\":\"6e437a9fea7d3e9a71c29b7395d208ce043a090eb018b7075cee09bc292ac5e2\",\"text\":\"Tea production differs from coffee, however, in that a choice of teas is often provided for client selection before the tea is brewed. To this end, a TEA-capable pot that receives a BREW message of content type \\\"message/teapot\\\" MUST respond in accordance with the URI requested, as below.\"},{\"id\":\"q4\",\"chunk_id\":\"ae3f3bfc1ce0c56db5c7213adc078a1d47246ed0957ab89c2df87738ddf00491\",\"text\":\"TEA-capable HTCPCP clients MUST check the contents of the Alternates header returned by a BREW request, and provide a specific URI for subsequent requests of the \\\"message/teapot\\\" type.\"},{\"id\":\"q5\",\"chunk_id\":\"4a4b36682595be4967b9f4680d67222ea52d77a59b5ca86263c062d6bac91053\",\"text\":\"If a BREW command with an entity body containing \\\"stop\\\" is received before the recommended strength is achieved, the pot MUST abort brewing and serve the resultant beverage at lesser strength.\"}],\"clarification\":\"\"}",
+        "Model": "qwen3.5:4b",
+        "FinishReason": "stop",
+        "PromptTokens": 3101,
+        "CachedInputTokens": 0,
+        "CompletionTokens": 849,
+        "TotalTokens": 3950,
+        "Duration": 21935568400
+      },
+      "grounding": {
+        "status": "answered",
+        "answer": "The Content-Type header of a POST or BREW request sent to a TEA-capable pot MUST be \"message/teapot\" if tea is to be requested. [q1]\nA BREW request with a Content-Type header field of \"message/teapot\" to a TEA-capable pot will result in an Alternates header being sent with the response, and a pot will not be brewed. [q2]\nA TEA-capable pot that receives a BREW message of content type \"message/teapot\" MUST respond in accordance with the URI requested. [q3]\nTEA-capable clients MUST check the contents of the Alternates header returned by a BREW request, and provide a specific URI for subsequent requests of the \"message/teapot\" type. [q4]\nIf a BREW command with an entity body containing \"stop\" is received before the recommended strength is achieved, the pot MUST abort brewing and serve the resultant beverage at lesser strength. [q5]",
+        "claims": [
+          {
+            "text": "The Content-Type header of a POST or BREW request sent to a TEA-capable pot MUST be \"message/teapot\" if tea is to be requested.",
+            "quote_ids": [
+              "q1"
+            ]
+          },
+          {
+            "text": "A BREW request with a Content-Type header field of \"message/teapot\" to a TEA-capable pot will result in an Alternates header being sent with the response, and a pot will not be brewed.",
+            "quote_ids": [
+              "q2"
+            ]
+          },
+          {
+            "text": "A TEA-capable pot that receives a BREW message of content type \"message/teapot\" MUST respond in accordance with the URI requested.",
+            "quote_ids": [
+              "q3"
+            ]
+          },
+          {
+            "text": "TEA-capable clients MUST check the contents of the Alternates header returned by a BREW request, and provide a specific URI for subsequent requests of the \"message/teapot\" type.",
+            "quote_ids": [
+              "q4"
+            ]
+          },
+          {
+            "text": "If a BREW command with an entity body containing \"stop\" is received before the recommended strength is achieved, the pot MUST abort brewing and serve the resultant beverage at lesser strength.",
+            "quote_ids": [
+              "q5"
+            ]
+          }
+        ],
+        "quotes": [
+          {
+            "id": "q1",
+            "chunk_id": "81cb1b3c60eb63eb0eee2e358b41ceb1ab87a3f3b27626ad12c3b51a93b1d1f5",
+            "text": "To distinguish messages destined for TEA-capable HTCPCP services from pots compliant with the base HTCPCP specification, a new MIME media type is defined by this document. The Content-Type header of a POST or BREW request sent to a TEA-capable pot MUST be \"message/teapot\" if tea is to be requested."
+          },
+          {
+            "id": "q2",
+            "chunk_id": "5ae60e885a26f576bdbfcce6fa78c74455920d4e87b5e44b8f43686a7605ee2e",
+            "text": "As noted in Section 2.1, a BREW request with a Content-Type header field of \"message/teapot\" to a TEA-capable pot will result in an Alternates header being sent with the response, and a pot will not be brewed."
+          },
+          {
+            "id": "q3",
+            "chunk_id": "6e437a9fea7d3e9a71c29b7395d208ce043a090eb018b7075cee09bc292ac5e2",
+            "text": "Tea production differs from coffee, however, in that a choice of teas is often provided for client selection before the tea is brewed. To this end, a TEA-capable pot that receives a BREW message of content type \"message/teapot\" MUST respond in accordance with the URI requested, as below."
+          },
+          {
+            "id": "q4",
+            "chunk_id": "ae3f3bfc1ce0c56db5c7213adc078a1d47246ed0957ab89c2df87738ddf00491",
+            "text": "TEA-capable HTCPCP clients MUST check the contents of the Alternates header returned by a BREW request, and provide a specific URI for subsequent requests of the \"message/teapot\" type."
+          },
+          {
+            "id": "q5",
+            "chunk_id": "4a4b36682595be4967b9f4680d67222ea52d77a59b5ca86263c062d6bac91053",
+            "text": "If a BREW command with an entity body containing \"stop\" is received before the recommended strength is achieved, the pot MUST abort brewing and serve the resultant beverage at lesser strength."
+          }
+        ],
+        "sources": [
+          {
+            "source": "rfc7168.md",
+            "section": "RFC 7168: The Hyper Text Coffee Pot Control Protocol for Tea Efflux Appliances / 3. The \"message/teapot\" Media Type",
+            "chunk_id": "81cb1b3c60eb63eb0eee2e358b41ceb1ab87a3f3b27626ad12c3b51a93b1d1f5"
+          },
+          {
+            "source": "rfc7168.md",
+            "section": "RFC 7168: The Hyper Text Coffee Pot Control Protocol for Tea Efflux Appliances / 4. Environmental Considerations",
+            "chunk_id": "5ae60e885a26f576bdbfcce6fa78c74455920d4e87b5e44b8f43686a7605ee2e"
+          },
+          {
+            "source": "rfc7168.md",
+            "section": "RFC 7168: The Hyper Text Coffee Pot Control Protocol for Tea Efflux Appliances / 2. HTCPCP-TEA Protocol Additions / 2.1. BREW and POST Methods",
+            "chunk_id": "6e437a9fea7d3e9a71c29b7395d208ce043a090eb018b7075cee09bc292ac5e2"
+          },
+          {
+            "source": "rfc7168.md",
+            "section": "RFC 7168: The Hyper Text Coffee Pot Control Protocol for Tea Efflux Appliances / 2. HTCPCP-TEA Protocol Additions / 2.1. BREW and POST Methods / 2.1.1. The \"/\" URI",
+            "chunk_id": "ae3f3bfc1ce0c56db5c7213adc078a1d47246ed0957ab89c2df87738ddf00491"
+          },
+          {
+            "source": "rfc7168.md",
+            "section": "RFC 7168: The Hyper Text Coffee Pot Control Protocol for Tea Efflux Appliances / 2. HTCPCP-TEA Protocol Additions / 2.1. BREW and POST Methods / 2.1.2. Variety-Specific URIs",
+            "chunk_id": "4a4b36682595be4967b9f4680d67222ea52d77a59b5ca86263c062d6bac91053"
+          }
+        ],
+        "clarification": "",
+        "local": false
+      },
+      "visible": "[База знаний: Готовый локальный индекс · найдено фрагментов: 5]\n[Поиск: 20 кандидатов → 12 после фильтра → 5 в контекст; отсечено 8]\n[rfc7168.md#81cb1b3c60eb63eb0eee2e358b41ceb1ab87a3f3b27626ad12c3b51a93b1d1f5]\n[rfc7168.md#5ae60e885a26f576bdbfcce6fa78c74455920d4e87b5e44b8f43686a7605ee2e]\n[rfc7168.md#6e437a9fea7d3e9a71c29b7395d208ce043a090eb018b7075cee09bc292ac5e2]\n[rfc7168.md#ae3f3bfc1ce0c56db5c7213adc078a1d47246ed0957ab89c2df87738ddf00491]\n[rfc7168.md#4a4b36682595be4967b9f4680d67222ea52d77a59b5ca86263c062d6bac91053]\nThe Content-Type header of a POST or BREW request sent to a TEA-capable pot MUST be \"message/teapot\" if tea is to be requested. [q1]\nA BREW request with a Content-Type header field of \"message/teapot\" to a TEA-capable pot will result in an Alternates header being sent with the response, and a pot will not be brewed. [q2]\nA TEA-capable pot that receives a BREW message of content type \"message/teapot\" MUST respond in accordance with the URI requested. [q3]\nTEA-capable clients MUST check the contents of the Alternates header returned by a BREW request, and provide a specific URI for subsequent requests of the \"message/teapot\" type. [q4]\nIf a BREW command with an entity body containing \"stop\" is received before the recommended strength is achieved, the pot MUST abort brewing and serve the resultant beverage at lesser strength. [q5]\n\nЦитаты:\n[q1] «To distinguish messages destined for TEA-capable HTCPCP services from pots compliant with the base HTCPCP specification, a new MIME media type is defined by this document. The Content-Type header of a POST or BREW request sent to a TEA-capable pot MUST be \"message/teapot\" if tea is to be requested.» [rfc7168.md#81cb1b3c60eb63eb0eee2e358b41ceb1ab87a3f3b27626ad12c3b51a93b1d1f5]\n[q2] «As noted in Section 2.1, a BREW request with a Content-Type header field of \"message/teapot\" to a TEA-capable pot will result in an Alternates header being sent with the response, and a pot will not be brewed.» [rfc7168.md#5ae60e885a26f576bdbfcce6fa78c74455920d4e87b5e44b8f43686a7605ee2e]\n[q3] «Tea production differs from coffee, however, in that a choice of teas is often provided for client selection before the tea is brewed. To this end, a TEA-capable pot that receives a BREW message of content type \"message/teapot\" MUST respond in accordance with the URI requested, as below.» [rfc7168.md#6e437a9fea7d3e9a71c29b7395d208ce043a090eb018b7075cee09bc292ac5e2]\n[q4] «TEA-capable HTCPCP clients MUST check the contents of the Alternates header returned by a BREW request, and provide a specific URI for subsequent requests of the \"message/teapot\" type.» [rfc7168.md#ae3f3bfc1ce0c56db5c7213adc078a1d47246ed0957ab89c2df87738ddf00491]\n[q5] «If a BREW command with an entity body containing \"stop\" is received before the recommended strength is achieved, the pot MUST abort brewing and serve the resultant beverage at lesser strength.» [rfc7168.md#4a4b36682595be4967b9f4680d67222ea52d77a59b5ca86263c062d6bac91053]\n\nИсточники:\n[rfc7168.md#81cb1b3c60eb63eb0eee2e358b41ceb1ab87a3f3b27626ad12c3b51a93b1d1f5]\n  Раздел: RFC 7168: The Hyper Text Coffee Pot Control Protocol for Tea Efflux Appliances / 3. The \"message/teapot\" Media Type\n[rfc7168.md#5ae60e885a26f576bdbfcce6fa78c74455920d4e87b5e44b8f43686a7605ee2e]\n  Раздел: RFC 7168: The Hyper Text Coffee Pot Control Protocol for Tea Efflux Appliances / 4. Environmental Considerations\n[rfc7168.md#6e437a9fea7d3e9a71c29b7395d208ce043a090eb018b7075cee09bc292ac5e2]\n  Раздел: RFC 7168: The Hyper Text Coffee Pot Control Protocol for Tea Efflux Appliances / 2. HTCPCP-TEA Protocol Additions / 2.1. BREW and POST Methods\n[rfc7168.md#ae3f3bfc1ce0c56db5c7213adc078a1d47246ed0957ab89c2df87738ddf00491]\n  Раздел: RFC 7168: The Hyper Text Coffee Pot Control Protocol for Tea Efflux Appliances / 2. HTCPCP-TEA Protocol Additions / 2.1. BREW and POST Methods / 2.1.1. The \"/\" URI\n[rfc7168.md#4a4b36682595be4967b9f4680d67222ea52d77a59b5ca86263c062d6bac91053]\n  Раздел: RFC 7168: The Hyper Text Coffee Pot Control Protocol for Tea Efflux Appliances / 2. HTCPCP-TEA Protocol Additions / 2.1. BREW and POST Methods / 2.1.2. Variety-Specific URIs\n[RAG: 5 утверждений · 5 цитат · 5 источников; источники и точность цитат проверены]",
+      "calls": 1,
+      "total_seconds": 22.704761
+    },
+    {
+      "id": "Q03",
+      "run": 1,
+      "query": "Which sugar-type additions are permitted by HTCPCP-TEA?",
+      "retrieval": {
+        "query": "Which sugar-type additions are permitted by HTCPCP-TEA?",
+        "search_query": "Which sugar-type additions are permitted by HTCPCP-TEA?",
+        "rewrite": true,
+        "min_similarity": 0.49,
+        "score_type": "cosine",
+        "retained_count": 13,
+        "filtered_count": 7,
+        "cosine_retained_count": 20,
+        "min_rerank_score": -3,
+        "rerank_score_type": "raw_logit",
+        "no_evidence": false,
+        "candidates": 20,
+        "strategy": "structured",
+        "reranking": true,
+        "candidate_count": 20,
+        "top_k": 5,
+        "retrieval_seconds": 0.02420849999998609,
+        "rerank_seconds": 0.7489279000001261,
+        "results": [
+          {
+            "chunk_id": "780bc9a67735785ea1ef3a368f275d45a12fae7b162c274cbf7a570d5314a69b",
+            "source": "rfc7168.md",
+            "file": "rfc7168.md",
+            "title": "RFC 7168: The Hyper Text Coffee Pot Control Protocol for Tea Efflux Appliances",
+            "section": "RFC 7168: The Hyper Text Coffee Pot Control Protocol for Tea Efflux Appliances / 2. HTCPCP-TEA Protocol Additions / 2.2. Modified Header Fields / 2.2.1. The Accept-Additions Header Field",
+            "page": null,
+            "strategy": "structured",
+            "start_char": 6807,
+            "end_char": 7745,
+            "text": "#### 2.2.1. The Accept-Additions Header Field\n\n   It has been observed that some users of blended teas have an\n   occasional preference for teas brewed as an emulsion of cane sugar\n   with hints of water.  To allow for this circumstance, the Accept-\n   Additions header field defined in the base HTCPCP specification is\n   updated to allow the following options:\n\n      addition-type   = ( \"*\"\n                        | milk-type\n                        | syrup-type\n                        | sweetener-type\n                        | spice-type\n                        | alcohol-type\n                        | sugar-type\n                        ) *( \";\" parameter )\n      sugar-type      = ( \"Sugar\" | \"Xylitol\" | \"Stevia\" )\n\n   Implementers should be aware that excessive use of the Sugar addition\n   may cause the BREW request to exceed the segment size allowed by the\n   transport layer, causing fragmentation and a delay in brewing.\n\n",
+            "tokens": 175,
+            "vector_score": 0.8317137210262088,
+            "rerank_score": 8.798911094665527
+          },
+          {
+            "chunk_id": "78662ed6ebf0b2665c67b09548b859f8dab45896a5f2a70c405bd6219bd8d5d7",
+            "source": "rfc7168.md",
+            "file": "rfc7168.md",
+            "title": "RFC 7168: The Hyper Text Coffee Pot Control Protocol for Tea Efflux Appliances",
+            "section": "RFC 7168: The Hyper Text Coffee Pot Control Protocol for Tea Efflux Appliances / 2. HTCPCP-TEA Protocol Additions",
+            "page": null,
+            "strategy": "structured",
+            "start_char": 3326,
+            "end_char": 3446,
+            "text": "## 2. HTCPCP-TEA Protocol Additions\n\n   The TEA extension to HTCPCP adapts the operation of certain HTCPCP\n   methods.\n\n",
+            "tokens": 32,
+            "vector_score": 0.757552251073075,
+            "rerank_score": 3.7238380908966064
+          },
+          {
+            "chunk_id": "ff1e7da0e4e0320a6773afdc461791b4b432dd9f29f0b499680684ac76fc8113",
+            "source": "rfc7168.md",
+            "file": "rfc7168.md",
+            "title": "RFC 7168: The Hyper Text Coffee Pot Control Protocol for Tea Efflux Appliances",
+            "section": "RFC 7168: The Hyper Text Coffee Pot Control Protocol for Tea Efflux Appliances / 1. Introduction",
+            "page": null,
+            "strategy": "structured",
+            "start_char": 1815,
+            "end_char": 3089,
+            "text": "## 1. Introduction\n\n   As noted in the Hyper Text Coffee Pot Control Protocol [HTCPCP],\n   coffee is renowned worldwide as an artfully brewed caffeinated\n   beverage, but coffee shares this quality with many other varied\n   preparations based on the filtration of plant material.  Foremost,\n   among these are the category of brews based on the straining of water\n   through prepared leaves from a tea tree: the lineage and history of\n   the tea genus will not be recounted as part of this paper, but\n   evidence shows that the production of tea existed many thousands of\n   years ago.\n\n   The deficiency of HTCPCP in addressing the networked production of\n   such a venerable beverage as tea is noteworthy: indeed, the only\n   provision given for networked teapots is that they not respond to\n   requests for the production of coffee, which, while eminently\n   reasonable, does not allow for communication with the teapot for its\n   intended purpose.\n\n   This paper specifies an extension to HTCPCP to allow communication\n   with networked tea production devices and teapots.  The additions to\n   the protocol specified herein permit the requests and responses\n   necessary to control all devices capable of making, arguably, the\n   most popular caffeinated hot beverage.\n\n",
+            "tokens": 240,
+            "vector_score": 0.7023540798042537,
+            "rerank_score": 3.055826425552368
+          },
+          {
+            "chunk_id": "1fce01239d871a78f1cf2f02b10c1880281309129eb5a7d446d027cbc42e9446",
+            "source": "rfc2324.md",
+            "file": "rfc2324.md",
+            "title": "RFC 2324: Hyper Text Coffee Pot Control Protocol (HTCPCP/1.0)",
+            "section": "RFC 2324: Hyper Text Coffee Pot Control Protocol (HTCPCP/1.0) / 2. HTCPCP Protocol / 2.2. Coffee Pot Header fields / 2.2.2. New header fields / 2.2.2.1. The Accept-Additions header field",
+            "page": null,
+            "strategy": "structured",
+            "start_char": 5761,
+            "end_char": 6812,
+            "text": "##### 2.2.2.1. The Accept-Additions header field\n\n   In HTTP, the \"Accept\" request-header field is used to specify media\n   types which are acceptable for the response. However, in HTCPCP, the\n   response may result in additional actions on the part of the\n   automated pot. For this reason, HTCPCP adds a new header field,\n   \"Accept-Additions\":\n\n       Accept-Additions = \"Accept-Additions\" \":\"\n                          #( addition-range [ accept-params ] )\n\n        addition-type   = ( \"*\"\n                          | milk-type\n                          | syrup-type\n                          | sweetener-type\n                          | spice-type\n                          | alcohol-type\n                          ) *( \";\" parameter )\n        milk-type       = ( \"Cream\" | \"Half-and-half\" | \"Whole-milk\"\n                          | \"Part-Skim\" | \"Skim\" | \"Non-Dairy\" )\n        syrup-type      = ( \"Vanilla\" | \"Almond\" | \"Raspberry\"\n                          | \"Chocolate\" )\n        alcohol-type    = ( \"Whisky\" | \"Rum\" | \"Kahlua\" | \"Aquavit\" )\n\n",
+            "tokens": 236,
+            "vector_score": 0.717807742529861,
+            "rerank_score": 2.772379159927368
+          },
+          {
+            "chunk_id": "ae3f3bfc1ce0c56db5c7213adc078a1d47246ed0957ab89c2df87738ddf00491",
+            "source": "rfc7168.md",
+            "file": "rfc7168.md",
+            "title": "RFC 7168: The Hyper Text Coffee Pot Control Protocol for Tea Efflux Appliances",
+            "section": "RFC 7168: The Hyper Text Coffee Pot Control Protocol for Tea Efflux Appliances / 2. HTCPCP-TEA Protocol Additions / 2.1. BREW and POST Methods / 2.1.1. The \"/\" URI",
+            "page": null,
+            "strategy": "structured",
+            "start_char": 3991,
+            "end_char": 5340,
+            "text": "#### 2.1.1. The \"/\" URI\n\n   For the URI \"/\", brewing will not commence.  Instead, an Alternates\n   header as defined in RFC 2295 [RFC2295] MUST be sent, with the\n   available tea bags and/or leaf varieties as entries.  An example of\n   such a response is as follows:\n\n      Alternates: {\"/darjeeling\" {type message/teapot}},\n                  {\"/earl-grey\" {type message/teapot}},\n                  {\"/peppermint\" {type message/teapot}}\n\n   The following example demonstrates the possibility of\n   interoperability of a TEA-capable pot that also complies with the\n   base HTCPCP specification:\n\n      Alternates: {\"/\" {type message/coffeepot}},\n                  {\"/pot-0/darjeeling\" {type message/teapot}},\n                  {\"/pot-0/earl-grey\" {type message/teapot}},\n                  {\"/pot-1/peppermint\" {type message/teapot}}\n\n   TEA-capable HTCPCP clients MUST check the contents of the Alternates\n   header returned by a BREW request, and provide a specific URI for\n   subsequent requests of the \"message/teapot\" type.\n\n   A request to the \"/\" URI with a Content-Type header of\n   \"message/coffeepot\" SHOULD also be responded to with an Alternates\n   header in the above format, to allow TEA-capable clients the\n   opportunity to present the selection of teas to the user if inferior\n   caffeinated beverages have initially been requested.\n\n",
+            "tokens": 337,
+            "vector_score": 0.6708504010579113,
+            "rerank_score": 1.6529840230941772
+          }
+        ]
+      },
+      "raw_answer": {
+        "UsageIncomplete": false,
+        "ToolCalls": null,
+        "UsageKnown": true,
+        "Content": "{\"status\":\"answered\",\"claims\":[{\"text\":\"The permitted sugar-type additions for HTCPCP-TEA are \\\"Sugar\\\", \\\"Xylitol\\\", and \\\"Stevia\\\".\",\"quote_ids\":[\"q1\"]},{\"text\":\"These options are defined within the Accept-Additions header field as part of the modified header fields in the protocol.\",\"quote_ids\":[\"q2\"]},{\"text\":\"Implementers should be aware that excessive use of the Sugar addition may cause the BREW request to exceed the segment size allowed by the transport layer.\",\"quote_ids\":[\"q3\"]},{\"text\":\"The Accept-Additions header field allows options including sugar-type as one of the permitted addition types.\",\"quote_ids\":[\"q4\"]},{\"text\":\"The sugar-type is defined specifically as ( \\\"Sugar\\\" | \\\"Xylitol\\\" | \\\"Stevia\\\" ).\",\"quote_ids\":[\"q5\"]}],\"quotes\":[{\"id\":\"q1\",\"chunk_id\":\"780bc9a67735785ea1ef3a368f275d45a12fae7b162c274cbf7a570d5314a69b\",\"text\":\"sugar-type      = ( \\\"Sugar\\\" | \\\"Xylitol\\\" | \\\"Stevia\\\" )\"},{\"id\":\"q2\",\"chunk_id\":\"780bc9a67735785ea1ef3a368f275d45a12fae7b162c274cbf7a570d5314a69b\",\"text\":\"It has been observed that some users of blended teas have an occasional preference for teas brewed as an emulsion of cane sugar with hints of water. To allow for this circumstance, the Accept-Additions header field defined in the base HTCPCP specification is updated to allow the following options:\"},{\"id\":\"q3\",\"chunk_id\":\"780bc9a67735785ea1ef3a368f275d45a12fae7b162c274cbf7a570d5314a69b\",\"text\":\"Implementers should be aware that excessive use of the Sugar addition may cause the BREW request to exceed the segment size allowed by the transport layer, causing fragmentation and a delay in brewing.\"},{\"id\":\"q4\",\"chunk_id\":\"780bc9a67735785ea1ef3a368f275d45a12fae7b162c274cbf7a570d5314a69b\",\"text\":\"addition-type   = ( \\\"*\\\"\\n                        | milk-type\\n                        | syrup-type\\n                        | sweetener-type\\n                        | spice-type\\n                        | alcohol-type\\n                        | sugar-type\\n                        ) *( \\\";\\\" parameter )\"},{\"id\":\"q5\",\"chunk_id\":\"780bc9a67735785ea1ef3a368f275d45a12fae7b162c274cbf7a570d5314a69b\",\"text\":\"sugar-type      = ( \\\"Sugar\\\" | \\\"Xylitol\\\" | \\\"Stevia\\\" )\"}],\"clarification\":\"\"}",
+        "Model": "qwen3.5:4b",
+        "FinishReason": "stop",
+        "PromptTokens": 3144,
+        "CachedInputTokens": 0,
+        "CompletionTokens": 728,
+        "TotalTokens": 3872,
+        "Duration": 20475068800
+      },
+      "grounding": null,
+      "visible": "[База знаний: Готовый локальный индекс · найдено фрагментов: 5]\n[Поиск: 20 кандидатов → 13 после фильтра → 5 в контекст; отсечено 7]\n[rfc7168.md#780bc9a67735785ea1ef3a368f275d45a12fae7b162c274cbf7a570d5314a69b]\n[rfc7168.md#78662ed6ebf0b2665c67b09548b859f8dab45896a5f2a70c405bd6219bd8d5d7]\n[rfc7168.md#ff1e7da0e4e0320a6773afdc461791b4b432dd9f29f0b499680684ac76fc8113]\n[rfc2324.md#1fce01239d871a78f1cf2f02b10c1880281309129eb5a7d446d027cbc42e9446]\n[rfc7168.md#ae3f3bfc1ce0c56db5c7213adc078a1d47246ed0957ab89c2df87738ddf00491]\n\n\u001b[38;5;203mошибка запроса: RAG answer rejected before saving: quote is not an exact meaningful excerpt of its chunk\u001b[m",
+      "calls": 1,
+      "total_seconds": 21.2635883,
+      "error": "response rejected by application; see visible trace"
+    },
+    {
+      "id": "Q04",
+      "run": 1,
+      "query": "Which protocol synchronizes the clocks of coffee pots?",
+      "retrieval": {
+        "query": "Which protocol synchronizes the clocks of coffee pots?",
+        "search_query": "Which protocol synchronizes the clocks of coffee pots?",
+        "rewrite": true,
+        "min_similarity": 0.49,
+        "score_type": "cosine",
+        "retained_count": 12,
+        "filtered_count": 8,
+        "cosine_retained_count": 20,
+        "min_rerank_score": -3,
+        "rerank_score_type": "raw_logit",
+        "no_evidence": false,
+        "candidates": 20,
+        "strategy": "structured",
+        "reranking": true,
+        "candidate_count": 20,
+        "top_k": 5,
+        "retrieval_seconds": 0.02220729999953619,
+        "rerank_seconds": 0.9532316999993782,
+        "results": [
+          {
+            "chunk_id": "c841e7fcb15b3e23e063613761dad158cf11bb5e75cf58e0f6883a75738feabe",
+            "source": "rfc2324.md",
+            "file": "rfc2324.md",
+            "title": "RFC 2324: Hyper Text Coffee Pot Control Protocol (HTCPCP/1.0)",
+            "section": "RFC 2324: Hyper Text Coffee Pot Control Protocol (HTCPCP/1.0) / 5. Operational constraints / 5.1. Timing Considerations",
+            "page": null,
+            "strategy": "structured",
+            "start_char": 10679,
+            "end_char": 11718,
+            "text": "### 5.1. Timing Considerations\n\n   A robust quality of service is required between the coffee pot user\n   and the coffee pot service.  Coffee pots SHOULD use the Network Time\n   Protocol [NTP] to synchronize their clocks to a globally accurate\n   time standard.\n\n   Telerobotics has been an expensive technology. However, with the\n   advent of the Cambridge Coffee Pot [CAM], the use of the web (rather\n   than SNMP) for remote system monitoring and management has been\n   proven.  Additional coffee pot maintenance tasks might be\n   accomplished by remote robotics.\n\n   Web data is normally static. Therefore to save data transmission and\n   time, Web browser programs store each Web page retrieved by a user on\n   the user's computer. Thus, if the user wants to return to that page,\n   it is now stored locally and does not need to be requested again from\n   the server. An image used for robot control or for monitoring a\n   changing scene is dynamic. A fresh version needs to be retrieved from\n   the server each time it is accessed.\n\n",
+            "tokens": 203,
+            "vector_score": 0.791533333912658,
+            "rerank_score": 7.631653785705566
+          },
+          {
+            "chunk_id": "1e3099e6785412945a3b0396f5ea17f2ab49606c7da458dd34813f41071339d0",
+            "source": "rfc2324.md",
+            "file": "rfc2324.md",
+            "title": "RFC 2324: Hyper Text Coffee Pot Control Protocol (HTCPCP/1.0)",
+            "section": "RFC 2324: Hyper Text Coffee Pot Control Protocol (HTCPCP/1.0) / 1. Rationale and Scope",
+            "page": null,
+            "strategy": "structured",
+            "start_char": 687,
+            "end_char": 2592,
+            "text": "## 1. Rationale and Scope\n\n   There is coffee all over the world. Increasingly, in a world in which\n   computing is ubiquitous, the computists want to make coffee. Coffee\n   brewing is an art, but the distributed intelligence of the web-\n   connected world transcends art.  Thus, there is a strong, dark, rich\n   requirement for a protocol designed espressoly for the brewing of\n   coffee. Coffee is brewed using coffee pots.  Networked coffee pots\n   require a control protocol if they are to be controlled.\n\n   Increasingly, home and consumer devices are being connected to the\n   Internet. Early networking experiments demonstrated vending devices\n   connected to the Internet for status monitoring [COKE]. One of the\n   first remotely _operated_ machine to be hooked up to the Internet,\n   the Internet Toaster, (controlled via SNMP) was debuted in 1990\n   [RFC2235].\n\n   The demand for ubiquitous appliance connectivity that is causing the\n   consumption of the IPv4 address space. Consumers want remote control\n   of devices such as coffee pots so that they may wake up to freshly\n   brewed coffee, or cause coffee to be prepared at a precise time after\n   the completion of dinner preparations.\n\n   This document specifies a Hyper Text Coffee Pot Control Protocol\n   (HTCPCP), which permits the full request and responses necessary to\n   control all devices capable of making the popular caffeinated hot\n   beverages.\n\n   HTTP 1.1 ([RFC2068]) permits the transfer of web objects from origin\n   servers to clients. The web is world-wide.  HTCPCP is based on HTTP.\n   This is because HTTP is everywhere. It could not be so pervasive\n   without being good. Therefore, HTTP is good. If you want good coffee,\n   HTCPCP needs to be good. To make HTCPCP good, it is good to base\n   HTCPCP on HTTP.\n\n   Future versions of this protocol may include extensions for espresso\n   machines and similar devices.\n\n",
+            "tokens": 392,
+            "vector_score": 0.7333027551362111,
+            "rerank_score": 0.1782585084438324
+          },
+          {
+            "chunk_id": "b6da60872dd33f17bc0d587d0cdc587b517f9d4efd1ec5613527ce56096eed5c",
+            "source": "rfc7168.md",
+            "file": "rfc7168.md",
+            "title": "RFC 7168: The Hyper Text Coffee Pot Control Protocol for Tea Efflux Appliances",
+            "section": "RFC 7168: The Hyper Text Coffee Pot Control Protocol for Tea Efflux Appliances / 7. References / 7.2. Informative References",
+            "page": null,
+            "strategy": "structured",
+            "start_char": 11781,
+            "end_char": 12185,
+            "text": "### 7.2. Informative References\n\n   [HTCPCP]   Masinter, L., \"Hyper Text Coffee Pot Control Protocol\n              (HTCPCP/1.0)\", RFC 2324, April 1 1998.\n\n   [RFC2295]  Holtman, K. and A. Mutz, \"Transparent Content Negotiation\n              in HTTP\", RFC 2295, March 1998.\n\nAuthor's Address\n\n   Imran Nazar\n   deviantART Inc.\n   7095 Hollywood Blvd\n   Hollywood, CA 90028\n\n   EMail: inazar@deviantart.com",
+            "tokens": 117,
+            "vector_score": 0.7255385991651738,
+            "rerank_score": 0.07972690463066101
+          },
+          {
+            "chunk_id": "d50a424b3a0ce96e38398a0ff417a59ccc185bc41adca8bc691f263368a15193",
+            "source": "rfc2324.md",
+            "file": "rfc2324.md",
+            "title": "RFC 2324: Hyper Text Coffee Pot Control Protocol (HTCPCP/1.0)",
+            "section": "RFC 2324: Hyper Text Coffee Pot Control Protocol (HTCPCP/1.0)",
+            "page": null,
+            "strategy": "structured",
+            "start_char": 0,
+            "end_char": 687,
+            "text": "# RFC 2324: Hyper Text Coffee Pot Control Protocol (HTCPCP/1.0)\n\nNetwork Working Group                                       L. Masinter\nRequest for Comments: 2324                                 1 April 1998\nCategory: Informational\n\n          Hyper Text Coffee Pot Control Protocol (HTCPCP/1.0)\n\nStatus of this Memo\n\n   This memo provides information for the Internet community.  It does\n   not specify an Internet standard of any kind.  Distribution of this\n   memo is unlimited.\n\nCopyright Notice\n\n   Copyright (C) The Internet Society (1998).  All Rights Reserved.\n\nAbstract\n\n   This document describes HTCPCP, a protocol for controlling,\n   monitoring, and diagnosing coffee pots.\n\n",
+            "tokens": 129,
+            "vector_score": 0.7350311299772111,
+            "rerank_score": -0.10131564736366272
+          },
+          {
+            "chunk_id": "94b8e2967115f06873e3ac036ca7a4e477b58c5bdc24c238cfbeedcf9104a4f8",
+            "source": "rfc7168.md",
+            "file": "rfc7168.md",
+            "title": "RFC 7168: The Hyper Text Coffee Pot Control Protocol for Tea Efflux Appliances",
+            "section": "RFC 7168: The Hyper Text Coffee Pot Control Protocol for Tea Efflux Appliances / 6. Acknowledgements",
+            "page": null,
+            "strategy": "structured",
+            "start_char": 11105,
+            "end_char": 11600,
+            "text": "## 6. Acknowledgements\n\n   This extension to the HTCPCP specification would not be possible\n   without the base specification, and research on networked beverage\n   production leading up thereto.  In that vein, the author wishes to\n   acknowledge the sterling work of Larry Masinter in the development of\n   the leading protocol for coffee pot communication.\n\n   Many thanks also to Kevin Waterson and Pete Davis, for providing\n   guidance and suggestions during the drafting of this document.\n\n",
+            "tokens": 88,
+            "vector_score": 0.7178939231503763,
+            "rerank_score": -0.12570415437221527
+          }
+        ]
+      },
+      "raw_answer": {
+        "UsageIncomplete": false,
+        "ToolCalls": null,
+        "UsageKnown": true,
+        "Content": "{\"status\":\"answered\",\"claims\":[{\"text\":\"Coffee pots SHOULD use the Network Time Protocol to synchronize their clocks to a globally accurate time standard.\",\"quote_ids\":[\"q1\"]},{\"text\":\"The Internet Toaster, controlled via SNMP, was one of the first remotely operated machines hooked up to the Internet in 1990.\",\"quote_ids\":[\"q2\"]},{\"text\":\"Coffee pots SHOULD use the Network Time Protocol [NTP] to synchronize their clocks to a globally accurate time standard.\",\"quote_ids\":[\"q3\"]},{\"text\":\"Networked coffee pots require a control protocol if they are to be controlled.\",\"quote_ids\":[\"q4\"]},{\"text\":\"HTTP 1.1 permits the transfer of web objects from origin servers to clients.\",\"quote_ids\":[\"q5\"]},{\"text\":\"The demand for ubiquitous appliance connectivity is causing the consumption of the IPv4 address space.\",\"quote_ids\":[\"q6\"]},{\"text\":\"Consumers want remote control of devices such as coffee pots so that they may wake up to freshly brewed coffee, or cause coffee to be prepared at a precise time after the completion of dinner preparations.\",\"quote_ids\":[\"q7\"]},{\"text\":\"This document specifies a Hyper Text Coffee Pot Control Protocol (HTCPCP), which permits the full request and responses necessary to control all devices capable of making the popular caffeinated hot beverages.\",\"quote_ids\":[\"q8\"]},{\"text\":\"Future versions of this protocol may include extensions for espresso machines and similar devices.\",\"quote_ids\":[\"q9\"]},{\"text\":\"Web data is normally static. Therefore to save data transmission and time, Web browser programs store each Web page retrieved by a user on the user's computer.\",\"quote_ids\":[\"q10\"]},{\"text\":\"An image used for robot control or for monitoring a changing scene is dynamic. A fresh version needs to be retrieved from the server each time it is accessed.\",\"quote_ids\":[\"q11\"]},{\"text\":\"Telerobotics has been an expensive technology. However, with the advent of the Cambridge Coffee Pot [CAM], the use of the web (rather than SNMP) for remote system monitoring and management has been proven.\",\"quote_ids\":[\"q12\"]},{\"text\":\"Additional coffee pot maintenance tasks might be accomplished by remote robotics.\",\"quote_ids\":[\"q13\"]},{\"text\":\"There is coffee all over the world. Increasingly, in a world in which computing is ubiquitous, the computists want to make coffee.\",\"quote_ids\":[\"q14\"]},{\"text\":\"Coffee brewing is an art, but the distributed intelligence of the web-connected world transcends art.\",\"quote_ids\":[\"q15\"]},{\"text\":\"Thus, there is a strong, dark, rich requirement for a protocol designed expressly for the brewing of coffee.\",\"quote_ids\":[\"q16\"]}]\n}",
+        "Model": "qwen3.5:4b",
+        "FinishReason": "stop",
+        "PromptTokens": 2992,
+        "CachedInputTokens": 0,
+        "CompletionTokens": 559,
+        "TotalTokens": 3551,
+        "Duration": 16308430000
+      },
+      "grounding": null,
+      "visible": "[База знаний: Готовый локальный индекс · найдено фрагментов: 5]\n[Поиск: 20 кандидатов → 12 после фильтра → 5 в контекст; отсечено 8]\n[rfc2324.md#c841e7fcb15b3e23e063613761dad158cf11bb5e75cf58e0f6883a75738feabe]\n[rfc2324.md#1e3099e6785412945a3b0396f5ea17f2ab49606c7da458dd34813f41071339d0]\n[rfc7168.md#b6da60872dd33f17bc0d587d0cdc587b517f9d4efd1ec5613527ce56096eed5c]\n[rfc2324.md#d50a424b3a0ce96e38398a0ff417a59ccc185bc41adca8bc691f263368a15193]\n[rfc7168.md#94b8e2967115f06873e3ac036ca7a4e477b58c5bdc24c238cfbeedcf9104a4f8]\n\n\u001b[38;5;203mошибка запроса: RAG answer rejected before saving: invalid RAG response schema\u001b[m",
+      "calls": 1,
+      "total_seconds": 17.3011457,
+      "error": "response rejected by application; see visible trace"
+    }
+  ]
+}

@@ -20,6 +20,7 @@ import (
 )
 
 type Base struct {
+	IndexDir  string   `json:"index_dir,omitempty"`
 	StorageID string   `json:"storage_id,omitempty"`
 	ID        string   `json:"id"`
 	Name      string   `json:"name"`
@@ -349,6 +350,7 @@ func (m *Manager) build(ctx context.Context, base *Base, out io.Writer) error {
 	if err = m.run(ctx, python, args, m.environment(storageID), filepath.Join(m.Dir, "runtime"), out); err != nil {
 		return err
 	}
+	base.IndexDir = "" // Updating a borrowed index creates a managed version.
 	base.Ready = true
 	base.StorageID = storageID
 	base.Updated = time.Now().UTC().Format(time.RFC3339)
@@ -399,6 +401,9 @@ func (m *Manager) Search(ctx context.Context, chat, query string) (string, error
 		cmd := exec.Command(python, "-u", "-m", "rag.worker")
 		hideProcess(cmd)
 		cmd.Env = m.environment(id)
+		if base.IndexDir != "" {
+			cmd.Env = append(cmd.Env, "RAG_DATA_DIR="+base.IndexDir)
+		}
 		cmd.Dir = filepath.Join(m.Dir, "runtime")
 		input, err := cmd.StdinPipe()
 		if err != nil {

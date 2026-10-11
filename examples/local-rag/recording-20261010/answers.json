@@ -1,0 +1,431 @@
+{
+  "model": "qwen3.5:4b-rag",
+  "endpoint": "http://127.0.0.1:11434/v1",
+  "started": "2026-10-10T12:55:46Z",
+  "manifest": {
+    "source_root": "C:\\Users\\erdni\\Documents\\projects\\hw1\\examples\\rag-indexing\\corpus",
+    "source_roots": [
+      "C:\\Users\\erdni\\Documents\\projects\\hw1\\examples\\rag-indexing\\corpus"
+    ],
+    "corpus_sha256": "538eb5d3b698b6773b7a4ec9df045669e677ba3894ff0af5df80187d9f5686bd",
+    "files": 3,
+    "text_units": 3,
+    "pdf_pages": 0,
+    "characters": 45358,
+    "skipped_files": [],
+    "tokenizer": "nomic-ai/nomic-embed-text-v1.5",
+    "size": 400,
+    "overlap": 60,
+    "stats": {
+      "fixed": {
+        "chunks": 30,
+        "min_tokens": 200,
+        "max_tokens": 400,
+        "mean_tokens": 387.26666666666665,
+        "total_tokens_with_overlap": 11618,
+        "chunking_seconds": 0.04911029999493621
+      },
+      "structured": {
+        "chunks": 72,
+        "min_tokens": 5,
+        "max_tokens": 400,
+        "mean_tokens": 143.02777777777777,
+        "total_tokens_with_overlap": 10298,
+        "chunking_seconds": 0.047986800003855024
+      }
+    },
+    "embedding": {
+      "model": "nomic-embed-text:latest",
+      "digest": "0a109f422b47e3a30ba2b10eca18548e944e8a23073ee3f3e947efcf3c45e59f"
+    },
+    "collections": {
+      "fixed": {
+        "name": "chunks_fixed_4e122ff89c71",
+        "dimension": 768
+      },
+      "structured": {
+        "name": "chunks_structured_447705e7a311",
+        "dimension": 768
+      }
+    },
+    "qdrant_path": "C:\\Users\\erdni\\Documents\\projects\\hw1\\artifacts\\hw21\\qdrant",
+    "index_seconds": {
+      "fixed": 1.486767400005192,
+      "structured": 0.8971909999963827
+    },
+    "backend": "local"
+  },
+  "startup_seconds": 11.3872883,
+  "cloud_generation_calls": 0,
+  "rows": [
+    {
+      "id": "Q01",
+      "run": 1,
+      "query": "Which method tells the coffee pot that enough milk has been added?",
+      "retrieval": {
+        "query": "Which method tells the coffee pot that enough milk has been added?",
+        "search_query": "Which method tells the coffee pot that enough milk has been added?",
+        "rewrite": true,
+        "min_similarity": 0.49,
+        "score_type": "cosine",
+        "retained_count": 2,
+        "filtered_count": 18,
+        "cosine_retained_count": 20,
+        "min_rerank_score": -3,
+        "rerank_score_type": "raw_logit",
+        "no_evidence": false,
+        "candidates": 20,
+        "strategy": "structured",
+        "reranking": true,
+        "candidate_count": 20,
+        "top_k": 5,
+        "retrieval_seconds": 0.01760900000044785,
+        "rerank_seconds": 0.7754141000004893,
+        "results": [
+          {
+            "chunk_id": "ebeb735ad069845816100d378b606edd19053b1153a0d3bbe0c0918a91e02615",
+            "source": "rfc2324.md",
+            "file": "rfc2324.md",
+            "title": "RFC 2324: Hyper Text Coffee Pot Control Protocol (HTCPCP/1.0)",
+            "section": "RFC 2324: Hyper Text Coffee Pot Control Protocol (HTCPCP/1.0) / 2. HTCPCP Protocol / 2.1. HTCPCP Added Methods / 2.1.4. WHEN method",
+            "page": null,
+            "strategy": "structured",
+            "start_char": 4340,
+            "end_char": 4645,
+            "text": "#### 2.1.4. WHEN method\n\n   When coffee is poured, and milk is offered, it is necessary for the\n   holder of the recipient of milk to say \"when\" at the time when\n   sufficient milk has been introduced into the coffee. For this\n   purpose, the \"WHEN\" method has been added to HTCPCP. Enough? Say\n   WHEN.\n\n",
+            "tokens": 74,
+            "vector_score": 0.7892162271836579,
+            "rerank_score": 6.692489147186279
+          },
+          {
+            "chunk_id": "79a87edbe7a850e44fe1ff705f8716ecdb7e955a14fd544915f0165a57f619c9",
+            "source": "rfc2324.md",
+            "file": "rfc2324.md",
+            "title": "RFC 2324: Hyper Text Coffee Pot Control Protocol (HTCPCP/1.0)",
+            "section": "RFC 2324: Hyper Text Coffee Pot Control Protocol (HTCPCP/1.0) / 2. HTCPCP Protocol / 2.1. HTCPCP Added Methods / 2.1.1. The BREW method, and the use of POST",
+            "page": null,
+            "strategy": "structured",
+            "start_char": 2858,
+            "end_char": 3624,
+            "text": "#### 2.1.1. The BREW method, and the use of POST\n\n   Commands to control a coffee pot are sent from client to coffee\n   server using either the BREW or POST method, and a message body with\n   Content-Type set to \"application/coffee-pot-command\".\n\n   A coffee pot server MUST accept both the BREW and POST method\n   equivalently.  However, the use of POST for causing actions to happen\n   is deprecated.\n\n   Coffee pots heat water using electronic mechanisms, so there is no\n   fire. Thus, no firewalls are necessary, and firewall control policy\n   is irrelevant. However, POST may be a trademark for coffee, and so\n   the BREW method has been added. The BREW method may be used with\n   other HTTP-based protocols (e.g., the Hyper Text Brewery Control\n   Protocol).\n\n",
+            "tokens": 167,
+            "vector_score": 0.6981169200615507,
+            "rerank_score": -0.6713998317718506
+          }
+        ]
+      },
+      "raw_answer": {
+        "UsageIncomplete": false,
+        "ToolCalls": null,
+        "UsageKnown": true,
+        "Content": "{\"status\":\"answered\",\"claims\":[{\"text\":\"The WHEN method is used to indicate when sufficient milk has been introduced into the coffee.\",\"quote_ids\":[\"q1\"]},{\"text\":\"When coffee is poured and milk is offered, the holder of the recipient of milk must say \\\"when\\\" at the time when sufficient milk has been introduced.\",\"quote_ids\":[\"q2\"]},{\"text\":\"For this purpose, the WHEN method has been added to HTCPCP.\",\"quote_ids\":[\"q3\"]},{\"text\":\"Enough? Say WHEN.\",\"quote_ids\":[\"q4\"]}],\"quotes\":[{\"id\":\"q1\",\"chunk_id\":\"ebeb735ad069845816100d378b606edd19053b1153a0d3bbe0c0918a91e02615\",\"text\":\"#### 2.1.4. WHEN method\\n\\n   When coffee is poured, and milk is offered, it is necessary for the\\n   holder of the recipient of milk to say \\\"when\\\" at the time when\\n   sufficient milk has been introduced into the coffee. For this\\n   purpose, the \\\"WHEN\\\" method has been added to HTCPCP. Enough? Say\\n   WHEN.\\n\\n\"},{\"id\":\"q2\",\"chunk_id\":\"ebeb735ad069845816100d378b606edd19053b1153a0d3bbe0c0918a91e02615\",\"text\":\"#### 2.1.4. WHEN method\\n\\n   When coffee is poured, and milk is offered, it is necessary for the\\n   holder of the recipient of milk to say \\\"when\\\" at the time when\\n   sufficient milk has been introduced into the coffee. For this\\n   purpose, the \\\"WHEN\\\" method has been added to HTCPCP. Enough? Say\\n   WHEN.\\n\\n\"},{\"id\":\"q3\",\"chunk_id\":\"ebeb735ad069845816100d378b606edd19053b1153a0d3bbe0c0918a91e02615\",\"text\":\"#### 2.1.4. WHEN method\\n\\n   When coffee is poured, and milk is offered, it is necessary for the\\n   holder of the recipient of milk to say \\\"when\\\" at the time when\\n   sufficient milk has been introduced into the coffee. For this\\n   purpose, the \\\"WHEN\\\" method has been added to HTCPCP. Enough? Say\\n   WHEN.\\n\\n\"},{\"id\":\"q4\",\"chunk_id\":\"ebeb735ad069845816100d378b606edd19053b1153a0d3bbe0c0918a91e02615\",\"text\":\"#### 2.1.4. WHEN method\\n\\n   When coffee is poured, and milk is offered, it is necessary for the\\n   holder of the recipient of milk to say \\\"when\\\" at the time when\\n   sufficient milk has been introduced into the coffee. For this\\n   purpose, the \\\"WHEN\\\" method has been added to HTCPCP. Enough? Say\\n   WHEN.\\n\\n\"}],\"clarification\":\"\"}",
+        "Model": "qwen3.5:4b-rag",
+        "FinishReason": "stop",
+        "PromptTokens": 1489,
+        "CachedInputTokens": 0,
+        "CompletionTokens": 736,
+        "TotalTokens": 2225,
+        "Duration": 22535309700
+      },
+      "grounding": {
+        "status": "answered",
+        "answer": "The WHEN method is used to indicate when sufficient milk has been introduced into the coffee. [q1]\nWhen coffee is poured and milk is offered, the holder of the recipient of milk must say \"when\" at the time when sufficient milk has been introduced. [q2]\nFor this purpose, the WHEN method has been added to HTCPCP. [q3]\nEnough? Say WHEN. [q4]",
+        "claims": [
+          {
+            "text": "The WHEN method is used to indicate when sufficient milk has been introduced into the coffee.",
+            "quote_ids": [
+              "q1"
+            ]
+          },
+          {
+            "text": "When coffee is poured and milk is offered, the holder of the recipient of milk must say \"when\" at the time when sufficient milk has been introduced.",
+            "quote_ids": [
+              "q2"
+            ]
+          },
+          {
+            "text": "For this purpose, the WHEN method has been added to HTCPCP.",
+            "quote_ids": [
+              "q3"
+            ]
+          },
+          {
+            "text": "Enough? Say WHEN.",
+            "quote_ids": [
+              "q4"
+            ]
+          }
+        ],
+        "quotes": [
+          {
+            "id": "q1",
+            "chunk_id": "ebeb735ad069845816100d378b606edd19053b1153a0d3bbe0c0918a91e02615",
+            "text": "#### 2.1.4. WHEN method When coffee is poured, and milk is offered, it is necessary for the holder of the recipient of milk to say \"when\" at the time when sufficient milk has been introduced into the coffee. For this purpose, the \"WHEN\" method has been added to HTCPCP. Enough? Say WHEN."
+          },
+          {
+            "id": "q2",
+            "chunk_id": "ebeb735ad069845816100d378b606edd19053b1153a0d3bbe0c0918a91e02615",
+            "text": "#### 2.1.4. WHEN method When coffee is poured, and milk is offered, it is necessary for the holder of the recipient of milk to say \"when\" at the time when sufficient milk has been introduced into the coffee. For this purpose, the \"WHEN\" method has been added to HTCPCP. Enough? Say WHEN."
+          },
+          {
+            "id": "q3",
+            "chunk_id": "ebeb735ad069845816100d378b606edd19053b1153a0d3bbe0c0918a91e02615",
+            "text": "#### 2.1.4. WHEN method When coffee is poured, and milk is offered, it is necessary for the holder of the recipient of milk to say \"when\" at the time when sufficient milk has been introduced into the coffee. For this purpose, the \"WHEN\" method has been added to HTCPCP. Enough? Say WHEN."
+          },
+          {
+            "id": "q4",
+            "chunk_id": "ebeb735ad069845816100d378b606edd19053b1153a0d3bbe0c0918a91e02615",
+            "text": "#### 2.1.4. WHEN method When coffee is poured, and milk is offered, it is necessary for the holder of the recipient of milk to say \"when\" at the time when sufficient milk has been introduced into the coffee. For this purpose, the \"WHEN\" method has been added to HTCPCP. Enough? Say WHEN."
+          }
+        ],
+        "sources": [
+          {
+            "source": "rfc2324.md",
+            "section": "RFC 2324: Hyper Text Coffee Pot Control Protocol (HTCPCP/1.0) / 2. HTCPCP Protocol / 2.1. HTCPCP Added Methods / 2.1.4. WHEN method",
+            "chunk_id": "ebeb735ad069845816100d378b606edd19053b1153a0d3bbe0c0918a91e02615"
+          }
+        ],
+        "clarification": "",
+        "local": false
+      },
+      "visible": "[База знаний: Готовый локальный индекс · найдено фрагментов: 2]\n[Поиск: 20 кандидатов → 2 после фильтра → 2 в контекст; отсечено 18]\n[rfc2324.md#ebeb735ad069845816100d378b606edd19053b1153a0d3bbe0c0918a91e02615]\n[rfc2324.md#79a87edbe7a850e44fe1ff705f8716ecdb7e955a14fd544915f0165a57f619c9]\nThe WHEN method is used to indicate when sufficient milk has been introduced into the coffee. [q1]\nWhen coffee is poured and milk is offered, the holder of the recipient of milk must say \"when\" at the time when sufficient milk has been introduced. [q2]\nFor this purpose, the WHEN method has been added to HTCPCP. [q3]\nEnough? Say WHEN. [q4]\n\nЦитаты:\n[q1] «#### 2.1.4. WHEN method When coffee is poured, and milk is offered, it is necessary for the holder of the recipient of milk to say \"when\" at the time when sufficient milk has been introduced into the coffee. For this purpose, the \"WHEN\" method has been added to HTCPCP. Enough? Say WHEN.» [rfc2324.md#ebeb735ad069845816100d378b606edd19053b1153a0d3bbe0c0918a91e02615]\n[q2] «#### 2.1.4. WHEN method When coffee is poured, and milk is offered, it is necessary for the holder of the recipient of milk to say \"when\" at the time when sufficient milk has been introduced into the coffee. For this purpose, the \"WHEN\" method has been added to HTCPCP. Enough? Say WHEN.» [rfc2324.md#ebeb735ad069845816100d378b606edd19053b1153a0d3bbe0c0918a91e02615]\n[q3] «#### 2.1.4. WHEN method When coffee is poured, and milk is offered, it is necessary for the holder of the recipient of milk to say \"when\" at the time when sufficient milk has been introduced into the coffee. For this purpose, the \"WHEN\" method has been added to HTCPCP. Enough? Say WHEN.» [rfc2324.md#ebeb735ad069845816100d378b606edd19053b1153a0d3bbe0c0918a91e02615]\n[q4] «#### 2.1.4. WHEN method When coffee is poured, and milk is offered, it is necessary for the holder of the recipient of milk to say \"when\" at the time when sufficient milk has been introduced into the coffee. For this purpose, the \"WHEN\" method has been added to HTCPCP. Enough? Say WHEN.» [rfc2324.md#ebeb735ad069845816100d378b606edd19053b1153a0d3bbe0c0918a91e02615]\n\nИсточники:\n[rfc2324.md#ebeb735ad069845816100d378b606edd19053b1153a0d3bbe0c0918a91e02615]\n  Раздел: RFC 2324: Hyper Text Coffee Pot Control Protocol (HTCPCP/1.0) / 2. HTCPCP Protocol / 2.1. HTCPCP Added Methods / 2.1.4. WHEN method\n[RAG: 4 утверждений · 4 цитат · 1 источников; источники и точность цитат проверены]",
+      "calls": 1,
+      "total_seconds": 23.3618665
+    },
+    {
+      "id": "Q05",
+      "run": 1,
+      "query": "Which status code requires a conditional request to prevent lost updates?",
+      "retrieval": {
+        "query": "Which status code requires a conditional request to prevent lost updates?",
+        "search_query": "Which status code requires a conditional request to prevent lost updates?",
+        "rewrite": true,
+        "min_similarity": 0.49,
+        "score_type": "cosine",
+        "retained_count": 7,
+        "filtered_count": 13,
+        "cosine_retained_count": 20,
+        "min_rerank_score": -3,
+        "rerank_score_type": "raw_logit",
+        "no_evidence": false,
+        "candidates": 20,
+        "strategy": "structured",
+        "reranking": true,
+        "candidate_count": 20,
+        "top_k": 5,
+        "retrieval_seconds": 0.02084629999990284,
+        "rerank_seconds": 0.7710465000000113,
+        "results": [
+          {
+            "chunk_id": "ca5ec7f63e53792ca01f7cff347d159b3174d4d14cb2f54ea4dab9c9f8fb53cf",
+            "source": "rfc6585.md",
+            "file": "rfc6585.md",
+            "title": "RFC 6585: Additional HTTP Status Codes",
+            "section": "RFC 6585: Additional HTTP Status Codes / 3. 428 Precondition Required",
+            "page": null,
+            "strategy": "structured",
+            "start_char": 2677,
+            "end_char": 3670,
+            "text": "## 3. 428 Precondition Required\n\n   The 428 status code indicates that the origin server requires the\n   request to be conditional.\n\n   Its typical use is to avoid the \"lost update\" problem, where a client\n   GETs a resource's state, modifies it, and PUTs it back to the server,\n   when meanwhile a third party has modified the state on the server,\n   leading to a conflict.  By requiring requests to be conditional, the\n   server can assure that clients are working with the correct copies.\n\n   Responses using this status code SHOULD explain how to resubmit the\n   request successfully.  For example:\n\n   HTTP/1.1 428 Precondition Required\n   Content-Type: text/html\n\n   \u003chtml\u003e\n      \u003chead\u003e\n         \u003ctitle\u003ePrecondition Required\u003c/title\u003e\n      \u003c/head\u003e\n      \u003cbody\u003e\n         \u003ch1\u003ePrecondition Required\u003c/h1\u003e\n         \u003cp\u003eThis request is required to be conditional;\n         try using \"If-Match\".\u003c/p\u003e\n      \u003c/body\u003e\n   \u003c/html\u003e\n\n   Responses with the 428 status code MUST NOT be stored by a cache.\n\n",
+            "tokens": 220,
+            "vector_score": 0.8148061171554968,
+            "rerank_score": 9.804100036621094
+          },
+          {
+            "chunk_id": "fb1f9875bafaeaeab2a28878f11ec7757573545b365e8266812a1230dfb14ca3",
+            "source": "rfc6585.md",
+            "file": "rfc6585.md",
+            "title": "RFC 6585: Additional HTTP Status Codes",
+            "section": "RFC 6585: Additional HTTP Status Codes / 7. Security Considerations / 7.1. 428 Precondition Required",
+            "page": null,
+            "strategy": "structured",
+            "start_char": 8392,
+            "end_char": 8537,
+            "text": "### 7.1. 428 Precondition Required\n\n   The 428 status code is optional; clients cannot rely upon its use to\n   prevent \"lost update\" conflicts.\n\n",
+            "tokens": 35,
+            "vector_score": 0.7811322048604088,
+            "rerank_score": 8.931602478027344
+          },
+          {
+            "chunk_id": "6962b2c209ebd898adc0ea57f5cccd5203d296dba2152481315722cfb35baaba",
+            "source": "rfc6585.md",
+            "file": "rfc6585.md",
+            "title": "RFC 6585: Additional HTTP Status Codes",
+            "section": "RFC 6585: Additional HTTP Status Codes / 8. IANA Considerations",
+            "page": null,
+            "strategy": "structured",
+            "start_char": 9922,
+            "end_char": 10392,
+            "text": "## 8. IANA Considerations\n\n   The HTTP Status Codes registry has been updated with the following\n   entries:\n\n      Value: 428\n      Description: Precondition Required\n      Reference: [RFC6585]\n\n      Value: 429\n      Description: Too Many Requests\n      Reference: [RFC6585]\n\n      Value: 431\n      Description: Request Header Fields Too Large\n      Reference: [RFC6585]\n\n      Value: 511\n      Description: Network Authentication Required\n      Reference: [RFC6585]\n\n",
+            "tokens": 87,
+            "vector_score": 0.6800654258318586,
+            "rerank_score": -1.1663588285446167
+          },
+          {
+            "chunk_id": "9d900659568bfdc769c5f94d7f780d74849c545e3fae656b738bcac0b49749eb",
+            "source": "rfc6585.md",
+            "file": "rfc6585.md",
+            "title": "RFC 6585: Additional HTTP Status Codes",
+            "section": "RFC 6585: Additional HTTP Status Codes / 6. 511 Network Authentication Required / 6.1. The 511 Status Code and Captive Portals",
+            "page": null,
+            "strategy": "structured",
+            "start_char": 6523,
+            "end_char": 8158,
+            "text": "### 6.1. The 511 Status Code and Captive Portals\n\n   The 511 status code is designed to mitigate problems caused by\n   \"captive portals\" to software (especially non-browser agents) that is\n   expecting a response from the server that a request was made to, not\n   the intervening network infrastructure.  It is not intended to\n   encourage deployment of captive portals -- only to limit the damage\n   caused by them.\n\n   A network operator wishing to require some authentication, acceptance\n   of terms, or other user interaction before granting access usually\n   does so by identifying clients who have not done so (\"unknown\n   clients\") using their Media Access Control (MAC) addresses.\n\n   Unknown clients then have all traffic blocked, except for that on TCP\n   port 80, which is sent to an HTTP server (the \"login server\")\n   dedicated to \"logging in\" unknown clients, and of course traffic to\n   the login server itself.\n\n   For example, a user agent might connect to a network and make the\n   following HTTP request on TCP port 80:\n\n   GET /index.htm HTTP/1.1\n   Host: www.example.com\n\n   Upon receiving such a request, the login server would generate a 511\n   response:\n\n   HTTP/1.1 511 Network Authentication Required\n   Content-Type: text/html\n\n   \u003chtml\u003e\n      \u003chead\u003e\n         \u003ctitle\u003eNetwork Authentication Required\u003c/title\u003e\n         \u003cmeta http-equiv=\"refresh\"\n               content=\"0; url=https://login.example.net/\"\u003e\n      \u003c/head\u003e\n      \u003cbody\u003e\n         \u003cp\u003eYou need to \u003ca href=\"https://login.example.net/\"\u003e\n         authenticate with the local network\u003c/a\u003e in order to gain\n         access.\u003c/p\u003e\n      \u003c/body\u003e\n   \u003c/html\u003e\n\n   ",
+            "tokens": 366,
+            "vector_score": 0.635208840234834,
+            "rerank_score": -2.267103433609009
+          },
+          {
+            "chunk_id": "d9a715419df5df90110baa2de60c51dca266633701e4aba6392ee7f55d3dcbbd",
+            "source": "rfc6585.md",
+            "file": "rfc6585.md",
+            "title": "RFC 6585: Additional HTTP Status Codes",
+            "section": "RFC 6585: Additional HTTP Status Codes / 7. Security Considerations / 7.2. 429 Too Many Requests",
+            "page": null,
+            "strategy": "structured",
+            "start_char": 8537,
+            "end_char": 8924,
+            "text": "### 7.2. 429 Too Many Requests\n\n   When a server is under attack or just receiving a very large number\n   of requests from a single party, responding to each with a 429 status\n   code will consume resources.\n\n   Therefore, servers are not required to use the 429 status code; when\n   limiting resource usage, it may be more appropriate to just drop\n   connections, or take other steps.\n\n",
+            "tokens": 79,
+            "vector_score": 0.6756125516127349,
+            "rerank_score": -2.5163447856903076
+          }
+        ]
+      },
+      "raw_answer": {
+        "UsageIncomplete": false,
+        "ToolCalls": null,
+        "UsageKnown": true,
+        "Content": "{\"status\":\"answered\",\"claims\":[{\"text\":\"The 428 Precondition Required status code indicates that the origin server requires the request to be conditional to avoid the \\\"lost update\\\" problem.\",\"quote_ids\":[\"q1\"]},{\"text\":\"Responses with the 428 status code MUST NOT be stored by a cache.\",\"quote_ids\":[\"q2\"]},{\"text\":\"The 428 status code is optional; clients cannot rely upon its use to prevent \\\"lost update\\\" conflicts.\",\"quote_ids\":[\"q3\"]},{\"text\":\"Clients can try using \\\"If-Match\\\" to resubmit the request successfully when encountering a 428 response.\",\"quote_ids\":[\"q4\"]}],\"quotes\":[{\"id\":\"q1\",\"chunk_id\":\"ca5ec7f63e53792ca01f7cff347d159b3174d4d14cb2f54ea4dab9c9f8fb53cf\",\"text\":\"The 428 status code indicates that the origin server requires the request to be conditional.\\n\\nIts typical use is to avoid the \\\"lost update\\\" problem, where a client GETs a resource's state, modifies it, and PUTs it back to the server,\\nwhen meanwhile a third party has modified the state on the server,\\nleading to a conflict.  By requiring requests to be conditional, the\\nserver can assure that clients are working with the correct copies.\"},{\"id\":\"q2\",\"chunk_id\":\"ca5ec7f63e53792ca01f7cff347d159b3174d4d14cb2f54ea4dab9c9f8fb53cf\",\"text\":\"Responses with the 428 status code MUST NOT be stored by a cache.\"},{\"id\":\"q3\",\"chunk_id\":\"fb1f9875bafaeaeab2a28878f11ec7757573545b365e8266812a1230dfb14ca3\",\"text\":\"The 428 status code is optional; clients cannot rely upon its use to\\nprevent \\\"lost update\\\" conflicts.\"},{\"id\":\"q4\",\"chunk_id\":\"ca5ec7f63e53792ca01f7cff347d159b3174d4d14cb2f54ea4dab9c9f8fb53cf\",\"text\":\"Responses using this status code SHOULD explain how to resubmit the\\nrequest successfully.  For example:\\n\\n   HTTP/1.1 428 Precondition Required\\n   Content-Type: text/html\\n\\n   \u003chtml\u003e\\n      \u003chead\u003e\\n         \u003ctitle\u003ePrecondition Required\u003c/title\u003e\\n      \u003c/head\u003e\\n      \u003cbody\u003e\\n         \u003ch1\u003ePrecondition Required\u003c/h1\u003e\\n         \u003cp\u003eThis request is required to be conditional;\\n         try using \\\"If-Match\\\".\u003c/p\u003e\\n      \u003c/body\u003e\\n   \u003c/html\u003e\"}],\"clarification\":\"\"}",
+        "Model": "qwen3.5:4b-rag",
+        "FinishReason": "stop",
+        "PromptTokens": 2772,
+        "CachedInputTokens": 0,
+        "CompletionTokens": 675,
+        "TotalTokens": 3447,
+        "Duration": 19928321800
+      },
+      "grounding": {
+        "status": "answered",
+        "answer": "The 428 Precondition Required status code indicates that the origin server requires the request to be conditional to avoid the \"lost update\" problem. [q1]\nResponses with the 428 status code MUST NOT be stored by a cache. [q2]\nThe 428 status code is optional; clients cannot rely upon its use to prevent \"lost update\" conflicts. [q3]\nClients can try using \"If-Match\" to resubmit the request successfully when encountering a 428 response. [q4]",
+        "claims": [
+          {
+            "text": "The 428 Precondition Required status code indicates that the origin server requires the request to be conditional to avoid the \"lost update\" problem.",
+            "quote_ids": [
+              "q1"
+            ]
+          },
+          {
+            "text": "Responses with the 428 status code MUST NOT be stored by a cache.",
+            "quote_ids": [
+              "q2"
+            ]
+          },
+          {
+            "text": "The 428 status code is optional; clients cannot rely upon its use to prevent \"lost update\" conflicts.",
+            "quote_ids": [
+              "q3"
+            ]
+          },
+          {
+            "text": "Clients can try using \"If-Match\" to resubmit the request successfully when encountering a 428 response.",
+            "quote_ids": [
+              "q4"
+            ]
+          }
+        ],
+        "quotes": [
+          {
+            "id": "q1",
+            "chunk_id": "ca5ec7f63e53792ca01f7cff347d159b3174d4d14cb2f54ea4dab9c9f8fb53cf",
+            "text": "The 428 status code indicates that the origin server requires the request to be conditional. Its typical use is to avoid the \"lost update\" problem, where a client GETs a resource's state, modifies it, and PUTs it back to the server, when meanwhile a third party has modified the state on the server, leading to a conflict. By requiring requests to be conditional, the server can assure that clients are working with the correct copies."
+          },
+          {
+            "id": "q2",
+            "chunk_id": "ca5ec7f63e53792ca01f7cff347d159b3174d4d14cb2f54ea4dab9c9f8fb53cf",
+            "text": "Responses with the 428 status code MUST NOT be stored by a cache."
+          },
+          {
+            "id": "q3",
+            "chunk_id": "fb1f9875bafaeaeab2a28878f11ec7757573545b365e8266812a1230dfb14ca3",
+            "text": "The 428 status code is optional; clients cannot rely upon its use to prevent \"lost update\" conflicts."
+          },
+          {
+            "id": "q4",
+            "chunk_id": "ca5ec7f63e53792ca01f7cff347d159b3174d4d14cb2f54ea4dab9c9f8fb53cf",
+            "text": "Responses using this status code SHOULD explain how to resubmit the request successfully. For example: HTTP/1.1 428 Precondition Required Content-Type: text/html \u003chtml\u003e \u003chead\u003e \u003ctitle\u003ePrecondition Required\u003c/title\u003e \u003c/head\u003e \u003cbody\u003e \u003ch1\u003ePrecondition Required\u003c/h1\u003e \u003cp\u003eThis request is required to be conditional; try using \"If-Match\".\u003c/p\u003e \u003c/body\u003e \u003c/html\u003e"
+          }
+        ],
+        "sources": [
+          {
+            "source": "rfc6585.md",
+            "section": "RFC 6585: Additional HTTP Status Codes / 3. 428 Precondition Required",
+            "chunk_id": "ca5ec7f63e53792ca01f7cff347d159b3174d4d14cb2f54ea4dab9c9f8fb53cf"
+          },
+          {
+            "source": "rfc6585.md",
+            "section": "RFC 6585: Additional HTTP Status Codes / 7. Security Considerations / 7.1. 428 Precondition Required",
+            "chunk_id": "fb1f9875bafaeaeab2a28878f11ec7757573545b365e8266812a1230dfb14ca3"
+          }
+        ],
+        "clarification": "",
+        "local": false
+      },
+      "visible": "[База знаний: Готовый локальный индекс · найдено фрагментов: 5]\n[Поиск: 20 кандидатов → 7 после фильтра → 5 в контекст; отсечено 13]\n[rfc6585.md#ca5ec7f63e53792ca01f7cff347d159b3174d4d14cb2f54ea4dab9c9f8fb53cf]\n[rfc6585.md#fb1f9875bafaeaeab2a28878f11ec7757573545b365e8266812a1230dfb14ca3]\n[rfc6585.md#6962b2c209ebd898adc0ea57f5cccd5203d296dba2152481315722cfb35baaba]\n[rfc6585.md#9d900659568bfdc769c5f94d7f780d74849c545e3fae656b738bcac0b49749eb]\n[rfc6585.md#d9a715419df5df90110baa2de60c51dca266633701e4aba6392ee7f55d3dcbbd]\nThe 428 Precondition Required status code indicates that the origin server requires the request to be conditional to avoid the \"lost update\" problem. [q1]\nResponses with the 428 status code MUST NOT be stored by a cache. [q2]\nThe 428 status code is optional; clients cannot rely upon its use to prevent \"lost update\" conflicts. [q3]\nClients can try using \"If-Match\" to resubmit the request successfully when encountering a 428 response. [q4]\n\nЦитаты:\n[q1] «The 428 status code indicates that the origin server requires the request to be conditional. Its typical use is to avoid the \"lost update\" problem, where a client GETs a resource's state, modifies it, and PUTs it back to the server, when meanwhile a third party has modified the state on the server, leading to a conflict. By requiring requests to be conditional, the server can assure that clients are working with the correct copies.» [rfc6585.md#ca5ec7f63e53792ca01f7cff347d159b3174d4d14cb2f54ea4dab9c9f8fb53cf]\n[q2] «Responses with the 428 status code MUST NOT be stored by a cache.» [rfc6585.md#ca5ec7f63e53792ca01f7cff347d159b3174d4d14cb2f54ea4dab9c9f8fb53cf]\n[q3] «The 428 status code is optional; clients cannot rely upon its use to prevent \"lost update\" conflicts.» [rfc6585.md#fb1f9875bafaeaeab2a28878f11ec7757573545b365e8266812a1230dfb14ca3]\n[q4] «Responses using this status code SHOULD explain how to resubmit the request successfully. For example: HTTP/1.1 428 Precondition Required Content-Type: text/html \u003chtml\u003e \u003chead\u003e \u003ctitle\u003ePrecondition Required\u003c/title\u003e \u003c/head\u003e \u003cbody\u003e \u003ch1\u003ePrecondition Required\u003c/h1\u003e \u003cp\u003eThis request is required to be conditional; try using \"If-Match\".\u003c/p\u003e \u003c/body\u003e \u003c/html\u003e» [rfc6585.md#ca5ec7f63e53792ca01f7cff347d159b3174d4d14cb2f54ea4dab9c9f8fb53cf]\n\nИсточники:\n[rfc6585.md#ca5ec7f63e53792ca01f7cff347d159b3174d4d14cb2f54ea4dab9c9f8fb53cf]\n  Раздел: RFC 6585: Additional HTTP Status Codes / 3. 428 Precondition Required\n[rfc6585.md#fb1f9875bafaeaeab2a28878f11ec7757573545b365e8266812a1230dfb14ca3]\n  Раздел: RFC 6585: Additional HTTP Status Codes / 7. Security Considerations / 7.1. 428 Precondition Required\n[RAG: 4 утверждений · 4 цитат · 2 источников; источники и точность цитат проверены]",
+      "calls": 1,
+      "total_seconds": 20.7381725
+    },
+    {
+      "id": "Q09",
+      "run": 1,
+      "query": "What is the distance from Earth to the Moon?",
+      "retrieval": {
+        "query": "What is the distance from Earth to the Moon?",
+        "search_query": "What is the distance from Earth to the Moon?",
+        "rewrite": true,
+        "min_similarity": 0.49,
+        "score_type": "cosine",
+        "retained_count": 0,
+        "filtered_count": 20,
+        "cosine_retained_count": 4,
+        "min_rerank_score": -3,
+        "rerank_score_type": "raw_logit",
+        "no_evidence": true,
+        "candidates": 20,
+        "strategy": "structured",
+        "reranking": true,
+        "candidate_count": 20,
+        "top_k": 5,
+        "retrieval_seconds": 0.01883289999932458,
+        "rerank_seconds": 0.09649290000015753,
+        "results": []
+      },
+      "raw_answer": {
+        "UsageIncomplete": false,
+        "ToolCalls": null,
+        "UsageKnown": false,
+        "Content": "",
+        "Model": "",
+        "FinishReason": "",
+        "PromptTokens": 0,
+        "CachedInputTokens": 0,
+        "CompletionTokens": 0,
+        "TotalTokens": 0,
+        "Duration": 0
+      },
+      "grounding": {
+        "status": "unknown",
+        "answer": "Не знаю: в выбранной базе знаний недостаточно подтверждений для ответа.",
+        "claims": [],
+        "quotes": [],
+        "sources": [],
+        "clarification": "Уточните вопрос или добавьте документ с нужной информацией.",
+        "local": true
+      },
+      "visible": "[База знаний: Готовый локальный индекс · найдено фрагментов: 0]\n[Поиск: 20 кандидатов → 0 после фильтра → 0 в контекст; отсечено 20]\n[В базе не найдено подтверждающих фрагментов]\nНе знаю: в выбранной базе знаний недостаточно подтверждений для ответа.\nУточните вопрос или добавьте документ с нужной информацией.\n[Недостаточно контекста · ответ клиента · LLM-вызовов: 0]\nИсточники: нет подтверждающих фрагментов для ответа.",
+      "calls": 0,
+      "total_seconds": 0.1291319
+    }
+  ]
+}
