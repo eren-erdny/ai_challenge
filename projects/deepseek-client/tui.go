@@ -223,7 +223,7 @@ func (model tuiModel) Update(message tea.Msg) (tea.Model, tea.Cmd) {
 		if message.lastStatus != nil {
 			model.state.LastRequest = message.lastStatus
 		}
-		model.history = append(model.history, titleStyle.Render("DeepSeek")+"\n"+message.text)
+		model.history = append(model.history, titleStyle.Render(model.state.Model)+"\n"+message.text)
 		model.refreshHistory()
 		return model, nil
 	case modelListMessage:

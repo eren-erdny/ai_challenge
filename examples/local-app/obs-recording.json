@@ -1,0 +1,23 @@
+{
+  "path": "C:\\Users\\erdni\\Videos\\ai_challenge_hw27.mp4",
+  "duration_seconds": 113.22,
+  "width": 2560,
+  "height": 1440,
+  "fps": 60,
+  "bytes": 6641614,
+  "sha256": "200e951f02419639e905be16027e6885729ccd0ae4b081b2a67bac6f0b1434d7",
+  "full_decode_exit_code": 0,
+  "inspected_frame_seconds": [
+    5,
+    22,
+    55,
+    85,
+    108
+  ],
+  "automated_input": true,
+  "real_tui_event_loop": true,
+  "profile": "ollama_local",
+  "model": "batiai/gemma4-12b:iq3",
+  "cloud_generation_calls": 0,
+  "original_scene_and_audio_restored": true
+}
