@@ -1,0 +1,1220 @@
+[
+  {
+    "gpu_csv": "8654, 21, 60.41",
+    "utc": "2026-10-10T13:36:37.2923265Z",
+    "python_working_set_bytes": null,
+    "ollama_working_set_bytes": 97509376.0
+  },
+  {
+    "gpu_csv": "8592, 15, 59.31",
+    "utc": "2026-10-10T13:36:38.3822364Z",
+    "python_working_set_bytes": 233512960.0,
+    "ollama_working_set_bytes": 97509376.0
+  },
+  {
+    "gpu_csv": "8556, 13, 52.97",
+    "utc": "2026-10-10T13:36:39.4415600Z",
+    "python_working_set_bytes": 313176064.0,
+    "ollama_working_set_bytes": 97509376.0
+  },
+  {
+    "gpu_csv": "8554, 14, 49.52",
+    "utc": "2026-10-10T13:36:40.5024042Z",
+    "python_working_set_bytes": 187547648.0,
+    "ollama_working_set_bytes": 97619968.0
+  },
+  {
+    "gpu_csv": "8536, 14, 49.66",
+    "utc": "2026-10-10T13:36:41.5763780Z",
+    "python_working_set_bytes": 278212608.0,
+    "ollama_working_set_bytes": 97619968.0
+  },
+  {
+    "gpu_csv": "8306, 15, 49.10",
+    "utc": "2026-10-10T13:36:42.6370905Z",
+    "python_working_set_bytes": 496177152.0,
+    "ollama_working_set_bytes": 97619968.0
+  },
+  {
+    "gpu_csv": "8290, 15, 49.13",
+    "utc": "2026-10-10T13:36:43.6964016Z",
+    "python_working_set_bytes": 82923520.0,
+    "ollama_working_set_bytes": 97619968.0
+  },
+  {
+    "gpu_csv": "8289, 14, 48.88",
+    "utc": "2026-10-10T13:36:44.7691948Z",
+    "python_working_set_bytes": 277499904.0,
+    "ollama_working_set_bytes": 96854016.0
+  },
+  {
+    "gpu_csv": "8289, 17, 50.82",
+    "utc": "2026-10-10T13:36:45.8298950Z",
+    "python_working_set_bytes": 336740352.0,
+    "ollama_working_set_bytes": 96854016.0
+  },
+  {
+    "gpu_csv": "8293, 14, 49.98",
+    "utc": "2026-10-10T13:36:46.9032013Z",
+    "python_working_set_bytes": 633634816.0,
+    "ollama_working_set_bytes": 96903168.0
+  },
+  {
+    "gpu_csv": "8874, 12, 57.81",
+    "utc": "2026-10-10T13:36:47.9687000Z",
+    "python_working_set_bytes": 831557632.0,
+    "ollama_working_set_bytes": 96907264.0
+  },
+  {
+    "gpu_csv": "8863, 5, 56.05",
+    "utc": "2026-10-10T13:36:49.0300173Z",
+    "python_working_set_bytes": 849907712.0,
+    "ollama_working_set_bytes": 96907264.0
+  },
+  {
+    "gpu_csv": "8880, 6, 48.94",
+    "utc": "2026-10-10T13:36:50.1055980Z",
+    "python_working_set_bytes": 852647936.0,
+    "ollama_working_set_bytes": 97173504.0
+  },
+  {
+    "gpu_csv": "8924, 89, 166.52",
+    "utc": "2026-10-10T13:36:51.1716604Z",
+    "python_working_set_bytes": 852647936.0,
+    "ollama_working_set_bytes": 97181696.0
+  },
+  {
+    "gpu_csv": "8910, 86, 191.20",
+    "utc": "2026-10-10T13:36:52.2316578Z",
+    "python_working_set_bytes": 852647936.0,
+    "ollama_working_set_bytes": 97198080.0
+  },
+  {
+    "gpu_csv": "9004, 84, 197.01",
+    "utc": "2026-10-10T13:36:53.3023813Z",
+    "python_working_set_bytes": 852647936.0,
+    "ollama_working_set_bytes": 97198080.0
+  },
+  {
+    "gpu_csv": "8967, 87, 198.95",
+    "utc": "2026-10-10T13:36:54.3629658Z",
+    "python_working_set_bytes": 852647936.0,
+    "ollama_working_set_bytes": 97198080.0
+  },
+  {
+    "gpu_csv": "9066, 12, 116.40",
+    "utc": "2026-10-10T13:36:55.4267086Z",
+    "python_working_set_bytes": 842170368.0,
+    "ollama_working_set_bytes": 97198080.0
+  },
+  {
+    "gpu_csv": "9108, 47, 67.14",
+    "utc": "2026-10-10T13:36:56.4867914Z",
+    "python_working_set_bytes": 849375232.0,
+    "ollama_working_set_bytes": 97292288.0
+  },
+  {
+    "gpu_csv": "9079, 86, 205.64",
+    "utc": "2026-10-10T13:36:57.5595065Z",
+    "python_working_set_bytes": 849375232.0,
+    "ollama_working_set_bytes": 97292288.0
+  },
+  {
+    "gpu_csv": "9107, 87, 194.28",
+    "utc": "2026-10-10T13:36:58.6313004Z",
+    "python_working_set_bytes": 849375232.0,
+    "ollama_working_set_bytes": 97292288.0
+  },
+  {
+    "gpu_csv": "9057, 86, 199.11",
+    "utc": "2026-10-10T13:36:59.7036260Z",
+    "python_working_set_bytes": 849375232.0,
+    "ollama_working_set_bytes": 97292288.0
+  },
+  {
+    "gpu_csv": "8876, 0, 156.87",
+    "utc": "2026-10-10T13:37:00.9109362Z",
+    "python_working_set_bytes": 849375232.0,
+    "ollama_working_set_bytes": 97292288.0
+  },
+  {
+    "gpu_csv": "8790, 92, 162.69",
+    "utc": "2026-10-10T13:37:01.9724954Z",
+    "python_working_set_bytes": 849375232.0,
+    "ollama_working_set_bytes": 97214464.0
+  },
+  {
+    "gpu_csv": "8438, 93, 200.24",
+    "utc": "2026-10-10T13:37:03.0508274Z",
+    "python_working_set_bytes": 829394944.0,
+    "ollama_working_set_bytes": 97255424.0
+  },
+  {
+    "gpu_csv": "8447, 43, 120.57",
+    "utc": "2026-10-10T13:37:04.1403241Z",
+    "python_working_set_bytes": 827047936.0,
+    "ollama_working_set_bytes": 97300480.0
+  },
+  {
+    "gpu_csv": "8398, 97, 139.53",
+    "utc": "2026-10-10T13:37:05.2344507Z",
+    "python_working_set_bytes": 827965440.0,
+    "ollama_working_set_bytes": 97300480.0
+  },
+  {
+    "gpu_csv": "8625, 90, 193.95",
+    "utc": "2026-10-10T13:37:06.3368756Z",
+    "python_working_set_bytes": 827965440.0,
+    "ollama_working_set_bytes": 97300480.0
+  },
+  {
+    "gpu_csv": "8811, 99, 174.40",
+    "utc": "2026-10-10T13:37:07.4125888Z",
+    "python_working_set_bytes": 827965440.0,
+    "ollama_working_set_bytes": 97300480.0
+  },
+  {
+    "gpu_csv": "8865, 99, 175.30",
+    "utc": "2026-10-10T13:37:08.4854239Z",
+    "python_working_set_bytes": 827965440.0,
+    "ollama_working_set_bytes": 97300480.0
+  },
+  {
+    "gpu_csv": "8885, 99, 174.06",
+    "utc": "2026-10-10T13:37:09.5576143Z",
+    "python_working_set_bytes": 827965440.0,
+    "ollama_working_set_bytes": 98496512.0
+  },
+  {
+    "gpu_csv": "8926, 99, 175.54",
+    "utc": "2026-10-10T13:37:10.6298272Z",
+    "python_working_set_bytes": 827965440.0,
+    "ollama_working_set_bytes": 98254848.0
+  },
+  {
+    "gpu_csv": "8952, 99, 175.71",
+    "utc": "2026-10-10T13:37:11.6925269Z",
+    "python_working_set_bytes": 827965440.0,
+    "ollama_working_set_bytes": 98271232.0
+  },
+  {
+    "gpu_csv": "8961, 99, 176.76",
+    "utc": "2026-10-10T13:37:12.7647849Z",
+    "python_working_set_bytes": 827965440.0,
+    "ollama_working_set_bytes": 98279424.0
+  },
+  {
+    "gpu_csv": "8960, 63, 153.93",
+    "utc": "2026-10-10T13:37:13.8562879Z",
+    "python_working_set_bytes": 855097344.0,
+    "ollama_working_set_bytes": 96911360.0
+  },
+  {
+    "gpu_csv": "8970, 99, 111.25",
+    "utc": "2026-10-10T13:37:14.9242714Z",
+    "python_working_set_bytes": 853721088.0,
+    "ollama_working_set_bytes": 97058816.0
+  },
+  {
+    "gpu_csv": "8998, 99, 170.56",
+    "utc": "2026-10-10T13:37:17.9933158Z",
+    "python_working_set_bytes": 853721088.0,
+    "ollama_working_set_bytes": 97058816.0
+  },
+  {
+    "gpu_csv": "8991, 99, 169.17",
+    "utc": "2026-10-10T13:37:19.0746323Z",
+    "python_working_set_bytes": 853721088.0,
+    "ollama_working_set_bytes": 97091584.0
+  },
+  {
+    "gpu_csv": "8995, 99, 171.25",
+    "utc": "2026-10-10T13:37:20.1444423Z",
+    "python_working_set_bytes": 853721088.0,
+    "ollama_working_set_bytes": 97099776.0
+  },
+  {
+    "gpu_csv": "8996, 99, 179.42",
+    "utc": "2026-10-10T13:37:21.2177274Z",
+    "python_working_set_bytes": 853721088.0,
+    "ollama_working_set_bytes": 97116160.0
+  },
+  {
+    "gpu_csv": "9095, 99, 178.20",
+    "utc": "2026-10-10T13:37:22.2916124Z",
+    "python_working_set_bytes": 853721088.0,
+    "ollama_working_set_bytes": 97124352.0
+  },
+  {
+    "gpu_csv": "9063, 99, 174.22",
+    "utc": "2026-10-10T13:37:23.3616395Z",
+    "python_working_set_bytes": 853721088.0,
+    "ollama_working_set_bytes": 97124352.0
+  },
+  {
+    "gpu_csv": "9030, 72, 159.05",
+    "utc": "2026-10-10T13:37:24.4437621Z",
+    "python_working_set_bytes": 844230656.0,
+    "ollama_working_set_bytes": 97148928.0
+  },
+  {
+    "gpu_csv": "8995, 76, 128.97",
+    "utc": "2026-10-10T13:37:25.5325681Z",
+    "python_working_set_bytes": 853155840.0,
+    "ollama_working_set_bytes": 97165312.0
+  },
+  {
+    "gpu_csv": "8985, 99, 174.58",
+    "utc": "2026-10-10T13:37:26.6034318Z",
+    "python_working_set_bytes": 853155840.0,
+    "ollama_working_set_bytes": 97165312.0
+  },
+  {
+    "gpu_csv": "8985, 99, 180.91",
+    "utc": "2026-10-10T13:37:27.6628168Z",
+    "python_working_set_bytes": 853155840.0,
+    "ollama_working_set_bytes": 97165312.0
+  },
+  {
+    "gpu_csv": "8985, 99, 181.14",
+    "utc": "2026-10-10T13:37:28.7228483Z",
+    "python_working_set_bytes": 853155840.0,
+    "ollama_working_set_bytes": 97165312.0
+  },
+  {
+    "gpu_csv": "8985, 99, 181.09",
+    "utc": "2026-10-10T13:37:29.7959463Z",
+    "python_working_set_bytes": 853155840.0,
+    "ollama_working_set_bytes": 97165312.0
+  },
+  {
+    "gpu_csv": "8985, 99, 181.40",
+    "utc": "2026-10-10T13:37:30.8563953Z",
+    "python_working_set_bytes": 853155840.0,
+    "ollama_working_set_bytes": 97165312.0
+  },
+  {
+    "gpu_csv": "8985, 99, 180.83",
+    "utc": "2026-10-10T13:37:31.9158858Z",
+    "python_working_set_bytes": 853155840.0,
+    "ollama_working_set_bytes": 97165312.0
+  },
+  {
+    "gpu_csv": "8985, 99, 182.02",
+    "utc": "2026-10-10T13:37:32.9888206Z",
+    "python_working_set_bytes": 853155840.0,
+    "ollama_working_set_bytes": 97165312.0
+  },
+  {
+    "gpu_csv": "8985, 99, 181.40",
+    "utc": "2026-10-10T13:37:34.0614761Z",
+    "python_working_set_bytes": 853155840.0,
+    "ollama_working_set_bytes": 97165312.0
+  },
+  {
+    "gpu_csv": "8985, 98, 181.70",
+    "utc": "2026-10-10T13:37:35.1209022Z",
+    "python_working_set_bytes": 853155840.0,
+    "ollama_working_set_bytes": 97165312.0
+  },
+  {
+    "gpu_csv": "8985, 96, 181.01",
+    "utc": "2026-10-10T13:37:36.1926939Z",
+    "python_working_set_bytes": 853155840.0,
+    "ollama_working_set_bytes": 97165312.0
+  },
+  {
+    "gpu_csv": "8985, 99, 182.41",
+    "utc": "2026-10-10T13:37:37.2634027Z",
+    "python_working_set_bytes": 853155840.0,
+    "ollama_working_set_bytes": 97165312.0
+  },
+  {
+    "gpu_csv": "8985, 99, 183.04",
+    "utc": "2026-10-10T13:37:38.3242202Z",
+    "python_working_set_bytes": 853155840.0,
+    "ollama_working_set_bytes": 97165312.0
+  },
+  {
+    "gpu_csv": "8985, 99, 182.39",
+    "utc": "2026-10-10T13:37:39.3983565Z",
+    "python_working_set_bytes": 853155840.0,
+    "ollama_working_set_bytes": 97165312.0
+  },
+  {
+    "gpu_csv": "8986, 66, 164.31",
+    "utc": "2026-10-10T13:37:40.4787369Z",
+    "python_working_set_bytes": 843907072.0,
+    "ollama_working_set_bytes": 97193984.0
+  },
+  {
+    "gpu_csv": "8985, 63, 124.42",
+    "utc": "2026-10-10T13:37:41.5589441Z",
+    "python_working_set_bytes": 858820608.0,
+    "ollama_working_set_bytes": 97198080.0
+  },
+  {
+    "gpu_csv": "8986, 99, 167.37",
+    "utc": "2026-10-10T13:37:42.6282479Z",
+    "python_working_set_bytes": 858820608.0,
+    "ollama_working_set_bytes": 97312768.0
+  },
+  {
+    "gpu_csv": "8990, 98, 186.54",
+    "utc": "2026-10-10T13:37:43.6871749Z",
+    "python_working_set_bytes": 858759168.0,
+    "ollama_working_set_bytes": 97312768.0
+  },
+  {
+    "gpu_csv": "8992, 99, 183.42",
+    "utc": "2026-10-10T13:37:44.7597698Z",
+    "python_working_set_bytes": 858759168.0,
+    "ollama_working_set_bytes": 97312768.0
+  },
+  {
+    "gpu_csv": "8994, 99, 181.92",
+    "utc": "2026-10-10T13:37:45.8194902Z",
+    "python_working_set_bytes": 858759168.0,
+    "ollama_working_set_bytes": 97312768.0
+  },
+  {
+    "gpu_csv": "8982, 95, 182.18",
+    "utc": "2026-10-10T13:37:46.8924208Z",
+    "python_working_set_bytes": 858759168.0,
+    "ollama_working_set_bytes": 97312768.0
+  },
+  {
+    "gpu_csv": "8983, 63, 136.29",
+    "utc": "2026-10-10T13:37:47.9733603Z",
+    "python_working_set_bytes": 842403840.0,
+    "ollama_working_set_bytes": 96915456.0
+  },
+  {
+    "gpu_csv": "8991, 76, 120.49",
+    "utc": "2026-10-10T13:37:49.0459180Z",
+    "python_working_set_bytes": 842764288.0,
+    "ollama_working_set_bytes": 97021952.0
+  },
+  {
+    "gpu_csv": "9007, 99, 184.19",
+    "utc": "2026-10-10T13:37:50.1057699Z",
+    "python_working_set_bytes": 842764288.0,
+    "ollama_working_set_bytes": 97021952.0
+  },
+  {
+    "gpu_csv": "9011, 99, 185.11",
+    "utc": "2026-10-10T13:37:51.1781957Z",
+    "python_working_set_bytes": 842764288.0,
+    "ollama_working_set_bytes": 97021952.0
+  },
+  {
+    "gpu_csv": "9007, 99, 183.44",
+    "utc": "2026-10-10T13:37:52.2412877Z",
+    "python_working_set_bytes": 842764288.0,
+    "ollama_working_set_bytes": 97021952.0
+  },
+  {
+    "gpu_csv": "9005, 99, 184.93",
+    "utc": "2026-10-10T13:37:53.3013196Z",
+    "python_working_set_bytes": 842764288.0,
+    "ollama_working_set_bytes": 97021952.0
+  },
+  {
+    "gpu_csv": "9013, 99, 184.59",
+    "utc": "2026-10-10T13:37:54.3764237Z",
+    "python_working_set_bytes": 842764288.0,
+    "ollama_working_set_bytes": 97021952.0
+  },
+  {
+    "gpu_csv": "9019, 99, 182.94",
+    "utc": "2026-10-10T13:37:55.4497684Z",
+    "python_working_set_bytes": 842764288.0,
+    "ollama_working_set_bytes": 97021952.0
+  },
+  {
+    "gpu_csv": "9023, 99, 187.15",
+    "utc": "2026-10-10T13:37:56.5236631Z",
+    "python_working_set_bytes": 842764288.0,
+    "ollama_working_set_bytes": 97021952.0
+  },
+  {
+    "gpu_csv": "9023, 99, 188.18",
+    "utc": "2026-10-10T13:37:57.5828724Z",
+    "python_working_set_bytes": 842764288.0,
+    "ollama_working_set_bytes": 97030144.0
+  },
+  {
+    "gpu_csv": "9032, 99, 184.96",
+    "utc": "2026-10-10T13:37:58.6449575Z",
+    "python_working_set_bytes": 842764288.0,
+    "ollama_working_set_bytes": 97046528.0
+  },
+  {
+    "gpu_csv": "9036, 76, 179.62",
+    "utc": "2026-10-10T13:37:59.7379173Z",
+    "python_working_set_bytes": 840630272.0,
+    "ollama_working_set_bytes": 97116160.0
+  },
+  {
+    "gpu_csv": "9046, 87, 132.73",
+    "utc": "2026-10-10T13:38:00.8258879Z",
+    "python_working_set_bytes": 853647360.0,
+    "ollama_working_set_bytes": 97153024.0
+  },
+  {
+    "gpu_csv": "9053, 99, 178.27",
+    "utc": "2026-10-10T13:38:01.8991245Z",
+    "python_working_set_bytes": 858525696.0,
+    "ollama_working_set_bytes": 97157120.0
+  },
+  {
+    "gpu_csv": "9052, 99, 187.22",
+    "utc": "2026-10-10T13:38:02.9569854Z",
+    "python_working_set_bytes": 858525696.0,
+    "ollama_working_set_bytes": 97157120.0
+  },
+  {
+    "gpu_csv": "9071, 99, 181.31",
+    "utc": "2026-10-10T13:38:04.0154608Z",
+    "python_working_set_bytes": 858525696.0,
+    "ollama_working_set_bytes": 97157120.0
+  },
+  {
+    "gpu_csv": "9148, 99, 180.96",
+    "utc": "2026-10-10T13:38:05.0882362Z",
+    "python_working_set_bytes": 858525696.0,
+    "ollama_working_set_bytes": 97157120.0
+  },
+  {
+    "gpu_csv": "9071, 98, 178.30",
+    "utc": "2026-10-10T13:38:06.1601400Z",
+    "python_working_set_bytes": 858525696.0,
+    "ollama_working_set_bytes": 97157120.0
+  },
+  {
+    "gpu_csv": "9105, 99, 184.42",
+    "utc": "2026-10-10T13:38:07.2214765Z",
+    "python_working_set_bytes": 858525696.0,
+    "ollama_working_set_bytes": 97157120.0
+  },
+  {
+    "gpu_csv": "9097, 99, 209.42",
+    "utc": "2026-10-10T13:38:08.2815417Z",
+    "python_working_set_bytes": 858525696.0,
+    "ollama_working_set_bytes": 97157120.0
+  },
+  {
+    "gpu_csv": "9084, 99, 209.08",
+    "utc": "2026-10-10T13:38:09.3421313Z",
+    "python_working_set_bytes": 858525696.0,
+    "ollama_working_set_bytes": 97157120.0
+  },
+  {
+    "gpu_csv": "9082, 99, 210.64",
+    "utc": "2026-10-10T13:38:10.4090371Z",
+    "python_working_set_bytes": 858525696.0,
+    "ollama_working_set_bytes": 97157120.0
+  },
+  {
+    "gpu_csv": "9080, 99, 209.30",
+    "utc": "2026-10-10T13:38:11.4761435Z",
+    "python_working_set_bytes": 858525696.0,
+    "ollama_working_set_bytes": 97157120.0
+  },
+  {
+    "gpu_csv": "9080, 99, 208.54",
+    "utc": "2026-10-10T13:38:12.5491267Z",
+    "python_working_set_bytes": 858525696.0,
+    "ollama_working_set_bytes": 97157120.0
+  },
+  {
+    "gpu_csv": "9083, 99, 208.35",
+    "utc": "2026-10-10T13:38:13.6108107Z",
+    "python_working_set_bytes": 858525696.0,
+    "ollama_working_set_bytes": 97157120.0
+  },
+  {
+    "gpu_csv": "9087, 99, 205.02",
+    "utc": "2026-10-10T13:38:14.6706882Z",
+    "python_working_set_bytes": 858525696.0,
+    "ollama_working_set_bytes": 97157120.0
+  },
+  {
+    "gpu_csv": "9096, 99, 178.49",
+    "utc": "2026-10-10T13:38:15.7352187Z",
+    "python_working_set_bytes": 858525696.0,
+    "ollama_working_set_bytes": 97157120.0
+  },
+  {
+    "gpu_csv": "9111, 99, 175.31",
+    "utc": "2026-10-10T13:38:16.7989417Z",
+    "python_working_set_bytes": 858525696.0,
+    "ollama_working_set_bytes": 97157120.0
+  },
+  {
+    "gpu_csv": "9111, 98, 180.07",
+    "utc": "2026-10-10T13:38:17.8658983Z",
+    "python_working_set_bytes": 858525696.0,
+    "ollama_working_set_bytes": 97157120.0
+  },
+  {
+    "gpu_csv": "9087, 99, 181.75",
+    "utc": "2026-10-10T13:38:18.9274859Z",
+    "python_working_set_bytes": 858525696.0,
+    "ollama_working_set_bytes": 97157120.0
+  },
+  {
+    "gpu_csv": "9087, 99, 182.41",
+    "utc": "2026-10-10T13:38:19.9979612Z",
+    "python_working_set_bytes": 858525696.0,
+    "ollama_working_set_bytes": 97157120.0
+  },
+  {
+    "gpu_csv": "9087, 99, 183.66",
+    "utc": "2026-10-10T13:38:21.0587702Z",
+    "python_working_set_bytes": 858525696.0,
+    "ollama_working_set_bytes": 97157120.0
+  },
+  {
+    "gpu_csv": "9087, 99, 185.19",
+    "utc": "2026-10-10T13:38:22.1187098Z",
+    "python_working_set_bytes": 858525696.0,
+    "ollama_working_set_bytes": 97157120.0
+  },
+  {
+    "gpu_csv": "9087, 72, 163.99",
+    "utc": "2026-10-10T13:38:23.1946852Z",
+    "python_working_set_bytes": 834060288.0,
+    "ollama_working_set_bytes": 96997376.0
+  },
+  {
+    "gpu_csv": "9087, 68, 132.07",
+    "utc": "2026-10-10T13:38:24.2754752Z",
+    "python_working_set_bytes": 833732608.0,
+    "ollama_working_set_bytes": 97251328.0
+  },
+  {
+    "gpu_csv": "9087, 99, 157.12",
+    "utc": "2026-10-10T13:38:25.3457689Z",
+    "python_working_set_bytes": 833732608.0,
+    "ollama_working_set_bytes": 97263616.0
+  },
+  {
+    "gpu_csv": "9297, 82, 163.66",
+    "utc": "2026-10-10T13:38:26.4539321Z",
+    "python_working_set_bytes": 833732608.0,
+    "ollama_working_set_bytes": 97304576.0
+  },
+  {
+    "gpu_csv": "9316, 5, 83.77",
+    "utc": "2026-10-10T13:38:27.5267575Z",
+    "python_working_set_bytes": 842039296.0,
+    "ollama_working_set_bytes": 96997376.0
+  },
+  {
+    "gpu_csv": "9353, 93, 91.97",
+    "utc": "2026-10-10T13:38:28.6010627Z",
+    "python_working_set_bytes": 841670656.0,
+    "ollama_working_set_bytes": 97001472.0
+  },
+  {
+    "gpu_csv": "9272, 86, 192.62",
+    "utc": "2026-10-10T13:38:29.8957182Z",
+    "python_working_set_bytes": 841670656.0,
+    "ollama_working_set_bytes": 97001472.0
+  },
+  {
+    "gpu_csv": "9288, 83, 148.48",
+    "utc": "2026-10-10T13:38:30.9854105Z",
+    "python_working_set_bytes": 841670656.0,
+    "ollama_working_set_bytes": 97001472.0
+  },
+  {
+    "gpu_csv": "9087, 99, 182.86",
+    "utc": "2026-10-10T13:38:32.0437894Z",
+    "python_working_set_bytes": 841670656.0,
+    "ollama_working_set_bytes": 97001472.0
+  },
+  {
+    "gpu_csv": "9087, 99, 181.96",
+    "utc": "2026-10-10T13:38:33.1187181Z",
+    "python_working_set_bytes": 841670656.0,
+    "ollama_working_set_bytes": 97001472.0
+  },
+  {
+    "gpu_csv": "9086, 99, 175.49",
+    "utc": "2026-10-10T13:38:34.1791339Z",
+    "python_working_set_bytes": 841670656.0,
+    "ollama_working_set_bytes": 97001472.0
+  },
+  {
+    "gpu_csv": "9086, 99, 178.26",
+    "utc": "2026-10-10T13:38:35.2504728Z",
+    "python_working_set_bytes": 841670656.0,
+    "ollama_working_set_bytes": 97001472.0
+  },
+  {
+    "gpu_csv": "9088, 99, 181.79",
+    "utc": "2026-10-10T13:38:36.3091698Z",
+    "python_working_set_bytes": 841670656.0,
+    "ollama_working_set_bytes": 97001472.0
+  },
+  {
+    "gpu_csv": "9092, 99, 183.71",
+    "utc": "2026-10-10T13:38:37.3835411Z",
+    "python_working_set_bytes": 841670656.0,
+    "ollama_working_set_bytes": 97001472.0
+  },
+  {
+    "gpu_csv": "9099, 60, 131.55",
+    "utc": "2026-10-10T13:38:38.4624411Z",
+    "python_working_set_bytes": 826208256.0,
+    "ollama_working_set_bytes": 97001472.0
+  },
+  {
+    "gpu_csv": "9100, 97, 130.92",
+    "utc": "2026-10-10T13:38:39.5341729Z",
+    "python_working_set_bytes": 840331264.0,
+    "ollama_working_set_bytes": 97345536.0
+  },
+  {
+    "gpu_csv": "9108, 89, 187.68",
+    "utc": "2026-10-10T13:38:40.6074027Z",
+    "python_working_set_bytes": 840331264.0,
+    "ollama_working_set_bytes": 97345536.0
+  },
+  {
+    "gpu_csv": "9109, 99, 184.62",
+    "utc": "2026-10-10T13:38:41.6806051Z",
+    "python_working_set_bytes": 840331264.0,
+    "ollama_working_set_bytes": 97345536.0
+  },
+  {
+    "gpu_csv": "9099, 99, 185.20",
+    "utc": "2026-10-10T13:38:42.7561227Z",
+    "python_working_set_bytes": 840331264.0,
+    "ollama_working_set_bytes": 97337344.0
+  },
+  {
+    "gpu_csv": "9098, 99, 184.25",
+    "utc": "2026-10-10T13:38:43.8295892Z",
+    "python_working_set_bytes": 840331264.0,
+    "ollama_working_set_bytes": 97353728.0
+  },
+  {
+    "gpu_csv": "9097, 99, 184.12",
+    "utc": "2026-10-10T13:38:44.9021584Z",
+    "python_working_set_bytes": 840331264.0,
+    "ollama_working_set_bytes": 97361920.0
+  },
+  {
+    "gpu_csv": "9097, 99, 184.58",
+    "utc": "2026-10-10T13:38:45.9751532Z",
+    "python_working_set_bytes": 840331264.0,
+    "ollama_working_set_bytes": 97378304.0
+  },
+  {
+    "gpu_csv": "9097, 99, 183.86",
+    "utc": "2026-10-10T13:38:47.0490458Z",
+    "python_working_set_bytes": 840327168.0,
+    "ollama_working_set_bytes": 97394688.0
+  },
+  {
+    "gpu_csv": "9097, 99, 184.12",
+    "utc": "2026-10-10T13:38:48.1237636Z",
+    "python_working_set_bytes": 840327168.0,
+    "ollama_working_set_bytes": 97402880.0
+  },
+  {
+    "gpu_csv": "9097, 99, 183.00",
+    "utc": "2026-10-10T13:38:49.1980021Z",
+    "python_working_set_bytes": 840327168.0,
+    "ollama_working_set_bytes": 97431552.0
+  },
+  {
+    "gpu_csv": "9100, 99, 182.01",
+    "utc": "2026-10-10T13:38:50.2709843Z",
+    "python_working_set_bytes": 840327168.0,
+    "ollama_working_set_bytes": 97439744.0
+  },
+  {
+    "gpu_csv": "9100, 99, 180.93",
+    "utc": "2026-10-10T13:38:51.3435113Z",
+    "python_working_set_bytes": 840327168.0,
+    "ollama_working_set_bytes": 97456128.0
+  },
+  {
+    "gpu_csv": "9101, 83, 174.16",
+    "utc": "2026-10-10T13:38:52.4370050Z",
+    "python_working_set_bytes": 840593408.0,
+    "ollama_working_set_bytes": 97243136.0
+  },
+  {
+    "gpu_csv": "9101, 68, 130.12",
+    "utc": "2026-10-10T13:38:53.5304094Z",
+    "python_working_set_bytes": 838807552.0,
+    "ollama_working_set_bytes": 97243136.0
+  },
+  {
+    "gpu_csv": "9104, 99, 149.88",
+    "utc": "2026-10-10T13:38:54.6024316Z",
+    "python_working_set_bytes": 838807552.0,
+    "ollama_working_set_bytes": 97247232.0
+  },
+  {
+    "gpu_csv": "9104, 99, 178.66",
+    "utc": "2026-10-10T13:38:55.6628845Z",
+    "python_working_set_bytes": 838807552.0,
+    "ollama_working_set_bytes": 97247232.0
+  },
+  {
+    "gpu_csv": "9107, 99, 170.29",
+    "utc": "2026-10-10T13:38:56.7372682Z",
+    "python_working_set_bytes": 838807552.0,
+    "ollama_working_set_bytes": 97247232.0
+  },
+  {
+    "gpu_csv": "9105, 98, 168.40",
+    "utc": "2026-10-10T13:38:57.8005199Z",
+    "python_working_set_bytes": 838774784.0,
+    "ollama_working_set_bytes": 97247232.0
+  },
+  {
+    "gpu_csv": "9107, 99, 169.16",
+    "utc": "2026-10-10T13:38:58.8612406Z",
+    "python_working_set_bytes": 838774784.0,
+    "ollama_working_set_bytes": 97247232.0
+  },
+  {
+    "gpu_csv": "9107, 99, 171.69",
+    "utc": "2026-10-10T13:38:59.9348424Z",
+    "python_working_set_bytes": 838774784.0,
+    "ollama_working_set_bytes": 97247232.0
+  },
+  {
+    "gpu_csv": "9110, 99, 170.15",
+    "utc": "2026-10-10T13:39:00.9943983Z",
+    "python_working_set_bytes": 838774784.0,
+    "ollama_working_set_bytes": 97247232.0
+  },
+  {
+    "gpu_csv": "9112, 99, 171.78",
+    "utc": "2026-10-10T13:39:02.0714666Z",
+    "python_working_set_bytes": 838774784.0,
+    "ollama_working_set_bytes": 97247232.0
+  },
+  {
+    "gpu_csv": "8951, 99, 169.21",
+    "utc": "2026-10-10T13:39:03.1443310Z",
+    "python_working_set_bytes": 838774784.0,
+    "ollama_working_set_bytes": 97247232.0
+  },
+  {
+    "gpu_csv": "8951, 99, 168.64",
+    "utc": "2026-10-10T13:39:04.2055648Z",
+    "python_working_set_bytes": 838774784.0,
+    "ollama_working_set_bytes": 97247232.0
+  },
+  {
+    "gpu_csv": "8949, 99, 170.04",
+    "utc": "2026-10-10T13:39:05.2651508Z",
+    "python_working_set_bytes": 838774784.0,
+    "ollama_working_set_bytes": 97247232.0
+  },
+  {
+    "gpu_csv": "8949, 99, 166.05",
+    "utc": "2026-10-10T13:39:06.3398298Z",
+    "python_working_set_bytes": 838774784.0,
+    "ollama_working_set_bytes": 97247232.0
+  },
+  {
+    "gpu_csv": "8952, 86, 142.55",
+    "utc": "2026-10-10T13:39:07.4211904Z",
+    "python_working_set_bytes": 866914304.0,
+    "ollama_working_set_bytes": 97271808.0
+  },
+  {
+    "gpu_csv": "8972, 99, 144.57",
+    "utc": "2026-10-10T13:39:08.4942682Z",
+    "python_working_set_bytes": 845524992.0,
+    "ollama_working_set_bytes": 97271808.0
+  },
+  {
+    "gpu_csv": "8973, 99, 171.50",
+    "utc": "2026-10-10T13:39:09.5694611Z",
+    "python_working_set_bytes": 845524992.0,
+    "ollama_working_set_bytes": 97271808.0
+  },
+  {
+    "gpu_csv": "8974, 99, 166.45",
+    "utc": "2026-10-10T13:39:10.6267530Z",
+    "python_working_set_bytes": 845524992.0,
+    "ollama_working_set_bytes": 97271808.0
+  },
+  {
+    "gpu_csv": "8974, 99, 165.88",
+    "utc": "2026-10-10T13:39:11.6995031Z",
+    "python_working_set_bytes": 845524992.0,
+    "ollama_working_set_bytes": 97271808.0
+  },
+  {
+    "gpu_csv": "8974, 99, 167.52",
+    "utc": "2026-10-10T13:39:12.7601796Z",
+    "python_working_set_bytes": 845524992.0,
+    "ollama_working_set_bytes": 97271808.0
+  },
+  {
+    "gpu_csv": "8973, 99, 170.75",
+    "utc": "2026-10-10T13:39:13.8345421Z",
+    "python_working_set_bytes": 845524992.0,
+    "ollama_working_set_bytes": 97271808.0
+  },
+  {
+    "gpu_csv": "8976, 91, 160.48",
+    "utc": "2026-10-10T13:39:14.9294001Z",
+    "python_working_set_bytes": 847949824.0,
+    "ollama_working_set_bytes": 96813056.0
+  },
+  {
+    "gpu_csv": "8977, 99, 148.76",
+    "utc": "2026-10-10T13:39:16.0148969Z",
+    "python_working_set_bytes": 855261184.0,
+    "ollama_working_set_bytes": 96817152.0
+  },
+  {
+    "gpu_csv": "8977, 99, 167.47",
+    "utc": "2026-10-10T13:39:17.0863248Z",
+    "python_working_set_bytes": 855261184.0,
+    "ollama_working_set_bytes": 96817152.0
+  },
+  {
+    "gpu_csv": "8971, 99, 167.69",
+    "utc": "2026-10-10T13:39:18.1467477Z",
+    "python_working_set_bytes": 855261184.0,
+    "ollama_working_set_bytes": 96817152.0
+  },
+  {
+    "gpu_csv": "8971, 99, 168.64",
+    "utc": "2026-10-10T13:39:19.2203403Z",
+    "python_working_set_bytes": 855261184.0,
+    "ollama_working_set_bytes": 96817152.0
+  },
+  {
+    "gpu_csv": "8970, 99, 168.81",
+    "utc": "2026-10-10T13:39:20.2928999Z",
+    "python_working_set_bytes": 855261184.0,
+    "ollama_working_set_bytes": 96817152.0
+  },
+  {
+    "gpu_csv": "8977, 99, 168.55",
+    "utc": "2026-10-10T13:39:21.3692560Z",
+    "python_working_set_bytes": 855261184.0,
+    "ollama_working_set_bytes": 96817152.0
+  },
+  {
+    "gpu_csv": "8975, 99, 173.13",
+    "utc": "2026-10-10T13:39:22.4394376Z",
+    "python_working_set_bytes": 855261184.0,
+    "ollama_working_set_bytes": 96817152.0
+  },
+  {
+    "gpu_csv": "8966, 99, 174.93",
+    "utc": "2026-10-10T13:39:23.5119112Z",
+    "python_working_set_bytes": 855261184.0,
+    "ollama_working_set_bytes": 96817152.0
+  },
+  {
+    "gpu_csv": "8966, 99, 174.41",
+    "utc": "2026-10-10T13:39:24.5848719Z",
+    "python_working_set_bytes": 855261184.0,
+    "ollama_working_set_bytes": 96817152.0
+  },
+  {
+    "gpu_csv": "8966, 99, 175.85",
+    "utc": "2026-10-10T13:39:25.6578693Z",
+    "python_working_set_bytes": 855261184.0,
+    "ollama_working_set_bytes": 96817152.0
+  },
+  {
+    "gpu_csv": "8966, 99, 175.65",
+    "utc": "2026-10-10T13:39:26.7188777Z",
+    "python_working_set_bytes": 855261184.0,
+    "ollama_working_set_bytes": 96817152.0
+  },
+  {
+    "gpu_csv": "8963, 99, 175.94",
+    "utc": "2026-10-10T13:39:27.7824934Z",
+    "python_working_set_bytes": 855261184.0,
+    "ollama_working_set_bytes": 96817152.0
+  },
+  {
+    "gpu_csv": "8984, 98, 175.91",
+    "utc": "2026-10-10T13:39:28.8565106Z",
+    "python_working_set_bytes": 855261184.0,
+    "ollama_working_set_bytes": 96817152.0
+  },
+  {
+    "gpu_csv": "8984, 99, 180.97",
+    "utc": "2026-10-10T13:39:29.9294366Z",
+    "python_working_set_bytes": 855261184.0,
+    "ollama_working_set_bytes": 96817152.0
+  },
+  {
+    "gpu_csv": "8973, 99, 181.40",
+    "utc": "2026-10-10T13:39:30.9905301Z",
+    "python_working_set_bytes": 855261184.0,
+    "ollama_working_set_bytes": 96817152.0
+  },
+  {
+    "gpu_csv": "8973, 67, 152.73",
+    "utc": "2026-10-10T13:39:32.0837843Z",
+    "python_working_set_bytes": 846020608.0,
+    "ollama_working_set_bytes": 96817152.0
+  },
+  {
+    "gpu_csv": "9005, 65, 124.93",
+    "utc": "2026-10-10T13:39:33.1689988Z",
+    "python_working_set_bytes": 851931136.0,
+    "ollama_working_set_bytes": 97005568.0
+  },
+  {
+    "gpu_csv": "8973, 99, 168.66",
+    "utc": "2026-10-10T13:39:34.2412463Z",
+    "python_working_set_bytes": 851931136.0,
+    "ollama_working_set_bytes": 97005568.0
+  },
+  {
+    "gpu_csv": "8973, 99, 181.44",
+    "utc": "2026-10-10T13:39:35.3033943Z",
+    "python_working_set_bytes": 851931136.0,
+    "ollama_working_set_bytes": 97005568.0
+  },
+  {
+    "gpu_csv": "8973, 99, 177.67",
+    "utc": "2026-10-10T13:39:36.3782291Z",
+    "python_working_set_bytes": 851931136.0,
+    "ollama_working_set_bytes": 97005568.0
+  },
+  {
+    "gpu_csv": "8973, 99, 181.42",
+    "utc": "2026-10-10T13:39:37.4357438Z",
+    "python_working_set_bytes": 851931136.0,
+    "ollama_working_set_bytes": 97005568.0
+  },
+  {
+    "gpu_csv": "8975, 99, 179.83",
+    "utc": "2026-10-10T13:39:38.4958240Z",
+    "python_working_set_bytes": 851931136.0,
+    "ollama_working_set_bytes": 97005568.0
+  },
+  {
+    "gpu_csv": "8975, 99, 179.17",
+    "utc": "2026-10-10T13:39:39.5571283Z",
+    "python_working_set_bytes": 851931136.0,
+    "ollama_working_set_bytes": 97005568.0
+  },
+  {
+    "gpu_csv": "8987, 99, 177.60",
+    "utc": "2026-10-10T13:39:40.6176263Z",
+    "python_working_set_bytes": 851931136.0,
+    "ollama_working_set_bytes": 97005568.0
+  },
+  {
+    "gpu_csv": "8987, 98, 176.90",
+    "utc": "2026-10-10T13:39:41.6936975Z",
+    "python_working_set_bytes": 851931136.0,
+    "ollama_working_set_bytes": 97005568.0
+  },
+  {
+    "gpu_csv": "8992, 99, 185.72",
+    "utc": "2026-10-10T13:39:42.7651795Z",
+    "python_working_set_bytes": 851931136.0,
+    "ollama_working_set_bytes": 97005568.0
+  },
+  {
+    "gpu_csv": "8985, 57, 146.00",
+    "utc": "2026-10-10T13:39:43.8441371Z",
+    "python_working_set_bytes": 849485824.0,
+    "ollama_working_set_bytes": 97005568.0
+  },
+  {
+    "gpu_csv": "8984, 98, 148.60",
+    "utc": "2026-10-10T13:39:44.9155400Z",
+    "python_working_set_bytes": 836694016.0,
+    "ollama_working_set_bytes": 97480704.0
+  },
+  {
+    "gpu_csv": "8984, 99, 187.08",
+    "utc": "2026-10-10T13:39:45.9761761Z",
+    "python_working_set_bytes": 836694016.0,
+    "ollama_working_set_bytes": 97480704.0
+  },
+  {
+    "gpu_csv": "8988, 97, 184.84",
+    "utc": "2026-10-10T13:39:47.0502469Z",
+    "python_working_set_bytes": 836694016.0,
+    "ollama_working_set_bytes": 97480704.0
+  },
+  {
+    "gpu_csv": "8991, 98, 182.29",
+    "utc": "2026-10-10T13:39:48.1092040Z",
+    "python_working_set_bytes": 836694016.0,
+    "ollama_working_set_bytes": 97480704.0
+  },
+  {
+    "gpu_csv": "8991, 99, 179.44",
+    "utc": "2026-10-10T13:39:49.1825153Z",
+    "python_working_set_bytes": 836694016.0,
+    "ollama_working_set_bytes": 97480704.0
+  },
+  {
+    "gpu_csv": "9013, 99, 181.07",
+    "utc": "2026-10-10T13:39:50.2504947Z",
+    "python_working_set_bytes": 836694016.0,
+    "ollama_working_set_bytes": 97480704.0
+  },
+  {
+    "gpu_csv": "9013, 99, 177.28",
+    "utc": "2026-10-10T13:39:51.3119684Z",
+    "python_working_set_bytes": 836694016.0,
+    "ollama_working_set_bytes": 97480704.0
+  },
+  {
+    "gpu_csv": "9009, 61, 163.48",
+    "utc": "2026-10-10T13:39:52.3917976Z",
+    "python_working_set_bytes": 861609984.0,
+    "ollama_working_set_bytes": 96698368.0
+  },
+  {
+    "gpu_csv": "8996, 57, 114.58",
+    "utc": "2026-10-10T13:39:53.4862336Z",
+    "python_working_set_bytes": 861671424.0,
+    "ollama_working_set_bytes": 96706560.0
+  },
+  {
+    "gpu_csv": "8997, 97, 172.74",
+    "utc": "2026-10-10T13:39:54.5553284Z",
+    "python_working_set_bytes": 861671424.0,
+    "ollama_working_set_bytes": 96706560.0
+  },
+  {
+    "gpu_csv": "8998, 99, 176.45",
+    "utc": "2026-10-10T13:39:55.6169944Z",
+    "python_working_set_bytes": 861671424.0,
+    "ollama_working_set_bytes": 96706560.0
+  },
+  {
+    "gpu_csv": "8998, 99, 174.53",
+    "utc": "2026-10-10T13:39:56.6912962Z",
+    "python_working_set_bytes": 861671424.0,
+    "ollama_working_set_bytes": 96706560.0
+  },
+  {
+    "gpu_csv": "8998, 99, 174.86",
+    "utc": "2026-10-10T13:39:57.7530266Z",
+    "python_working_set_bytes": 861671424.0,
+    "ollama_working_set_bytes": 96706560.0
+  },
+  {
+    "gpu_csv": "8998, 99, 175.36",
+    "utc": "2026-10-10T13:39:58.8258093Z",
+    "python_working_set_bytes": 861671424.0,
+    "ollama_working_set_bytes": 96706560.0
+  },
+  {
+    "gpu_csv": "8998, 98, 180.02",
+    "utc": "2026-10-10T13:39:59.8993707Z",
+    "python_working_set_bytes": 861671424.0,
+    "ollama_working_set_bytes": 96706560.0
+  },
+  {
+    "gpu_csv": "8998, 98, 177.35",
+    "utc": "2026-10-10T13:40:00.9731915Z",
+    "python_working_set_bytes": 861671424.0,
+    "ollama_working_set_bytes": 96706560.0
+  },
+  {
+    "gpu_csv": "8998, 99, 175.90",
+    "utc": "2026-10-10T13:40:02.0469723Z",
+    "python_working_set_bytes": 861671424.0,
+    "ollama_working_set_bytes": 96706560.0
+  },
+  {
+    "gpu_csv": "8998, 99, 177.59",
+    "utc": "2026-10-10T13:40:03.1225748Z",
+    "python_working_set_bytes": 861671424.0,
+    "ollama_working_set_bytes": 96706560.0
+  },
+  {
+    "gpu_csv": "8998, 99, 176.65",
+    "utc": "2026-10-10T13:40:04.1956304Z",
+    "python_working_set_bytes": 861671424.0,
+    "ollama_working_set_bytes": 96706560.0
+  },
+  {
+    "gpu_csv": "8999, 99, 170.04",
+    "utc": "2026-10-10T13:40:05.2552985Z",
+    "python_working_set_bytes": 861671424.0,
+    "ollama_working_set_bytes": 96706560.0
+  },
+  {
+    "gpu_csv": "8998, 99, 169.82",
+    "utc": "2026-10-10T13:40:06.3109320Z",
+    "python_working_set_bytes": 861671424.0,
+    "ollama_working_set_bytes": 96706560.0
+  },
+  {
+    "gpu_csv": "8998, 99, 176.79",
+    "utc": "2026-10-10T13:40:07.3738542Z",
+    "python_working_set_bytes": 861671424.0,
+    "ollama_working_set_bytes": 96706560.0
+  },
+  {
+    "gpu_csv": "8999, 99, 174.57",
+    "utc": "2026-10-10T13:40:08.4482352Z",
+    "python_working_set_bytes": 861671424.0,
+    "ollama_working_set_bytes": 96706560.0
+  },
+  {
+    "gpu_csv": "8998, 99, 171.05",
+    "utc": "2026-10-10T13:40:09.5205623Z",
+    "python_working_set_bytes": 861671424.0,
+    "ollama_working_set_bytes": 96706560.0
+  },
+  {
+    "gpu_csv": "8998, 99, 175.74",
+    "utc": "2026-10-10T13:40:10.5952897Z",
+    "python_working_set_bytes": 861671424.0,
+    "ollama_working_set_bytes": 96706560.0
+  },
+  {
+    "gpu_csv": "8998, 70, 165.38",
+    "utc": "2026-10-10T13:40:11.6735713Z",
+    "python_working_set_bytes": 840945664.0,
+    "ollama_working_set_bytes": 96780288.0
+  },
+  {
+    "gpu_csv": "8998, 86, 138.75",
+    "utc": "2026-10-10T13:40:12.7687190Z",
+    "python_working_set_bytes": 814862336.0,
+    "ollama_working_set_bytes": 97292288.0
+  },
+  {
+    "gpu_csv": "8998, 99, 166.10",
+    "utc": "2026-10-10T13:40:13.8393933Z",
+    "python_working_set_bytes": 833634304.0,
+    "ollama_working_set_bytes": 97456128.0
+  },
+  {
+    "gpu_csv": "8998, 98, 183.74",
+    "utc": "2026-10-10T13:40:14.9152514Z",
+    "python_working_set_bytes": 833634304.0,
+    "ollama_working_set_bytes": 97456128.0
+  },
+  {
+    "gpu_csv": "8999, 99, 177.31",
+    "utc": "2026-10-10T13:40:15.9747946Z",
+    "python_working_set_bytes": 833634304.0,
+    "ollama_working_set_bytes": 97456128.0
+  }
+]

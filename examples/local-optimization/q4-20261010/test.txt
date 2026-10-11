@@ -1,0 +1,23 @@
+=== RUN   TestHomework29Optimization
+    local_optimization_live_test.go:246: run 1 Q01: calls=1 valid=true 3.79s
+    local_optimization_live_test.go:246: run 1 Q02: calls=1 valid=true 5.23s
+    local_optimization_live_test.go:246: run 1 Q03: calls=1 valid=true 6.27s
+    local_optimization_live_test.go:246: run 1 Q04: calls=1 valid=true 5.41s
+    local_optimization_live_test.go:246: run 1 Q05: calls=1 valid=false 13.08s
+    local_optimization_live_test.go:246: run 1 Q06: calls=1 valid=true 4.29s
+    local_optimization_live_test.go:246: run 1 Q07: calls=1 valid=true 4.69s
+    local_optimization_live_test.go:246: run 1 Q08: calls=1 valid=true 14.12s
+    local_optimization_live_test.go:246: run 1 Q09: calls=0 valid=true 0.13s
+    local_optimization_live_test.go:246: run 1 Q10: calls=1 valid=true 3.36s
+    local_optimization_live_test.go:246: run 2 Q01: calls=1 valid=true 4.02s
+    local_optimization_live_test.go:246: run 2 Q02: calls=1 valid=false 9.05s
+    local_optimization_live_test.go:246: run 2 Q03: calls=1 valid=true 3.40s
+    local_optimization_live_test.go:246: run 2 Q04: calls=1 valid=true 3.41s
+    local_optimization_live_test.go:246: run 2 Q05: calls=1 valid=false 9.12s
+    local_optimization_live_test.go:246: run 2 Q06: calls=1 valid=true 4.77s
+    local_optimization_live_test.go:246: run 2 Q07: calls=1 valid=true 4.37s
+    local_optimization_live_test.go:246: run 2 Q08: calls=1 valid=true 8.83s
+    local_optimization_live_test.go:246: run 2 Q09: calls=0 valid=true 0.16s
+    local_optimization_live_test.go:246: run 2 Q10: calls=1 valid=true 3.76s
+--- PASS: TestHomework29Optimization (137.85s)
+PASS

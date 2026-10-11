@@ -26,6 +26,7 @@ const (
 
 // Target identifies a provider connection. Credentials belong to the injected client.
 type Target struct {
+	RAGTemplate          string
 	ContextWindow        int
 	MaxOutputTokens      int
 	Profile              string

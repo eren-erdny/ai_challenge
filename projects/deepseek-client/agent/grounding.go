@@ -62,6 +62,15 @@ If the excerpts do not support the requested answer, use exactly {"status":"unkn
 
 const groundingClarification = "Уточните вопрос или добавьте документ с нужной информацией."
 
+// Compact is opt-in per profile; the schema and provenance validator stay identical.
+const compactGroundingInstruction = `
+TASK TEMPLATE: concise document question answering.
+Produce ONE claim and ONE short quote whenever possible. For a question asking several facts, use at most three claims/quotes. Stop as soon as the question is answered. Never enumerate background facts, examples or alternative formulations of your answer.
+First locate the smallest complete source sentence or grammar rule that answers the question. Copy that exact substring into quotes[].text, including punctuation and parentheses. Do not repair, simplify or join separate excerpts. If the required facts occur in separate sentences, copy separate quotes. Then write the minimal claim supported by those quotes, preserving MAY, SHOULD, MUST, NOT and all conditions. Reference only quotes that actually prove that claim.
+Example on unrelated synthetic data: question "How long are logs retained?", chunk_id "demo", text "Logs MUST be retained for seven days. Backups are weekly."
+Correct: {"status":"answered","claims":[{"text":"Logs MUST be retained for seven days.","quote_ids":["q1"]}],"quotes":[{"id":"q1","chunk_id":"demo","text":"Logs MUST be retained for seven days."}],"clarification":""}
+Do not copy the example's answer or IDs into real answers. Do not discuss backups when asked about logs. If the current evidence lacks the answer, return the unknown object. Output the JSON now; no analysis or additional claims.`
+
 func normalized(text string) string { return strings.Join(strings.Fields(text), " ") }
 func safeGroundingText(text string) bool {
 	for _, r := range text {

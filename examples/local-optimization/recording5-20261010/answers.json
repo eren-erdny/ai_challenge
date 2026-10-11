@@ -1,0 +1,61 @@
+{
+  "model": "mixed: before + q8",
+  "endpoint": "http://127.0.0.1:11434/v1",
+  "started": "2026-10-10T14:19:37Z",
+  "manifest": {
+    "source_root": "C:\\Users\\erdni\\Documents\\projects\\hw1\\examples\\rag-indexing\\corpus",
+    "source_roots": [
+      "C:\\Users\\erdni\\Documents\\projects\\hw1\\examples\\rag-indexing\\corpus"
+    ],
+    "corpus_sha256": "538eb5d3b698b6773b7a4ec9df045669e677ba3894ff0af5df80187d9f5686bd",
+    "files": 3,
+    "text_units": 3,
+    "pdf_pages": 0,
+    "characters": 45358,
+    "skipped_files": [],
+    "tokenizer": "nomic-ai/nomic-embed-text-v1.5",
+    "size": 400,
+    "overlap": 60,
+    "stats": {
+      "fixed": {
+        "chunks": 30,
+        "min_tokens": 200,
+        "max_tokens": 400,
+        "mean_tokens": 387.26666666666665,
+        "total_tokens_with_overlap": 11618,
+        "chunking_seconds": 0.04911029999493621
+      },
+      "structured": {
+        "chunks": 72,
+        "min_tokens": 5,
+        "max_tokens": 400,
+        "mean_tokens": 143.02777777777777,
+        "total_tokens_with_overlap": 10298,
+        "chunking_seconds": 0.047986800003855024
+      }
+    },
+    "embedding": {
+      "model": "nomic-embed-text:latest",
+      "digest": "0a109f422b47e3a30ba2b10eca18548e944e8a23073ee3f3e947efcf3c45e59f"
+    },
+    "collections": {
+      "fixed": {
+        "name": "chunks_fixed_4e122ff89c71",
+        "dimension": 768
+      },
+      "structured": {
+        "name": "chunks_structured_447705e7a311",
+        "dimension": 768
+      }
+    },
+    "qdrant_path": "C:\\Users\\erdni\\Documents\\projects\\hw1\\artifacts\\hw21\\qdrant",
+    "index_seconds": {
+      "fixed": 1.486767400005192,
+      "structured": 0.8971909999963827
+    },
+    "backend": "local"
+  },
+  "startup_seconds": 10.8935795,
+  "cloud_generation_calls": 0,
+  "rows": null
+}

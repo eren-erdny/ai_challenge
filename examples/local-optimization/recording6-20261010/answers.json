@@ -1,0 +1,701 @@
+{
+  "model": "mixed: before + q8",
+  "endpoint": "http://127.0.0.1:11434/v1",
+  "started": "2026-10-10T14:25:40Z",
+  "manifest": {
+    "source_root": "C:\\Users\\erdni\\Documents\\projects\\hw1\\examples\\rag-indexing\\corpus",
+    "source_roots": [
+      "C:\\Users\\erdni\\Documents\\projects\\hw1\\examples\\rag-indexing\\corpus"
+    ],
+    "corpus_sha256": "538eb5d3b698b6773b7a4ec9df045669e677ba3894ff0af5df80187d9f5686bd",
+    "files": 3,
+    "text_units": 3,
+    "pdf_pages": 0,
+    "characters": 45358,
+    "skipped_files": [],
+    "tokenizer": "nomic-ai/nomic-embed-text-v1.5",
+    "size": 400,
+    "overlap": 60,
+    "stats": {
+      "fixed": {
+        "chunks": 30,
+        "min_tokens": 200,
+        "max_tokens": 400,
+        "mean_tokens": 387.26666666666665,
+        "total_tokens_with_overlap": 11618,
+        "chunking_seconds": 0.04911029999493621
+      },
+      "structured": {
+        "chunks": 72,
+        "min_tokens": 5,
+        "max_tokens": 400,
+        "mean_tokens": 143.02777777777777,
+        "total_tokens_with_overlap": 10298,
+        "chunking_seconds": 0.047986800003855024
+      }
+    },
+    "embedding": {
+      "model": "nomic-embed-text:latest",
+      "digest": "0a109f422b47e3a30ba2b10eca18548e944e8a23073ee3f3e947efcf3c45e59f"
+    },
+    "collections": {
+      "fixed": {
+        "name": "chunks_fixed_4e122ff89c71",
+        "dimension": 768
+      },
+      "structured": {
+        "name": "chunks_structured_447705e7a311",
+        "dimension": 768
+      }
+    },
+    "qdrant_path": "C:\\Users\\erdni\\Documents\\projects\\hw1\\artifacts\\hw21\\qdrant",
+    "index_seconds": {
+      "fixed": 1.486767400005192,
+      "structured": 0.8971909999963827
+    },
+    "backend": "local"
+  },
+  "startup_seconds": 11.0918921,
+  "cloud_generation_calls": 0,
+  "rows": [
+    {
+      "model": "qwen3.5:4b-rag",
+      "variant": "before",
+      "runtime": {
+        "models": [
+          {
+            "name": "qwen3.5:4b-rag-opt-q8",
+            "model": "qwen3.5:4b-rag-opt-q8",
+            "size": 5177731972,
+            "digest": "61ac7baa351be88503c1f9252a2876a9ded3da43d23bb597c896d45db891916e",
+            "details": {
+              "parent_model": "",
+              "format": "gguf",
+              "family": "qwen35",
+              "families": [
+                "qwen35"
+              ],
+              "parameter_size": "4.2B",
+              "quantization_level": "Q8_0"
+            },
+            "expires_at": "2026-10-10T17:39:51.6308469+03:00",
+            "size_vram": 5177731972,
+            "context_length": 8192
+          },
+          {
+            "name": "nomic-embed-text:latest",
+            "model": "nomic-embed-text:latest",
+            "size": 323150151,
+            "digest": "0a109f422b47e3a30ba2b10eca18548e944e8a23073ee3f3e947efcf3c45e59f",
+            "details": {
+              "parent_model": "",
+              "format": "gguf",
+              "family": "nomic-bert",
+              "families": [
+                "nomic-bert"
+              ],
+              "parameter_size": "137M",
+              "quantization_level": "F16"
+            },
+            "expires_at": "2026-10-10T17:39:17.8813917+03:00",
+            "size_vram": 323150151,
+            "context_length": 2048
+          },
+          {
+            "name": "qwen3.5:4b-rag",
+            "model": "qwen3.5:4b-rag",
+            "size": 3629142506,
+            "digest": "83445517020938fafcac0034605e08165798eeb9c933544f732a0340522dc33b",
+            "details": {
+              "parent_model": "",
+              "format": "gguf",
+              "family": "qwen35",
+              "families": [
+                "qwen35"
+              ],
+              "parameter_size": "4.2B",
+              "quantization_level": "Q4_K_M"
+            },
+            "expires_at": "2026-10-10T17:34:23.0163889+03:00",
+            "size_vram": 3629142506,
+            "context_length": 16384
+          }
+        ]
+      },
+      "id": "Q03",
+      "run": 1,
+      "query": "Which sugar-type additions are permitted by HTCPCP-TEA?",
+      "retrieval": {
+        "query": "Which sugar-type additions are permitted by HTCPCP-TEA?",
+        "search_query": "Which sugar-type additions are permitted by HTCPCP-TEA?",
+        "rewrite": true,
+        "min_similarity": 0.49,
+        "score_type": "cosine",
+        "retained_count": 13,
+        "filtered_count": 7,
+        "cosine_retained_count": 20,
+        "min_rerank_score": -3,
+        "rerank_score_type": "raw_logit",
+        "no_evidence": false,
+        "candidates": 20,
+        "strategy": "structured",
+        "reranking": true,
+        "candidate_count": 20,
+        "top_k": 5,
+        "retrieval_seconds": 0.01708420000068145,
+        "rerank_seconds": 0.7309815999997227,
+        "results": [
+          {
+            "chunk_id": "780bc9a67735785ea1ef3a368f275d45a12fae7b162c274cbf7a570d5314a69b",
+            "source": "rfc7168.md",
+            "file": "rfc7168.md",
+            "title": "RFC 7168: The Hyper Text Coffee Pot Control Protocol for Tea Efflux Appliances",
+            "section": "RFC 7168: The Hyper Text Coffee Pot Control Protocol for Tea Efflux Appliances / 2. HTCPCP-TEA Protocol Additions / 2.2. Modified Header Fields / 2.2.1. The Accept-Additions Header Field",
+            "page": null,
+            "strategy": "structured",
+            "start_char": 6807,
+            "end_char": 7745,
+            "text": "#### 2.2.1. The Accept-Additions Header Field\n\n   It has been observed that some users of blended teas have an\n   occasional preference for teas brewed as an emulsion of cane sugar\n   with hints of water.  To allow for this circumstance, the Accept-\n   Additions header field defined in the base HTCPCP specification is\n   updated to allow the following options:\n\n      addition-type   = ( \"*\"\n                        | milk-type\n                        | syrup-type\n                        | sweetener-type\n                        | spice-type\n                        | alcohol-type\n                        | sugar-type\n                        ) *( \";\" parameter )\n      sugar-type      = ( \"Sugar\" | \"Xylitol\" | \"Stevia\" )\n\n   Implementers should be aware that excessive use of the Sugar addition\n   may cause the BREW request to exceed the segment size allowed by the\n   transport layer, causing fragmentation and a delay in brewing.\n\n",
+            "tokens": 175,
+            "vector_score": 0.8317137210262088,
+            "rerank_score": 8.798911094665527
+          },
+          {
+            "chunk_id": "78662ed6ebf0b2665c67b09548b859f8dab45896a5f2a70c405bd6219bd8d5d7",
+            "source": "rfc7168.md",
+            "file": "rfc7168.md",
+            "title": "RFC 7168: The Hyper Text Coffee Pot Control Protocol for Tea Efflux Appliances",
+            "section": "RFC 7168: The Hyper Text Coffee Pot Control Protocol for Tea Efflux Appliances / 2. HTCPCP-TEA Protocol Additions",
+            "page": null,
+            "strategy": "structured",
+            "start_char": 3326,
+            "end_char": 3446,
+            "text": "## 2. HTCPCP-TEA Protocol Additions\n\n   The TEA extension to HTCPCP adapts the operation of certain HTCPCP\n   methods.\n\n",
+            "tokens": 32,
+            "vector_score": 0.757552251073075,
+            "rerank_score": 3.7238380908966064
+          },
+          {
+            "chunk_id": "ff1e7da0e4e0320a6773afdc461791b4b432dd9f29f0b499680684ac76fc8113",
+            "source": "rfc7168.md",
+            "file": "rfc7168.md",
+            "title": "RFC 7168: The Hyper Text Coffee Pot Control Protocol for Tea Efflux Appliances",
+            "section": "RFC 7168: The Hyper Text Coffee Pot Control Protocol for Tea Efflux Appliances / 1. Introduction",
+            "page": null,
+            "strategy": "structured",
+            "start_char": 1815,
+            "end_char": 3089,
+            "text": "## 1. Introduction\n\n   As noted in the Hyper Text Coffee Pot Control Protocol [HTCPCP],\n   coffee is renowned worldwide as an artfully brewed caffeinated\n   beverage, but coffee shares this quality with many other varied\n   preparations based on the filtration of plant material.  Foremost,\n   among these are the category of brews based on the straining of water\n   through prepared leaves from a tea tree: the lineage and history of\n   the tea genus will not be recounted as part of this paper, but\n   evidence shows that the production of tea existed many thousands of\n   years ago.\n\n   The deficiency of HTCPCP in addressing the networked production of\n   such a venerable beverage as tea is noteworthy: indeed, the only\n   provision given for networked teapots is that they not respond to\n   requests for the production of coffee, which, while eminently\n   reasonable, does not allow for communication with the teapot for its\n   intended purpose.\n\n   This paper specifies an extension to HTCPCP to allow communication\n   with networked tea production devices and teapots.  The additions to\n   the protocol specified herein permit the requests and responses\n   necessary to control all devices capable of making, arguably, the\n   most popular caffeinated hot beverage.\n\n",
+            "tokens": 240,
+            "vector_score": 0.7023540798042537,
+            "rerank_score": 3.055826425552368
+          },
+          {
+            "chunk_id": "1fce01239d871a78f1cf2f02b10c1880281309129eb5a7d446d027cbc42e9446",
+            "source": "rfc2324.md",
+            "file": "rfc2324.md",
+            "title": "RFC 2324: Hyper Text Coffee Pot Control Protocol (HTCPCP/1.0)",
+            "section": "RFC 2324: Hyper Text Coffee Pot Control Protocol (HTCPCP/1.0) / 2. HTCPCP Protocol / 2.2. Coffee Pot Header fields / 2.2.2. New header fields / 2.2.2.1. The Accept-Additions header field",
+            "page": null,
+            "strategy": "structured",
+            "start_char": 5761,
+            "end_char": 6812,
+            "text": "##### 2.2.2.1. The Accept-Additions header field\n\n   In HTTP, the \"Accept\" request-header field is used to specify media\n   types which are acceptable for the response. However, in HTCPCP, the\n   response may result in additional actions on the part of the\n   automated pot. For this reason, HTCPCP adds a new header field,\n   \"Accept-Additions\":\n\n       Accept-Additions = \"Accept-Additions\" \":\"\n                          #( addition-range [ accept-params ] )\n\n        addition-type   = ( \"*\"\n                          | milk-type\n                          | syrup-type\n                          | sweetener-type\n                          | spice-type\n                          | alcohol-type\n                          ) *( \";\" parameter )\n        milk-type       = ( \"Cream\" | \"Half-and-half\" | \"Whole-milk\"\n                          | \"Part-Skim\" | \"Skim\" | \"Non-Dairy\" )\n        syrup-type      = ( \"Vanilla\" | \"Almond\" | \"Raspberry\"\n                          | \"Chocolate\" )\n        alcohol-type    = ( \"Whisky\" | \"Rum\" | \"Kahlua\" | \"Aquavit\" )\n\n",
+            "tokens": 236,
+            "vector_score": 0.717807742529861,
+            "rerank_score": 2.772379159927368
+          },
+          {
+            "chunk_id": "ae3f3bfc1ce0c56db5c7213adc078a1d47246ed0957ab89c2df87738ddf00491",
+            "source": "rfc7168.md",
+            "file": "rfc7168.md",
+            "title": "RFC 7168: The Hyper Text Coffee Pot Control Protocol for Tea Efflux Appliances",
+            "section": "RFC 7168: The Hyper Text Coffee Pot Control Protocol for Tea Efflux Appliances / 2. HTCPCP-TEA Protocol Additions / 2.1. BREW and POST Methods / 2.1.1. The \"/\" URI",
+            "page": null,
+            "strategy": "structured",
+            "start_char": 3991,
+            "end_char": 5340,
+            "text": "#### 2.1.1. The \"/\" URI\n\n   For the URI \"/\", brewing will not commence.  Instead, an Alternates\n   header as defined in RFC 2295 [RFC2295] MUST be sent, with the\n   available tea bags and/or leaf varieties as entries.  An example of\n   such a response is as follows:\n\n      Alternates: {\"/darjeeling\" {type message/teapot}},\n                  {\"/earl-grey\" {type message/teapot}},\n                  {\"/peppermint\" {type message/teapot}}\n\n   The following example demonstrates the possibility of\n   interoperability of a TEA-capable pot that also complies with the\n   base HTCPCP specification:\n\n      Alternates: {\"/\" {type message/coffeepot}},\n                  {\"/pot-0/darjeeling\" {type message/teapot}},\n                  {\"/pot-0/earl-grey\" {type message/teapot}},\n                  {\"/pot-1/peppermint\" {type message/teapot}}\n\n   TEA-capable HTCPCP clients MUST check the contents of the Alternates\n   header returned by a BREW request, and provide a specific URI for\n   subsequent requests of the \"message/teapot\" type.\n\n   A request to the \"/\" URI with a Content-Type header of\n   \"message/coffeepot\" SHOULD also be responded to with an Alternates\n   header in the above format, to allow TEA-capable clients the\n   opportunity to present the selection of teas to the user if inferior\n   caffeinated beverages have initially been requested.\n\n",
+            "tokens": 337,
+            "vector_score": 0.6708504010579113,
+            "rerank_score": 1.6529840230941772
+          }
+        ]
+      },
+      "raw_answer": {
+        "UsageIncomplete": false,
+        "ToolCalls": null,
+        "UsageKnown": true,
+        "Content": "{\"status\":\"answered\",\"claims\":[{\"text\":\"The permitted sugar-type additions for HTCPCP-TEA are \\\"Sugar\\\", \\\"Xylitol\\\", and \\\"Stevia\\\".\",\"quote_ids\":[\"q1\"]},{\"text\":\"These options are defined within the Accept-Additions header field as part of the protocol modifications.\",\"quote_ids\":[\"q2\"]}],\"quotes\":[{\"id\":\"q1\",\"chunk_id\":\"780bc9a67735785ea1ef3a368f275d45a12fae7b162c274cbf7a570d5314a69b\",\"text\":\"sugar-type      = ( \\\"Sugar\\\" | \\\"Xylitol\\\" | \\\"Stevia\\\" )\"},{\"id\":\"q2\",\"chunk_id\":\"780bc9a67735785ea1ef3a368f275d45a12fae7b162c274cbf7a570d5314a69b\",\"text\":\"The Accept-Additions header field defined in the base HTCPCP specification is updated to allow the following options: addition-type   = ( \\\"*\\\" | milk-type | syrup-type | sweetener-type | spice-type | alcohol-type | sugar-type ) *( \\\";\\\" parameter )\"}],\"clarification\":\"\"}",
+        "Model": "qwen3.5:4b-rag",
+        "FinishReason": "stop",
+        "PromptTokens": 3144,
+        "CachedInputTokens": 0,
+        "CompletionTokens": 302,
+        "TotalTokens": 3446,
+        "Duration": 4400667000
+      },
+      "grounding": null,
+      "visible": "[База знаний: Готовый локальный индекс · найдено фрагментов: 5]\n[Поиск: 20 кандидатов → 13 после фильтра → 5 в контекст; отсечено 7]\n[rfc7168.md#780bc9a67735785ea1ef3a368f275d45a12fae7b162c274cbf7a570d5314a69b]\n[rfc7168.md#78662ed6ebf0b2665c67b09548b859f8dab45896a5f2a70c405bd6219bd8d5d7]\n[rfc7168.md#ff1e7da0e4e0320a6773afdc461791b4b432dd9f29f0b499680684ac76fc8113]\n[rfc2324.md#1fce01239d871a78f1cf2f02b10c1880281309129eb5a7d446d027cbc42e9446]\n[rfc7168.md#ae3f3bfc1ce0c56db5c7213adc078a1d47246ed0957ab89c2df87738ddf00491]\n\n\u001b[38;5;203mошибка запроса: RAG answer rejected before saving: quote is not an exact meaningful excerpt of its chunk\u001b[m",
+      "calls": 1,
+      "total_seconds": 5.1663309,
+      "error": "response rejected by application; see visible trace"
+    },
+    {
+      "model": "qwen3.5:4b-rag-opt-q8",
+      "variant": "q8",
+      "runtime": {
+        "models": [
+          {
+            "name": "qwen3.5:4b-rag-opt-q8",
+            "model": "qwen3.5:4b-rag-opt-q8",
+            "size": 5177731972,
+            "digest": "61ac7baa351be88503c1f9252a2876a9ded3da43d23bb597c896d45db891916e",
+            "details": {
+              "parent_model": "",
+              "format": "gguf",
+              "family": "qwen35",
+              "families": [
+                "qwen35"
+              ],
+              "parameter_size": "4.2B",
+              "quantization_level": "Q8_0"
+            },
+            "expires_at": "2026-10-10T17:59:49.5525753+03:00",
+            "size_vram": 5177731972,
+            "context_length": 8192
+          },
+          {
+            "name": "nomic-embed-text:latest",
+            "model": "nomic-embed-text:latest",
+            "size": 323150151,
+            "digest": "0a109f422b47e3a30ba2b10eca18548e944e8a23073ee3f3e947efcf3c45e59f",
+            "details": {
+              "parent_model": "",
+              "format": "gguf",
+              "family": "nomic-bert",
+              "families": [
+                "nomic-bert"
+              ],
+              "parameter_size": "137M",
+              "quantization_level": "F16"
+            },
+            "expires_at": "2026-10-10T17:39:46.9106644+03:00",
+            "size_vram": 323150151,
+            "context_length": 2048
+          },
+          {
+            "name": "qwen3.5:4b-rag",
+            "model": "qwen3.5:4b-rag",
+            "size": 3629142506,
+            "digest": "83445517020938fafcac0034605e08165798eeb9c933544f732a0340522dc33b",
+            "details": {
+              "parent_model": "",
+              "format": "gguf",
+              "family": "qwen35",
+              "families": [
+                "qwen35"
+              ],
+              "parameter_size": "4.2B",
+              "quantization_level": "Q4_K_M"
+            },
+            "expires_at": "2026-10-10T17:34:23.0163889+03:00",
+            "size_vram": 3629142506,
+            "context_length": 16384
+          }
+        ]
+      },
+      "id": "Q03",
+      "run": 1,
+      "query": "Which sugar-type additions are permitted by HTCPCP-TEA?",
+      "retrieval": {
+        "query": "Which sugar-type additions are permitted by HTCPCP-TEA?",
+        "search_query": "Which sugar-type additions are permitted by HTCPCP-TEA?",
+        "rewrite": true,
+        "min_similarity": 0.49,
+        "score_type": "cosine",
+        "retained_count": 13,
+        "filtered_count": 7,
+        "cosine_retained_count": 20,
+        "min_rerank_score": -3,
+        "rerank_score_type": "raw_logit",
+        "no_evidence": false,
+        "candidates": 20,
+        "strategy": "structured",
+        "reranking": true,
+        "candidate_count": 20,
+        "top_k": 5,
+        "retrieval_seconds": 0.03376669999852311,
+        "rerank_seconds": 0.744119299999511,
+        "results": [
+          {
+            "chunk_id": "780bc9a67735785ea1ef3a368f275d45a12fae7b162c274cbf7a570d5314a69b",
+            "source": "rfc7168.md",
+            "file": "rfc7168.md",
+            "title": "RFC 7168: The Hyper Text Coffee Pot Control Protocol for Tea Efflux Appliances",
+            "section": "RFC 7168: The Hyper Text Coffee Pot Control Protocol for Tea Efflux Appliances / 2. HTCPCP-TEA Protocol Additions / 2.2. Modified Header Fields / 2.2.1. The Accept-Additions Header Field",
+            "page": null,
+            "strategy": "structured",
+            "start_char": 6807,
+            "end_char": 7745,
+            "text": "#### 2.2.1. The Accept-Additions Header Field\n\n   It has been observed that some users of blended teas have an\n   occasional preference for teas brewed as an emulsion of cane sugar\n   with hints of water.  To allow for this circumstance, the Accept-\n   Additions header field defined in the base HTCPCP specification is\n   updated to allow the following options:\n\n      addition-type   = ( \"*\"\n                        | milk-type\n                        | syrup-type\n                        | sweetener-type\n                        | spice-type\n                        | alcohol-type\n                        | sugar-type\n                        ) *( \";\" parameter )\n      sugar-type      = ( \"Sugar\" | \"Xylitol\" | \"Stevia\" )\n\n   Implementers should be aware that excessive use of the Sugar addition\n   may cause the BREW request to exceed the segment size allowed by the\n   transport layer, causing fragmentation and a delay in brewing.\n\n",
+            "tokens": 175,
+            "vector_score": 0.8317137210262088,
+            "rerank_score": 8.798911094665527
+          },
+          {
+            "chunk_id": "78662ed6ebf0b2665c67b09548b859f8dab45896a5f2a70c405bd6219bd8d5d7",
+            "source": "rfc7168.md",
+            "file": "rfc7168.md",
+            "title": "RFC 7168: The Hyper Text Coffee Pot Control Protocol for Tea Efflux Appliances",
+            "section": "RFC 7168: The Hyper Text Coffee Pot Control Protocol for Tea Efflux Appliances / 2. HTCPCP-TEA Protocol Additions",
+            "page": null,
+            "strategy": "structured",
+            "start_char": 3326,
+            "end_char": 3446,
+            "text": "## 2. HTCPCP-TEA Protocol Additions\n\n   The TEA extension to HTCPCP adapts the operation of certain HTCPCP\n   methods.\n\n",
+            "tokens": 32,
+            "vector_score": 0.757552251073075,
+            "rerank_score": 3.7238380908966064
+          },
+          {
+            "chunk_id": "ff1e7da0e4e0320a6773afdc461791b4b432dd9f29f0b499680684ac76fc8113",
+            "source": "rfc7168.md",
+            "file": "rfc7168.md",
+            "title": "RFC 7168: The Hyper Text Coffee Pot Control Protocol for Tea Efflux Appliances",
+            "section": "RFC 7168: The Hyper Text Coffee Pot Control Protocol for Tea Efflux Appliances / 1. Introduction",
+            "page": null,
+            "strategy": "structured",
+            "start_char": 1815,
+            "end_char": 3089,
+            "text": "## 1. Introduction\n\n   As noted in the Hyper Text Coffee Pot Control Protocol [HTCPCP],\n   coffee is renowned worldwide as an artfully brewed caffeinated\n   beverage, but coffee shares this quality with many other varied\n   preparations based on the filtration of plant material.  Foremost,\n   among these are the category of brews based on the straining of water\n   through prepared leaves from a tea tree: the lineage and history of\n   the tea genus will not be recounted as part of this paper, but\n   evidence shows that the production of tea existed many thousands of\n   years ago.\n\n   The deficiency of HTCPCP in addressing the networked production of\n   such a venerable beverage as tea is noteworthy: indeed, the only\n   provision given for networked teapots is that they not respond to\n   requests for the production of coffee, which, while eminently\n   reasonable, does not allow for communication with the teapot for its\n   intended purpose.\n\n   This paper specifies an extension to HTCPCP to allow communication\n   with networked tea production devices and teapots.  The additions to\n   the protocol specified herein permit the requests and responses\n   necessary to control all devices capable of making, arguably, the\n   most popular caffeinated hot beverage.\n\n",
+            "tokens": 240,
+            "vector_score": 0.7023540798042537,
+            "rerank_score": 3.055826425552368
+          },
+          {
+            "chunk_id": "1fce01239d871a78f1cf2f02b10c1880281309129eb5a7d446d027cbc42e9446",
+            "source": "rfc2324.md",
+            "file": "rfc2324.md",
+            "title": "RFC 2324: Hyper Text Coffee Pot Control Protocol (HTCPCP/1.0)",
+            "section": "RFC 2324: Hyper Text Coffee Pot Control Protocol (HTCPCP/1.0) / 2. HTCPCP Protocol / 2.2. Coffee Pot Header fields / 2.2.2. New header fields / 2.2.2.1. The Accept-Additions header field",
+            "page": null,
+            "strategy": "structured",
+            "start_char": 5761,
+            "end_char": 6812,
+            "text": "##### 2.2.2.1. The Accept-Additions header field\n\n   In HTTP, the \"Accept\" request-header field is used to specify media\n   types which are acceptable for the response. However, in HTCPCP, the\n   response may result in additional actions on the part of the\n   automated pot. For this reason, HTCPCP adds a new header field,\n   \"Accept-Additions\":\n\n       Accept-Additions = \"Accept-Additions\" \":\"\n                          #( addition-range [ accept-params ] )\n\n        addition-type   = ( \"*\"\n                          | milk-type\n                          | syrup-type\n                          | sweetener-type\n                          | spice-type\n                          | alcohol-type\n                          ) *( \";\" parameter )\n        milk-type       = ( \"Cream\" | \"Half-and-half\" | \"Whole-milk\"\n                          | \"Part-Skim\" | \"Skim\" | \"Non-Dairy\" )\n        syrup-type      = ( \"Vanilla\" | \"Almond\" | \"Raspberry\"\n                          | \"Chocolate\" )\n        alcohol-type    = ( \"Whisky\" | \"Rum\" | \"Kahlua\" | \"Aquavit\" )\n\n",
+            "tokens": 236,
+            "vector_score": 0.717807742529861,
+            "rerank_score": 2.772379159927368
+          },
+          {
+            "chunk_id": "ae3f3bfc1ce0c56db5c7213adc078a1d47246ed0957ab89c2df87738ddf00491",
+            "source": "rfc7168.md",
+            "file": "rfc7168.md",
+            "title": "RFC 7168: The Hyper Text Coffee Pot Control Protocol for Tea Efflux Appliances",
+            "section": "RFC 7168: The Hyper Text Coffee Pot Control Protocol for Tea Efflux Appliances / 2. HTCPCP-TEA Protocol Additions / 2.1. BREW and POST Methods / 2.1.1. The \"/\" URI",
+            "page": null,
+            "strategy": "structured",
+            "start_char": 3991,
+            "end_char": 5340,
+            "text": "#### 2.1.1. The \"/\" URI\n\n   For the URI \"/\", brewing will not commence.  Instead, an Alternates\n   header as defined in RFC 2295 [RFC2295] MUST be sent, with the\n   available tea bags and/or leaf varieties as entries.  An example of\n   such a response is as follows:\n\n      Alternates: {\"/darjeeling\" {type message/teapot}},\n                  {\"/earl-grey\" {type message/teapot}},\n                  {\"/peppermint\" {type message/teapot}}\n\n   The following example demonstrates the possibility of\n   interoperability of a TEA-capable pot that also complies with the\n   base HTCPCP specification:\n\n      Alternates: {\"/\" {type message/coffeepot}},\n                  {\"/pot-0/darjeeling\" {type message/teapot}},\n                  {\"/pot-0/earl-grey\" {type message/teapot}},\n                  {\"/pot-1/peppermint\" {type message/teapot}}\n\n   TEA-capable HTCPCP clients MUST check the contents of the Alternates\n   header returned by a BREW request, and provide a specific URI for\n   subsequent requests of the \"message/teapot\" type.\n\n   A request to the \"/\" URI with a Content-Type header of\n   \"message/coffeepot\" SHOULD also be responded to with an Alternates\n   header in the above format, to allow TEA-capable clients the\n   opportunity to present the selection of teas to the user if inferior\n   caffeinated beverages have initially been requested.\n\n",
+            "tokens": 337,
+            "vector_score": 0.6708504010579113,
+            "rerank_score": 1.6529840230941772
+          }
+        ]
+      },
+      "raw_answer": {
+        "UsageIncomplete": false,
+        "ToolCalls": null,
+        "UsageKnown": true,
+        "Content": "{\"status\":\"answered\",\"claims\":[{\"text\":\"The permitted sugar-type additions are \\\"Sugar\\\", \\\"Xylitol\\\", and \\\"Stevia\\\".\",\"quote_ids\":[\"q1\"]}],\"quotes\":[{\"id\":\"q1\",\"chunk_id\":\"780bc9a67735785ea1ef3a368f275d45a12fae7b162c274cbf7a570d5314a69b\",\"text\":\"sugar-type      = ( \\\"Sugar\\\" | \\\"Xylitol\\\" | \\\"Stevia\\\" )\"}],\"clarification\":\"\"}",
+        "Model": "qwen3.5:4b-rag-opt-q8",
+        "FinishReason": "stop",
+        "PromptTokens": 3422,
+        "CachedInputTokens": 0,
+        "CompletionTokens": 138,
+        "TotalTokens": 3560,
+        "Duration": 1895244300
+      },
+      "grounding": {
+        "status": "answered",
+        "answer": "The permitted sugar-type additions are \"Sugar\", \"Xylitol\", and \"Stevia\". [q1]",
+        "claims": [
+          {
+            "text": "The permitted sugar-type additions are \"Sugar\", \"Xylitol\", and \"Stevia\".",
+            "quote_ids": [
+              "q1"
+            ]
+          }
+        ],
+        "quotes": [
+          {
+            "id": "q1",
+            "chunk_id": "780bc9a67735785ea1ef3a368f275d45a12fae7b162c274cbf7a570d5314a69b",
+            "text": "sugar-type = ( \"Sugar\" | \"Xylitol\" | \"Stevia\" )"
+          }
+        ],
+        "sources": [
+          {
+            "source": "rfc7168.md",
+            "section": "RFC 7168: The Hyper Text Coffee Pot Control Protocol for Tea Efflux Appliances / 2. HTCPCP-TEA Protocol Additions / 2.2. Modified Header Fields / 2.2.1. The Accept-Additions Header Field",
+            "chunk_id": "780bc9a67735785ea1ef3a368f275d45a12fae7b162c274cbf7a570d5314a69b"
+          }
+        ],
+        "clarification": "",
+        "local": false
+      },
+      "visible": "[База знаний: Готовый локальный индекс · найдено фрагментов: 5]\n[Поиск: 20 кандидатов → 13 после фильтра → 5 в контекст; отсечено 7]\n[rfc7168.md#780bc9a67735785ea1ef3a368f275d45a12fae7b162c274cbf7a570d5314a69b]\n[rfc7168.md#78662ed6ebf0b2665c67b09548b859f8dab45896a5f2a70c405bd6219bd8d5d7]\n[rfc7168.md#ff1e7da0e4e0320a6773afdc461791b4b432dd9f29f0b499680684ac76fc8113]\n[rfc2324.md#1fce01239d871a78f1cf2f02b10c1880281309129eb5a7d446d027cbc42e9446]\n[rfc7168.md#ae3f3bfc1ce0c56db5c7213adc078a1d47246ed0957ab89c2df87738ddf00491]\nThe permitted sugar-type additions are \"Sugar\", \"Xylitol\", and \"Stevia\". [q1]\n\nЦитаты:\n[q1] «sugar-type = ( \"Sugar\" | \"Xylitol\" | \"Stevia\" )» [rfc7168.md#780bc9a67735785ea1ef3a368f275d45a12fae7b162c274cbf7a570d5314a69b]\n\nИсточники:\n[rfc7168.md#780bc9a67735785ea1ef3a368f275d45a12fae7b162c274cbf7a570d5314a69b]\n  Раздел: RFC 7168: The Hyper Text Coffee Pot Control Protocol for Tea Efflux Appliances / 2. HTCPCP-TEA Protocol Additions / 2.2. Modified Header Fields / 2.2.1. The Accept-Additions Header Field\n[RAG: 1 утверждений · 1 цитат · 1 источников; источники и точность цитат проверены]",
+      "calls": 1,
+      "total_seconds": 2.711951
+    },
+    {
+      "model": "qwen3.5:4b-rag-opt-q8",
+      "variant": "q8",
+      "runtime": {
+        "models": [
+          {
+            "name": "qwen3.5:4b-rag-opt-q8",
+            "model": "qwen3.5:4b-rag-opt-q8",
+            "size": 5177731972,
+            "digest": "61ac7baa351be88503c1f9252a2876a9ded3da43d23bb597c896d45db891916e",
+            "details": {
+              "parent_model": "",
+              "format": "gguf",
+              "family": "qwen35",
+              "families": [
+                "qwen35"
+              ],
+              "parameter_size": "4.2B",
+              "quantization_level": "Q8_0"
+            },
+            "expires_at": "2026-10-10T18:00:15.8822389+03:00",
+            "size_vram": 5177731972,
+            "context_length": 8192
+          },
+          {
+            "name": "nomic-embed-text:latest",
+            "model": "nomic-embed-text:latest",
+            "size": 323150151,
+            "digest": "0a109f422b47e3a30ba2b10eca18548e944e8a23073ee3f3e947efcf3c45e59f",
+            "details": {
+              "parent_model": "",
+              "format": "gguf",
+              "family": "nomic-bert",
+              "families": [
+                "nomic-bert"
+              ],
+              "parameter_size": "137M",
+              "quantization_level": "F16"
+            },
+            "expires_at": "2026-10-10T17:40:13.4031473+03:00",
+            "size_vram": 323150151,
+            "context_length": 2048
+          },
+          {
+            "name": "qwen3.5:4b-rag",
+            "model": "qwen3.5:4b-rag",
+            "size": 3629142506,
+            "digest": "83445517020938fafcac0034605e08165798eeb9c933544f732a0340522dc33b",
+            "details": {
+              "parent_model": "",
+              "format": "gguf",
+              "family": "qwen35",
+              "families": [
+                "qwen35"
+              ],
+              "parameter_size": "4.2B",
+              "quantization_level": "Q4_K_M"
+            },
+            "expires_at": "2026-10-10T17:34:23.0163889+03:00",
+            "size_vram": 3629142506,
+            "context_length": 16384
+          }
+        ]
+      },
+      "id": "Q07",
+      "run": 1,
+      "query": "May HTTP 431 responses be stored by a cache? Preserve the normative requirement.",
+      "retrieval": {
+        "query": "May HTTP 431 responses be stored by a cache? Preserve the normative requirement.",
+        "search_query": "May HTTP 431 responses be stored by a cache? Preserve the normative requirement.",
+        "rewrite": true,
+        "min_similarity": 0.49,
+        "score_type": "cosine",
+        "retained_count": 4,
+        "filtered_count": 16,
+        "cosine_retained_count": 20,
+        "min_rerank_score": -3,
+        "rerank_score_type": "raw_logit",
+        "no_evidence": false,
+        "candidates": 20,
+        "strategy": "structured",
+        "reranking": true,
+        "candidate_count": 20,
+        "top_k": 5,
+        "retrieval_seconds": 0.03975720000016736,
+        "rerank_seconds": 0.7813810000006924,
+        "results": [
+          {
+            "chunk_id": "ca5ec7f63e53792ca01f7cff347d159b3174d4d14cb2f54ea4dab9c9f8fb53cf",
+            "source": "rfc6585.md",
+            "file": "rfc6585.md",
+            "title": "RFC 6585: Additional HTTP Status Codes",
+            "section": "RFC 6585: Additional HTTP Status Codes / 3. 428 Precondition Required",
+            "page": null,
+            "strategy": "structured",
+            "start_char": 2677,
+            "end_char": 3670,
+            "text": "## 3. 428 Precondition Required\n\n   The 428 status code indicates that the origin server requires the\n   request to be conditional.\n\n   Its typical use is to avoid the \"lost update\" problem, where a client\n   GETs a resource's state, modifies it, and PUTs it back to the server,\n   when meanwhile a third party has modified the state on the server,\n   leading to a conflict.  By requiring requests to be conditional, the\n   server can assure that clients are working with the correct copies.\n\n   Responses using this status code SHOULD explain how to resubmit the\n   request successfully.  For example:\n\n   HTTP/1.1 428 Precondition Required\n   Content-Type: text/html\n\n   \u003chtml\u003e\n      \u003chead\u003e\n         \u003ctitle\u003ePrecondition Required\u003c/title\u003e\n      \u003c/head\u003e\n      \u003cbody\u003e\n         \u003ch1\u003ePrecondition Required\u003c/h1\u003e\n         \u003cp\u003eThis request is required to be conditional;\n         try using \"If-Match\".\u003c/p\u003e\n      \u003c/body\u003e\n   \u003c/html\u003e\n\n   Responses with the 428 status code MUST NOT be stored by a cache.\n\n",
+            "tokens": 220,
+            "vector_score": 0.7015064666969759,
+            "rerank_score": 5.975028991699219
+          },
+          {
+            "chunk_id": "72649411207e74ce22e6992c9e6b618da6dc6dd4cff0c500b0e216317c095f75",
+            "source": "rfc6585.md",
+            "file": "rfc6585.md",
+            "title": "RFC 6585: Additional HTTP Status Codes",
+            "section": "RFC 6585: Additional HTTP Status Codes / 5. 431 Request Header Fields Too Large",
+            "page": null,
+            "strategy": "structured",
+            "start_char": 4859,
+            "end_char": 5754,
+            "text": "## 5. 431 Request Header Fields Too Large\n\n   The 431 status code indicates that the server is unwilling to process\n   the request because its header fields are too large.  The request MAY\n   be resubmitted after reducing the size of the request header fields.\n\n   It can be used both when the set of request header fields in total is\n   too large, and when a single header field is at fault.  In the latter\n   case, the response representation SHOULD specify which header field\n   was too large.\n\n   For example:\n\n   HTTP/1.1 431 Request Header Fields Too Large\n   Content-Type: text/html\n\n   \u003chtml\u003e\n      \u003chead\u003e\n         \u003ctitle\u003eRequest Header Fields Too Large\u003c/title\u003e\n      \u003c/head\u003e\n      \u003cbody\u003e\n         \u003ch1\u003eRequest Header Fields Too Large\u003c/h1\u003e\n         \u003cp\u003eThe \"Example\" header was too large.\u003c/p\u003e\n      \u003c/body\u003e\n   \u003c/html\u003e\n\n   Responses with the 431 status code MUST NOT be stored by a cache.\n\n",
+            "tokens": 197,
+            "vector_score": 0.7494277533747455,
+            "rerank_score": 5.937546730041504
+          },
+          {
+            "chunk_id": "34df5f0df9993a9326c2dd285d7b40b97cbca62b046071353e791988705d0dfd",
+            "source": "rfc6585.md",
+            "file": "rfc6585.md",
+            "title": "RFC 6585: Additional HTTP Status Codes",
+            "section": "RFC 6585: Additional HTTP Status Codes / 4. 429 Too Many Requests",
+            "page": null,
+            "strategy": "structured",
+            "start_char": 3670,
+            "end_char": 4859,
+            "text": "## 4. 429 Too Many Requests\n\n   The 429 status code indicates that the user has sent too many\n   requests in a given amount of time (\"rate limiting\").\n\n   The response representations SHOULD include details explaining the\n   condition, and MAY include a Retry-After header indicating how long\n   to wait before making a new request.\n\n   For example:\n\n   HTTP/1.1 429 Too Many Requests\n   Content-Type: text/html\n   Retry-After: 3600\n\n   \u003chtml\u003e\n      \u003chead\u003e\n         \u003ctitle\u003eToo Many Requests\u003c/title\u003e\n      \u003c/head\u003e\n      \u003cbody\u003e\n         \u003ch1\u003eToo Many Requests\u003c/h1\u003e\n         \u003cp\u003eI only allow 50 requests per hour to this Web site per\n            logged in user.  Try again soon.\u003c/p\u003e\n      \u003c/body\u003e\n   \u003c/html\u003e\n\n   Note that this specification does not define how the origin server\n   identifies the user, nor how it counts requests.  For example, an\n   origin server that is limiting request rates can do so based upon\n   counts of requests on a per-resource basis, across the entire server,\n   or even among a set of servers.  Likewise, it might identify the user\n   by its authentication credentials, or a stateful cookie.\n\n   Responses with the 429 status code MUST NOT be stored by a cache.\n\n",
+            "tokens": 256,
+            "vector_score": 0.6800250418369774,
+            "rerank_score": 0.5077604651451111
+          },
+          {
+            "chunk_id": "607d1be6fe1596aa99b2873c2a46778779302f22b439600e917b06db7aa4aab1",
+            "source": "rfc6585.md",
+            "file": "rfc6585.md",
+            "title": "RFC 6585: Additional HTTP Status Codes",
+            "section": "RFC 6585: Additional HTTP Status Codes / 6. 511 Network Authentication Required",
+            "page": null,
+            "strategy": "structured",
+            "start_char": 5754,
+            "end_char": 6523,
+            "text": "## 6. 511 Network Authentication Required\n\n   The 511 status code indicates that the client needs to authenticate\n   to gain network access.\n\n   The response representation SHOULD contain a link to a resource that\n   allows the user to submit credentials (e.g., with an HTML form).\n\n   Note that the 511 response SHOULD NOT contain a challenge or the\n   login interface itself, because browsers would show the login\n   interface as being associated with the originally requested URL,\n   which may cause confusion.\n\n   The 511 status SHOULD NOT be generated by origin servers; it is\n   intended for use by intercepting proxies that are interposed as a\n   means of controlling access to the network.\n\n   Responses with the 511 status code MUST NOT be stored by a cache.\n\n",
+            "tokens": 150,
+            "vector_score": 0.6870362967238797,
+            "rerank_score": -2.7484474182128906
+          }
+        ]
+      },
+      "raw_answer": {
+        "UsageIncomplete": false,
+        "ToolCalls": null,
+        "UsageKnown": true,
+        "Content": "{\"status\":\"answered\",\"claims\":[{\"text\":\"Responses with the 431 status code MUST NOT be stored by a cache.\",\"quote_ids\":[\"q1\"]}],\"quotes\":[{\"id\":\"q1\",\"chunk_id\":\"72649411207e74ce22e6992c9e6b618da6dc6dd4cff0c500b0e216317c095f75\",\"text\":\"Responses with the 431 status code MUST NOT be stored by a cache.\"}],\"clarification\":\"\"}",
+        "Model": "qwen3.5:4b-rag-opt-q8",
+        "FinishReason": "stop",
+        "PromptTokens": 2877,
+        "CachedInputTokens": 0,
+        "CompletionTokens": 128,
+        "TotalTokens": 3005,
+        "Duration": 1679092600
+      },
+      "grounding": {
+        "status": "answered",
+        "answer": "Responses with the 431 status code MUST NOT be stored by a cache. [q1]",
+        "claims": [
+          {
+            "text": "Responses with the 431 status code MUST NOT be stored by a cache.",
+            "quote_ids": [
+              "q1"
+            ]
+          }
+        ],
+        "quotes": [
+          {
+            "id": "q1",
+            "chunk_id": "72649411207e74ce22e6992c9e6b618da6dc6dd4cff0c500b0e216317c095f75",
+            "text": "Responses with the 431 status code MUST NOT be stored by a cache."
+          }
+        ],
+        "sources": [
+          {
+            "source": "rfc6585.md",
+            "section": "RFC 6585: Additional HTTP Status Codes / 5. 431 Request Header Fields Too Large",
+            "chunk_id": "72649411207e74ce22e6992c9e6b618da6dc6dd4cff0c500b0e216317c095f75"
+          }
+        ],
+        "clarification": "",
+        "local": false
+      },
+      "visible": "[База знаний: Готовый локальный индекс · найдено фрагментов: 4]\n[Поиск: 20 кандидатов → 4 после фильтра → 4 в контекст; отсечено 16]\n[rfc6585.md#ca5ec7f63e53792ca01f7cff347d159b3174d4d14cb2f54ea4dab9c9f8fb53cf]\n[rfc6585.md#72649411207e74ce22e6992c9e6b618da6dc6dd4cff0c500b0e216317c095f75]\n[rfc6585.md#34df5f0df9993a9326c2dd285d7b40b97cbca62b046071353e791988705d0dfd]\n[rfc6585.md#607d1be6fe1596aa99b2873c2a46778779302f22b439600e917b06db7aa4aab1]\nResponses with the 431 status code MUST NOT be stored by a cache. [q1]\n\nЦитаты:\n[q1] «Responses with the 431 status code MUST NOT be stored by a cache.» [rfc6585.md#72649411207e74ce22e6992c9e6b618da6dc6dd4cff0c500b0e216317c095f75]\n\nИсточники:\n[rfc6585.md#72649411207e74ce22e6992c9e6b618da6dc6dd4cff0c500b0e216317c095f75]\n  Раздел: RFC 6585: Additional HTTP Status Codes / 5. 431 Request Header Fields Too Large\n[RAG: 1 утверждений · 1 цитат · 1 источников; источники и точность цитат проверены]",
+      "calls": 1,
+      "total_seconds": 2.5327416
+    },
+    {
+      "model": "qwen3.5:4b-rag-opt-q8",
+      "variant": "q8",
+      "id": "Q09",
+      "run": 1,
+      "query": "What is the distance from Earth to the Moon?",
+      "retrieval": {
+        "query": "What is the distance from Earth to the Moon?",
+        "search_query": "What is the distance from Earth to the Moon?",
+        "rewrite": true,
+        "min_similarity": 0.49,
+        "score_type": "cosine",
+        "retained_count": 0,
+        "filtered_count": 20,
+        "cosine_retained_count": 4,
+        "min_rerank_score": -3,
+        "rerank_score_type": "raw_logit",
+        "no_evidence": true,
+        "candidates": 20,
+        "strategy": "structured",
+        "reranking": true,
+        "candidate_count": 20,
+        "top_k": 5,
+        "retrieval_seconds": 0.015116099999431754,
+        "rerank_seconds": 0.09628030000021681,
+        "results": []
+      },
+      "raw_answer": {
+        "UsageIncomplete": false,
+        "ToolCalls": null,
+        "UsageKnown": false,
+        "Content": "",
+        "Model": "",
+        "FinishReason": "",
+        "PromptTokens": 0,
+        "CachedInputTokens": 0,
+        "CompletionTokens": 0,
+        "TotalTokens": 0,
+        "Duration": 0
+      },
+      "grounding": {
+        "status": "unknown",
+        "answer": "Не знаю: в выбранной базе знаний недостаточно подтверждений для ответа.",
+        "claims": [],
+        "quotes": [],
+        "sources": [],
+        "clarification": "Уточните вопрос или добавьте документ с нужной информацией.",
+        "local": true
+      },
+      "visible": "[База знаний: Готовый локальный индекс · найдено фрагментов: 0]\n[Поиск: 20 кандидатов → 0 после фильтра → 0 в контекст; отсечено 20]\n[В базе не найдено подтверждающих фрагментов]\nНе знаю: в выбранной базе знаний недостаточно подтверждений для ответа.\nУточните вопрос или добавьте документ с нужной информацией.\n[Недостаточно контекста · ответ клиента · LLM-вызовов: 0]\nИсточники: нет подтверждающих фрагментов для ответа.",
+      "calls": 0,
+      "total_seconds": 0.1232091
+    }
+  ]
+}
