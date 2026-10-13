@@ -1,0 +1,108 @@
+{
+  "verified_at": "2026-10-13T21:19:22.3283299+03:00",
+  "transport": "SSH tunnel from Windows PC to VPS loopback",
+  "health": {
+    "max_context": 512,
+    "max_input_characters": 4096,
+    "max_output": 128,
+    "model": "smollm2:135m",
+    "parallel_generations": 1,
+    "queue_capacity": 2,
+    "requests_per_minute": 5,
+    "status": "ok",
+    "streaming": false
+  },
+  "models": {
+    "data": [
+      {
+        "id": "smollm2:135m",
+        "object": "model",
+        "owned_by": "local"
+      }
+    ],
+    "object": "list"
+  },
+  "results": [
+    {
+      "name": "context_rejected",
+      "status": 400,
+      "expected": 400,
+      "passed": true,
+      "seconds": 0.312,
+      "error": "Maximum context is 512 tokens"
+    },
+    {
+      "name": "output_rejected",
+      "status": 400,
+      "expected": 400,
+      "passed": true,
+      "seconds": 0.138,
+      "error": "Maximum output is 128 tokens"
+    },
+    {
+      "name": "input_rejected",
+      "status": 413,
+      "expected": 413,
+      "passed": true,
+      "seconds": 0.149,
+      "error": "Maximum total message length is 4096 characters"
+    },
+    {
+      "name": "chat_turn_1",
+      "status": 200,
+      "expected": 200,
+      "passed": true,
+      "seconds": 3.402,
+      "answer": "I'm glad you asked for a brief introduction. I'm a helpful AI assistant named SmolLM, and I've been designed to assist you in various aspects",
+      "prompt_tokens": 39,
+      "output_tokens": 32
+    },
+    {
+      "name": "chat_turn_2",
+      "status": 200,
+      "expected": 200,
+      "passed": true,
+      "seconds": 1.715,
+      "answer": "My name is Alex. I'm a human who loves helping others, and I'm here to offer support and guidance when you're facing challenges or seeking advice.",
+      "prompt_tokens": 87,
+      "output_tokens": 32
+    },
+    {
+      "name": "concurrent_1",
+      "status": 200,
+      "expected": 200,
+      "passed": true,
+      "PSComputerName": "localhost",
+      "RunspaceId": "87225084-2bbf-49d7-98b1-677b8ccfb19c",
+      "PSShowComputerName": false
+    },
+    {
+      "name": "concurrent_2",
+      "status": 200,
+      "expected": 200,
+      "passed": true,
+      "PSComputerName": "localhost",
+      "RunspaceId": "df4760a5-0e6b-4cfd-b78f-18a22927b58e",
+      "PSShowComputerName": false
+    },
+    {
+      "name": "sequential_5",
+      "status": 200,
+      "expected": 200,
+      "passed": true,
+      "seconds": 0.907,
+      "answer": "Hello, welcome to our library! I'm happy to help you find books.",
+      "prompt_tokens": 33,
+      "output_tokens": 16
+    },
+    {
+      "name": "rate_limit_6",
+      "status": 429,
+      "expected": 429,
+      "passed": true,
+      "seconds": 0.158,
+      "error": "Rate limit: 5 requests per minute"
+    }
+  ],
+  "passed": true
+}

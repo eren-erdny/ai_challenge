@@ -22,3 +22,7 @@ __pycache__/
 
 # Isolated local LLM configuration and conversations
 /.local-llm/
+
+# Local private-service build output
+/artifacts/hw30/
+/examples/private-llm/recording-*/done

@@ -1,0 +1,16 @@
+{
+  "chat_answer": "Hello! Say one short greeting.",
+  "checks": [
+    "Одновременные запросы: HTTP 200 и HTTP 200.",
+    "Последовательный запрос 1: HTTP 200.",
+    "Последовательный запрос 2: HTTP 200.",
+    "Контекст: HTTP 400.",
+    "Ответ: HTTP 400.",
+    "Rate limit: HTTP 429."
+  ],
+  "cloud_calls": 0,
+  "passed": true,
+  "real_TUI": true,
+  "scripted_input": true,
+  "transport": "Windows SSH tunnel to VPS"
+}

@@ -1,0 +1,21 @@
+{
+  "choices": [
+    {
+      "finish_reason": "length",
+      "index": 0,
+      "message": {
+        "role": "assistant",
+        "content": "Hello, welcome to our library. It's so wonderful to have you here."
+      }
+    }
+  ],
+  "created": 1791915688,
+  "id": "chatcmpl-1791915688588249253",
+  "model": "smollm2:135m",
+  "object": "chat.completion",
+  "usage": {
+    "completion_tokens": 16,
+    "prompt_tokens": 33,
+    "total_tokens": 49
+  }
+}
