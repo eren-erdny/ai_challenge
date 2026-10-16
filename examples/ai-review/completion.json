@@ -1,0 +1,13 @@
+{
+  "UsageIncomplete": false,
+  "ToolCalls": null,
+  "UsageKnown": true,
+  "Content": "{\"summary\":\"В рамках области projects/deepseek-client удалена проверка nil в UserName, что нарушает задокументированный контракт и создаёт панику при nil-пользователе.\",\"findings\":[{\"category\":\"bug\",\"priority\":\"P1\",\"path\":\"projects/deepseek-client/user.go\",\"side\":\"LEFT\",\"line\":6,\"title\":\"Удалена защита от nil, что нарушает контракт и вызывает панику\",\"explanation\":\"Триггер: HTTP-обработчик вызывает UserName с nil-пользователем (неаутентифицированный запрос). После удаления строки `if u == nil { return \\\"\\\" }` функция сразу выполняет `return u.Name`, что разыменовывает nil-указатель и приводит к panic, роняя обработчик/сервер. Это прямо противоречит задокументированному контракту: «UserName must return an empty string when User is nil.» и «A missing authenticated user is represented by nil.».\",\"recommendation\":\"Вернуть проверку nil в начале функции: `if u == nil { return \\\"\\\" }` перед `return u.Name`, либо явно обработать nil у всех вызывающих.\",\"evidence\":[{\"chunk_id\":\"eba1f8cd163faa61916556a5\",\"quote\":\"UserName must return an empty string when User is nil.\"},{\"chunk_id\":\"eba1f8cd163faa61916556a5\",\"quote\":\"A missing authenticated user is represented by nil.\"},{\"chunk_id\":\"93ec3d5a6ab9417c3c9d448c\",\"quote\":\"func UserName(u *User) string {\\n if u == nil { return \\\"\\\" }\\n return u.Name\\n}\"}]}]}",
+  "Model": "deepseek-flash",
+  "FinishReason": "stop",
+  "PromptTokens": 806,
+  "CachedInputTokens": 0,
+  "CompletionTokens": 381,
+  "TotalTokens": 1187,
+  "Duration": 2635825800
+}

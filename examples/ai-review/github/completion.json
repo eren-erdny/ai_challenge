@@ -1,0 +1,13 @@
+{
+  "UsageIncomplete": false,
+  "ToolCalls": null,
+  "UsageKnown": true,
+  "Content": "{\"summary\":\"В рамках области projects/deepseek-client изменён только демонстрационный фикстур-файл prreview/testdata/demo/user.go: удалена проверка u == nil в функции UserName. Согласно retrieved_context, этот файл является демонстрационным фикстуром, а не прикладным кодом, однако документация прямо фиксирует контракт: UserName должен возвращать пустую строку при nil, а удаление guard приводит к панике. Это единственное изменение в диффе и оно создаёт регрессию поведения относительно задокументированного контракта.\",\"findings\":[{\"category\":\"bug\",\"priority\":\"P1\",\"path\":\"projects/deepseek-client/prreview/testdata/demo/user.go\",\"side\":\"LEFT\",\"line\":7,\"title\":\"Удалён nil-guard в UserName, что приводит к панике при nil\",\"explanation\":\"Триггер: вызов UserName(nil) — например, HTTP-обработчик передаёт отсутствующего аутентифицированного пользователя, представленного nil. После удаления блока 'if u == nil { return \\\"\\\" }' функция сразу выполняет 'return u.Name', то есть разыменовывает nil-указатель, что вызывает panic вместо возврата пустой строки. Это нарушает задокументированный контракт: 'UserName must return an empty string when User is nil' и 'Removing the nil guard causes UserName(nil) to panic'.\",\"recommendation\":\"Восстановить удалённый guard в начале функции: 'if u == nil { return \\\"\\\" }' перед 'return u.Name', чтобы сохранить задокументированное поведение и избежать паники при nil.\",\"evidence\":[{\"chunk_id\":\"ab1144985afd7540a156eb17\",\"quote\":\"UserName must return an empty string when User is nil.\"},{\"chunk_id\":\"ab1144985afd7540a156eb17\",\"quote\":\"Removing the nil guard causes UserName(nil) to panic.\"},{\"chunk_id\":\"8540ea8034c04283b353901b\",\"quote\":\"func UserName(u *User) string {\\n\\tif u == nil {\\n\\t\\treturn \\\"\\\"\\n\\t}\\n\\treturn u.Name\\n}\"}]}]}",
+  "Model": "deepseek-flash",
+  "FinishReason": "stop",
+  "PromptTokens": 3350,
+  "CachedInputTokens": 0,
+  "CompletionTokens": 499,
+  "TotalTokens": 3849,
+  "Duration": 4135993263
+}

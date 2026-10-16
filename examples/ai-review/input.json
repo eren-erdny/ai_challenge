@@ -1,0 +1,52 @@
+{
+  "base_sha": "970d10d0d978166a62bc45cbe20d3ddb59ebbe71",
+  "head_sha": "7144157c3cb336c7cb9f8d462499e08dd90d7c6c",
+  "merge_base_sha": "970d10d0d978166a62bc45cbe20d3ddb59ebbe71",
+  "scope": "projects/deepseek-client",
+  "files": [
+    {
+      "path": "projects/deepseek-client/user.go",
+      "status": "M",
+      "patch": "diff --git a/projects/deepseek-client/user.go b/projects/deepseek-client/user.go\nindex 95272bc..6c6c05c 100644\n--- a/projects/deepseek-client/user.go\n+++ b/projects/deepseek-client/user.go\n@@ -2,7 +2,6 @@ package user\n \r\n type User struct { Name string }\r\n \r\n func UserName(u *User) string {\r\n- if u == nil { return \"\" }\r\n  return u.Name\r\n }\r\n",
+      "changed_lines": [
+        {
+          "side": "LEFT",
+          "line": 6,
+          "text": " if u == nil { return \"\" }\r"
+        }
+      ]
+    }
+  ],
+  "skipped": [],
+  "retrieved_context": [
+    {
+      "id": "93ec3d5a6ab9417c3c9d448c",
+      "path": "projects/deepseek-client/user.go",
+      "kind": "code",
+      "start_line": 1,
+      "end_line": 9,
+      "text": "package user\n\ntype User struct { Name string }\n\nfunc UserName(u *User) string {\n if u == nil { return \"\" }\n return u.Name\n}\n",
+      "score": 0.7180493587263277
+    },
+    {
+      "id": "b3a1acd8d7628966e3681681",
+      "path": "projects/deepseek-client/README.md",
+      "kind": "documentation",
+      "start_line": 1,
+      "end_line": 3,
+      "text": "# User service\nUserName accepts an optional User and returns a display name. See docs/api.md for the nil contract.\n",
+      "score": 0.2599059140227813
+    },
+    {
+      "id": "eba1f8cd163faa61916556a5",
+      "path": "projects/deepseek-client/docs/api.md",
+      "kind": "documentation",
+      "start_line": 1,
+      "end_line": 4,
+      "text": "# UserName contract\nUserName must return an empty string when User is nil.\nHTTP handlers call UserName with optional users. A missing authenticated user is represented by nil.\n",
+      "score": 0.2304737256770437
+    }
+  ],
+  "corpus_files": 3,
+  "corpus_chunks": 3
+}
