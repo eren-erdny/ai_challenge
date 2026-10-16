@@ -1,0 +1,26 @@
+{
+  "kind": "Local real DeepSeek CLI against an isolated synthetic Git PR; not a GitHub Actions run",
+  "verified": "2026-10-16",
+  "go_test": "passed",
+  "go_vet": "passed",
+  "go_build": "passed",
+  "publisher_unittest": {
+    "passed": 5
+  },
+  "workflow_actionlint": {
+    "version": "1.7.12",
+    "result": "passed",
+    "shellcheck": "not installed; integration disabled"
+  },
+  "standalone_bootstrap_build": "passed with committed HEAD plus only new reviewer files; prior uncommitted homework not needed",
+  "live": {
+    "calls": 1,
+    "findings": 1,
+    "expected_bug": "nil guard removal",
+    "quote_and_anchor_validation": "passed",
+    "manual_semantic_review": "passed with server-crash wording qualification in README"
+  },
+  "github_actions": "not run",
+  "github_comment": "not published",
+  "git": "no commit, push or retag"
+}
