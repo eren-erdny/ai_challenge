@@ -4,8 +4,5 @@ package demo
 type User struct{ Name string }
 
 func UserName(u *User) string {
-	if u == nil {
-		return ""
-	}
 	return u.Name
 }
