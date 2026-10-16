@@ -110,4 +110,10 @@ Hidden paths, config.json, conversations/memory/data/models/examples/vendor/node
 
 Опциональный TestPRReviewLive требует отдельного текущего разрешения, бюджета,
 новой выходной папки и общего ledger; обычный go test его пропускает.
-Живая проверка выполнена локально, реальный GitHub runner ещё не запускался.
+Живая проверка выполнена локально и на GitHub runner. [Тестовый PR №7](https://github.com/eren-erdny/ai_challenge/pull/7),
+[успешный Action](https://github.com/eren-erdny/ai_challenge/actions/runs/38925358936)
+и [комментарий бота](https://github.com/eren-erdny/ai_challenge/pull/7#issuecomment-6219003672).
+[Сохранённые артефакты](../../../examples/ai-review/github/verification.json).
+После проверки AI_REVIEW_ENABLED=false; secret сохранён, лимит на запуск 0.02.
+Временное ограничение тестовой ветки удалено. Для постоянной работы сначала
+объедините реализацию в целевую базовую ветку и затем явно включите автоматизацию.

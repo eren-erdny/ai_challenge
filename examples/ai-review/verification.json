@@ -20,7 +20,7 @@
     "quote_and_anchor_validation": "passed",
     "manual_semantic_review": "passed with server-crash wording qualification in README"
   },
-  "github_actions": "not run",
-  "github_comment": "not published",
-  "git": "no commit, push or retag"
+  "github_actions": "passed: https://github.com/eren-erdny/ai_challenge/actions/runs/38925358936",
+  "github_comment": "https://github.com/eren-erdny/ai_challenge/pull/7#issuecomment-6219003672",
+  "git": "implementation published on codex/ai-pr-review; synthetic demo on codex/ai-pr-review-demo; original week-6 working tree preserved"
 }

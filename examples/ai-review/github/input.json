@@ -1,0 +1,107 @@
+{
+  "base_sha": "0070f58a662addaef40e4182afe425a575dc951b",
+  "head_sha": "766ece2916b483c8501daa21df8b1d0dc6d7c9c8",
+  "merge_base_sha": "0070f58a662addaef40e4182afe425a575dc951b",
+  "scope": "projects/deepseek-client",
+  "files": [
+    {
+      "path": "projects/deepseek-client/prreview/testdata/demo/user.go",
+      "status": "M",
+      "patch": "diff --git a/projects/deepseek-client/prreview/testdata/demo/user.go b/projects/deepseek-client/prreview/testdata/demo/user.go\nindex 3be56a0..7365ad3 100644\n--- a/projects/deepseek-client/prreview/testdata/demo/user.go\n+++ b/projects/deepseek-client/prreview/testdata/demo/user.go\n@@ -3,9 +3,6 @@ package demo\n // User is a synthetic PR-review demonstration value.\n type User struct{ Name string }\n \n func UserName(u *User) string {\n-\tif u == nil {\n-\t\treturn \"\"\n-\t}\n \treturn u.Name\n }\n",
+      "changed_lines": [
+        {
+          "side": "LEFT",
+          "line": 7,
+          "text": "\tif u == nil {"
+        },
+        {
+          "side": "LEFT",
+          "line": 8,
+          "text": "\t\treturn \"\""
+        },
+        {
+          "side": "LEFT",
+          "line": 9,
+          "text": "\t}"
+        }
+      ]
+    }
+  ],
+  "skipped": [],
+  "retrieved_context": [
+    {
+      "id": "8540ea8034c04283b353901b",
+      "path": "projects/deepseek-client/prreview/testdata/demo/user.go",
+      "kind": "code",
+      "start_line": 1,
+      "end_line": 12,
+      "text": "package demo\n\n// User is a synthetic PR-review demonstration value.\ntype User struct{ Name string }\n\nfunc UserName(u *User) string {\n\tif u == nil {\n\t\treturn \"\"\n\t}\n\treturn u.Name\n}\n",
+      "score": 0.6593035477066005
+    },
+    {
+      "id": "ab1144985afd7540a156eb17",
+      "path": "projects/deepseek-client/docs/review-demo.md",
+      "kind": "documentation",
+      "start_line": 1,
+      "end_line": 7,
+      "text": "# Synthetic PR review demonstration\n\nThe file prreview/testdata/demo/user.go is a demonstration fixture, not application code.\nUserName must return an empty string when User is nil.\nHTTP handlers may call UserName with optional users; a missing authenticated user is represented by nil.\nRemoving the nil guard causes UserName(nil) to panic.\n",
+      "score": 0.35533060388929083
+    },
+    {
+      "id": "7e19b78c756ee749c2804435",
+      "path": "projects/deepseek-client/token_demo_test.go",
+      "kind": "code",
+      "start_line": 1,
+      "end_line": 19,
+      "text": "package main\n\nimport (\n\t\"strings\"\n\t\"testing\"\n)\n\nfunc TestTokenDemo(t *testing.T) {\n\tvar out strings.Builder\n\tif code := runTokenDemo(\u0026out); code != 0 {\n\t\tt.Fatal(code)\n\t}\n\tfor _, want := range []string{\"1 | 0 | 30 | 37 | 1\", \"4 | 93 | 30 | 154 | 1\", \"ПЕРЕПОЛНЕНИЕ\", \"context_length_exceeded\", \"8 сообщений (до отказов 8)\"} {\n\t\tif !strings.Contains(out.String(), want) {\n\t\t\tt.Fatalf(\"missing %q: %s\", want, out.String())\n\t\t}\n\t}\n}\n",
+      "score": 0.13074343709088435
+    },
+    {
+      "id": "b7ac32e750bcfa43daab7313",
+      "path": "projects/deepseek-client/cmd/review-pr/main.go",
+      "kind": "code",
+      "start_line": 61,
+      "end_line": 97,
+      "text": "\t}\n\tlock, err := os.OpenFile(*ledgerPath+\".lock\", os.O_CREATE|os.O_EXCL|os.O_WRONLY, 0600)\n\tif err != nil {\n\t\treturn fail(fmt.Errorf(\"cannot lock budget: %w\", err))\n\t}\n\tlock.Close()\n\tdefer os.Remove(*ledgerPath + \".lock\")\n\tledger := prreview.Ledger{Budget: *budget}\n\tdata, err := os.ReadFile(*ledgerPath)\n\tif err == nil {\n\t\tif json.Unmarshal(data, \u0026ledger) != nil || ledger.Budget != *budget {\n\t\t\treturn fail(fmt.Errorf(\"existing ledger budget mismatch or invalid JSON\"))\n\t\t}\n\t} else if !os.IsNotExist(err) {\n\t\treturn fail(err)\n\t}\n\tclient := llm.New(\u0026http.Client{Timeout: 90 * time.Second, CheckRedirect: func(*http.Request, []*http.Request) error { return http.ErrUseLastResponse }}, map[string]string{\"deepseek\": key})\n\treview, completion, err := prreview.Generate(ctx, client, input, \u0026ledger, *ledgerPath)\n\tif e := prreview.WriteJSON(filepath.Join(*output, \"completion.json\"), completion); e != nil {\n\t\treturn fail(e)\n\t}\n\tif e := prreview.WriteJSON(filepath.Join(*output, \"usage.json\"), ledger); e != nil {\n\t\treturn fail(e)\n\t}\n\tif err != nil {\n\t\treturn fail(err)\n\t}\n\tif err = prreview.WriteJSON(filepath.Join(*output, \"review.json\"), review); err != nil {\n\t\treturn fail(err)\n\t}\n\tif err = os.WriteFile(filepath.Join(*output, \"review.md\"), []byte(prreview.Markdown(review, input)), 0600); err != nil {\n\t\treturn fail(err)\n\t}\n\tfmt.Printf(\"Validated findings: %d; calls: %d; reserved: $%.8f; peak usage estimate: $%.8f\\n\", len(review.Findings), ledger.Calls, ledger.Reserved, ledger.EstimatedPeak)\n\treturn 0\n}\n",
+      "score": 0.1168285142492627
+    },
+    {
+      "id": "d595eabab0d22d6c0e20c65a",
+      "path": "projects/deepseek-client/prreview/collect.go",
+      "kind": "code",
+      "start_line": 241,
+      "end_line": 251,
+      "text": "\t\tfor _, f := range in.Files {\n\t\t\tquery.WriteString(f.Path + \" \")\n\t\t\tfor _, line := range f.Lines {\n\t\t\t\tquery.WriteString(line.Text + \" \")\n\t\t\t}\n\t\t}\n\t\tin.Context = Retrieve(chunks, query.String())\n\t}\n\treturn in, chunks, nil\n}\n",
+      "score": 0.11610378160483392
+    },
+    {
+      "id": "660a2476787d5154ae28102a",
+      "path": "projects/deepseek-client/prreview/review_test.go",
+      "kind": "code",
+      "start_line": 1,
+      "end_line": 40,
+      "text": "package prreview\n\nimport (\n\t\"context\"\n\t\"encoding/json\"\n\t\"errors\"\n\t\"github.com/eren-erdny/ai_challenge/projects/deepseek-client/agent\"\n\t\"os\"\n\t\"os/exec\"\n\t\"path/filepath\"\n\t\"strings\"\n\t\"testing\"\n)\n\nfunc fixture(t *testing.T) (string, string, string) {\n\tt.Helper()\n\trepo := t.TempDir()\n\trun := func(args ...string) string {\n\t\tcmd := exec.Command(\"git\", append([]string{\"-C\", repo, \"-c\", \"commit.gpgsign=false\", \"-c\", \"core.autocrlf=false\"}, args...)...)\n\t\tcmd.Env = append(os.Environ(), \"GIT_AUTHOR_NAME=Fixture\", \"GIT_AUTHOR_EMAIL=fixture@example.invalid\", \"GIT_COMMITTER_NAME=Fixture\", \"GIT_COMMITTER_EMAIL=fixture@example.invalid\")\n\t\tb, err := cmd.CombinedOutput()\n\t\tif err != nil {\n\t\t\tt.Fatalf(\"fixture git: %v %s\", err, b)\n\t\t}\n\t\treturn strings.TrimSpace(string(b))\n\t}\n\twrite := func(p, s string) {\n\t\tt.Helper()\n\t\tfull := filepath.Join(repo, p)\n\t\tif err := os.MkdirAll(filepath.Dir(full), 0700); err != nil {\n\t\t\tt.Fatal(err)\n\t\t}\n\t\tif err := os.WriteFile(full, []byte(s), 0600); err != nil {\n\t\t\tt.Fatal(err)\n\t\t}\n\t}\n\trun(\"init\", \"-q\")\n\twrite(\"project/README.md\", \"# User service\\nUserName accepts a nil User and returns an empty string.\\n\")\n\twrite(\"project/docs/api.md\", \"# UserName API\\nUserName must return an empty string when User is nil. HTTP handlers call UserName with optional users.\\n\")\n\twrite(\"project/user.go\", \"package user\\ntype User struct { Name string }\\nfunc UserName(u *User) string {\\n if u == nil { return \\\"\\\" }\\n return u.Name\\n}\\n\")",
+      "score": 0.11425848897036381
+    },
+    {
+      "id": "60846690e939322338534a66",
+      "path": "projects/deepseek-client/README.md",
+      "kind": "documentation",
+      "start_line": 121,
+      "end_line": 160,
+      "text": "Live GitHub и ответ настоящей модели в этой проверке не подтверждаются.\n\nОтдельно 2026-09-27 выполнена живая проверка домашки 17 через TUI: DeepSeek Flash\nвызвал `github__github_get_repository` для `golang/go`, получил JSON и использовал\nего поля в ответе. Выполнены два запроса модели; полный набор тестов приложения\nи `go vet` прошли. Автоматический ввод и ограничитель бюджета использовались\nтолько во временной демонстрационной сборке; штатный запуск приложения не\nполучает денежный лимит автоматически.\n\n## Минимальный MCP-клиент\n\nВ проекте есть автономный пример на официальном Go SDK: он запускает локальный\nMCP-сервер через stdio, устанавливает соединение, выполняет `tools/list` и\nпечатает доступные инструменты. API-ключ не нужен.\n\n```powershell\ngo run ./projects/deepseek-client/cmd/mcp-demo\n```\n\nОжидаемый результат:\n\n```text\nMCP connection established\nAvailable tools (1):\n- echo: Returns the supplied text unchanged\n```\n\nТест соединяет клиент и сервер через транспорт SDK в памяти:\n\n```powershell\ngo test ./projects/deepseek-client/cmd/mcp-demo\n```\n\n## Токены и переполнение контекста\n\n**Токены текущего запроса** — полный контекст, отправленный модели:\nsystem + предыдущая история + последнее сообщение пользователя + служебное\nоформление messages. Его фактический размер возвращается как `prompt_tokens`.\nЭто не токены только нового вопроса. Предыдущая история является частью запроса,\nпоэтому её оценку нельзя ещё раз прибавлять к `prompt_tokens`.",
+      "score": 0.04498725962604243
+    },
+    {
+      "id": "8dec8810c47863fa6d6cddef",
+      "path": "projects/deepseek-client/docs/ai-review.md",
+      "kind": "documentation",
+      "start_line": 91,
+      "end_line": 114,
+      "text": "\nЖивая команда дополнительно требует DEEPSEEK_API_KEY и --budget-usd 0.20.\nДля нескольких запусков укажите один --ledger PATH; резерв не освобождается\nпосле ошибки, API-запросов без предварительного резерва нет.\nВыходная папка всегда новая; lock защищает общий ledger от параллельных запусков.\n\nРезерв: размер JSON-запроса в UTF-8 байтах плюс 4096 как верхняя оценка входных\nтокенов и 1600 выходных токенов, cache miss, peak. Тарифы Flash на 2026-10-16:\nвход $0.30, cache hit $0.006, выход $1.20 за миллион токенов.\n[Источник тарифов](https://api-docs.deepseek.com/quick_start/pricing/).\nПосле изменения тарифов формулу необходимо обновить. Ledger usage — оценка\nпо известным токенам и peak, а не выписка списаний провайдера.\n\n## Проверка\n\n    go test ./...\n    go vet ./...\n    go build ./...\n    python -m unittest discover -s scripts/ai-review -v\n\nОпциональный TestPRReviewLive требует отдельного текущего разрешения, бюджета,\nновой выходной папки и общего ledger; обычный go test его пропускает.\nЖивая проверка выполнена локально, реальный GitHub runner ещё не запускался.\n",
+      "score": 0.03492043101471126
+    }
+  ],
+  "corpus_files": 184,
+  "corpus_chunks": 933
+}

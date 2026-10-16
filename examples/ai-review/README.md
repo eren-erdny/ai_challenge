@@ -26,5 +26,16 @@ $0.000699 (806 input + 381 output, cache hit 0). Это не точное спи
 
 Go tests/vet/build, пять offline тестов publisher и actionlint прошли.
 Проверка корпуса текущего Git base: 892 chunks, без API-запроса.
-Запуск GitHub Actions и комментарий в настоящем PR пока не проверены:
-изменения ещё не опубликованы, secret/variables не настраивались.
+Это был первоначальный локальный снимок. Теперь выполнена и проверка на GitHub:
+[PR №7](https://github.com/eren-erdny/ai_challenge/pull/7),
+[Action success](https://github.com/eren-erdny/ai_challenge/actions/runs/38925358936),
+[бот-комментарий](https://github.com/eren-erdny/ai_challenge/pull/7#issuecomment-6219003672).
+
+[CI verification](github/verification.json) и [текст ревью](github/review.md) сохранены.
+В CI корпус: 184 файла / 933 chunks, найдено 8 chunks; один bug на LEFT:7.
+Все цитаты и anchor проверены, опубликованный комментарий совпадает с artifact.
+CI: один запрос, резерв $0.0070851, оценка peak $0.0016038.
+Итого локальная + CI оценка $0.0023028 в разрешённых $0.20.
+После проверки AI_REVIEW_ENABLED=false, лимит на будущий запуск 0.02 USD;
+ключ хранится в GitHub Secrets. Демонстрационный PR с намеренной ошибкой не сливать.
+Реализация опубликована отдельно от незакоммиченной домашки 31.
