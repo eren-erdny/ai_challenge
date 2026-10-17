@@ -994,3 +994,9 @@ Markdown, JSON, XML, YAML, TOML, Gradle и текстовые файлы. Вло
 [TaskDesk support](../../examples/support-assistant/README.md): локальный веб-сервис,
 FAQ RAG и контекст пользователей/тикетов через отдельный MCP stdio-процесс.
 Запуск из корня: Start-Support-Assistant.cmd -BudgetUsd 0.20.
+
+## Ассистент для работы с файлами — домашка 34
+
+Запуск из корня: .\Start-File-Assistant.ps1 -BudgetUsd 0.20. Агент самостоятельно исследует учебный TaskDesk, исправляет README/FAQ и создаёт карту API. Ключ и текущий бюджет обязательны; -Verify выполняет обе цели через scripted TUI submit/update. Исходный код не меняется, результаты сохраняются как файлы, журнал и diff.
+
+[Инструкции и реальные результаты](../../examples/file-assistant/README.md), [описание](docs/file-assistant.md).

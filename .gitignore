@@ -32,3 +32,6 @@ __pycache__/
 
 # Local support service credentials, budget and verification state
 /.support-assistant/
+
+# File-assistant isolated runs, budget and local executable
+/.file-assistant/

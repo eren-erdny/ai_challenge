@@ -1,0 +1,61 @@
+# TaskDesk Export API — карта зависимостей
+
+Карта связей между реализацией экспорта, API-слоем, интерфейсом и тестами.
+Все пути указаны относительно корня репозитория.
+
+## Слои и файлы
+
+| Слой | Файл | Экспортирует | Роль |
+| --- | --- | --- | --- |
+| Реализация | `src/export.js` | `exportTasks(plan, format)` | Проверка формата и прав плана, формирование метаданных ответа |
+| API | `src/api.js` | `handleExport(user, body)` | Точка входа `POST /api/export`; извлекает `user.plan` и `body.format` |
+| Интерфейс | `src/ui.js` | `downloadExport(user, format)` | Вызывает API и превращает ответ в `{ download }` или `{ message }` |
+| Тесты | `test/export.test.js` | — | Регрессионные проверки всех трёх слоёв |
+
+## Граф зависимостей (require)
+
+```
+test/export.test.js
+ ├── require('../src/export')  → exportTasks
+ ├── require('../src/api')     → handleExport
+ └── require('../src/ui')      → downloadExport
+
+src/ui.js
+ └── require('./api')          → handleExport
+
+src/api.js
+ └── require('./export')       → exportTasks
+
+src/export.js
+ └── (без внутренних зависимостей)
+```
+
+Поток вызова: `downloadExport` (UI) → `handleExport` (API) → `exportTasks` (реализация).
+
+## Правила экспорта (по текущему коду)
+
+- Поддерживаемые форматы: `csv`, `pdf`. Любой другой формат → `{ status: 400, error: 'UNSUPPORTED_FORMAT' }`.
+- `pdf` доступен только на плане `Pro`; иначе → `{ status: 403, error: 'PLAN_REQUIRED' }`.
+- `csv` доступен на любом плане.
+- Успех → `{ status: 200, format, filename: 'tasks.<format>' }`.
+- API-слой не дублирует проверки: `handleExport` просто делегирует в `exportTasks(user.plan, body.format)`.
+- UI-слой: при `status !== 200` возвращает `{ message: response.error }`, иначе `{ download: response.filename }`.
+
+## Покрытие тестами
+
+| Тест | Проверяемый слой |
+| --- | --- |
+| Free can export CSV | `exportTasks` |
+| Free cannot export PDF | `exportTasks` |
+| Pro can export CSV | `exportTasks` |
+| Pro can export PDF | `exportTasks` |
+| Unsupported format is a client error | `exportTasks` |
+| API delegates plan checks | `handleExport` |
+| UI reports API failure | `downloadExport` |
+
+Запуск: `node --test test/export.test.js`.
+
+## Связанная документация
+
+- `README.md` — обзор и правила экспорта.
+- `docs/faq.md` — FAQ по форматам и кодам ошибок.

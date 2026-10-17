@@ -1,0 +1,21 @@
+{
+  "changes": [
+    "README.md",
+    "docs/export-api-map.md",
+    "docs/faq.md"
+  ],
+  "goals": [
+    "Приведи документацию об экспорте в соответствие с текущим кодом TaskDesk. Сам найди реализацию и документацию, исправь все найденные расхождения в существующих документах. Код не меняй. После изменений перечитай документы и кратко объясни результат.",
+    "Найди все места использования API экспорта TaskDesk, проследи связи между реализацией, API, интерфейсом и тестами. Создай docs/export-api-map.md с картой зависимостей, ссылками на реальные файлы и краткими правилами экспорта. Сам найди нужные файлы; после записи прочитай результат для проверки. Код не меняй."
+  ],
+  "kind": "Real DeepSeek tool calling + existing agent + real file executor + TUI",
+  "pricing": "https://api-docs.deepseek.com/quick_start/pricing/ checked 2026-10-17; peak USD per 1M: input 0.30 cache 0.006 output 1.20",
+  "scripted_TUI": true,
+  "usage": {
+    "budget_usd": 0.2,
+    "reserved_usd": 0.0954933,
+    "estimated_peak_usd": 0.005373936000000001,
+    "calls": 12
+  },
+  "verification": "passed"
+}

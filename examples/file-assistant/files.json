@@ -1,0 +1,22 @@
+{
+  "changes": [
+    "README.md",
+    "docs/export-api-map.md",
+    "docs/faq.md"
+  ],
+  "sha256": {
+    "README.md": "6687bb182f2e8b4be1eb295768dd9fec4feb9b188f88012b7c106115f91e1ea6",
+    "docs/export-api-map.md": "26458cabe3f9bac6f56ff0b593391d9a32d9c026924f64ac82ab0d2c7950cb91",
+    "docs/faq.md": "be727886858413b2c48513e1956ef4430b802f231f9b65816c38b9a90da60923",
+    "src/api.js": "843f16053ce3dc7c34a7a125dc9f869ea77ebbb5c78357a8db7b31ad3ef929d1",
+    "src/export.js": "d1a607c07e9f11b141f6a2624a948ea85c7ffe230fb53abbb66525947b1d0c30",
+    "src/ui.js": "faa96fc3ce1163ce5af9bfb6f738a9f5c72b81cd93019c2d22402113b74b3a33",
+    "test/export.test.js": "fb05ec7b338d75cc15af46fcbb143026ddffe76aa5b256ad4bbd17bcd33b2529"
+  },
+  "usage": {
+    "budget_usd": 0.2,
+    "reserved_usd": 0.0954933,
+    "estimated_peak_usd": 0.005373936000000001,
+    "calls": 12
+  }
+}

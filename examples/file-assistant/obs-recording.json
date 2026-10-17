@@ -1,0 +1,70 @@
+{
+  "path": "C:/Users/erdni/Videos/ai_challenge_hw34.mp4",
+  "assignment": 34,
+  "duration_seconds": 143.75,
+  "bytes": 10512622,
+  "width": 2560,
+  "height": 1440,
+  "fps": 60,
+  "full_decode_exit_code": 0,
+  "audio_max_db": -91.0,
+  "sha256": "af3b21427fe522f0763d3625fa61da9a1905a0cde7a16a96b9ff1e537c625458",
+  "sampled_frames": [
+    {
+      "scene": "intro",
+      "seconds": 5.216
+    },
+    {
+      "scene": "goal-docs",
+      "seconds": 13.483
+    },
+    {
+      "scene": "discovery",
+      "seconds": 21.249
+    },
+    {
+      "scene": "updated-docs",
+      "seconds": 39.183
+    },
+    {
+      "scene": "goal-map",
+      "seconds": 61.249
+    },
+    {
+      "scene": "search-api",
+      "seconds": 69.516
+    },
+    {
+      "scene": "created-map",
+      "seconds": 87.533
+    },
+    {
+      "scene": "diff",
+      "seconds": 109.616
+    },
+    {
+      "scene": "checks",
+      "seconds": 131.733
+    }
+  ],
+  "encoded_frame_review": "All nine encoded scene samples inspected in contact sheet; final verification frame additionally inspected at extracted resolution. Goals, discovery, actual file contents, write/read, diff excerpt and replay/test verdict visible.",
+  "presentation": "Actual DeepSeek Client TUI captured from dedicated native console; 25 saved real tool operations replayed on fresh workspace; persistent replay label; no API calls; temporary Go build overlay only.",
+  "replay_verification": {
+    "error": "",
+    "model_calls_in_recording": 0,
+    "node_tests_exit_ok": true,
+    "passed": true,
+    "presentation": "Actual DeepSeek Client TUI; recorded real tool calls replayed on fresh workspace; persistent explicit replay label; no new generation",
+    "real_file_operations": 25,
+    "replay_bytes_equal_original_live_run": true
+  },
+  "real_DeepSeek_calls_in_recording": 0,
+  "additional_model_cost_usd": 0,
+  "fixture_model_responses": false,
+  "recording_mode": "Saved real model-selected calls replayed with actual filesystem effects; no new independent model decisions.",
+  "obs_original_scene_audio_restored": true,
+  "owned_TUI_process_exit_code": 0,
+  "application_source_unchanged_for_recording": true,
+  "scenario": "recording-scenario.md",
+  "git": "No commit/push/merge/retag."
+}

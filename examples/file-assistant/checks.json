@@ -1,0 +1,28 @@
+{
+  "real_live_scenarios": "passed",
+  "manual_semantic_review": "README and FAQ now match CSV/PDF plan rules and 400/403 errors; dependency map matches all four JS files and existing test assertions. No model claims used as sole proof.",
+  "node_tests_after_changes": {
+    "passed": 7,
+    "failed": 0
+  },
+  "go_test_all": "passed",
+  "go_vet_all": "passed",
+  "go_build": "passed",
+  "powershell_syntax": "passed",
+  "unified_diff_apply_check": "passed using git apply --check --no-index on pristine before directory",
+  "offline_trace_replay": "passed; real trace replayed on fresh embedded fixture, all resulting file bytes equal; no new model requests",
+  "unique_read_paths": [
+    "README.md",
+    "docs/export-api-map.md",
+    "docs/faq.md",
+    "src/api.js",
+    "src/export.js",
+    "src/ui.js",
+    "test/export.test.js"
+  ],
+  "tool_executions": 25,
+  "code_and_tests_byte_unchanged": true,
+  "scope": "Scripted actual TUI submit/update, not a visible terminal session or recording; existing agent and real file executor. Teaching TaskDesk export-policy fixture, no real PDF generation.",
+  "git": "No commit/push/merge/retag",
+  "video": "not recorded"
+}

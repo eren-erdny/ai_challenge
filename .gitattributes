@@ -2,6 +2,8 @@
 examples/** text eol=lf
 # Screenshots are binary; never normalize their bytes as text.
 examples/**/*.png binary
+# Embedded teaching files must match saved exact-edit arguments on every OS.
+projects/deepseek-client/fileassistant/fixture/** text eol=lf
 # RFC provenance hashes describe the exact downloaded/prepared bytes.
 examples/rag-indexing/sources/** -text whitespace=cr-at-eol
 examples/rag-indexing/corpus/** -text whitespace=cr-at-eol
