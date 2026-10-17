@@ -1,0 +1,66 @@
+{
+  "budget_after": {
+    "budget_usd": 0.2,
+    "reserved_usd": 0.012598499999999999,
+    "estimated_peak_usd": 0.0021089999999999998,
+    "calls": 3
+  },
+  "go_vet": "support and cmd/support-assistant passed",
+  "go_test": "support and cmd/support-assistant passed with count=1",
+  "checks": [
+    {
+      "http_status": 200,
+      "check": "running HTTP service",
+      "passed": true
+    },
+    {
+      "http_status": 200,
+      "check": "own tickets through MCP",
+      "passed": true
+    },
+    {
+      "http_status": 401,
+      "check": "HTTP authentication",
+      "passed": true
+    },
+    {
+      "http_status": 422,
+      "check": "foreign ticket denied",
+      "passed": true
+    },
+    {
+      "http_status": 200,
+      "check": "unsupported question",
+      "passed": true
+    },
+    {
+      "http_status": 400,
+      "check": "caller cannot override identity",
+      "passed": true
+    },
+    {
+      "check": "no new provider requests or spending",
+      "passed": true
+    },
+    {
+      "check": "saved live FAQ and MCP citations: U-100/T-100",
+      "passed": true
+    },
+    {
+      "check": "saved live FAQ and MCP citations: U-100/T-101",
+      "passed": true
+    },
+    {
+      "check": "saved live FAQ and MCP citations: U-200/T-200",
+      "passed": true
+    }
+  ],
+  "checked_at": "2026-10-16T22:27:28.1397639+03:00",
+  "kind": "Running service checked without new provider requests; previous live responses inspected separately",
+  "budget_before": {
+    "budget_usd": 0.2,
+    "reserved_usd": 0.012598499999999999,
+    "estimated_peak_usd": 0.0021089999999999998,
+    "calls": 3
+  }
+}

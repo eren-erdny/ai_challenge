@@ -1,0 +1,399 @@
+{
+  "kind": "Real DeepSeek + real stdio MCP subprocess + local TF-IDF FAQ RAG + authenticated HTTP service",
+  "rows": [
+    {
+      "user": "U-100",
+      "question": "Почему не работает авторизация?",
+      "ticket_id": "T-100",
+      "http_status": 200,
+      "reply": {
+        "answer": {
+          "status": "answered",
+          "answer": "Вход после регистрации запрещён, пока адрес почты не подтверждён, и у Анны email_verified=false. [q1] [q2]\nЧтобы подтвердить почту, нужно открыть письмо TaskDesk и перейти по ссылке подтверждения; письмо можно повторно отправить с экрана входа кнопкой «Отправить письмо ещё раз». [q3] [q4]",
+          "claims": [
+            {
+              "text": "Вход после регистрации запрещён, пока адрес почты не подтверждён, и у Анны email_verified=false.",
+              "quote_ids": [
+                "q1",
+                "q2"
+              ]
+            },
+            {
+              "text": "Чтобы подтвердить почту, нужно открыть письмо TaskDesk и перейти по ссылке подтверждения; письмо можно повторно отправить с экрана входа кнопкой «Отправить письмо ещё раз».",
+              "quote_ids": [
+                "q3",
+                "q4"
+              ]
+            }
+          ],
+          "quotes": [
+            {
+              "id": "q1",
+              "chunk_id": "faq-82386bcc345182f8f551",
+              "text": "При AUTH_EMAIL_UNVERIFIED вход после регистрации запрещён, пока адрес почты не подтверждён."
+            },
+            {
+              "id": "q2",
+              "chunk_id": "crm-user",
+              "text": "\"email_verified\":false"
+            },
+            {
+              "id": "q3",
+              "chunk_id": "faq-82386bcc345182f8f551",
+              "text": "Если email_verified=false, откройте письмо TaskDesk и перейдите по ссылке подтверждения."
+            },
+            {
+              "id": "q4",
+              "chunk_id": "faq-82386bcc345182f8f551",
+              "text": "Письмо можно повторно отправить с экрана входа кнопкой «Отправить письмо ещё раз»."
+            }
+          ],
+          "sources": [
+            {
+              "source": "faq/auth.md",
+              "section": "AUTH_EMAIL_UNVERIFIED: почта не подтверждена",
+              "chunk_id": "faq-82386bcc345182f8f551"
+            },
+            {
+              "source": "mcp://support/users/U-100",
+              "section": "Текущий пользователь",
+              "chunk_id": "crm-user"
+            }
+          ],
+          "clarification": "",
+          "local": false
+        },
+        "user": {
+          "id": "U-100",
+          "name": "Анна (демо)",
+          "plan": "Free",
+          "auth_method": "password",
+          "email_verified": false,
+          "account_state": "active"
+        },
+        "ticket": {
+          "id": "T-100",
+          "user_id": "U-100",
+          "title": "Не получается войти после регистрации",
+          "category": "Авторизация",
+          "error_code": "AUTH_EMAIL_UNVERIFIED",
+          "description": "После регистрации вход отклонён. Письмо подтверждения пока не открывала.",
+          "status": "open"
+        },
+        "retrieval": [
+          {
+            "chunk_id": "faq-82386bcc345182f8f551",
+            "source": "faq/auth.md",
+            "section": "AUTH_EMAIL_UNVERIFIED: почта не подтверждена",
+            "text": "При AUTH_EMAIL_UNVERIFIED вход после регистрации запрещён, пока адрес почты не подтверждён.\nЕсли email_verified=false, откройте письмо TaskDesk и перейдите по ссылке подтверждения.\nПисьмо можно повторно отправить с экрана входа кнопкой «Отправить письмо ещё раз».\nПроверьте папку «Спам», если письмо не пришло.\nПоддержка не может подтвердить почту вместо пользователя.",
+            "vector_score": 0.2604111145287333
+          }
+        ],
+        "mcp": [
+          {
+            "tool": "support_get_user",
+            "source": "mcp://support/users/U-100"
+          },
+          {
+            "tool": "support_get_ticket",
+            "source": "mcp://support/tickets/T-100"
+          }
+        ],
+        "usage": {
+          "budget_usd": 0.2,
+          "reserved_usd": 0.0041721,
+          "estimated_peak_usd": 0.0006645,
+          "calls": 1
+        }
+      }
+    },
+    {
+      "user": "U-100",
+      "question": "Почему не работает экспорт PDF?",
+      "ticket_id": "T-101",
+      "http_status": 200,
+      "reply": {
+        "answer": {
+          "status": "answered",
+          "answer": "Экспорт PDF доступен только на тарифе Pro, а у Анны (демо) тариф Free, поэтому при экспорте PDF возникает PLAN_REQUIRED. [q1] [q2] [q3]\nНа тарифе Free можно воспользоваться экспортом CSV или перейти на Pro; поддержка не меняет тариф и не выполняет платежи. [q4] [q5]",
+          "claims": [
+            {
+              "text": "Экспорт PDF доступен только на тарифе Pro, а у Анны (демо) тариф Free, поэтому при экспорте PDF возникает PLAN_REQUIRED.",
+              "quote_ids": [
+                "q1",
+                "q2",
+                "q3"
+              ]
+            },
+            {
+              "text": "На тарифе Free можно воспользоваться экспортом CSV или перейти на Pro; поддержка не меняет тариф и не выполняет платежи.",
+              "quote_ids": [
+                "q4",
+                "q5"
+              ]
+            }
+          ],
+          "quotes": [
+            {
+              "id": "q1",
+              "chunk_id": "faq-aaf0c1ff951fa7752fcc",
+              "text": "Экспорт PDF доступен только на тарифе Pro."
+            },
+            {
+              "id": "q2",
+              "chunk_id": "faq-aaf0c1ff951fa7752fcc",
+              "text": "На тарифе Free при попытке экспорта PDF возникает PLAN_REQUIRED."
+            },
+            {
+              "id": "q3",
+              "chunk_id": "crm-user",
+              "text": "\"plan\":\"Free\""
+            },
+            {
+              "id": "q4",
+              "chunk_id": "faq-aaf0c1ff951fa7752fcc",
+              "text": "Пользователь Free может воспользоваться экспортом CSV или перейти на Pro."
+            },
+            {
+              "id": "q5",
+              "chunk_id": "faq-aaf0c1ff951fa7752fcc",
+              "text": "Ассистент поддержки не меняет тариф и не выполняет платежи."
+            }
+          ],
+          "sources": [
+            {
+              "source": "faq/faq.md",
+              "section": "Экспорт PDF и PLAN_REQUIRED",
+              "chunk_id": "faq-aaf0c1ff951fa7752fcc"
+            },
+            {
+              "source": "mcp://support/users/U-100",
+              "section": "Текущий пользователь",
+              "chunk_id": "crm-user"
+            }
+          ],
+          "clarification": "",
+          "local": false
+        },
+        "user": {
+          "id": "U-100",
+          "name": "Анна (демо)",
+          "plan": "Free",
+          "auth_method": "password",
+          "email_verified": false,
+          "account_state": "active"
+        },
+        "ticket": {
+          "id": "T-101",
+          "user_id": "U-100",
+          "title": "Не работает экспорт PDF",
+          "category": "Экспорт PDF",
+          "error_code": "PLAN_REQUIRED",
+          "description": "В разделе экспорта не удаётся скачать PDF.",
+          "status": "open"
+        },
+        "retrieval": [
+          {
+            "chunk_id": "faq-aaf0c1ff951fa7752fcc",
+            "source": "faq/faq.md",
+            "section": "Экспорт PDF и PLAN_REQUIRED",
+            "text": "Экспорт PDF доступен только на тарифе Pro.\nНа тарифе Free при попытке экспорта PDF возникает PLAN_REQUIRED.\nПользователь Free может воспользоваться экспортом CSV или перейти на Pro.\nАссистент поддержки не меняет тариф и не выполняет платежи.",
+            "vector_score": 0.5781676379323631
+          },
+          {
+            "chunk_id": "faq-c331c5b9e3aad496cf04",
+            "source": "faq/product.md",
+            "section": "TaskDesk — продукт",
+            "text": "TaskDesk — вымышленный сервис управления задачами для демонстрации поддержки.\nТариф Free включает задачи и экспорт CSV. Тариф Pro дополнительно включает экспорт PDF.\nПоддержка использует FAQ и данные только выбранного пользователя и его тикета.\nПароли, токены и платёжные реквизиты не нужны для диагностики.",
+            "vector_score": 0.23497197724376426
+          }
+        ],
+        "mcp": [
+          {
+            "tool": "support_get_user",
+            "source": "mcp://support/users/U-100"
+          },
+          {
+            "tool": "support_get_ticket",
+            "source": "mcp://support/tickets/T-101"
+          }
+        ],
+        "usage": {
+          "budget_usd": 0.2,
+          "reserved_usd": 0.008451299999999998,
+          "estimated_peak_usd": 0.0013731,
+          "calls": 2
+        }
+      }
+    },
+    {
+      "user": "U-100",
+      "question": "Погода на Юпитере завтра",
+      "ticket_id": "",
+      "http_status": 200,
+      "reply": {
+        "answer": {
+          "status": "unknown",
+          "answer": "В FAQ нет подтверждений для ответа.",
+          "claims": [],
+          "quotes": [],
+          "sources": [],
+          "clarification": "Уточните вопрос или передайте обращение специалисту поддержки.",
+          "local": true
+        },
+        "user": {
+          "id": "U-100",
+          "name": "Анна (демо)",
+          "plan": "Free",
+          "auth_method": "password",
+          "email_verified": false,
+          "account_state": "active"
+        },
+        "retrieval": [],
+        "mcp": [
+          {
+            "tool": "support_get_user",
+            "source": "mcp://support/users/U-100"
+          }
+        ],
+        "usage": {
+          "budget_usd": 0.2,
+          "reserved_usd": 0.008451299999999998,
+          "estimated_peak_usd": 0.0013731,
+          "calls": 2
+        }
+      }
+    },
+    {
+      "user": "U-100",
+      "question": "Почему не работает авторизация?",
+      "ticket_id": "T-200",
+      "http_status": 422
+    },
+    {
+      "user": "U-200",
+      "question": "Почему не работает авторизация?",
+      "ticket_id": "T-200",
+      "http_status": 200,
+      "reply": {
+        "answer": {
+          "status": "answered",
+          "answer": "Учётная запись Бориса (демо) сейчас в состоянии temporarily_locked, а тикет T-200 зафиксировал ошибку ACCOUNT_LOCKED после нескольких неверных вводов пароля. [q1] [q2]\nПри ACCOUNT_LOCKED и account_state=temporarily_locked нужно дождаться окончания блокировки: 15 минут после последней неудачной попытки. [q3]",
+          "claims": [
+            {
+              "text": "Учётная запись Бориса (демо) сейчас в состоянии temporarily_locked, а тикет T-200 зафиксировал ошибку ACCOUNT_LOCKED после нескольких неверных вводов пароля.",
+              "quote_ids": [
+                "q1",
+                "q2"
+              ]
+            },
+            {
+              "text": "При ACCOUNT_LOCKED и account_state=temporarily_locked нужно дождаться окончания блокировки: 15 минут после последней неудачной попытки.",
+              "quote_ids": [
+                "q3"
+              ]
+            }
+          ],
+          "quotes": [
+            {
+              "id": "q1",
+              "chunk_id": "crm-user",
+              "text": "{\"account_state\":\"temporarily_locked\",\"auth_method\":\"password\",\"email_verified\":true,\"id\":\"U-200\",\"name\":\"Борис (демо)\",\"plan\":\"Pro\"}"
+            },
+            {
+              "id": "q2",
+              "chunk_id": "crm-ticket",
+              "text": "{\"category\":\"Авторизация\",\"description\":\"Несколько раз вводил неправильный пароль; теперь вижу ACCOUNT_LOCKED.\",\"error_code\":\"ACCOUNT_LOCKED\",\"id\":\"T-200\",\"status\":\"open\",\"title\":\"Вход временно заблокирован\",\"user_id\":\"U-200\"}"
+            },
+            {
+              "id": "q3",
+              "chunk_id": "faq-94c0e02bfb9643198643",
+              "text": "При ACCOUNT_LOCKED и account_state=temporarily_locked дождитесь окончания блокировки: 15 минут после последней неудачной попытки."
+            }
+          ],
+          "sources": [
+            {
+              "source": "mcp://support/users/U-200",
+              "section": "Текущий пользователь",
+              "chunk_id": "crm-user"
+            },
+            {
+              "source": "mcp://support/tickets/T-200",
+              "section": "Текущий тикет",
+              "chunk_id": "crm-ticket"
+            },
+            {
+              "source": "faq/auth.md",
+              "section": "ACCOUNT_LOCKED: временная блокировка",
+              "chunk_id": "faq-94c0e02bfb9643198643"
+            }
+          ],
+          "clarification": "",
+          "local": false
+        },
+        "user": {
+          "id": "U-200",
+          "name": "Борис (демо)",
+          "plan": "Pro",
+          "auth_method": "password",
+          "email_verified": true,
+          "account_state": "temporarily_locked"
+        },
+        "ticket": {
+          "id": "T-200",
+          "user_id": "U-200",
+          "title": "Вход временно заблокирован",
+          "category": "Авторизация",
+          "error_code": "ACCOUNT_LOCKED",
+          "description": "Несколько раз вводил неправильный пароль; теперь вижу ACCOUNT_LOCKED.",
+          "status": "open"
+        },
+        "retrieval": [
+          {
+            "chunk_id": "faq-94c0e02bfb9643198643",
+            "source": "faq/auth.md",
+            "section": "ACCOUNT_LOCKED: временная блокировка",
+            "text": "После пяти неудачных попыток входа учётная запись временно блокируется на 15 минут.\nПри ACCOUNT_LOCKED и account_state=temporarily_locked дождитесь окончания блокировки: 15 минут после последней неудачной попытки.\nЕсли пароль забыт, используйте кнопку «Забыли пароль?» на экране входа.\nПодтверждение почты не снимает временную блокировку ACCOUNT_LOCKED.",
+            "vector_score": 0.3353052505833275
+          }
+        ],
+        "mcp": [
+          {
+            "tool": "support_get_user",
+            "source": "mcp://support/users/U-200"
+          },
+          {
+            "tool": "support_get_ticket",
+            "source": "mcp://support/tickets/T-200"
+          }
+        ],
+        "usage": {
+          "budget_usd": 0.2,
+          "reserved_usd": 0.012598499999999999,
+          "estimated_peak_usd": 0.0021089999999999998,
+          "calls": 3
+        }
+      }
+    }
+  ],
+  "usage": {
+    "budget_usd": 0.2,
+    "reserved_usd": 0.012598499999999999,
+    "estimated_peak_usd": 0.0021089999999999998,
+    "calls": 3
+  },
+  "checks": {
+    "go_test": "passed",
+    "go_vet": "passed",
+    "go_build": "passed",
+    "javascript_syntax": "passed",
+    "powershell_launcher_syntax": "passed",
+    "initial_browser_ui_and_MCP_tickets": "passed",
+    "ordinary_browser_button_interaction": "not automated; Browser Use unavailable due to MXC",
+    "manual_reviewed_claims": 6,
+    "manual_reviewed_quotes": 12,
+    "owned_verification_services": "stopped",
+    "video": "not recorded",
+    "publication": "no commit/push/merge"
+  }
+}

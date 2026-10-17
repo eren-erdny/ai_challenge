@@ -1,0 +1,8 @@
+{"users":[
+{"id":"U-100","name":"Анна (демо)","plan":"Free","auth_method":"password","email_verified":false,"account_state":"active"},
+{"id":"U-200","name":"Борис (демо)","plan":"Pro","auth_method":"password","email_verified":true,"account_state":"temporarily_locked"}
+],"tickets":[
+{"id":"T-100","user_id":"U-100","title":"Не получается войти после регистрации","category":"Авторизация","error_code":"AUTH_EMAIL_UNVERIFIED","description":"После регистрации вход отклонён. Письмо подтверждения пока не открывала.","status":"open"},
+{"id":"T-101","user_id":"U-100","title":"Не работает экспорт PDF","category":"Экспорт PDF","error_code":"PLAN_REQUIRED","description":"В разделе экспорта не удаётся скачать PDF.","status":"open"},
+{"id":"T-200","user_id":"U-200","title":"Вход временно заблокирован","category":"Авторизация","error_code":"ACCOUNT_LOCKED","description":"Несколько раз вводил неправильный пароль; теперь вижу ACCOUNT_LOCKED.","status":"open"}
+]}

@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="ru"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>TaskDesk — поддержка</title>
+<style nonce="{{NONCE}}">
+:root{font:17px system-ui;color:#183047;background:#eef3f8}body{max-width:1080px;margin:40px auto;padding:0 22px}
+header{margin-bottom:26px}h1{font-size:36px;margin:0 0 8px}p{line-height:1.6}.muted{color:#617487}
+.panel{background:white;border:1px solid #dbe4ee;border-radius:18px;padding:26px;margin:18px 0;box-shadow:0 8px 25px #18304708}
+label{display:block;font-weight:600;margin:14px 0 8px}select,textarea,input{box-sizing:border-box;width:100%;font:inherit;padding:12px;border:1px solid #b7c9d9;border-radius:9px;background:#fff}
+textarea{min-height:100px;resize:vertical}button{background:#1765ce;color:white;border:0;border-radius:10px;padding:12px 22px;font:inherit;cursor:pointer;margin-top:16px}button:disabled{opacity:.5}
+pre{white-space:pre-wrap;overflow-wrap:anywhere;font:14px ui-monospace;line-height:1.5}.source{border-left:3px solid #8aafe8;padding:8px 15px;margin:12px 0;line-height:1.5}
+#answer{white-space:pre-wrap;line-height:1.7}#status{color:#1765ce;font-weight:600}.badge{display:inline-block;border-radius:20px;background:#e7f0ff;padding:6px 12px;font-size:14px}
+</style>
+<header><span class="badge">Демонстрационный продукт · синтетические данные</span><h1>TaskDesk — поддержка</h1>
+<div class="muted">Ответы по FAQ с учётом вашего обращения</div></header>
+<section class="panel" id="login"><label for="access">Локальный ключ доступа к сервису</label><input type="password" id="access" autocomplete="off"><button id="connect">Подключиться</button></section>
+<section class="panel"><label for="ticket">Обращение</label><select id="ticket"><option value="">Общий вопрос о продукте</option></select>
+<label for="question">Ваш вопрос</label><textarea id="question">Почему не работает авторизация?</textarea>
+<button id="ask">Получить ответ</button> <span id="status" role="status"></span></section>
+<section class="panel" aria-live="polite"><h2>Ответ поддержки</h2><div id="who" class="muted"></div><div id="answer">Выберите обращение и задайте вопрос.</div><div id="clarification"></div>
+<h3>На чём основан ответ</h3><div id="sources"></div>
+<details><summary>Подробности поиска и получения контекста</summary><pre id="trace"></pre></details></section>
+<script nonce="{{NONCE}}">
+const el=id=>document.getElementById(id);
+const fragment=new URLSearchParams(location.hash.slice(1));let token=fragment.get('access')||sessionStorage.getItem('support-access')||'';
+history.replaceState(null,'',location.pathname);
+async function api(path,data){
+ const response=await fetch(path,{method:data?'POST':'GET',headers:{'Authorization':'Bearer '+token,...(data?{'Content-Type':'application/json'}:{})},body:data?JSON.stringify(data):undefined});
+ if(!response.ok)throw new Error(await response.text());return response.json();
+}
+async function connect(){
+ try{const list=await api('/api/tickets');sessionStorage.setItem('support-access',token);el('login').hidden=true;
+ el('ticket').replaceChildren(new Option('Общий вопрос о продукте',''));
+ for(const t of list.tickets)el('ticket').add(new Option(t.id+' — '+t.title,t.id));
+ if(list.tickets.length)el('ticket').value=list.tickets[0].id;
+ el('status').textContent='FAQ и CRM готовы';
+ }catch(e){el('login').hidden=false;el('status').textContent='Нужен действующий локальный ключ доступа';}
+}
+el('connect').onclick=()=>{token=el('access').value.trim();connect()};
+el('ask').onclick=async()=>{
+ el('ask').disabled=true;el('ticket').disabled=true;el('question').disabled=true;el('sources').replaceChildren();el('who').textContent='';el('clarification').textContent='';el('trace').textContent='';el('status').textContent='Получаем контекст и готовим ответ…';
+ try{
+ const r=await api('/api/ask',{question:el('question').value,ticket_id:el('ticket').value});
+ el('who').textContent=r.user.name+' · тариф '+r.user.plan+(r.ticket?' · '+r.ticket.id:'');
+ el('answer').textContent=r.answer.answer;el('clarification').textContent=r.answer.clarification||'';
+ el('sources').replaceChildren();
+ for(const q of r.answer.quotes){
+ const source=r.answer.sources.find(s=>s.chunk_id===q.chunk_id);
+ const div=document.createElement('div');div.className='source';
+ div.textContent='['+q.id+'] '+source.source+' · '+source.section+'\n«'+q.text+'»';el('sources').append(div);
+ }
+ el('trace').textContent=JSON.stringify({mcp:r.mcp,retrieval:r.retrieval,usage:r.usage},null,2);
+ el('status').textContent=r.answer.status==='answered'?'Ответ подтверждён источниками':'Нужно уточнение';
+ }catch(e){el('status').textContent='Не удалось подготовить ответ';el('answer').textContent=e.message;}
+ finally{el('ask').disabled=false;el('ticket').disabled=false;el('question').disabled=false;}
+};
+if(token)connect();
+</script></html>

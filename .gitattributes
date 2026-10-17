@@ -1,5 +1,7 @@
 # Keep public source checksums and reviewed answer hashes stable on Windows.
 examples/** text eol=lf
+# Screenshots are binary; never normalize their bytes as text.
+examples/**/*.png binary
 # RFC provenance hashes describe the exact downloaded/prepared bytes.
 examples/rag-indexing/sources/** -text whitespace=cr-at-eol
 examples/rag-indexing/corpus/** -text whitespace=cr-at-eol

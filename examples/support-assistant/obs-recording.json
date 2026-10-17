@@ -1,0 +1,59 @@
+{
+  "path": "C:/Users/erdni/Videos/ai_challenge_hw33.mp4",
+  "assignment": 33,
+  "duration_seconds": 161.42,
+  "bytes": 10920861,
+  "width": 2560,
+  "height": 1440,
+  "fps": 60,
+  "full_decode_exit_code": 0,
+  "audio_max_db": -91.0,
+  "sha256": "fbedd1f69245cd6c534de3ca3de2547c50f2c16f8cf1975f5289765ef8f4fe11",
+  "sampled_frames": [
+    {
+      "scene": "live-ui",
+      "seconds": 5.0
+    },
+    {
+      "scene": "faq",
+      "seconds": 20.833
+    },
+    {
+      "scene": "crm",
+      "seconds": 40.883
+    },
+    {
+      "scene": "email",
+      "seconds": 59.916
+    },
+    {
+      "scene": "locked",
+      "seconds": 84.949
+    },
+    {
+      "scene": "pdf",
+      "seconds": 109.983
+    },
+    {
+      "scene": "guards",
+      "seconds": 132.999
+    },
+    {
+      "scene": "final",
+      "seconds": 152.999
+    }
+  ],
+  "encoded_frame_review": "All eight encoded scene samples reviewed in contact sheet; locked-user response additionally inspected at full extracted resolution. Live UI, FAQ, MCP, answers, citations, guards and summary visible.",
+  "real_DeepSeek_calls_in_recording": 0,
+  "additional_model_cost_usd": 0,
+  "presentation": "Native OBS Chromium browser_source; actual local TaskDesk UI plus clearly labeled saved real DeepSeek results; automated report navigation; page loads paused.",
+  "saved_responses": "Existing real DeepSeek responses from verification.json, explicitly labeled on screen; report viewer does not replace or intercept service API.",
+  "synthetic_product_users_tickets": true,
+  "fixture_model_responses": false,
+  "obs_original_scene_audio_restored": true,
+  "owned_browser_reset_to_about_blank": true,
+  "scenario": "recording-scenario.md",
+  "user_service": "left running",
+  "incomplete_take": "Initial OBS activation delay caused incomplete take; it was stopped and preserved separately, not delivered.",
+  "git": "No commit, push, merge or retag."
+}

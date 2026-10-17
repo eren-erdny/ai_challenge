@@ -988,3 +988,9 @@ Markdown, JSON, XML, YAML, TOML, Gradle и текстовые файлы. Вло
 [Настройка GitHub Actions и DeepSeek](docs/ai-review.md): diff, RAG по README/docs/коду,
 проверяемые замечания и комментарий в PR. [Живая локальная проверка](../../examples/ai-review/README.md).
 Автоматизация включается явно через repository variable после установки в базовую ветку.
+
+## Ассистент поддержки
+
+[TaskDesk support](../../examples/support-assistant/README.md): локальный веб-сервис,
+FAQ RAG и контекст пользователей/тикетов через отдельный MCP stdio-процесс.
+Запуск из корня: Start-Support-Assistant.cmd -BudgetUsd 0.20.

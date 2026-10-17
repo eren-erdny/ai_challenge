@@ -29,3 +29,6 @@ __pycache__/
 
 # Local developer-assistant indexes and isolated state
 /.project-assistant/
+
+# Local support service credentials, budget and verification state
+/.support-assistant/
