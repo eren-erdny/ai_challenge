@@ -67,6 +67,8 @@ func validateHistory(config historyConfig) error {
 }
 
 type apiProfile struct {
+	RAGTemplate     string `json:"rag_template,omitempty"`
+	ReasoningEffort string `json:"reasoning_effort,omitempty"`
 	ContextWindow   int    `json:"context_window,omitempty"`
 	MaxOutputTokens int    `json:"max_output_tokens,omitempty"`
 	BaseURL         string `json:"base_url"`
@@ -382,6 +384,9 @@ func printModelCatalog(output io.Writer) {
 }
 
 func validateAPIProfile(profile apiProfile) error {
+	if profile.RAGTemplate != "" && profile.RAGTemplate != "compact" {
+		return errors.New("rag_template must be empty or compact")
+	}
 	if profile.ContextWindow < 0 || profile.MaxOutputTokens < 0 {
 		return errors.New("context_window и max_output_tokens не могут быть отрицательными")
 	}

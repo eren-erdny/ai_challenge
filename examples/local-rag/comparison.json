@@ -1,0 +1,181 @@
+{
+  "local": {
+    "retrieval_median_seconds": 0.782,
+    "turns": 20,
+    "valid": 15,
+    "rejected": 5,
+    "calls": 18,
+    "generation_median_seconds": 14.548,
+    "generation_min_seconds": 1.527,
+    "generation_max_seconds": 26.334,
+    "input_tokens": 50321,
+    "output_tokens": 9834,
+    "expected_met": 12,
+    "core_expected_met": 15,
+    "reviewed_claims": 46,
+    "supported_claims": 40
+  },
+  "cloud": {
+    "retrieval_median_seconds": 0.742,
+    "turns": 10,
+    "valid": 10,
+    "rejected": 0,
+    "calls": 9,
+    "generation_median_seconds": 1.589,
+    "generation_min_seconds": 1.063,
+    "generation_max_seconds": 2.111,
+    "input_tokens": 21905,
+    "output_tokens": 2015,
+    "expected_met": 10
+  },
+  "local_startup_seconds": 11.1216251,
+  "stable_outcome_questions": 9,
+  "questions": 10,
+  "identical_retrieval_turns": 20,
+  "comparisons": [
+    {
+      "run": 1,
+      "id": "Q01",
+      "local_status": "answered",
+      "cloud_status": "answered",
+      "identical_retrieved_text": true
+    },
+    {
+      "run": 1,
+      "id": "Q02",
+      "local_status": "answered",
+      "cloud_status": "answered",
+      "identical_retrieved_text": true
+    },
+    {
+      "run": 1,
+      "id": "Q03",
+      "local_status": "rejected",
+      "cloud_status": "answered",
+      "identical_retrieved_text": true
+    },
+    {
+      "run": 1,
+      "id": "Q04",
+      "local_status": "rejected",
+      "cloud_status": "answered",
+      "identical_retrieved_text": true
+    },
+    {
+      "run": 1,
+      "id": "Q05",
+      "local_status": "answered",
+      "cloud_status": "answered",
+      "identical_retrieved_text": true
+    },
+    {
+      "run": 1,
+      "id": "Q06",
+      "local_status": "answered",
+      "cloud_status": "answered",
+      "identical_retrieved_text": true
+    },
+    {
+      "run": 1,
+      "id": "Q07",
+      "local_status": "answered",
+      "cloud_status": "answered",
+      "identical_retrieved_text": true
+    },
+    {
+      "run": 1,
+      "id": "Q08",
+      "local_status": "rejected",
+      "cloud_status": "answered",
+      "identical_retrieved_text": true
+    },
+    {
+      "run": 1,
+      "id": "Q09",
+      "local_status": "unknown",
+      "cloud_status": "unknown",
+      "identical_retrieved_text": true
+    },
+    {
+      "run": 1,
+      "id": "Q10",
+      "local_status": "unknown",
+      "cloud_status": "unknown",
+      "identical_retrieved_text": true
+    },
+    {
+      "run": 2,
+      "id": "Q01",
+      "local_status": "answered",
+      "cloud_status": "answered",
+      "identical_retrieved_text": true
+    },
+    {
+      "run": 2,
+      "id": "Q02",
+      "local_status": "answered",
+      "cloud_status": "answered",
+      "identical_retrieved_text": true
+    },
+    {
+      "run": 2,
+      "id": "Q03",
+      "local_status": "rejected",
+      "cloud_status": "answered",
+      "identical_retrieved_text": true
+    },
+    {
+      "run": 2,
+      "id": "Q04",
+      "local_status": "answered",
+      "cloud_status": "answered",
+      "identical_retrieved_text": true
+    },
+    {
+      "run": 2,
+      "id": "Q05",
+      "local_status": "answered",
+      "cloud_status": "answered",
+      "identical_retrieved_text": true
+    },
+    {
+      "run": 2,
+      "id": "Q06",
+      "local_status": "answered",
+      "cloud_status": "answered",
+      "identical_retrieved_text": true
+    },
+    {
+      "run": 2,
+      "id": "Q07",
+      "local_status": "answered",
+      "cloud_status": "answered",
+      "identical_retrieved_text": true
+    },
+    {
+      "run": 2,
+      "id": "Q08",
+      "local_status": "rejected",
+      "cloud_status": "answered",
+      "identical_retrieved_text": true
+    },
+    {
+      "run": 2,
+      "id": "Q09",
+      "local_status": "unknown",
+      "cloud_status": "unknown",
+      "identical_retrieved_text": true
+    },
+    {
+      "run": 2,
+      "id": "Q10",
+      "local_status": "unknown",
+      "cloud_status": "unknown",
+      "identical_retrieved_text": true
+    }
+  ],
+  "local_sha256": "b43bc165e6d5783a689c9ec22d31c06e5f0a5be19b211e563abb8c1500944b4c",
+  "cloud_sha256": "e25847b07daeea067e03a2b4654cfe9a51ccf599b804677366a5f1bb5aeaa42d",
+  "new_cloud_calls": 0,
+  "limits": "Historical DeepSeek vs current Qwen, different model/tokenizer/output cap and dates. API duration excludes retrieval and startup. Two local repeats are finite observations; cloud has one saved run, so repeat stability is unmeasured."
+}

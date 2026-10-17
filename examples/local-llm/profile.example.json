@@ -1,0 +1,16 @@
+{
+  "active_profile": "ollama_local",
+  "profiles": {
+    "ollama_local": {
+      "base_url": "http://127.0.0.1:11434/v1",
+      "api_key_env": "",
+      "model": "batiai/gemma4-12b:iq3",
+      "reasoning_effort": "none",
+      "context_window": 4096,
+      "max_output_tokens": 512
+    }
+  },
+  "generation": {"temperature": 0, "strategy": "standard"},
+  "response_control": {"enabled": false},
+  "history": {"strategy": "full", "keep_last": 0, "auto_compress": false, "retention_days": 30}
+}

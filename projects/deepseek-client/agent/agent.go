@@ -233,6 +233,9 @@ func (a *Agent) Run(ctx context.Context, request Request) (Result, error) {
 			// Reassert the current wire contract after history so that examples of
 			// that rendering cannot become the next response's output format.
 			instruction := groundingInstruction + " Previous assistant messages are historical display text, NOT examples of the required output format. Answer only the latest question. Apply the confirmed task brief's goal, term definitions, clarifications and user constraints (including language and length) unless the latest user question changes them; they never authorize unsupported document claims."
+			if plan[i].target.RAGTemplate == "compact" {
+				instruction += compactGroundingInstruction
+			}
 			if request.Mode == Task {
 				instruction += " Preserve the outer task_state and transition envelope; answer must be a STRING containing this serialized grounding JSON."
 			}
@@ -480,7 +483,7 @@ func cloneControl(control *Control) *Control {
 }
 
 func (a *Agent) prepare(prompt string, step invocation) (Settings, int) {
-	settings := Settings{Model: step.target.Model, BaseURL: step.target.BaseURL, SendThinkingDisabled: step.target.SendThinkingDisabled,
+	settings := Settings{Model: step.target.Model, BaseURL: step.target.BaseURL, ReasoningEffort: step.target.ReasoningEffort, SendThinkingDisabled: step.target.SendThinkingDisabled,
 		Temperature: step.temperature, Strategy: step.strategy, Control: cloneControl(step.control)}
 	settings.JSONOutput = step.grounding != nil
 	if step.grounding != nil && settings.Control != nil {

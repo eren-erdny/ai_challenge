@@ -1,0 +1,327 @@
+{
+  "answers_sha256": "093790c18080a1f241d9f36e31f38a1064cf9155843b03328a9c29b025cbdb79",
+  "method": "Manual review of every accepted claim with its own quotes; exact provenance checked separately. Fully supported requires the requested answer plus all claims supported. Concision is measured separately by claim/output-token count.",
+  "rows": [
+    {
+      "run": 1,
+      "id": "Q01",
+      "status": "answered",
+      "core_expected_met": true,
+      "expected_met": true,
+      "claims": [
+        {
+          "text": "The WHEN method is used when sufficient milk has been introduced into the coffee.",
+          "quote_ids": [
+            "q1"
+          ],
+          "supported": true,
+          "reason": "Manually checked: the attached quote directly supports this claim, including modality and conditions."
+        }
+      ],
+      "note": "The main requested fact is present; every claim was reviewed against its own referenced quotes."
+    },
+    {
+      "run": 1,
+      "id": "Q02",
+      "status": "answered",
+      "core_expected_met": true,
+      "expected_met": true,
+      "claims": [
+        {
+          "text": "The Content-Type header of a POST or BREW request sent to a TEA-capable pot MUST be \"message/teapot\" if tea is to be requested.",
+          "quote_ids": [
+            "q1"
+          ],
+          "supported": true,
+          "reason": "Manually checked: the attached quote directly supports this claim, including modality and conditions."
+        }
+      ],
+      "note": "The main requested fact is present; every claim was reviewed against its own referenced quotes."
+    },
+    {
+      "run": 1,
+      "id": "Q03",
+      "status": "answered",
+      "core_expected_met": true,
+      "expected_met": true,
+      "claims": [
+        {
+          "text": "The permitted sugar-type additions for HTCPCP-TEA are \"Sugar\", \"Xylitol\", and \"Stevia\".",
+          "quote_ids": [
+            "q1"
+          ],
+          "supported": true,
+          "reason": "Manually checked: the attached quote directly supports this claim, including modality and conditions."
+        }
+      ],
+      "note": "The main requested fact is present; every claim was reviewed against its own referenced quotes."
+    },
+    {
+      "run": 1,
+      "id": "Q04",
+      "status": "answered",
+      "core_expected_met": true,
+      "expected_met": true,
+      "claims": [
+        {
+          "text": "Coffee pots SHOULD use the Network Time Protocol [NTP] to synchronize their clocks to a globally accurate time standard.",
+          "quote_ids": [
+            "q1"
+          ],
+          "supported": true,
+          "reason": "Manually checked: the attached quote directly supports this claim, including modality and conditions."
+        }
+      ],
+      "note": "The main requested fact is present; every claim was reviewed against its own referenced quotes."
+    },
+    {
+      "run": 1,
+      "id": "Q05",
+      "status": "rejected",
+      "core_expected_met": false,
+      "expected_met": false,
+      "claims": [],
+      "note": "quote refers to a chunk outside current eligible results\u001b[m"
+    },
+    {
+      "run": 1,
+      "id": "Q06",
+      "status": "answered",
+      "core_expected_met": true,
+      "expected_met": true,
+      "claims": [
+        {
+          "text": "HTTP 429 responses MAY include a Retry-After header.",
+          "quote_ids": [
+            "q1"
+          ],
+          "supported": true,
+          "reason": "Manually checked: the attached quote directly supports this claim, including modality and conditions."
+        }
+      ],
+      "note": "The main requested fact is present; every claim was reviewed against its own referenced quotes."
+    },
+    {
+      "run": 1,
+      "id": "Q07",
+      "status": "answered",
+      "core_expected_met": true,
+      "expected_met": true,
+      "claims": [
+        {
+          "text": "Responses with the 431 status code MUST NOT be stored by a cache.",
+          "quote_ids": [
+            "q1"
+          ],
+          "supported": true,
+          "reason": "Manually checked: the attached quote directly supports this claim, including modality and conditions."
+        }
+      ],
+      "note": "The main requested fact is present; every claim was reviewed against its own referenced quotes."
+    },
+    {
+      "run": 1,
+      "id": "Q08",
+      "status": "answered",
+      "core_expected_met": true,
+      "expected_met": false,
+      "claims": [
+        {
+          "text": "A TEA-capable pot that cannot brew coffee may return either status code 503 or status code 418.",
+          "quote_ids": [
+            "q1"
+          ],
+          "supported": true,
+          "reason": "Manually checked: the attached quote directly supports this claim, including modality and conditions."
+        },
+        {
+          "text": "Code 503 indicates temporary unavailability of coffee, while code 418 denotes a permanent indication that the pot is a teapot.",
+          "quote_ids": [
+            "q2"
+          ],
+          "supported": false,
+          "reason": "The source says a more permanent indication; the claim strengthens this to permanent."
+        },
+        {
+          "text": "The choice between these codes depends on whether the unavailability is temporary or permanent.",
+          "quote_ids": [
+            "q3"
+          ],
+          "supported": false,
+          "reason": "The source permits either code and describes meanings; it does not explicitly specify this selection rule."
+        }
+      ],
+      "note": "The main requested fact is present; every claim was reviewed against its own referenced quotes."
+    },
+    {
+      "run": 1,
+      "id": "Q09",
+      "status": "unknown",
+      "core_expected_met": true,
+      "expected_met": true,
+      "claims": [],
+      "note": "Correct abstention: no answer in the RFC corpus; Q09 has zero model calls, Q10 has topic-related but insufficient evidence."
+    },
+    {
+      "run": 1,
+      "id": "Q10",
+      "status": "unknown",
+      "core_expected_met": true,
+      "expected_met": true,
+      "claims": [],
+      "note": "Correct abstention: no answer in the RFC corpus; Q09 has zero model calls, Q10 has topic-related but insufficient evidence."
+    },
+    {
+      "run": 2,
+      "id": "Q01",
+      "status": "answered",
+      "core_expected_met": true,
+      "expected_met": true,
+      "claims": [
+        {
+          "text": "The WHEN method is used to indicate when sufficient milk has been introduced into the coffee.",
+          "quote_ids": [
+            "q1"
+          ],
+          "supported": true,
+          "reason": "Manually checked: the attached quote directly supports this claim, including modality and conditions."
+        }
+      ],
+      "note": "The main requested fact is present; every claim was reviewed against its own referenced quotes."
+    },
+    {
+      "run": 2,
+      "id": "Q02",
+      "status": "rejected",
+      "core_expected_met": false,
+      "expected_met": false,
+      "claims": [],
+      "note": "quote is not an exact meaningful excerpt of its chunk\u001b[m"
+    },
+    {
+      "run": 2,
+      "id": "Q03",
+      "status": "answered",
+      "core_expected_met": true,
+      "expected_met": true,
+      "claims": [
+        {
+          "text": "The permitted sugar-type additions are \"Sugar\", \"Xylitol\", and \"Stevia\".",
+          "quote_ids": [
+            "q1"
+          ],
+          "supported": true,
+          "reason": "Manually checked: the attached quote directly supports this claim, including modality and conditions."
+        }
+      ],
+      "note": "The main requested fact is present; every claim was reviewed against its own referenced quotes."
+    },
+    {
+      "run": 2,
+      "id": "Q04",
+      "status": "answered",
+      "core_expected_met": true,
+      "expected_met": true,
+      "claims": [
+        {
+          "text": "Coffee pots SHOULD use the Network Time Protocol [NTP] to synchronize their clocks to a globally accurate time standard.",
+          "quote_ids": [
+            "q1"
+          ],
+          "supported": true,
+          "reason": "Manually checked: the attached quote directly supports this claim, including modality and conditions."
+        }
+      ],
+      "note": "The main requested fact is present; every claim was reviewed against its own referenced quotes."
+    },
+    {
+      "run": 2,
+      "id": "Q05",
+      "status": "rejected",
+      "core_expected_met": false,
+      "expected_met": false,
+      "claims": [],
+      "note": "quote refers to a chunk outside current eligible results\u001b[m"
+    },
+    {
+      "run": 2,
+      "id": "Q06",
+      "status": "answered",
+      "core_expected_met": true,
+      "expected_met": true,
+      "claims": [
+        {
+          "text": "HTTP 429 responses MAY include a Retry-After header.",
+          "quote_ids": [
+            "q1"
+          ],
+          "supported": true,
+          "reason": "Manually checked: the attached quote directly supports this claim, including modality and conditions."
+        }
+      ],
+      "note": "The main requested fact is present; every claim was reviewed against its own referenced quotes."
+    },
+    {
+      "run": 2,
+      "id": "Q07",
+      "status": "answered",
+      "core_expected_met": true,
+      "expected_met": true,
+      "claims": [
+        {
+          "text": "Responses with the 431 status code MUST NOT be stored by a cache.",
+          "quote_ids": [
+            "q1"
+          ],
+          "supported": true,
+          "reason": "Manually checked: the attached quote directly supports this claim, including modality and conditions."
+        }
+      ],
+      "note": "The main requested fact is present; every claim was reviewed against its own referenced quotes."
+    },
+    {
+      "run": 2,
+      "id": "Q08",
+      "status": "answered",
+      "core_expected_met": true,
+      "expected_met": true,
+      "claims": [
+        {
+          "text": "A TEA-capable pot that cannot brew coffee may return either status code 503 or status code 418.",
+          "quote_ids": [
+            "q1"
+          ],
+          "supported": true,
+          "reason": "Manually checked: the attached quote directly supports this claim, including modality and conditions."
+        },
+        {
+          "text": "Code 503 indicates temporary unavailability of coffee, while code 418 denotes a more permanent indication that the pot is a teapot.",
+          "quote_ids": [
+            "q2"
+          ],
+          "supported": true,
+          "reason": "Manually checked: the attached quote directly supports this claim, including modality and conditions."
+        }
+      ],
+      "note": "The main requested fact is present; every claim was reviewed against its own referenced quotes."
+    },
+    {
+      "run": 2,
+      "id": "Q09",
+      "status": "unknown",
+      "core_expected_met": true,
+      "expected_met": true,
+      "claims": [],
+      "note": "Correct abstention: no answer in the RFC corpus; Q09 has zero model calls, Q10 has topic-related but insufficient evidence."
+    },
+    {
+      "run": 2,
+      "id": "Q10",
+      "status": "unknown",
+      "core_expected_met": true,
+      "expected_met": true,
+      "claims": [],
+      "note": "Correct abstention: no answer in the RFC corpus; Q09 has zero model calls, Q10 has topic-related but insufficient evidence."
+    }
+  ]
+}

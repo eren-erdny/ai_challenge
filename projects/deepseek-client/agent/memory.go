@@ -152,7 +152,7 @@ func (a *Agent) RefreshFacts(ctx context.Context, id string, target Target) (Fac
 	if window > 0 {
 		reserve = min(reserve, window/4)
 	}
-	settings := Settings{Model: target.Model, BaseURL: target.BaseURL, SendThinkingDisabled: target.SendThinkingDisabled, MaxOutputTokens: reserve, Temperature: 0, Messages: []Message{{Role: "system", Content: factsInstruction}, {Role: "user", Content: prompt}}}
+	settings := Settings{Model: target.Model, BaseURL: target.BaseURL, ReasoningEffort: target.ReasoningEffort, SendThinkingDisabled: target.SendThinkingDisabled, MaxOutputTokens: reserve, Temperature: 0, Messages: []Message{{Role: "system", Content: factsInstruction}, {Role: "user", Content: prompt}}}
 	inputEstimate := a.historySize(settings.Messages) + reserve
 	if strings.TrimSpace(target.Model) == "" || reserve < 64 || (window > 0 && inputEstimate > window) {
 		return result, errors.New("facts update does not fit configured extraction window")

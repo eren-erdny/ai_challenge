@@ -176,7 +176,7 @@ func (a *Agent) Compress(ctx context.Context, id string, target Target, config C
 			return result, errors.New("compression chunk cannot fit")
 		}
 		prompt := prefix + string(remaining[:lo])
-		settings := Settings{Model: target.Model, BaseURL: target.BaseURL, SendThinkingDisabled: target.SendThinkingDisabled, MaxOutputTokens: reserve, Temperature: 0, Messages: []Message{{Role: "system", Content: summaryInstruction}, {Role: "user", Content: prompt}}}
+		settings := Settings{Model: target.Model, BaseURL: target.BaseURL, ReasoningEffort: target.ReasoningEffort, SendThinkingDisabled: target.SendThinkingDisabled, MaxOutputTokens: reserve, Temperature: 0, Messages: []Message{{Role: "system", Content: summaryInstruction}, {Role: "user", Content: prompt}}}
 		started := time.Now()
 		answer, callErr := a.client.Complete(ctx, target, prompt, settings)
 		if answer.Model == "" {

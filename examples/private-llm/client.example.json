@@ -1,0 +1,15 @@
+{
+  "active_profile": "vps_local",
+  "profiles": {
+    "vps_local": {
+      "base_url": "http://127.0.0.1:11436/v1",
+      "api_key_env": "",
+      "model": "smollm2:135m",
+      "context_window": 512,
+      "max_output_tokens": 128
+    }
+  },
+  "history": {"strategy": "sliding", "keep_last": 2, "auto_compress": false, "retention_days": 30},
+  "generation": {"temperature": 0.7, "strategy": "standard"},
+  "response_control": {"enabled": false, "format": "structured_markdown", "max_words": 80, "max_tokens": 128}
+}

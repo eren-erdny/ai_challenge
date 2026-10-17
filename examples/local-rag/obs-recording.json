@@ -1,0 +1,26 @@
+{
+  "duration_seconds": 186.28,
+  "width": 2560,
+  "height": 1440,
+  "fps": 60,
+  "bytes": 13429603,
+  "sha256": "eae202dd6bef9df538668dd70f5e831950fe16fbf2ac6cc70a601e298d34dd9b",
+  "full_decode_exit_code": 0,
+  "path": "C:/Users/erdni/Videos/ai_challenge_hw28.mp4",
+  "inspected_frame_seconds": [
+    5,
+    48,
+    61,
+    100,
+    114,
+    150,
+    175
+  ],
+  "automated_input": true,
+  "real_tui_event_loop": true,
+  "profile": "ollama_rag",
+  "model": "qwen3.5:4b-rag",
+  "cloud_generation_calls": 0,
+  "original_scene_and_audio_restored": true,
+  "failed_start_take_preserved": "C:/Users/erdni/Videos/2026-10-10 15-56-48.mp4"
+}

@@ -19,3 +19,10 @@ config/config.json
 /projects/deepseek-client/rag-service/reports/
 __pycache__/
 /artifacts/hw21/
+
+# Isolated local LLM configuration and conversations
+/.local-llm/
+
+# Local private-service build output
+/artifacts/hw30/
+/examples/private-llm/recording-*/done

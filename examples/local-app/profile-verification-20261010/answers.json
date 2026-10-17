@@ -1,0 +1,85 @@
+{
+  "endpoint": "http://127.0.0.1:11434/v1",
+  "model": "batiai/gemma4-12b:iq3",
+  "reasoning_effort": "none",
+  "started": "2026-10-10T12:21:44Z",
+  "answers": [
+    {
+      "id": "plan",
+      "prompt": "Я готовлю проект с названием «Север». В нём 3 задачи: подключить Ollama, проверить ответы, сохранить историю. Составь краткий план из трёх пунктов.",
+      "completion": {
+        "UsageIncomplete": false,
+        "ToolCalls": null,
+        "UsageKnown": true,
+        "Content": "Вот краткий план для проекта **«Север»**, разделенный на три этапа согласно вашим задачам:\n\n1.  **Интеграция Ollama:** Настройка API-соединения между вашим приложением и локальным движком Ollama для генерации ответов.\n2.  **Валидация ответов:** Разработка системы проверки (промпт-инжиниринг или логические фильтры) для оценки корректности ответов модели.\n3.  **Логирование истории:** Реализация базы данных или файла для сохранения истории запросов и ответов пользователей для анализа и отладки.",
+        "Model": "batiai/gemma4-12b:iq3",
+        "FinishReason": "stop",
+        "PromptTokens": 62,
+        "CachedInputTokens": 57,
+        "CompletionTokens": 136,
+        "TotalTokens": 198,
+        "Duration": 1425639000
+      },
+      "visible": "Вот краткий план для проекта **«Север»**, разделенный на три этапа согласно вашим задачам:\n\n1.  **Интеграция Ollama:** Настройка API-соединения между вашим приложением и локальным движком Ollama для генерации ответов.\n2.  **Валидация ответов:** Разработка системы проверки (промпт-инжиниринг или логические фильтры) для оценки корректности ответов модели.\n3.  **Логирование истории:** Реализация базы данных или файла для сохранения истории запросов и ответов пользователей для анализа и отладки."
+    },
+    {
+      "id": "context",
+      "prompt": "Как называется мой проект и сколько в нём задач? Ответь одной строкой.",
+      "completion": {
+        "UsageIncomplete": false,
+        "ToolCalls": null,
+        "UsageKnown": true,
+        "Content": "Проект называется «Север» и в нём 3 задачи.",
+        "Model": "batiai/gemma4-12b:iq3",
+        "FinishReason": "stop",
+        "PromptTokens": 224,
+        "CachedInputTokens": 218,
+        "CompletionTokens": 15,
+        "TotalTokens": 239,
+        "Duration": 218048300
+      },
+      "visible": "Проект называется «Север» и в нём 3 задачи."
+    },
+    {
+      "id": "restored",
+      "prompt": "Перечисли задачи, которые я назвал в начале, без добавления новых. Ответь кратко.",
+      "completion": {
+        "UsageIncomplete": false,
+        "ToolCalls": null,
+        "UsageKnown": true,
+        "Content": "1. Подключить Ollama.\n2. Проверить ответы.\n3. Сохранить историю.",
+        "Model": "batiai/gemma4-12b:iq3",
+        "FinishReason": "stop",
+        "PromptTokens": 269,
+        "CachedInputTokens": 219,
+        "CompletionTokens": 25,
+        "TotalTokens": 294,
+        "Duration": 300242000
+      },
+      "visible": "1. Подключить Ollama.\n2. Проверить ответы.\n3. Сохранить историю."
+    }
+  ],
+  "running_models": {
+    "models": [
+      {
+        "name": "batiai/gemma4-12b:iq3",
+        "model": "batiai/gemma4-12b:iq3",
+        "size": 6030926807,
+        "digest": "46c3e602a4541e775750cd4fa90cef5055cb1e220620ad4e3c335ffb4571e80a",
+        "details": {
+          "parent_model": "",
+          "format": "gguf",
+          "family": "gemma4",
+          "families": [
+            "gemma4"
+          ],
+          "parameter_size": "11.9B",
+          "quantization_level": "unknown"
+        },
+        "expires_at": "2026-10-10T15:51:46.1939877+03:00",
+        "size_vram": 6030926807,
+        "context_length": 131072
+      }
+    ]
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "models": [
+    {
+      "name": "qwen3.5:4b-rag-opt-q8",
+      "context_length": 8192
+    },
+    {
+      "name": "nomic-embed-text:latest",
+      "context_length": 2048
+    },
+    {
+      "name": "qwen3.5:4b-rag",
+      "context_length": 16384
+    }
+  ]
+}

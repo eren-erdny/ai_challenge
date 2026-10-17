@@ -1,0 +1,37 @@
+{
+  "answers_sha256": "87b0d33e384c2c8fe1fee1c0a4973471cb13fcf6ba64bf88e07bcbf6806eba0f",
+  "turns": 4,
+  "local_generation_calls": 3,
+  "cloud_calls": 0,
+  "supported_claims": 2,
+  "claims": 2,
+  "input_tokens": 9443,
+  "output_tokens": 568,
+  "manual_review": "Baseline Q03 rejected for inaccurate quote. Q8 Q03: Sugar, Xylitol and Stevia directly supported by the exact grammar rule. Q8 Q07: MUST NOT cache 431 directly supported by its sentence. Q09: correct local unknown, zero generation calls.",
+  "rows": [
+    {
+      "variant": "before",
+      "id": "Q03",
+      "calls": 1,
+      "status": "rejected"
+    },
+    {
+      "variant": "q8",
+      "id": "Q03",
+      "calls": 1,
+      "status": "answered"
+    },
+    {
+      "variant": "q8",
+      "id": "Q07",
+      "calls": 1,
+      "status": "answered"
+    },
+    {
+      "variant": "q8",
+      "id": "Q09",
+      "calls": 0,
+      "status": "unknown"
+    }
+  ]
+}

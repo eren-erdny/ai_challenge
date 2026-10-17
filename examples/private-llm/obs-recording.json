@@ -1,0 +1,19 @@
+{
+  "silent": true,
+  "reviewed_seconds": [
+    16,
+    40,
+    51
+  ],
+  "real_TUI": true,
+  "video": "C:/Users/erdni/Videos/ai_challenge_hw30.mp4",
+  "fps": 60,
+  "cloud_calls": 0,
+  "audio_restored": true,
+  "scripted_input": true,
+  "resolution": "2560x1440",
+  "real_VPS_API": true,
+  "scene_restored": true,
+  "full_decode_exit_code": 0,
+  "duration_seconds": 56.47
+}

@@ -1,0 +1,458 @@
+{
+  "answers_sha256": "e8c08dc7ac859e7e192fc2dd207c820ed0585264a3d22baed477e2c25c2cb9fd",
+  "method": "Manual review of every accepted claim with its own quotes; exact provenance checked separately. Fully supported requires the requested answer plus all claims supported. Concision is measured separately by claim/output-token count.",
+  "rows": [
+    {
+      "run": 1,
+      "id": "Q01",
+      "status": "answered",
+      "core_expected_met": true,
+      "expected_met": true,
+      "claims": [
+        {
+          "text": "The WHEN method is used to indicate when sufficient milk has been introduced into the coffee.",
+          "quote_ids": [
+            "q1"
+          ],
+          "supported": true,
+          "reason": "Manually checked: the attached quote directly supports this claim, including modality and conditions."
+        },
+        {
+          "text": "When coffee is poured and milk is offered, the holder of the recipient of milk must say \"when\" at the time when sufficient milk has been introduced.",
+          "quote_ids": [
+            "q2"
+          ],
+          "supported": true,
+          "reason": "Manually checked: the attached quote directly supports this claim, including modality and conditions."
+        },
+        {
+          "text": "For this purpose, the WHEN method has been added to HTCPCP.",
+          "quote_ids": [
+            "q3"
+          ],
+          "supported": true,
+          "reason": "Manually checked: the attached quote directly supports this claim, including modality and conditions."
+        },
+        {
+          "text": "Enough? Say WHEN.",
+          "quote_ids": [
+            "q4"
+          ],
+          "supported": true,
+          "reason": "Manually checked: the attached quote directly supports this claim, including modality and conditions."
+        }
+      ],
+      "note": "The main requested fact is present; every claim was reviewed against its own referenced quotes."
+    },
+    {
+      "run": 1,
+      "id": "Q02",
+      "status": "answered",
+      "core_expected_met": true,
+      "expected_met": true,
+      "claims": [
+        {
+          "text": "The Content-Type header of a POST or BREW request sent to a TEA-capable pot MUST be \"message/teapot\" if tea is to be requested.",
+          "quote_ids": [
+            "q1"
+          ],
+          "supported": true,
+          "reason": "Manually checked: the attached quote directly supports this claim, including modality and conditions."
+        },
+        {
+          "text": "A BREW request with a Content-Type header field of \"message/teapot\" to a TEA-capable pot will result in an Alternates header being sent with the response, and a pot will not be brewed.",
+          "quote_ids": [
+            "q2"
+          ],
+          "supported": true,
+          "reason": "Manually checked: the attached quote directly supports this claim, including modality and conditions."
+        },
+        {
+          "text": "A TEA-capable pot that receives a BREW message of content type \"message/teapot\" MUST respond in accordance with the URI requested.",
+          "quote_ids": [
+            "q3"
+          ],
+          "supported": true,
+          "reason": "Manually checked: the attached quote directly supports this claim, including modality and conditions."
+        },
+        {
+          "text": "TEA-capable clients MUST check the contents of the Alternates header returned by a BREW request, and provide a specific URI for subsequent requests of the \"message/teapot\" type.",
+          "quote_ids": [
+            "q4"
+          ],
+          "supported": true,
+          "reason": "Manually checked: the attached quote directly supports this claim, including modality and conditions."
+        },
+        {
+          "text": "If a BREW command with an entity body containing \"stop\" is received before the recommended strength is achieved, the pot MUST abort brewing and serve the resultant beverage at lesser strength.",
+          "quote_ids": [
+            "q5"
+          ],
+          "supported": true,
+          "reason": "Manually checked: the attached quote directly supports this claim, including modality and conditions."
+        }
+      ],
+      "note": "The main requested fact is present; every claim was reviewed against its own referenced quotes."
+    },
+    {
+      "run": 1,
+      "id": "Q03",
+      "status": "rejected",
+      "core_expected_met": false,
+      "expected_met": false,
+      "claims": [],
+      "note": "quote is not an exact meaningful excerpt of its chunk\u001b[m"
+    },
+    {
+      "run": 1,
+      "id": "Q04",
+      "status": "rejected",
+      "core_expected_met": false,
+      "expected_met": false,
+      "claims": [],
+      "note": "invalid RAG response schema\u001b[m"
+    },
+    {
+      "run": 1,
+      "id": "Q05",
+      "status": "rejected",
+      "core_expected_met": false,
+      "expected_met": false,
+      "claims": [],
+      "note": "quote is not an exact meaningful excerpt of its chunk\u001b[m"
+    },
+    {
+      "run": 1,
+      "id": "Q06",
+      "status": "rejected",
+      "core_expected_met": false,
+      "expected_met": false,
+      "claims": [],
+      "note": "claim has unknown or duplicate quote reference\u001b[m"
+    },
+    {
+      "run": 1,
+      "id": "Q07",
+      "status": "answered",
+      "core_expected_met": true,
+      "expected_met": true,
+      "claims": [
+        {
+          "text": "Responses with the 431 status code MUST NOT be stored by a cache.",
+          "quote_ids": [
+            "q1"
+          ],
+          "supported": true,
+          "reason": "Manually checked: the attached quote directly supports this claim, including modality and conditions."
+        },
+        {
+          "text": "The request MAY be resubmitted after reducing the size of the request header fields.",
+          "quote_ids": [
+            "q2"
+          ],
+          "supported": true,
+          "reason": "Manually checked: the attached quote directly supports this claim, including modality and conditions."
+        },
+        {
+          "text": "It can be used both when the set of request header fields in total is too large, and when a single header field is at fault.",
+          "quote_ids": [
+            "q3"
+          ],
+          "supported": true,
+          "reason": "Manually checked: the attached quote directly supports this claim, including modality and conditions."
+        },
+        {
+          "text": "In the latter case, the response representation SHOULD specify which header field was too large.",
+          "quote_ids": [
+            "q4"
+          ],
+          "supported": true,
+          "reason": "Manually checked: the attached quote directly supports this claim, including modality and conditions."
+        }
+      ],
+      "note": "The main requested fact is present; every claim was reviewed against its own referenced quotes."
+    },
+    {
+      "run": 1,
+      "id": "Q08",
+      "status": "rejected",
+      "core_expected_met": false,
+      "expected_met": false,
+      "claims": [],
+      "note": "quote is not an exact meaningful excerpt of its chunk\u001b[m"
+    },
+    {
+      "run": 1,
+      "id": "Q09",
+      "status": "unknown",
+      "core_expected_met": true,
+      "expected_met": true,
+      "claims": [],
+      "note": "Correct abstention: no answer in the RFC corpus; Q09 has zero model calls, Q10 has topic-related but insufficient evidence."
+    },
+    {
+      "run": 1,
+      "id": "Q10",
+      "status": "unknown",
+      "core_expected_met": true,
+      "expected_met": true,
+      "claims": [],
+      "note": "Correct abstention: no answer in the RFC corpus; Q09 has zero model calls, Q10 has topic-related but insufficient evidence."
+    },
+    {
+      "run": 2,
+      "id": "Q01",
+      "status": "answered",
+      "core_expected_met": true,
+      "expected_met": true,
+      "claims": [
+        {
+          "text": "The WHEN method is used to indicate when sufficient milk has been introduced into the coffee.",
+          "quote_ids": [
+            "q1"
+          ],
+          "supported": true,
+          "reason": "Manually checked: the attached quote directly supports this claim, including modality and conditions."
+        },
+        {
+          "text": "When coffee is poured and milk is offered, the holder of the recipient of milk must say \"when\" at the time when sufficient milk has been introduced.",
+          "quote_ids": [
+            "q2"
+          ],
+          "supported": true,
+          "reason": "Manually checked: the attached quote directly supports this claim, including modality and conditions."
+        },
+        {
+          "text": "For this purpose, the WHEN method has been added to HTCPCP.",
+          "quote_ids": [
+            "q3"
+          ],
+          "supported": true,
+          "reason": "Manually checked: the attached quote directly supports this claim, including modality and conditions."
+        },
+        {
+          "text": "Enough? Say WHEN.",
+          "quote_ids": [
+            "q4"
+          ],
+          "supported": true,
+          "reason": "Manually checked: the attached quote directly supports this claim, including modality and conditions."
+        }
+      ],
+      "note": "The main requested fact is present; every claim was reviewed against its own referenced quotes."
+    },
+    {
+      "run": 2,
+      "id": "Q02",
+      "status": "answered",
+      "core_expected_met": true,
+      "expected_met": true,
+      "claims": [
+        {
+          "text": "The Content-Type header of a POST or BREW request sent to a TEA-capable pot MUST be \"message/teapot\" if tea is to be requested.",
+          "quote_ids": [
+            "q1"
+          ],
+          "supported": true,
+          "reason": "Manually checked: the attached quote directly supports this claim, including modality and conditions."
+        },
+        {
+          "text": "A BREW request with a Content-Type header field of \"message/teapot\" to a TEA-capable pot will result in an Alternates header being sent with the response, and a pot will not be brewed.",
+          "quote_ids": [
+            "q2"
+          ],
+          "supported": true,
+          "reason": "Manually checked: the attached quote directly supports this claim, including modality and conditions."
+        },
+        {
+          "text": "A TEA-capable pot that receives a BREW message of content type \"message/teapot\" MUST respond in accordance with the URI requested.",
+          "quote_ids": [
+            "q3"
+          ],
+          "supported": true,
+          "reason": "Manually checked: the attached quote directly supports this claim, including modality and conditions."
+        },
+        {
+          "text": "TEA-capable clients MUST check the contents of the Alternates header returned by a BREW request, and provide a specific URI for subsequent requests of the \"message/teapot\" type.",
+          "quote_ids": [
+            "q4"
+          ],
+          "supported": true,
+          "reason": "Manually checked: the attached quote directly supports this claim, including modality and conditions."
+        },
+        {
+          "text": "If a BREW command with an entity body containing \"stop\" is received before the recommended strength is achieved, the pot MUST abort brewing and serve the resultant beverage at lesser strength.",
+          "quote_ids": [
+            "q5"
+          ],
+          "supported": true,
+          "reason": "Manually checked: the attached quote directly supports this claim, including modality and conditions."
+        }
+      ],
+      "note": "The main requested fact is present; every claim was reviewed against its own referenced quotes."
+    },
+    {
+      "run": 2,
+      "id": "Q03",
+      "status": "rejected",
+      "core_expected_met": false,
+      "expected_met": false,
+      "claims": [],
+      "note": "quote is not an exact meaningful excerpt of its chunk\u001b[m"
+    },
+    {
+      "run": 2,
+      "id": "Q04",
+      "status": "rejected",
+      "core_expected_met": false,
+      "expected_met": false,
+      "claims": [],
+      "note": "invalid RAG response schema\u001b[m"
+    },
+    {
+      "run": 2,
+      "id": "Q05",
+      "status": "answered",
+      "core_expected_met": true,
+      "expected_met": true,
+      "claims": [
+        {
+          "text": "The 428 Precondition Required status code indicates that the origin server requires the request to be conditional to avoid the 'lost update' problem.",
+          "quote_ids": [
+            "q1"
+          ],
+          "supported": true,
+          "reason": "Manually checked: the attached quote directly supports this claim, including modality and conditions."
+        },
+        {
+          "text": "Responses with the 428 status code MUST NOT be stored by a cache.",
+          "quote_ids": [
+            "q2"
+          ],
+          "supported": true,
+          "reason": "Manually checked: the attached quote directly supports this claim, including modality and conditions."
+        },
+        {
+          "text": "The 428 status code is optional; clients cannot rely upon its use to prevent 'lost update' conflicts.",
+          "quote_ids": [
+            "q3"
+          ],
+          "supported": true,
+          "reason": "Manually checked: the attached quote directly supports this claim, including modality and conditions."
+        },
+        {
+          "text": "Clients can try using 'If-Match' to resubmit the request successfully when encountering a 428 response.",
+          "quote_ids": [
+            "q4"
+          ],
+          "supported": true,
+          "reason": "Manually checked: the attached quote directly supports this claim, including modality and conditions."
+        }
+      ],
+      "note": "The main requested fact is present; every claim was reviewed against its own referenced quotes."
+    },
+    {
+      "run": 2,
+      "id": "Q06",
+      "status": "answered",
+      "core_expected_met": true,
+      "expected_met": false,
+      "claims": [
+        {
+          "text": "HTTP 429 responses MAY include a Retry-After header indicating how long to wait before making a new request.",
+          "quote_ids": [
+            "q1"
+          ],
+          "supported": true,
+          "reason": "Manually checked: the attached quote directly supports this claim, including modality and conditions."
+        },
+        {
+          "text": "The response representations SHOULD include details explaining the condition, and MAY include a Retry-After header indicating how long to wait before making a new request.",
+          "quote_ids": [
+            "q2"
+          ],
+          "supported": false,
+          "reason": "The attached HTTP example does not prove SHOULD/MAY modality."
+        },
+        {
+          "text": "For example: HTTP/1.1 429 Too Many Requests ... Retry-After: 3600",
+          "quote_ids": [
+            "q3"
+          ],
+          "supported": false,
+          "reason": "The rate-limiting definition does not contain the claimed Retry-After example."
+        }
+      ],
+      "note": "The main requested fact is present; every claim was reviewed against its own referenced quotes."
+    },
+    {
+      "run": 2,
+      "id": "Q07",
+      "status": "answered",
+      "core_expected_met": true,
+      "expected_met": true,
+      "claims": [
+        {
+          "text": "Responses with the 431 status code MUST NOT be stored by a cache.",
+          "quote_ids": [
+            "q1"
+          ],
+          "supported": true,
+          "reason": "Manually checked: the attached quote directly supports this claim, including modality and conditions."
+        },
+        {
+          "text": "The request MAY be resubmitted after reducing the size of the request header fields.",
+          "quote_ids": [
+            "q2"
+          ],
+          "supported": true,
+          "reason": "Manually checked: the attached quote directly supports this claim, including modality and conditions."
+        },
+        {
+          "text": "It can be used both when the set of request header fields in total is too large, and when a single header field is at fault.",
+          "quote_ids": [
+            "q3"
+          ],
+          "supported": true,
+          "reason": "Manually checked: the attached quote directly supports this claim, including modality and conditions."
+        },
+        {
+          "text": "In the latter case, the response representation SHOULD specify which header field was too large.",
+          "quote_ids": [
+            "q4"
+          ],
+          "supported": true,
+          "reason": "Manually checked: the attached quote directly supports this claim, including modality and conditions."
+        }
+      ],
+      "note": "The main requested fact is present; every claim was reviewed against its own referenced quotes."
+    },
+    {
+      "run": 2,
+      "id": "Q08",
+      "status": "rejected",
+      "core_expected_met": false,
+      "expected_met": false,
+      "claims": [],
+      "note": "quote is not an exact meaningful excerpt of its chunk\u001b[m"
+    },
+    {
+      "run": 2,
+      "id": "Q09",
+      "status": "unknown",
+      "core_expected_met": true,
+      "expected_met": true,
+      "claims": [],
+      "note": "Correct abstention: no answer in the RFC corpus; Q09 has zero model calls, Q10 has topic-related but insufficient evidence."
+    },
+    {
+      "run": 2,
+      "id": "Q10",
+      "status": "unknown",
+      "core_expected_met": true,
+      "expected_met": true,
+      "claims": [],
+      "note": "Correct abstention: no answer in the RFC corpus; Q09 has zero model calls, Q10 has topic-related but insufficient evidence."
+    }
+  ]
+}

@@ -1,0 +1,11 @@
+{
+  "answers_sha256": "4bcea538ebd770f569dd3596ecc88dd4227527c23e24909c627d8246368372d1",
+  "successful_answers": 3,
+  "context_followup_correct": true,
+  "history_restored_messages": 4,
+  "persisted_messages": 6,
+  "restored_followup_correct": true,
+  "cloud_generation_calls": 0,
+  "prompt_tokens": 555,
+  "completion_tokens": 176
+}

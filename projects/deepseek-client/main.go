@@ -167,7 +167,7 @@ var completionHTTPClient = &http.Client{Timeout: 30 * time.Second}
 
 func askDeepSeek(ctx context.Context, token string, prompt string, settings requestSettings) (completionResult, error) {
 	client := llm.New(completionHTTPClient, map[string]string{"": token})
-	return client.Complete(ctx, agent.Target{Model: settings.Model, BaseURL: settings.BaseURL, SendThinkingDisabled: settings.SendThinkingDisabled}, prompt, settings)
+	return client.Complete(ctx, agent.Target{Model: settings.Model, BaseURL: settings.BaseURL, ReasoningEffort: settings.ReasoningEffort, SendThinkingDisabled: settings.SendThinkingDisabled}, prompt, settings)
 }
 
 func modelsURL(baseURL string) string {

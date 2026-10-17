@@ -1,0 +1,12 @@
+{
+  "answers_sha256": "37a381e77a4f0caa966955d6923e80dc7fee3fc909de35f02a0740493a5fbb88",
+  "successful_answers": 3,
+  "simple_correct": true,
+  "math_correct": true,
+  "code_passed": 12,
+  "gpu_residency": "full",
+  "runtime_context": 131072,
+  "prompt_tokens": 196,
+  "completion_tokens": 252,
+  "cloud_generation_calls": 0
+}

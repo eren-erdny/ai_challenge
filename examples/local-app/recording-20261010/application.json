@@ -1,0 +1,6 @@
+{
+  "cloud_generation_calls": 0,
+  "final_history_messages": 6,
+  "history_restored_messages": 4,
+  "production_entrypoint": "ordinary client with ollama_local profile"
+}

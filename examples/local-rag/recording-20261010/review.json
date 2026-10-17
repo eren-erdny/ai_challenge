@@ -1,0 +1,11 @@
+{
+  "answers_sha256": "8eb6a9ec0b972e7e7e6e7bf7717d3e874dd4e10254706c99948b5ba849be086e",
+  "turns": 3,
+  "calls": 2,
+  "cloud_generation_calls": 0,
+  "input_tokens": 4261,
+  "output_tokens": 1411,
+  "claims": 8,
+  "semantic_review": "Every recorded WHEN and 428 claim manually checked against its attached quote: directly supported. If-Match is presented as an example suggestion. Unknown correctly uses empty retrieval and zero model calls.",
+  "result": "PASS"
+}

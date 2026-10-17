@@ -26,12 +26,14 @@ const (
 
 // Target identifies a provider connection. Credentials belong to the injected client.
 type Target struct {
+	RAGTemplate          string
 	ContextWindow        int
 	MaxOutputTokens      int
 	Profile              string
 	BaseURL              string
 	Model                string
 	SendThinkingDisabled bool
+	ReasoningEffort      string
 }
 
 type Settings struct {
@@ -41,6 +43,7 @@ type Settings struct {
 	Model                string
 	BaseURL              string
 	SendThinkingDisabled bool
+	ReasoningEffort      string
 	Temperature          float64
 	Strategy             Strategy
 	Control              *Control

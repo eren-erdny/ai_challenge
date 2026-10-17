@@ -26,7 +26,7 @@ func refreshKnowledgeLabel(state *sessionState) {
 	}
 }
 func knowledgeMenu(state sessionState) string {
-	return fmt.Sprintf("Базы знаний · этот чат: %s\n1 — Создать базу\n2 — Выбрать базу для чата\n3 — Добавить файл или папку\n4 — Обновить индекс\n5 — Убрать источник из базы\n6 — Отключить базу в этом чате\n0 — Закрыть меню\nПри первом создании загрузятся локальные модели. Фрагменты для ответа отправляются выбранному LLM-провайдеру.", state.KnowledgeLabel)
+	return fmt.Sprintf("Базы знаний · этот чат: %s\n1 — Создать базу\n2 — Выбрать базу для чата\n3 — Добавить файл или папку\n4 — Обновить индекс\n5 — Убрать источник из базы\n6 — Отключить базу в этом чате\n7 — Подключить готовый локальный индекс\n0 — Закрыть меню\nПри первом создании загрузятся локальные модели. Фрагменты для ответа отправляются выбранному LLM-провайдеру.", state.KnowledgeLabel)
 }
 func knowledgeChoices(state sessionState) (string, error) {
 	bases, err := state.Knowledge.List()
@@ -60,7 +60,9 @@ func chooseKnowledge(state *sessionState, number string) error {
 func knowledgeJob(ctx context.Context, state sessionState, action, name, path string) string {
 	var log strings.Builder
 	var err error
-	if action == "create" {
+	if action == "attach" {
+		_, err = state.Knowledge.AttachIndex("Готовый локальный индекс", path, conversationID(state.ConversationID))
+	} else if action == "create" {
 		_, err = state.Knowledge.Create(ctx, name, path, conversationID(state.ConversationID), &log)
 	} else {
 		base, selectedErr := state.Knowledge.Selected(conversationID(state.ConversationID))
@@ -141,6 +143,10 @@ func (model tuiModel) submitKnowledge(text string) (tea.Model, tea.Cmd) {
 				}
 				message = out.String() + "Введите номер источника для удаления из индекса. Исходные файлы останутся. /cancel — отмена."
 			}
+		case "7":
+			model.knowledgeStage = "path"
+			model.knowledgeAction = "attach"
+			message = "Путь к существующему index.json. Индекс не перестраивается; закройте другие процессы, использующие его. /cancel — отмена."
 		case "6":
 			if err := model.state.Knowledge.Select(conversationID(model.state.ConversationID), ""); err != nil {
 				message = err.Error()
@@ -150,7 +156,7 @@ func (model tuiModel) submitKnowledge(text string) (tea.Model, tea.Cmd) {
 				message = "Поиск по базе в этом чате отключён."
 			}
 		default:
-			message = "Введите номер действия от 0 до 6."
+			message = "Введите номер действия от 0 до 7."
 		}
 	case "name":
 		if text == "" {
@@ -182,7 +188,11 @@ func (model tuiModel) startKnowledgeJob(action, path string) (tea.Model, tea.Cmd
 	model.busy = true
 	model.knowledgeBusy = true
 	model.activityGen++
-	model.history = append(model.history, "Подготавливаю базу знаний… Первый запуск скачивает зависимости и модели и может занять несколько минут. Ctrl+C — выйти и отменить.")
+	message := "Подготавливаю базу знаний… Первый запуск скачивает зависимости и модели и может занять несколько минут. Ctrl+C — выйти и отменить."
+	if action == "attach" {
+		message = "Подключаю готовый локальный индекс без перестройки…"
+	}
+	model.history = append(model.history, message)
 	model.refreshHistory()
 	state, name, ctx := model.state, model.knowledgeName, model.ctx
 	return model, tea.Batch(func() tea.Msg { return knowledgeMessage{text: knowledgeJob(ctx, state, action, name, path)} }, activityTickCommand(model.activityGen))
@@ -238,6 +248,10 @@ func runKnowledgeMenu(input *bufio.Reader, state *sessionState, out io.Writer) {
 			return
 		}
 		fmt.Fprint(out, "Путь к файлу или папке: ")
+		path, err = read()
+	case "7":
+		operation = "attach"
+		fmt.Fprint(out, "Путь к готовому index.json: ")
 		path, err = read()
 	case "3":
 		operation = "add"

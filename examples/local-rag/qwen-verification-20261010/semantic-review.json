@@ -1,0 +1,127 @@
+{
+  "answers_sha256": "e1b703bb34f46505c9bd10048179cab73ad0bcced9d060c8d0f5e9a0ddf30987",
+  "method": "Manual semantic inspection of every claim and its own attached quotes; no judge API.",
+  "fully_supported_answers": 12,
+  "rows": [
+    {
+      "run": 1,
+      "id": "Q01",
+      "expected_met": true,
+      "reason": "WHEN directly supported; redundant but supported claims."
+    },
+    {
+      "run": 1,
+      "id": "Q02",
+      "expected_met": true,
+      "reason": "message/teapot requirement and extra protocol statements supported by their attached quotations."
+    },
+    {
+      "run": 1,
+      "id": "Q03",
+      "expected_met": false,
+      "reason": "Application rejected altered quotation; no usable answer."
+    },
+    {
+      "run": 1,
+      "id": "Q04",
+      "expected_met": false,
+      "reason": "NTP core correct; additional HTTP basis and dynamic-image assertions not fully supported by attached quotes."
+    },
+    {
+      "run": 1,
+      "id": "Q05",
+      "expected_met": true,
+      "reason": "428 conditional request/lost-update scope and other normative statements supported."
+    },
+    {
+      "run": 1,
+      "id": "Q06",
+      "expected_met": false,
+      "reason": "MAY/Retry-After core correct; later claims point to wrong quotes (example vs normative sentence; rate-limit definition vs Retry-After example)."
+    },
+    {
+      "run": 1,
+      "id": "Q07",
+      "expected_met": false,
+      "reason": "Core MUST NOT correct; run 1 last normative SHOULD claim points only to example, run 2 both claims directly supported."
+    },
+    {
+      "run": 1,
+      "id": "Q08",
+      "expected_met": true,
+      "reason": "Run 1 supports 503/418 conditions and additional 406 facts; run 2 rejected altered quotation."
+    },
+    {
+      "run": 1,
+      "id": "Q09",
+      "expected_met": true,
+      "reason": "Empty retrieval, local unknown, zero model calls."
+    },
+    {
+      "run": 1,
+      "id": "Q10",
+      "expected_met": true,
+      "reason": "Near-topic context does not specify AES length; model correctly abstains."
+    },
+    {
+      "run": 2,
+      "id": "Q01",
+      "expected_met": true,
+      "reason": "WHEN directly supported; redundant but supported claims."
+    },
+    {
+      "run": 2,
+      "id": "Q02",
+      "expected_met": true,
+      "reason": "message/teapot requirement and extra protocol statements supported by their attached quotations."
+    },
+    {
+      "run": 2,
+      "id": "Q03",
+      "expected_met": false,
+      "reason": "Application rejected altered quotation; no usable answer."
+    },
+    {
+      "run": 2,
+      "id": "Q04",
+      "expected_met": false,
+      "reason": "NTP core correct; additional HTTP basis and dynamic-image assertions not fully supported by attached quotes."
+    },
+    {
+      "run": 2,
+      "id": "Q05",
+      "expected_met": true,
+      "reason": "428 conditional request/lost-update scope and other normative statements supported."
+    },
+    {
+      "run": 2,
+      "id": "Q06",
+      "expected_met": false,
+      "reason": "MAY/Retry-After core correct; later claims point to wrong quotes (example vs normative sentence; rate-limit definition vs Retry-After example)."
+    },
+    {
+      "run": 2,
+      "id": "Q07",
+      "expected_met": true,
+      "reason": "Core MUST NOT correct; run 1 last normative SHOULD claim points only to example, run 2 both claims directly supported."
+    },
+    {
+      "run": 2,
+      "id": "Q08",
+      "expected_met": false,
+      "reason": "Run 1 supports 503/418 conditions and additional 406 facts; run 2 rejected altered quotation."
+    },
+    {
+      "run": 2,
+      "id": "Q09",
+      "expected_met": true,
+      "reason": "Empty retrieval, local unknown, zero model calls."
+    },
+    {
+      "run": 2,
+      "id": "Q10",
+      "expected_met": true,
+      "reason": "Near-topic context does not specify AES length; model correctly abstains."
+    }
+  ]
+}

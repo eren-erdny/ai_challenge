@@ -1,0 +1,20 @@
+[Unit]
+Description=Private local LLM API with enforced limits
+After=network.target ollama.service
+Requires=ollama.service
+
+[Service]
+ExecStart=/opt/hw30/private-llm
+DynamicUser=yes
+Restart=on-failure
+RestartSec=3
+NoNewPrivileges=yes
+PrivateTmp=yes
+ProtectSystem=strict
+ProtectHome=yes
+RestrictAddressFamilies=AF_INET AF_INET6 AF_UNIX
+MemoryMax=128M
+TasksMax=64
+
+[Install]
+WantedBy=multi-user.target
