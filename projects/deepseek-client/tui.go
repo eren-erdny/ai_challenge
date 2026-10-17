@@ -139,6 +139,7 @@ func newTUIModel(config appConfig, ask askFunction) tuiModel {
 	}
 	profile, _ := config.activeAPIProfile()
 	state := sessionState{
+		ProjectRoot:  config.ProjectRoot,
 		Knowledge:    config.Knowledge,
 		Compression:  config.HistoryPolicy.CompressionConfig,
 		Memory:       config.Memory,
@@ -422,7 +423,7 @@ func (model tuiModel) submit() (tea.Model, tea.Cmd) {
 		model.refreshHistory()
 		return model, tea.Batch(fetchModelsCommand(model.ctx, model.state.APIToken, model.state.API), activityTickCommand(model.activityGen))
 	}
-	if strings.HasPrefix(text, "/") && text != "/compress" {
+	if strings.HasPrefix(text, "/") && text != "/compress" && !isProjectHelp(text) {
 		var output strings.Builder
 		previousProfile := model.state.ActiveProfile
 		handleSessionCommand(text, &model.state, &output)

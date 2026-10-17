@@ -1,0 +1,640 @@
+{
+  "kind": "Real DeepSeek + real RAG + subprocess MCP + scripted TUI; no recording",
+  "pricing": "https://api-docs.deepseek.com/quick_start/pricing/?tab=case-studies checked 2026-10-16; Flash peak USD per 1M: input 0.30, cache 0.006, output 1.20",
+  "branch": "week-6",
+  "ledger": {
+    "budget_usd": 0.2,
+    "reserved_usd": 0.0291294,
+    "estimated_peak_usd": 0.004355448,
+    "calls": 5
+  },
+  "rows": [
+    {
+      "question": "Как устроен проект? За что отвечает пакет agent?",
+      "evidence": {
+        "candidate_count": 20,
+        "candidates": 20,
+        "context_results": [
+          {
+            "chunk_id": "runtime-git-status",
+            "section": "Current repository branch",
+            "source": "mcp://git/git_status",
+            "text": "Project directory: C:/Users/erdni/Documents/projects/hw1/projects/deepseek-client\nCurrent Git status: ## week-6...origin/week-6"
+          }
+        ],
+        "cosine_retained_count": 20,
+        "filtered_count": 17,
+        "min_rerank_score": -3,
+        "min_similarity": 0.49,
+        "no_evidence": false,
+        "query": "Как устроен проект? За что отвечает пакет agent?",
+        "rerank_score_type": "raw_logit",
+        "rerank_seconds": 0.30470079999940936,
+        "reranking": true,
+        "results": [
+          {
+            "chunk_id": "9631c9abc1174dcc9984f7902bdd8692ff9ab95ba7c7af822879fb83da9f011e",
+            "source": "002-docs/architecture.md",
+            "file": "002-docs/architecture.md",
+            "title": "Структура DeepSeek Client",
+            "section": "Структура DeepSeek Client / Основные части проекта",
+            "page": null,
+            "strategy": "structured",
+            "start_char": 197,
+            "end_char": 693,
+            "text": "## Основные части проекта\n\nПакет agent отвечает за подготовку запросов, цикл вызова инструментов, проверку ответов, инварианты и учёт токенов.\nФайл agent_adapter.go связывает интерфейс приложения с агентом и поиском по базе знаний.\nФайл tui.go реализует терминальный интерфейс. Файл session.go реализует текстовый сеанс и команды.\nПакет llm реализует HTTP-клиент для OpenAI-compatible chat completions.\nПакет knowledge управляет базами знаний, выбором базы для диалога и Python-процессом поиска.\n",
+            "tokens": 348,
+            "vector_score": 0.8080118386535871,
+            "rerank_score": 8.19414234161377
+          },
+          {
+            "chunk_id": "c7bb057d63cd1f7a4712357512a0e95f01ed00455b3b826939d9f368db8cd1c9",
+            "source": "001-README.md/README.md",
+            "file": "001-README.md/README.md",
+            "title": "DeepSeek Client",
+            "section": "DeepSeek Client / Сохранение диалога / Инварианты",
+            "page": null,
+            "strategy": "structured",
+            "start_char": 23719,
+            "end_char": 23987,
+            "text": "через `Agent.Run(ctx, request)` и возвращает ответы, проверки, метрики и итог\nсудьи. Пакет `llm` реализует HTTP-клиент; TUI и CLI отображают полученный результат.\nАрхитектура, пример подключения и подготовка к памяти описаны в\n[документации агента](agent/README.md).\n\n",
+            "tokens": 201,
+            "vector_score": 0.7424798319239547,
+            "rerank_score": -1.1934516429901123
+          },
+          {
+            "chunk_id": "f6c712608ac959261f983489c160e88d831db5b7db11cdc021673a48de71b4cb",
+            "source": "001-README.md/README.md",
+            "file": "001-README.md/README.md",
+            "title": "DeepSeek Client",
+            "section": "DeepSeek Client / Помощник по этому проекту",
+            "page": null,
+            "strategy": "structured",
+            "start_char": 19,
+            "end_char": 441,
+            "text": "## Помощник по этому проекту\n\nИз корня монорепозитория запустите [Start-Developer-Assistant.cmd](../../Start-Developer-Assistant.cmd).\nЛокальный RAG индексирует этот README и [актуальную docs](docs/architecture.md).\nGit MCP по stdio читает тот же монорепозиторий. В TUI задайте\n`/help Как устроен проект?` или `/help На какой ветке мы работаем?`.\n\n[Подготовка, обновление индекса и примеры](docs/developer-assistant.md).\n\n",
+            "tokens": 273,
+            "vector_score": 0.7102783636114584,
+            "rerank_score": -2.8157222270965576
+          }
+        ],
+        "retained_count": 3,
+        "retrieval_seconds": 1.118366500000775,
+        "rewrite": true,
+        "score_type": "cosine",
+        "search_query": "Как устроен проект? За что отвечает пакет agent?",
+        "strategy": "structured",
+        "top_k": 5
+      },
+      "raw_answers": [
+        {
+          "UsageIncomplete": false,
+          "ToolCalls": null,
+          "UsageKnown": true,
+          "Content": "{\"status\":\"answered\",\"claims\":[{\"text\":\"Пакет agent отвечает за подготовку запросов, цикл вызова инструментов, проверку ответов, инварианты и учёт токенов.\",\"quote_ids\":[\"q1\"]},{\"text\":\"Файл agent_adapter.go связывает интерфейс приложения с агентом и поиском по базе знаний.\",\"quote_ids\":[\"q2\"]},{\"text\":\"Пакет llm реализует HTTP-клиент для OpenAI-compatible chat completions.\",\"quote_ids\":[\"q3\"]},{\"text\":\"Пакет knowledge управляет базами знаний, выбором базы для диалога и Python-процессом поиска.\",\"quote_ids\":[\"q4\"]}],\"quotes\":[{\"id\":\"q1\",\"chunk_id\":\"9631c9abc1174dcc9984f7902bdd8692ff9ab95ba7c7af822879fb83da9f011e\",\"text\":\"Пакет agent отвечает за подготовку запросов, цикл вызова инструментов, проверку ответов, инварианты и учёт токенов.\"},{\"id\":\"q2\",\"chunk_id\":\"9631c9abc1174dcc9984f7902bdd8692ff9ab95ba7c7af822879fb83da9f011e\",\"text\":\"Файл agent_adapter.go связывает интерфейс приложения с агентом и поиском по базе знаний.\"},{\"id\":\"q3\",\"chunk_id\":\"9631c9abc1174dcc9984f7902bdd8692ff9ab95ba7c7af822879fb83da9f011e\",\"text\":\"Пакет llm реализует HTTP-клиент для OpenAI-compatible chat completions.\"},{\"id\":\"q4\",\"chunk_id\":\"9631c9abc1174dcc9984f7902bdd8692ff9ab95ba7c7af822879fb83da9f011e\",\"text\":\"Пакет knowledge управляет базами знаний, выбором базы для диалога и Python-процессом поиска.\"}],\"clarification\":\"\"}",
+          "Model": "deepseek-flash",
+          "FinishReason": "stop",
+          "PromptTokens": 2731,
+          "CachedInputTokens": 0,
+          "CompletionTokens": 483,
+          "TotalTokens": 3214,
+          "Duration": 2871946700
+        }
+      ],
+      "grounding": {
+        "status": "answered",
+        "answer": "Пакет agent отвечает за подготовку запросов, цикл вызова инструментов, проверку ответов, инварианты и учёт токенов. [q1]\nФайл agent_adapter.go связывает интерфейс приложения с агентом и поиском по базе знаний. [q2]\nПакет llm реализует HTTP-клиент для OpenAI-compatible chat completions. [q3]\nПакет knowledge управляет базами знаний, выбором базы для диалога и Python-процессом поиска. [q4]",
+        "claims": [
+          {
+            "text": "Пакет agent отвечает за подготовку запросов, цикл вызова инструментов, проверку ответов, инварианты и учёт токенов.",
+            "quote_ids": [
+              "q1"
+            ]
+          },
+          {
+            "text": "Файл agent_adapter.go связывает интерфейс приложения с агентом и поиском по базе знаний.",
+            "quote_ids": [
+              "q2"
+            ]
+          },
+          {
+            "text": "Пакет llm реализует HTTP-клиент для OpenAI-compatible chat completions.",
+            "quote_ids": [
+              "q3"
+            ]
+          },
+          {
+            "text": "Пакет knowledge управляет базами знаний, выбором базы для диалога и Python-процессом поиска.",
+            "quote_ids": [
+              "q4"
+            ]
+          }
+        ],
+        "quotes": [
+          {
+            "id": "q1",
+            "chunk_id": "9631c9abc1174dcc9984f7902bdd8692ff9ab95ba7c7af822879fb83da9f011e",
+            "text": "Пакет agent отвечает за подготовку запросов, цикл вызова инструментов, проверку ответов, инварианты и учёт токенов."
+          },
+          {
+            "id": "q2",
+            "chunk_id": "9631c9abc1174dcc9984f7902bdd8692ff9ab95ba7c7af822879fb83da9f011e",
+            "text": "Файл agent_adapter.go связывает интерфейс приложения с агентом и поиском по базе знаний."
+          },
+          {
+            "id": "q3",
+            "chunk_id": "9631c9abc1174dcc9984f7902bdd8692ff9ab95ba7c7af822879fb83da9f011e",
+            "text": "Пакет llm реализует HTTP-клиент для OpenAI-compatible chat completions."
+          },
+          {
+            "id": "q4",
+            "chunk_id": "9631c9abc1174dcc9984f7902bdd8692ff9ab95ba7c7af822879fb83da9f011e",
+            "text": "Пакет knowledge управляет базами знаний, выбором базы для диалога и Python-процессом поиска."
+          }
+        ],
+        "sources": [
+          {
+            "source": "002-docs/architecture.md",
+            "section": "Структура DeepSeek Client / Основные части проекта",
+            "chunk_id": "9631c9abc1174dcc9984f7902bdd8692ff9ab95ba7c7af822879fb83da9f011e"
+          }
+        ],
+        "clarification": "",
+        "local": false
+      },
+      "visible": "[tool] git__git_status\nArguments: {}\nResult: {\"text\":\"## week-6...origin/week-6\\n M .gitignore\\n M projects/deepseek-client/README.md\\n M projects/deepseek-client/agent/agent.go\\n M projects/deepseek-client/agent/grounding.go\\n M projects/deepseek-client/agent/tools.go\\n M projects/deepseek-client/agent/types.go\\n M projects/deepseek-client/agent_adapter.go\\n M projects/deepseek-client/config.go\\n M projects/deepseek-client/go.mod\\n M projects/deepseek-client/main.go\\n M projects/deepseek-client/mcp_commands.go\\n M projects/deepseek-client/mcp_registry.go\\n M projects/deepseek-client/session.go\\n M projects/deepseek-client/tui.go\\n?? Start-Developer-Assistant.cmd\\n?? Start-Developer-Assistant.ps1\\n?? projects/deepseek-client/TOOL_GUARD.md\\n?? projects/deepseek-client/agent/tool_guard.go\\n?? projects/deepseek-client/agent/tool_guard_test.go\\n?? projects/deepseek-client/docs/\\n?? projects/deepseek-client/project_assistant_integration_test.go\\n?? projects/deepseek-client/project_context_test.go\\n?? projects/deepseek-client/project_help.go\\n?? projects/deepseek-client/project_help_test.go\\n\",\"truncated\":false}\n\n[База знаний: DeepSeek project documentation · найдено фрагментов: 3]\n[Поиск: 20 кандидатов → 3 после фильтра → 3 в контекст; отсечено 17]\n[002-docs/architecture.md#9631c9abc1174dcc9984f7902bdd8692ff9ab95ba7c7af822879fb83da9f011e]\n[001-README.md/README.md#c7bb057d63cd1f7a4712357512a0e95f01ed00455b3b826939d9f368db8cd1c9]\n[001-README.md/README.md#f6c712608ac959261f983489c160e88d831db5b7db11cdc021673a48de71b4cb]\n[MCP git__git_status: ## week-6...origin/week-6]\nПакет agent отвечает за подготовку запросов, цикл вызова инструментов, проверку ответов, инварианты и учёт токенов. [q1]\nФайл agent_adapter.go связывает интерфейс приложения с агентом и поиском по базе знаний. [q2]\nПакет llm реализует HTTP-клиент для OpenAI-compatible chat completions. [q3]\nПакет knowledge управляет базами знаний, выбором базы для диалога и Python-процессом поиска. [q4]\n\nЦитаты:\n[q1] «Пакет agent отвечает за подготовку запросов, цикл вызова инструментов, проверку ответов, инварианты и учёт токенов.» [002-docs/architecture.md#9631c9abc1174dcc9984f7902bdd8692ff9ab95ba7c7af822879fb83da9f011e]\n[q2] «Файл agent_adapter.go связывает интерфейс приложения с агентом и поиском по базе знаний.» [002-docs/architecture.md#9631c9abc1174dcc9984f7902bdd8692ff9ab95ba7c7af822879fb83da9f011e]\n[q3] «Пакет llm реализует HTTP-клиент для OpenAI-compatible chat completions.» [002-docs/architecture.md#9631c9abc1174dcc9984f7902bdd8692ff9ab95ba7c7af822879fb83da9f011e]\n[q4] «Пакет knowledge управляет базами знаний, выбором базы для диалога и Python-процессом поиска.» [002-docs/architecture.md#9631c9abc1174dcc9984f7902bdd8692ff9ab95ba7c7af822879fb83da9f011e]\n\nИсточники:\n[002-docs/architecture.md#9631c9abc1174dcc9984f7902bdd8692ff9ab95ba7c7af822879fb83da9f011e]\n  Раздел: Структура DeepSeek Client / Основные части проекта\n[RAG: 4 утверждений · 4 цитат · 1 источников; источники и точность цитат проверены]"
+    },
+    {
+      "question": "Где добавлять новый Git MCP-инструмент?",
+      "evidence": {
+        "candidate_count": 20,
+        "candidates": 20,
+        "context_results": [
+          {
+            "chunk_id": "runtime-git-status",
+            "section": "Current repository branch",
+            "source": "mcp://git/git_status",
+            "text": "Project directory: C:/Users/erdni/Documents/projects/hw1/projects/deepseek-client\nCurrent Git status: ## week-6...origin/week-6"
+          }
+        ],
+        "cosine_retained_count": 20,
+        "filtered_count": 5,
+        "min_rerank_score": -3,
+        "min_similarity": 0.49,
+        "no_evidence": false,
+        "query": "Где добавлять новый Git MCP-инструмент?",
+        "rerank_score_type": "raw_logit",
+        "rerank_seconds": 0.3614109999998618,
+        "reranking": true,
+        "results": [
+          {
+            "chunk_id": "9cba2cfd7bef3ac9e024d435a0fc90cacc77a7b0545cac24292edb7562bf79b1",
+            "source": "002-docs/architecture.md",
+            "file": "002-docs/architecture.md",
+            "title": "Структура DeepSeek Client",
+            "section": "Структура DeepSeek Client / Где добавлять инструмент",
+            "page": null,
+            "strategy": "structured",
+            "start_char": 1113,
+            "end_char": 1619,
+            "text": "## Где добавлять инструмент\n\nОписание и реализация локальных файловых инструментов находятся в filetools/documents.go.\nОбщий интерфейс ToolExecutor и модельный цикл вызовов находятся в agent/tools.go.\nОбщая проверка вызовов перед исполнением находится в agent/tool_guard.go.\nРегистрация Git MCP-инструментов находится в gitmcp/server.go.\nМаршрутизация нескольких MCP-серверов находится в mcptools/registry.go.\nНовый инструмент чтения для /help требует явного добавления в разрешённый список readOnlyTool.\n\n",
+            "tokens": 353,
+            "vector_score": 0.8296998518077676,
+            "rerank_score": 10.480494499206543
+          },
+          {
+            "chunk_id": "6dfcb2c92fdce46ba4912de2260a23f3abf751bbf84097fc0704af8791bcf334",
+            "source": "001-README.md/README.md",
+            "file": "001-README.md/README.md",
+            "title": "DeepSeek Client",
+            "section": "DeepSeek Client / Git MCP на удалённом сервере",
+            "page": null,
+            "strategy": "structured",
+            "start_char": 2535,
+            "end_char": 3014,
+            "text": "## Git MCP на удалённом сервере\n\nДобавлены [отложенные и периодические сводки](GIT_SCHEDULES.md): MCP-инструменты\nсоздания, чтения и отмены расписаний, JSON-хранилище и фоновое исполнение без\nподключённого клиента. Для работы 24/7 сервер запускается через systemd; сводки\nвыводятся в журнал и доступны агенту через MCP.\n\nСамостоятельный `cmd/git-mcp` предоставляет `git_status`, `git_log`, `git_diff`\nи `git_branches` для одного серверного клона через Streamable HTTP или stdio.\n",
+            "tokens": 351,
+            "vector_score": 0.8615093370520797,
+            "rerank_score": 5.084324359893799
+          },
+          {
+            "chunk_id": "e0bfc76372e037538c5e8f4dd088a35b7252ef3cd8272f900ad48c3d2194a7b1",
+            "source": "001-README.md/README.md",
+            "file": "001-README.md/README.md",
+            "title": "DeepSeek Client",
+            "section": "DeepSeek Client / GitHub через MCP в основном агенте",
+            "page": null,
+            "strategy": "structured",
+            "start_char": 3320,
+            "end_char": 3905,
+            "text": "## GitHub через MCP в основном агенте\n\nПо умолчанию основное приложение автоматически поднимает дочерний MCP-сервер\nчерез stdio, получает `tools/list` и добавляет `github__github_get_repository` к\nсуществующим файловым инструментам. Модель выбирает инструмент; приложение\nвыполняет `tools/call`, возвращает JSON сообщением `tool`, затем модель формирует\nответ с полученными данными. Сессия закрывается при выходе из приложения.\n\n```powershell\ngo run ./projects/deepseek-client\n```\n\nВ диалоге:\n\n```text\n/mode free\n/tools on\n/tools\nИспользуй github__github_get_repository для golang/go. ",
+            "tokens": 395,
+            "vector_score": 0.81891869665662,
+            "rerank_score": 2.2180979251861572
+          },
+          {
+            "chunk_id": "5d4fc569b1be10c87b6e0434b022a9cd00be15b42c06206189c03923018acf3b",
+            "source": "001-README.md/README.md",
+            "file": "001-README.md/README.md",
+            "title": "DeepSeek Client",
+            "section": "DeepSeek Client / GitHub через MCP в основном агенте",
+            "page": null,
+            "strategy": "structured",
+            "start_char": 4148,
+            "end_char": 4610,
+            "text": "апуск MCP и получение списка инструментов сами по себе к GitHub не обращаются.\n\nПосле завершения запроса TUI показывает фактические вызовы инструментов:\n`[tool]`, `Arguments` и `Result` либо `Error`, затем ответ модели. Предпросмотр\nкаждого поля ограничен 1600 символами; управляющие символы удаляются, активный\nAPI-ключ маскируется. Модель получает полный исходный результат. Этот журнал\nпоказывается в текущем TUI и отдельно в историю диалога не сохраняется.\n\n",
+            "tokens": 359,
+            "vector_score": 0.8003474368537523,
+            "rerank_score": 0.9396045804023743
+          },
+          {
+            "chunk_id": "05774495009b8677a3a9d66bc744367613294926f916f9ba9c97c35585a6ef4c",
+            "source": "001-README.md/README.md",
+            "file": "001-README.md/README.md",
+            "title": "DeepSeek Client",
+            "section": "DeepSeek Client / GitHub через MCP в основном агенте",
+            "page": null,
+            "strategy": "structured",
+            "start_char": 3772,
+            "end_char": 4228,
+            "text": "projects/deepseek-client\n```\n\nВ диалоге:\n\n```text\n/mode free\n/tools on\n/tools\nИспользуй github__github_get_repository для golang/go. Расскажи, что это за проект, на каком языке он написан и сколько у него звёзд.\n```\n\n`/tools` показывает обнаруженные инструменты; `/tools off` отключает и файловые,\nи MCP-инструменты. Диалог использует выбранную модель и её обычный API-ключ.\nЗапуск MCP и получение списка инструментов сами по себе к GitHub не обращаются.\n\n",
+            "tokens": 308,
+            "vector_score": 0.7698550741987966,
+            "rerank_score": 0.8075986504554749
+          }
+        ],
+        "retained_count": 15,
+        "retrieval_seconds": 0.015253600000505685,
+        "rewrite": true,
+        "score_type": "cosine",
+        "search_query": "Где добавлять новый Git MCP-инструмент?",
+        "strategy": "structured",
+        "top_k": 5
+      },
+      "raw_answers": [
+        {
+          "UsageIncomplete": false,
+          "ToolCalls": null,
+          "UsageKnown": true,
+          "Content": "{\"status\":\"answered\",\"claims\":[{\"text\":\"Регистрация Git MCP-инструментов находится в gitmcp/server.go.\",\"quote_ids\":[\"q1\"]},{\"text\":\"Маршрутизация нескольких MCP-серверов находится в mcptools/registry.go.\",\"quote_ids\":[\"q2\"]}],\"quotes\":[{\"id\":\"q1\",\"chunk_id\":\"9cba2cfd7bef3ac9e024d435a0fc90cacc77a7b0545cac24292edb7562bf79b1\",\"text\":\"Регистрация Git MCP-инструментов находится в gitmcp/server.go.\"},{\"id\":\"q2\",\"chunk_id\":\"9cba2cfd7bef3ac9e024d435a0fc90cacc77a7b0545cac24292edb7562bf79b1\",\"text\":\"Маршрутизация нескольких MCP-серверов находится в mcptools/registry.go.\"}],\"clarification\":\"\"}",
+          "Model": "deepseek-flash",
+          "FinishReason": "stop",
+          "PromptTokens": 3920,
+          "CachedInputTokens": 1152,
+          "CompletionTokens": 227,
+          "TotalTokens": 4147,
+          "Duration": 1562090900
+        }
+      ],
+      "grounding": {
+        "status": "answered",
+        "answer": "Регистрация Git MCP-инструментов находится в gitmcp/server.go. [q1]\nМаршрутизация нескольких MCP-серверов находится в mcptools/registry.go. [q2]",
+        "claims": [
+          {
+            "text": "Регистрация Git MCP-инструментов находится в gitmcp/server.go.",
+            "quote_ids": [
+              "q1"
+            ]
+          },
+          {
+            "text": "Маршрутизация нескольких MCP-серверов находится в mcptools/registry.go.",
+            "quote_ids": [
+              "q2"
+            ]
+          }
+        ],
+        "quotes": [
+          {
+            "id": "q1",
+            "chunk_id": "9cba2cfd7bef3ac9e024d435a0fc90cacc77a7b0545cac24292edb7562bf79b1",
+            "text": "Регистрация Git MCP-инструментов находится в gitmcp/server.go."
+          },
+          {
+            "id": "q2",
+            "chunk_id": "9cba2cfd7bef3ac9e024d435a0fc90cacc77a7b0545cac24292edb7562bf79b1",
+            "text": "Маршрутизация нескольких MCP-серверов находится в mcptools/registry.go."
+          }
+        ],
+        "sources": [
+          {
+            "source": "002-docs/architecture.md",
+            "section": "Структура DeepSeek Client / Где добавлять инструмент",
+            "chunk_id": "9cba2cfd7bef3ac9e024d435a0fc90cacc77a7b0545cac24292edb7562bf79b1"
+          }
+        ],
+        "clarification": "",
+        "local": false
+      },
+      "visible": "[tool] git__git_status\nArguments: {}\nResult: {\"text\":\"## week-6...origin/week-6\\n M .gitignore\\n M projects/deepseek-client/README.md\\n M projects/deepseek-client/agent/agent.go\\n M projects/deepseek-client/agent/grounding.go\\n M projects/deepseek-client/agent/tools.go\\n M projects/deepseek-client/agent/types.go\\n M projects/deepseek-client/agent_adapter.go\\n M projects/deepseek-client/config.go\\n M projects/deepseek-client/go.mod\\n M projects/deepseek-client/main.go\\n M projects/deepseek-client/mcp_commands.go\\n M projects/deepseek-client/mcp_registry.go\\n M projects/deepseek-client/session.go\\n M projects/deepseek-client/tui.go\\n?? Start-Developer-Assistant.cmd\\n?? Start-Developer-Assistant.ps1\\n?? projects/deepseek-client/TOOL_GUARD.md\\n?? projects/deepseek-client/agent/tool_guard.go\\n?? projects/deepseek-client/agent/tool_guard_test.go\\n?? projects/deepseek-client/docs/\\n?? projects/deepseek-client/project_assistant_integration_test.go\\n?? projects/deepseek-client/project_context_test.go\\n?? projects/deepseek-client/project_help.go\\n?? projects/deepseek-client/project_help_test.go\\n\",\"truncated\":false}\n\n[База знаний: DeepSeek project documentation · найдено фрагментов: 5]\n[Поиск: 20 кандидатов → 15 после фильтра → 5 в контекст; отсечено 5]\n[002-docs/architecture.md#9cba2cfd7bef3ac9e024d435a0fc90cacc77a7b0545cac24292edb7562bf79b1]\n[001-README.md/README.md#6dfcb2c92fdce46ba4912de2260a23f3abf751bbf84097fc0704af8791bcf334]\n[001-README.md/README.md#e0bfc76372e037538c5e8f4dd088a35b7252ef3cd8272f900ad48c3d2194a7b1]\n[001-README.md/README.md#5d4fc569b1be10c87b6e0434b022a9cd00be15b42c06206189c03923018acf3b]\n[001-README.md/README.md#05774495009b8677a3a9d66bc744367613294926f916f9ba9c97c35585a6ef4c]\n[MCP git__git_status: ## week-6...origin/week-6]\nРегистрация Git MCP-инструментов находится в gitmcp/server.go. [q1]\nМаршрутизация нескольких MCP-серверов находится в mcptools/registry.go. [q2]\n\nЦитаты:\n[q1] «Регистрация Git MCP-инструментов находится в gitmcp/server.go.» [002-docs/architecture.md#9cba2cfd7bef3ac9e024d435a0fc90cacc77a7b0545cac24292edb7562bf79b1]\n[q2] «Маршрутизация нескольких MCP-серверов находится в mcptools/registry.go.» [002-docs/architecture.md#9cba2cfd7bef3ac9e024d435a0fc90cacc77a7b0545cac24292edb7562bf79b1]\n\nИсточники:\n[002-docs/architecture.md#9cba2cfd7bef3ac9e024d435a0fc90cacc77a7b0545cac24292edb7562bf79b1]\n  Раздел: Структура DeepSeek Client / Где добавлять инструмент\n[RAG: 2 утверждений · 2 цитат · 1 источников; источники и точность цитат проверены]"
+    },
+    {
+      "question": "На какой git-ветке мы сейчас работаем?",
+      "evidence": {
+        "candidate_count": 20,
+        "candidates": 20,
+        "context_results": [
+          {
+            "chunk_id": "runtime-git-status",
+            "section": "Current repository branch",
+            "source": "mcp://git/git_status",
+            "text": "Project directory: C:/Users/erdni/Documents/projects/hw1/projects/deepseek-client\nCurrent Git status: ## week-6...origin/week-6"
+          }
+        ],
+        "cosine_retained_count": 20,
+        "filtered_count": 19,
+        "min_rerank_score": -3,
+        "min_similarity": 0.49,
+        "no_evidence": false,
+        "query": "На какой git-ветке мы сейчас работаем?",
+        "rerank_score_type": "raw_logit",
+        "rerank_seconds": 0.3273296000006667,
+        "reranking": true,
+        "results": [
+          {
+            "chunk_id": "612024e6c6d6f6f6001eb5bcfd27c33ea2b304890663a6ce8b58447c52781cc5",
+            "source": "002-docs/architecture.md",
+            "file": "002-docs/architecture.md",
+            "title": "Структура DeepSeek Client",
+            "section": "Структура DeepSeek Client / Границы репозитория",
+            "page": null,
+            "strategy": "structured",
+            "start_char": 1619,
+            "end_char": 1960,
+            "text": "## Границы репозитория\n\nDeepSeek Client находится в projects/deepseek-client внутри монорепозитория AI Challenge.\nGit-ветка относится ко всему монорепозиторию. Рабочая папка файловых инструментов в режиме помощника ограничена projects/deepseek-client.\nТекущую ветку нельзя определять по этой документации: её нужно получать заново через MCP.",
+            "tokens": 234,
+            "vector_score": 0.7619500983335061,
+            "rerank_score": -2.300335168838501
+          }
+        ],
+        "retained_count": 1,
+        "retrieval_seconds": 0.033908100000189734,
+        "rewrite": true,
+        "score_type": "cosine",
+        "search_query": "На какой git-ветке мы сейчас работаем?",
+        "strategy": "structured",
+        "top_k": 5
+      },
+      "raw_answers": [
+        {
+          "UsageIncomplete": false,
+          "ToolCalls": null,
+          "UsageKnown": true,
+          "Content": "{\"status\":\"answered\",\"claims\":[{\"text\":\"Текущая git-ветка — week-6 (отслеживает origin/week-6).\",\"quote_ids\":[\"q1\"]}],\"quotes\":[{\"id\":\"q1\",\"chunk_id\":\"runtime-git-status\",\"text\":\"Current Git status: ## week-6...origin/week-6\"}],\"clarification\":\"\"}",
+          "Model": "deepseek-flash",
+          "FinishReason": "stop",
+          "PromptTokens": 2435,
+          "CachedInputTokens": 1152,
+          "CompletionTokens": 82,
+          "TotalTokens": 2517,
+          "Duration": 1449345800
+        }
+      ],
+      "grounding": {
+        "status": "answered",
+        "answer": "Текущая git-ветка — week-6 (отслеживает origin/week-6). [q1]",
+        "claims": [
+          {
+            "text": "Текущая git-ветка — week-6 (отслеживает origin/week-6).",
+            "quote_ids": [
+              "q1"
+            ]
+          }
+        ],
+        "quotes": [
+          {
+            "id": "q1",
+            "chunk_id": "runtime-git-status",
+            "text": "Current Git status: ## week-6...origin/week-6"
+          }
+        ],
+        "sources": [
+          {
+            "source": "mcp://git/git_status",
+            "section": "Current repository branch",
+            "chunk_id": "runtime-git-status"
+          }
+        ],
+        "clarification": "",
+        "local": false
+      },
+      "visible": "[tool] git__git_status\nArguments: {}\nResult: {\"text\":\"## week-6...origin/week-6\\n M .gitignore\\n M projects/deepseek-client/README.md\\n M projects/deepseek-client/agent/agent.go\\n M projects/deepseek-client/agent/grounding.go\\n M projects/deepseek-client/agent/tools.go\\n M projects/deepseek-client/agent/types.go\\n M projects/deepseek-client/agent_adapter.go\\n M projects/deepseek-client/config.go\\n M projects/deepseek-client/go.mod\\n M projects/deepseek-client/main.go\\n M projects/deepseek-client/mcp_commands.go\\n M projects/deepseek-client/mcp_registry.go\\n M projects/deepseek-client/session.go\\n M projects/deepseek-client/tui.go\\n?? Start-Developer-Assistant.cmd\\n?? Start-Developer-Assistant.ps1\\n?? projects/deepseek-client/TOOL_GUARD.md\\n?? projects/deepseek-client/agent/tool_guard.go\\n?? projects/deepseek-client/agent/tool_guard_test.go\\n?? projects/deepseek-client/docs/\\n?? projects/deepseek-client/project_assistant_integration_test.go\\n?? projects/deepseek-client/project_context_test.go\\n?? projects/deepseek-client/project_help.go\\n?? projects/deepseek-client/project_help_test.go\\n\",\"truncated\":false}\n\n[База знаний: DeepSeek project documentation · найдено фрагментов: 1]\n[Поиск: 20 кандидатов → 1 после фильтра → 1 в контекст; отсечено 19]\n[002-docs/architecture.md#612024e6c6d6f6f6001eb5bcfd27c33ea2b304890663a6ce8b58447c52781cc5]\n[MCP git__git_status: ## week-6...origin/week-6]\nТекущая git-ветка — week-6 (отслеживает origin/week-6). [q1]\n\nЦитаты:\n[q1] «Current Git status: ## week-6...origin/week-6» [mcp://git/git_status#runtime-git-status]\n\nИсточники:\n[mcp://git/git_status#runtime-git-status]\n  Раздел: Current repository branch\n[RAG: 1 утверждений · 1 цитат · 1 источников; источники и точность цитат проверены]"
+    },
+    {
+      "question": "Какие поля содержит доказательный ответ модели?",
+      "evidence": {
+        "candidate_count": 20,
+        "candidates": 20,
+        "context_results": [
+          {
+            "chunk_id": "runtime-git-status",
+            "section": "Current repository branch",
+            "source": "mcp://git/git_status",
+            "text": "Project directory: C:/Users/erdni/Documents/projects/hw1/projects/deepseek-client\nCurrent Git status: ## week-6...origin/week-6"
+          }
+        ],
+        "cosine_retained_count": 20,
+        "filtered_count": 17,
+        "min_rerank_score": -3,
+        "min_similarity": 0.49,
+        "no_evidence": false,
+        "query": "Какие поля содержит доказательный ответ модели?",
+        "rerank_score_type": "raw_logit",
+        "rerank_seconds": 0.2884063999990758,
+        "reranking": true,
+        "results": [
+          {
+            "chunk_id": "cee82852f83135739dda792660dda30ec43095a0d84baab034b2a9aaa2042f73",
+            "source": "002-docs/data-model.md",
+            "file": "002-docs/data-model.md",
+            "title": "Данные и хранение состояния",
+            "section": "Данные и хранение состояния / Схема доказательного ответа",
+            "page": null,
+            "strategy": "structured",
+            "start_char": 992,
+            "end_char": 1454,
+            "text": "## Схема доказательного ответа\n\nДоказательный ответ модели содержит status, claims, quotes и clarification.\nКаждое утверждение claims ссылается через quote_ids на цитаты quotes.\nЦитата содержит id, chunk_id и точный фрагмент text.\nКлиент проверяет структуру ответа и совпадение цитат с текущими источниками.\nПроверка точной цитаты не доказывает, что всё утверждение логически следует из неё.\nИсточник и раздел определяются клиентом, а не придумываются моделью.\n\n",
+            "tokens": 342,
+            "vector_score": 0.7509035728684403,
+            "rerank_score": 4.881375312805176
+          },
+          {
+            "chunk_id": "4c03324d538edd8c9b1c8937c1add143f97c29bf76452d377ec7cc4ca3b278ee",
+            "source": "001-README.md/README.md",
+            "file": "001-README.md/README.md",
+            "title": "DeepSeek Client",
+            "section": "DeepSeek Client / Сохранение диалога / Инварианты",
+            "page": null,
+            "strategy": "structured",
+            "start_char": 20505,
+            "end_char": 20979,
+            "text": "я 16 MiB.\n\nFacts являются данными модели, а не гарантированно истинными сведениями. Ответ\nэкстрактора должен быть JSON-объектом не более чем со 100 строковыми ключами.\nЕсли обновление facts после ответа не удалось, сам ответ и ход остаются\nсохранёнными; перед следующим ответом агент пытается догнать пропущенные\nпользовательские сообщения. `/status` показывает отдельный расход facts.\n\n`/compress` вручную суммаризирует старую часть текущего диалога через активную\nмодель. ",
+            "tokens": 370,
+            "vector_score": 0.7221335056002882,
+            "rerank_score": -1.2983677387237549
+          },
+          {
+            "chunk_id": "f1bb8d30dfd44758ae5362c48cf7e007605ce7f2440a549ef7d137cf49ec73fb",
+            "source": "001-README.md/README.md",
+            "file": "001-README.md/README.md",
+            "title": "DeepSeek Client",
+            "section": "DeepSeek Client / Сохранение диалога / Инварианты",
+            "page": null,
+            "strategy": "structured",
+            "start_char": 22444,
+            "end_char": 22976,
+            "text": "а также включает его в общие суммы. Неизвестный usage не считается нулевым.\n\nДля сравнения качества и расхода создайте два новых диалога с одной моделью,\ntemperature и `context_window`. В первом задайте `auto_compress: false` и не\nвызывайте `/compress`; во втором включите автоматическое сжатие или вызовите\n`/compress` в заранее выбранной точке. Используйте одинаковый сценарий с фактами\nв начале, середине и конце, а контрольные вопросы задайте только в конце, чтобы\nответы не переносили проверяемые факты в свежую часть истории. ",
+            "tokens": 395,
+            "vector_score": 0.6896167251278756,
+            "rerank_score": -2.6747934818267822
+          }
+        ],
+        "retained_count": 3,
+        "retrieval_seconds": 0.017061000000467175,
+        "rewrite": true,
+        "score_type": "cosine",
+        "search_query": "Какие поля содержит доказательный ответ модели?",
+        "strategy": "structured",
+        "top_k": 5
+      },
+      "raw_answers": [
+        {
+          "UsageIncomplete": false,
+          "ToolCalls": null,
+          "UsageKnown": true,
+          "Content": "{\"status\":\"answered\",\"claims\":[{\"text\":\"Доказательный ответ модели содержит поля status, claims, quotes и clarification.\",\"quote_ids\":[\"q1\"]},{\"text\":\"Каждое утверждение claims ссылается через quote_ids на цитаты quotes.\",\"quote_ids\":[\"q2\"]},{\"text\":\"Цитата содержит id, chunk_id и точный фрагмент text.\",\"quote_ids\":[\"q3\"]}],\"quotes\":[{\"id\":\"q1\",\"chunk_id\":\"cee82852f83135739dda792660dda30ec43095a0d84baab034b2a9aaa2042f73\",\"text\":\"Доказательный ответ модели содержит status, claims, quotes и clarification.\"},{\"id\":\"q2\",\"chunk_id\":\"cee82852f83135739dda792660dda30ec43095a0d84baab034b2a9aaa2042f73\",\"text\":\"Каждое утверждение claims ссылается через quote_ids на цитаты quotes.\"},{\"id\":\"q3\",\"chunk_id\":\"cee82852f83135739dda792660dda30ec43095a0d84baab034b2a9aaa2042f73\",\"text\":\"Цитата содержит id, chunk_id и точный фрагмент text.\"}],\"clarification\":\"\"}",
+          "Model": "deepseek-flash",
+          "FinishReason": "stop",
+          "PromptTokens": 2854,
+          "CachedInputTokens": 1152,
+          "CompletionTokens": 290,
+          "TotalTokens": 3144,
+          "Duration": 1775965500
+        }
+      ],
+      "grounding": {
+        "status": "answered",
+        "answer": "Доказательный ответ модели содержит поля status, claims, quotes и clarification. [q1]\nКаждое утверждение claims ссылается через quote_ids на цитаты quotes. [q2]\nЦитата содержит id, chunk_id и точный фрагмент text. [q3]",
+        "claims": [
+          {
+            "text": "Доказательный ответ модели содержит поля status, claims, quotes и clarification.",
+            "quote_ids": [
+              "q1"
+            ]
+          },
+          {
+            "text": "Каждое утверждение claims ссылается через quote_ids на цитаты quotes.",
+            "quote_ids": [
+              "q2"
+            ]
+          },
+          {
+            "text": "Цитата содержит id, chunk_id и точный фрагмент text.",
+            "quote_ids": [
+              "q3"
+            ]
+          }
+        ],
+        "quotes": [
+          {
+            "id": "q1",
+            "chunk_id": "cee82852f83135739dda792660dda30ec43095a0d84baab034b2a9aaa2042f73",
+            "text": "Доказательный ответ модели содержит status, claims, quotes и clarification."
+          },
+          {
+            "id": "q2",
+            "chunk_id": "cee82852f83135739dda792660dda30ec43095a0d84baab034b2a9aaa2042f73",
+            "text": "Каждое утверждение claims ссылается через quote_ids на цитаты quotes."
+          },
+          {
+            "id": "q3",
+            "chunk_id": "cee82852f83135739dda792660dda30ec43095a0d84baab034b2a9aaa2042f73",
+            "text": "Цитата содержит id, chunk_id и точный фрагмент text."
+          }
+        ],
+        "sources": [
+          {
+            "source": "002-docs/data-model.md",
+            "section": "Данные и хранение состояния / Схема доказательного ответа",
+            "chunk_id": "cee82852f83135739dda792660dda30ec43095a0d84baab034b2a9aaa2042f73"
+          }
+        ],
+        "clarification": "",
+        "local": false
+      },
+      "visible": "[tool] git__git_status\nArguments: {}\nResult: {\"text\":\"## week-6...origin/week-6\\n M .gitignore\\n M projects/deepseek-client/README.md\\n M projects/deepseek-client/agent/agent.go\\n M projects/deepseek-client/agent/grounding.go\\n M projects/deepseek-client/agent/tools.go\\n M projects/deepseek-client/agent/types.go\\n M projects/deepseek-client/agent_adapter.go\\n M projects/deepseek-client/config.go\\n M projects/deepseek-client/go.mod\\n M projects/deepseek-client/main.go\\n M projects/deepseek-client/mcp_commands.go\\n M projects/deepseek-client/mcp_registry.go\\n M projects/deepseek-client/session.go\\n M projects/deepseek-client/tui.go\\n?? Start-Developer-Assistant.cmd\\n?? Start-Developer-Assistant.ps1\\n?? projects/deepseek-client/TOOL_GUARD.md\\n?? projects/deepseek-client/agent/tool_guard.go\\n?? projects/deepseek-client/agent/tool_guard_test.go\\n?? projects/deepseek-client/docs/\\n?? projects/deepseek-client/project_assistant_integration_test.go\\n?? projects/deepseek-client/project_context_test.go\\n?? projects/deepseek-client/project_help.go\\n?? projects/deepseek-client/project_help_test.go\\n\",\"truncated\":false}\n\n[База знаний: DeepSeek project documentation · найдено фрагментов: 3]\n[Поиск: 20 кандидатов → 3 после фильтра → 3 в контекст; отсечено 17]\n[002-docs/data-model.md#cee82852f83135739dda792660dda30ec43095a0d84baab034b2a9aaa2042f73]\n[001-README.md/README.md#4c03324d538edd8c9b1c8937c1add143f97c29bf76452d377ec7cc4ca3b278ee]\n[001-README.md/README.md#f1bb8d30dfd44758ae5362c48cf7e007605ce7f2440a549ef7d137cf49ec73fb]\n[MCP git__git_status: ## week-6...origin/week-6]\nДоказательный ответ модели содержит поля status, claims, quotes и clarification. [q1]\nКаждое утверждение claims ссылается через quote_ids на цитаты quotes. [q2]\nЦитата содержит id, chunk_id и точный фрагмент text. [q3]\n\nЦитаты:\n[q1] «Доказательный ответ модели содержит status, claims, quotes и clarification.» [002-docs/data-model.md#cee82852f83135739dda792660dda30ec43095a0d84baab034b2a9aaa2042f73]\n[q2] «Каждое утверждение claims ссылается через quote_ids на цитаты quotes.» [002-docs/data-model.md#cee82852f83135739dda792660dda30ec43095a0d84baab034b2a9aaa2042f73]\n[q3] «Цитата содержит id, chunk_id и точный фрагмент text.» [002-docs/data-model.md#cee82852f83135739dda792660dda30ec43095a0d84baab034b2a9aaa2042f73]\n\nИсточники:\n[002-docs/data-model.md#cee82852f83135739dda792660dda30ec43095a0d84baab034b2a9aaa2042f73]\n  Раздел: Данные и хранение состояния / Схема доказательного ответа\n[RAG: 3 утверждений · 3 цитат · 1 источников; источники и точность цитат проверены]"
+    },
+    {
+      "question": "Какой порт использует PostgreSQL-база нашего проекта?",
+      "evidence": {
+        "candidate_count": 20,
+        "candidates": 20,
+        "context_results": [
+          {
+            "chunk_id": "runtime-git-status",
+            "section": "Current repository branch",
+            "source": "mcp://git/git_status",
+            "text": "Project directory: C:/Users/erdni/Documents/projects/hw1/projects/deepseek-client\nCurrent Git status: ## week-6...origin/week-6"
+          }
+        ],
+        "cosine_retained_count": 20,
+        "filtered_count": 19,
+        "min_rerank_score": -3,
+        "min_similarity": 0.49,
+        "no_evidence": false,
+        "query": "Какой порт использует PostgreSQL-база нашего проекта?",
+        "rerank_score_type": "raw_logit",
+        "rerank_seconds": 0.3661649999994552,
+        "reranking": true,
+        "results": [
+          {
+            "chunk_id": "446cbf30801fa5ea1f4e7377fc5696fc8f26fe1c00da7ae1c4090601aedd7c1c",
+            "source": "001-README.md/README.md",
+            "file": "001-README.md/README.md",
+            "title": "DeepSeek Client",
+            "section": "DeepSeek Client / Запуск",
+            "page": null,
+            "strategy": "structured",
+            "start_char": 31400,
+            "end_char": 31930,
+            "text": "нутри верхнего окна, поэтому\nновые сообщения не перемещают composer и настройки.\n\nКлавиши TUI:\n\n```text\nEnter             отправить весь запрос\nCtrl+J/Alt+Enter  добавить перенос вручную\nTab/Enter         подставить выбранную команду или значение\n↑/↓               выбрать вариант автодополнения\nКолесо/PgUp/PgDn  прокрутить историю в окне «Диалог»\nEsc/Ctrl+C        завершить программу\n```\n\nАвтодополнение включается, когда поле ввода начинается с `/`. Оно подсказывает\nкоманды, модели, режимы, стратегии, температуры и форматы. ",
+            "tokens": 378,
+            "vector_score": 0.7128804210942074,
+            "rerank_score": -2.5673604011535645
+          }
+        ],
+        "retained_count": 1,
+        "retrieval_seconds": 0.024243899999419227,
+        "rewrite": true,
+        "score_type": "cosine",
+        "search_query": "Какой порт использует PostgreSQL-база нашего проекта?",
+        "strategy": "structured",
+        "top_k": 5
+      },
+      "raw_answers": [
+        {
+          "UsageIncomplete": false,
+          "ToolCalls": null,
+          "UsageKnown": true,
+          "Content": "{\"status\":\"unknown\",\"claims\":[],\"quotes\":[],\"clarification\":\"В найденных фрагментах нет сведений о порте PostgreSQL. Уточните вопрос или добавьте документ с конфигурацией базы данных.\"}",
+          "Model": "deepseek-flash",
+          "FinishReason": "stop",
+          "PromptTokens": 2554,
+          "CachedInputTokens": 1152,
+          "CompletionTokens": 53,
+          "TotalTokens": 2607,
+          "Duration": 1089456500
+        }
+      ],
+      "grounding": {
+        "status": "unknown",
+        "answer": "Не знаю: в выбранной базе знаний недостаточно подтверждений для ответа.",
+        "claims": [],
+        "quotes": [],
+        "sources": [],
+        "clarification": "Уточните вопрос или добавьте документ с нужной информацией.",
+        "local": false
+      },
+      "visible": "[tool] git__git_status\nArguments: {}\nResult: {\"text\":\"## week-6...origin/week-6\\n M .gitignore\\n M projects/deepseek-client/README.md\\n M projects/deepseek-client/agent/agent.go\\n M projects/deepseek-client/agent/grounding.go\\n M projects/deepseek-client/agent/tools.go\\n M projects/deepseek-client/agent/types.go\\n M projects/deepseek-client/agent_adapter.go\\n M projects/deepseek-client/config.go\\n M projects/deepseek-client/go.mod\\n M projects/deepseek-client/main.go\\n M projects/deepseek-client/mcp_commands.go\\n M projects/deepseek-client/mcp_registry.go\\n M projects/deepseek-client/session.go\\n M projects/deepseek-client/tui.go\\n?? Start-Developer-Assistant.cmd\\n?? Start-Developer-Assistant.ps1\\n?? projects/deepseek-client/TOOL_GUARD.md\\n?? projects/deepseek-client/agent/tool_guard.go\\n?? projects/deepseek-client/agent/tool_guard_test.go\\n?? projects/deepseek-client/docs/\\n?? projects/deepseek-client/project_assistant_integration_test.go\\n?? projects/deepseek-client/project_context_test.go\\n?? projects/deepseek-client/project_help.go\\n?? projects/deepseek-client/project_help_test.go\\n\",\"truncated\":false}\n\n[База знаний: DeepSeek project documentation · найдено фрагментов: 1]\n[Поиск: 20 кандидатов → 1 после фильтра → 1 в контекст; отсечено 19]\n[001-README.md/README.md#446cbf30801fa5ea1f4e7377fc5696fc8f26fe1c00da7ae1c4090601aedd7c1c]\n[MCP git__git_status: ## week-6...origin/week-6]\nНе знаю: в выбранной базе знаний недостаточно подтверждений для ответа.\nУточните вопрос или добавьте документ с нужной информацией.\nИсточники: нет подтверждающих фрагментов для ответа."
+    }
+  ]
+}

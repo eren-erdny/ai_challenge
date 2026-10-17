@@ -1,0 +1,39 @@
+{
+  "path": "C:/Users/erdni/Videos/ai_challenge_hw31.mp4",
+  "duration_seconds": 132.38,
+  "bytes": 10757195,
+  "full_decode_exit_code": 0,
+  "sampled_seconds": [
+    6,
+    24,
+    37,
+    63,
+    76,
+    98,
+    113,
+    128
+  ],
+  "audio_max_db": [
+    "-91.0"
+  ],
+  "sha256": "6f8e8618d91dae1f43f077f7724fa5fee0f97a4edce9ecf2a6acc908e4f7d234",
+  "assignment": 31,
+  "scripted_input": true,
+  "real_TUI": true,
+  "real_DeepSeek_calls_in_recording": 3,
+  "fixture_responses": false,
+  "obs_original_scene_audio_restored": true,
+  "owned_demo_window_closed": true,
+  "presentation_overlay": "Temporary Go overlay; ordinary TUI View; full-cell redraw; no response substitution or product-source edits.",
+  "failed_take_path": "C:/Users/erdni/Videos/2026-10-16 16-38-25.mp4",
+  "failed_take_reason": "StartRecord completed asynchronously after initial status check; no scenario signal or API calls. Failed file preserved.",
+  "controller_note": "After successful presentation, an empty completion marker caused a null.Trim exception. Finally cleanup stopped the video and restored OBS; TUI test exit was 0.",
+  "answers": "recording-answers.json",
+  "budget_total_usd": 0.2,
+  "all_authorized_calls": 8,
+  "all_reserved_usd": 0.0452925,
+  "all_estimated_peak_usd": 0.006399084,
+  "recording_reserved_usd": 0.0161631,
+  "recording_estimated_peak_usd": 0.002043636,
+  "encoded_frame_review": "Frames 37/63/76/98/128 reviewed: actual TUI, document/MCP evidence, exact quotes, unknown and final summary. Full decode passed."
+}

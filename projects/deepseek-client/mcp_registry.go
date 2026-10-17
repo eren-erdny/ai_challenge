@@ -9,7 +9,9 @@ import (
 	"io"
 	"os"
 	"os/exec"
+	"path/filepath"
 	"regexp"
+	"strings"
 	"time"
 
 	"github.com/eren-erdny/ai_challenge/projects/deepseek-client/agent"
@@ -18,6 +20,7 @@ import (
 )
 
 type mcpServerConfig struct {
+	Repo      string `json:"repo,omitempty"`
 	Name      string `json:"name"`
 	Transport string `json:"transport"`
 	URL       string `json:"url,omitempty"`
@@ -54,11 +57,15 @@ func decodeMCPRegistry(data []byte) (mcpRegistryConfig, error) {
 		names[s.Name] = true
 		switch s.Transport {
 		case "builtin-github":
-			if s.URL != "" || s.TokenEnv != "" {
+			if s.URL != "" || s.TokenEnv != "" || s.Repo != "" {
 				return config, errors.New("builtin-github does not accept URL or token_env")
 			}
+		case "builtin-git":
+			if !filepath.IsAbs(s.Repo) || s.URL != "" || s.TokenEnv != "" {
+				return config, errors.New("builtin-git requires an absolute repo and accepts no URL/token_env")
+			}
 		case "http":
-			if s.URL == "" || !envName.MatchString(s.TokenEnv) {
+			if s.URL == "" || !envName.MatchString(s.TokenEnv) || s.Repo != "" {
 				return config, fmt.Errorf("HTTP server %s requires URL and token_env", s.Name)
 			}
 		default:
@@ -69,6 +76,29 @@ func decodeMCPRegistry(data []byte) (mcpRegistryConfig, error) {
 }
 
 func loadMCPRegistry() (mcpRegistryConfig, error) {
+	if project := os.Getenv("DEEPSEEK_PROJECT_ROOT"); project != "" {
+		if os.Getenv("MCP_SERVERS_FILE") != "" || os.Getenv("GIT_MCP_URL") != "" {
+			return mcpRegistryConfig{}, errors.New("project mode requires its local Git MCP; clear MCP_SERVERS_FILE and GIT_MCP_URL")
+		}
+		lookupCtx, lookupCancel := context.WithTimeout(context.Background(), 10*time.Second)
+		defer lookupCancel()
+		cmd := exec.CommandContext(lookupCtx, "git", "--no-optional-locks", "-c", "core.fsmonitor=false", "-C", project, "rev-parse", "--show-toplevel")
+		for _, item := range os.Environ() {
+			if !strings.HasPrefix(strings.ToUpper(item), "GIT_") {
+				cmd.Env = append(cmd.Env, item)
+			}
+		}
+		cmd.Env = append(cmd.Env, "GIT_TERMINAL_PROMPT=0", "GIT_CONFIG_NOSYSTEM=1")
+		b, err := cmd.Output()
+		if err != nil {
+			return mcpRegistryConfig{}, errors.New("project must be inside a Git repository")
+		}
+		repo, err := filepath.Abs(strings.TrimSpace(string(b)))
+		if err != nil {
+			return mcpRegistryConfig{}, err
+		}
+		return mcpRegistryConfig{Servers: []mcpServerConfig{{Name: "git", Transport: "builtin-git", Repo: repo}}}, nil
+	}
 	if path := os.Getenv("MCP_SERVERS_FILE"); path != "" {
 		f, err := os.Open(path)
 		if err != nil {
@@ -110,7 +140,11 @@ func connectAgentMCP(fallback agent.ToolExecutor) (*mcptools.Registry, error) {
 			if err != nil {
 				return nil, err
 			}
-			client, err := mcptools.Connect(ctx, &mcp.CommandTransport{Command: exec.Command(executable, "--mcp-github-server")}, nil)
+			command := exec.Command(executable, "--mcp-github-server")
+			if server.Transport == "builtin-git" {
+				command = exec.Command(executable, "--mcp-git-server", server.Repo)
+			}
+			client, err := mcptools.Connect(ctx, &mcp.CommandTransport{Command: command}, nil)
 			if err != nil {
 				return nil, err
 			}

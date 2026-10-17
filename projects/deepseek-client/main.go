@@ -65,20 +65,49 @@ func run(input *bufio.Reader) int {
 		fmt.Fprintln(os.Stderr, err)
 		return 1
 	}
-	store := &history.JSON{Dir: filepath.Join(filepath.Dir(configPath), "conversations")}
-	config.Memory = &memorylayers.JSON{Dir: filepath.Join(filepath.Dir(configPath), "memory")}
-	config.UserProfiles = &userprofiles.JSON{Path: filepath.Join(filepath.Dir(configPath), "memory", "profiles.json")}
-	config.TaskStates = &taskstates.JSON{Dir: filepath.Join(filepath.Dir(configPath), "memory", "tasks")}
-	config.Invariants = &invariants.JSON{Path: filepath.Join(filepath.Dir(configPath), "memory", "invariants.json")}
+	stateRoot := filepath.Dir(configPath)
+	if projectState := os.Getenv("DEEPSEEK_PROJECT_STATE"); projectState != "" {
+		if os.Getenv("DEEPSEEK_PROJECT_ROOT") == "" {
+			fmt.Fprintln(os.Stderr, "DEEPSEEK_PROJECT_STATE requires DEEPSEEK_PROJECT_ROOT")
+			return 1
+		}
+		stateRoot, err = filepath.Abs(projectState)
+		if err != nil {
+			fmt.Fprintln(os.Stderr, err)
+			return 1
+		}
+	}
+	if os.Getenv("DEEPSEEK_PROJECT_ROOT") != "" && os.Getenv("DEEPSEEK_PROJECT_STATE") == "" {
+		fmt.Fprintln(os.Stderr, "project mode requires an isolated DEEPSEEK_PROJECT_STATE")
+		return 1
+	}
+	store := &history.JSON{Dir: filepath.Join(stateRoot, "conversations")}
+	config.Memory = &memorylayers.JSON{Dir: filepath.Join(stateRoot, "memory")}
+	config.UserProfiles = &userprofiles.JSON{Path: filepath.Join(stateRoot, "memory", "profiles.json")}
+	config.TaskStates = &taskstates.JSON{Dir: filepath.Join(stateRoot, "memory", "tasks")}
+	config.Invariants = &invariants.JSON{Path: filepath.Join(stateRoot, "memory", "invariants.json")}
 	config.UserProfile, err = config.UserProfiles.Active(context.Background())
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "Не удалось восстановить профиль пользователя: %v\n", err)
 		return 1
 	}
-	config.DocumentsDirectory = filepath.Join(filepath.Dir(configPath), "documents")
+	config.DocumentsDirectory = filepath.Join(stateRoot, "documents")
 	if err := os.MkdirAll(config.DocumentsDirectory, 0700); err != nil {
 		fmt.Fprintln(os.Stderr, "Не удалось создать папку документов")
 		return 1
+	}
+	if project := os.Getenv("DEEPSEEK_PROJECT_ROOT"); project != "" {
+		config.ProjectRoot, err = filepath.Abs(project)
+		if err != nil {
+			fmt.Fprintln(os.Stderr, err)
+			return 1
+		}
+		info, statErr := os.Stat(config.ProjectRoot)
+		if statErr != nil || !info.IsDir() {
+			fmt.Fprintln(os.Stderr, "project directory unavailable")
+			return 1
+		}
+		config.DocumentsDirectory = config.ProjectRoot
 	}
 	config.Tools = &filetools.Documents{Dir: config.DocumentsDirectory}
 	mcpClient, err := connectAgentMCP(config.Tools)
@@ -88,7 +117,7 @@ func run(input *bufio.Reader) int {
 	}
 	defer mcpClient.Close()
 	config.Tools = mcpClient
-	config.Knowledge = newKnowledgeManager(filepath.Dir(configPath))
+	config.Knowledge = newKnowledgeManager(stateRoot)
 	defer config.Knowledge.Close()
 	if address := os.Getenv("RAG_URL"); address != "" {
 		config.Tools, err = ragtools.New(address, config.Tools)
@@ -102,6 +131,17 @@ func run(input *bufio.Reader) int {
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "Не удалось восстановить историю: %v\n", err)
 		return 1
+	}
+	if config.ProjectRoot != "" {
+		manifest := os.Getenv("DEEPSEEK_PROJECT_INDEX")
+		if manifest == "" {
+			fmt.Fprintln(os.Stderr, "project mode requires DEEPSEEK_PROJECT_INDEX")
+			return 1
+		}
+		if _, err = config.Knowledge.AttachIndex("DeepSeek project documentation", manifest, config.ConversationID); err != nil {
+			fmt.Fprintln(os.Stderr, "Project index unavailable:", err)
+			return 1
+		}
 	}
 	removed, cleanupErr := store.Prune(context.Background(), config.ConversationID, config.HistoryPolicy.RetentionDays, time.Now())
 	if removed > 0 {

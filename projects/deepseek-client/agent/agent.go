@@ -47,14 +47,16 @@ func (a *Agent) WithInvariants(invariants InvariantStore) *Agent {
 }
 
 type invocation struct {
-	grounding   *groundingContext
-	allowTools  bool
-	target      Target
-	temperature float64
-	strategy    Strategy
-	control     *Control
-	validate    bool
-	messages    []Message
+	readOnlyTools  bool
+	toolInvariants []Invariant
+	grounding      *groundingContext
+	allowTools     bool
+	target         Target
+	temperature    float64
+	strategy       Strategy
+	control        *Control
+	validate       bool
+	messages       []Message
 }
 
 // Run returns completed responses even when a later model or judge fails.
@@ -227,6 +229,8 @@ func (a *Agent) Run(ctx context.Context, request Request) (Result, error) {
 		plan[0].messages = append([]Message(nil), effective...)
 	}
 	for i := range plan {
+		plan[i].readOnlyTools = request.ReadOnlyTools
+		plan[i].toolInvariants = invariants
 		plan[i].messages = append(append([]Message(nil), requestContext...), plan[i].messages...)
 		if request.Evidence != "" {
 			// Persisted assistant messages contain the human-readable rendering.
@@ -520,6 +524,11 @@ func (a *Agent) invoke(ctx context.Context, prompt string, step invocation) (Res
 	}
 	started := time.Now()
 	answer, fileContext, err := a.completeWithTools(ctx, step, prompt, settings, counter)
+	response.Answer = answer
+	response.Tokens.InputActual = answer.PromptTokens
+	response.Tokens.OutputActual = answer.CompletionTokens
+	response.Tokens.TotalActual = answer.TotalTokens
+	response.Tokens.UsageKnown = !answer.UsageIncomplete && (answer.UsageKnown || answer.PromptTokens > 0 || answer.CompletionTokens > 0)
 	if err != nil {
 		return response, err
 	}

@@ -37,6 +37,21 @@ func connectApplicationMCP(fallback agent.ToolExecutor) (*mcptools.Client, error
 }
 
 func handleMCPCommand(args []string, output, errorOutput io.Writer) (bool, int) {
+	if args[0] == "--mcp-git-server" {
+		if len(args) != 2 {
+			fmt.Fprintln(errorOutput, "Usage: --mcp-git-server ABSOLUTE_REPO")
+			return true, 2
+		}
+		server, err := gitmcp.NewServer(args[1])
+		if err == nil {
+			err = server.Run(context.Background(), &mcp.StdioTransport{})
+		}
+		if err != nil {
+			fmt.Fprintln(errorOutput, err)
+			return true, 1
+		}
+		return true, 0
+	}
 	if args[0] == "--mcp-multi-list" || args[0] == "--mcp-multi-call" {
 		if (args[0] == "--mcp-multi-list" && len(args) != 1) || (args[0] == "--mcp-multi-call" && len(args) != 3) {
 			fmt.Fprintln(errorOutput, "Usage: --mcp-multi-list | --mcp-multi-call SERVER__TOOL JSON_ARGUMENTS")

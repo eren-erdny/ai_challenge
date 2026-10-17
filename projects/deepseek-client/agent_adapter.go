@@ -13,11 +13,24 @@ import (
 
 // Configuration and credentials are resolved at the application boundary.
 func executeQuestion(ctx context.Context, token, prompt string, state sessionState, output, errorOutput io.Writer, ask askFunction) *requestStatus {
+	question, projectHelp := projectHelpQuestion(prompt)
+	if projectHelp {
+		prompt = question
+		if state.ToolsDisabled {
+			fmt.Fprintln(errorOutput, "Для /help с вопросом включите инструменты: /tools on.")
+			return nil
+		}
+	}
 	target := agent.Target{Profile: state.ActiveProfile, BaseURL: state.API.BaseURL, Model: state.Model, SendThinkingDisabled: isDeepSeekEndpoint(state.API.BaseURL)}
 	target.ContextWindow, target.MaxOutputTokens = state.API.ContextWindow, state.API.MaxOutputTokens
 	target.ReasoningEffort = state.API.ReasoningEffort
 	target.RAGTemplate = state.API.RAGTemplate
 	request := agent.Request{Prompt: prompt, Mode: state.Mode, Target: target, Temperature: state.Temperature, Strategy: state.Strategy, Control: state.Control, UserProfile: state.UserProfile}
+	if projectHelp {
+		request.ReadOnlyTools = true
+		request.Mode = agent.Free
+		request.Strategy = agent.Standard
+	}
 	if state.Knowledge != nil && !state.ToolsDisabled && prompt != "/compress" {
 		query, err := contextualKnowledgeQuery(ctx, state, prompt)
 		if err != nil {
@@ -59,6 +72,27 @@ func executeQuestion(ctx context.Context, token, prompt string, state sessionSta
 				}
 			}
 		}
+	}
+	if projectHelp && state.ProjectRoot != "" {
+		if state.Knowledge == nil {
+			fmt.Fprintln(errorOutput, "Project knowledge base is unavailable")
+			return nil
+		}
+		selected, selectErr := state.Knowledge.Selected(conversationID(state.ConversationID))
+		if selectErr != nil || selected.ID == "" {
+			fmt.Fprintln(errorOutput, "Select the project knowledge base through /kb")
+			return nil
+		}
+		if sourceErr := validateProjectSources(state.ProjectRoot, selected.Sources); sourceErr != nil {
+			fmt.Fprintln(errorOutput, "Project knowledge base mismatch:", sourceErr)
+			return nil
+		}
+		augmented, contextErr := projectHelpContext(ctx, state.Tools, state.ProjectRoot, request.Evidence, output)
+		if contextErr != nil {
+			fmt.Fprintln(errorOutput, "Project MCP context unavailable:", contextErr)
+			return nil
+		}
+		request.Evidence = augmented
 	}
 	credentials := map[string]string{target.Profile: token}
 	if state.Mode == modeModelBenchmark && prompt != "/compress" {

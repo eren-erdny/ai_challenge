@@ -76,6 +76,8 @@ func (f ClientFunc) Complete(ctx context.Context, target Target, prompt string, 
 }
 
 type Request struct {
+	// ReadOnlyTools enforces an application-owned allowlist before dispatch.
+	ReadOnlyTools  bool
 	Evidence       string
 	Compression    CompressionConfig
 	UserProfile    UserProfile

@@ -28,6 +28,7 @@ const (
 )
 
 type appConfig struct {
+	ProjectRoot        string                   `json:"-"`
 	Knowledge          *knowledge.Manager       `json:"-"`
 	Tools              agent.ToolExecutor       `json:"-"`
 	Memory             agent.LayeredMemoryStore `json:"-"`

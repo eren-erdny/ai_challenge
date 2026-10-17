@@ -26,3 +26,6 @@ __pycache__/
 # Local private-service build output
 /artifacts/hw30/
 /examples/private-llm/recording-*/done
+
+# Local developer-assistant indexes and isolated state
+/.project-assistant/

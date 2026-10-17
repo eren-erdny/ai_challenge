@@ -19,7 +19,7 @@ go run ./projects/deepseek-client
 
 Для другого набора серверов задайте MCP_SERVERS_FILE — путь к JSON по образцу
 [mcp-servers.example.json](mcp-servers.example.json). Файл полностью заменяет
-набор по умолчанию. Поддерживаются builtin-github и http; токен передаётся
+набор по умолчанию. Поддерживаются builtin-github, builtin-git и http; токен передаётся
 через переменную окружения, указанную в token_env, не через JSON.
 После изменения конфигурации перезапустите приложение.
 
@@ -105,3 +105,17 @@ unit-тесты покрывают одинаковые имена на разн
 
 Видео: [ai_challenge_hw20.mp4](C:/Users/erdni/Videos/ai_challenge_hw20.mp4).
 Подробности: [свидетельства прогона](../../raw/project/2026-09-28-hw20-multi-mcp-live.md).
+
+
+## Локальный Git MCP для помощника проекта
+
+Транспорт `builtin-git` принимает абсолютный путь `repo` и запускает
+встроенный сервер по stdio: URL и token_env для него запрещены.
+Пример записи servers: `{"name":"git","transport":"builtin-git","repo":"C:/path/to/repository"}`.
+Произвольный executable в конфигурации не поддерживается.
+
+[Start-Developer-Assistant.ps1](../../Start-Developer-Assistant.ps1) задаёт
+DEEPSEEK_PROJECT_ROOT, DEEPSEEK_PROJECT_STATE и DEEPSEEK_PROJECT_INDEX.
+В таком режиме приложение само определяет Git-корень проекта и подключает
+только локальный сервер git. Конфликтующие MCP_SERVERS_FILE/GIT_MCP_URL запрещены.
+Launcher восстанавливает переменные окружения после завершения.

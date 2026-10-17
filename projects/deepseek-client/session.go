@@ -39,6 +39,7 @@ type requestSettings = agent.Settings
 type askFunction func(context.Context, string, string, requestSettings) (completionResult, error)
 
 type sessionState struct {
+	ProjectRoot        string `json:"-"`
 	Knowledge          *knowledge.Manager
 	KnowledgeLabel     string
 	Compression        agent.CompressionConfig
@@ -85,6 +86,7 @@ func runInteractiveSession(
 	}
 	profile, _ := config.activeAPIProfile()
 	state := sessionState{
+		ProjectRoot:  config.ProjectRoot,
 		Knowledge:    config.Knowledge,
 		Compression:  config.HistoryPolicy.CompressionConfig,
 		Memory:       config.Memory,
@@ -133,7 +135,7 @@ func runInteractiveSession(
 			fmt.Fprintln(output, "Сеанс завершён.")
 			return 0
 		}
-		if strings.HasPrefix(text, "/") && text != "/compress" {
+		if strings.HasPrefix(text, "/") && text != "/compress" && !isProjectHelp(text) {
 			if text == "/kb" {
 				runKnowledgeMenu(input, &state, output)
 				continue
@@ -259,6 +261,7 @@ func handleSessionCommand(command string, state *sessionState, output io.Writer)
 	case "/rag":
 		handleRetrievalSettings(parts, state, output)
 	case "/help":
+		fmt.Fprintln(output, "/help ВОПРОС — вопросы о проекте с базой знаний и инструментами только чтения")
 		fmt.Fprintln(output, "/persona create|use|show|list|set|add-constraint|remove-constraint|delete — профиль пользователя")
 		fmt.Fprintln(output, "/memory STRATEGY   — full|summary|sliding|facts|branching")
 		fmt.Fprintln(output, "/brief show | goal TEXT | topic TEXT | constraint KEY TEXT | term KEY TEXT | clarify KEY TEXT — память задачи текущего чата")
