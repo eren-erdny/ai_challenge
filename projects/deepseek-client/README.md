@@ -982,3 +982,9 @@ Markdown, JSON, XML, YAML, TOML, Gradle и текстовые файлы. Вло
 Настройки RAG дня 23: `/rag baseline`, `/rag enhanced`, `/rag set 20 5`,
 `/rag threshold 0.49`, `/rag score-threshold -3`, `/rag rewrite on|off`.
 Подробности и ограничения порогов: [RAG.md](RAG.md).
+
+## Автоматическое AI-ревью PR
+
+[Настройка GitHub Actions и DeepSeek](docs/ai-review.md): diff, RAG по README/docs/коду,
+проверяемые замечания и комментарий в PR. [Живая локальная проверка](../../examples/ai-review/README.md).
+Автоматизация включается явно через repository variable после установки в базовую ветку.

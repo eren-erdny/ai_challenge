@@ -1,0 +1,26 @@
+{
+  "verified": "2026-10-16",
+  "repository": "eren-erdny/ai_challenge",
+  "base_sha": "0070f58a662addaef40e4182afe425a575dc951b",
+  "head_sha": "766ece2916b483c8501daa21df8b1d0dc6d7c9c8",
+  "pr_url": "https://github.com/eren-erdny/ai_challenge/pull/7",
+  "run_url": "https://github.com/eren-erdny/ai_challenge/actions/runs/38925358936",
+  "run_conclusion": "success",
+  "comment_url": "https://github.com/eren-erdny/ai_challenge/pull/7#issuecomment-6219003672",
+  "comment_matches_artifact": true,
+  "review_sha256": "19f7d80c0bbbc149b7f8e7780cbf861d615bb260e8dcd4995dd9075245a43580",
+  "reviewed_files": 1,
+  "corpus_files": 184,
+  "corpus_chunks": 933,
+  "retrieved_chunks": 8,
+  "validated_findings": 1,
+  "manual_review": "Expected synthetic nil regression found; changed-line and all evidence quotes verified; no application-code defect claimed.",
+  "ci_usage": {
+    "budget_usd": 0.02,
+    "reserved_usd": 0.0070850999999999996,
+    "estimated_peak_usd": 0.0016038,
+    "calls": 1
+  },
+  "total_local_and_ci_estimated_peak_usd": 0.0023028,
+  "ci_enabled_after_verification": false
+}

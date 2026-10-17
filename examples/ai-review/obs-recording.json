@@ -1,0 +1,63 @@
+{
+  "path": "C:/Users/erdni/Videos/ai_challenge_hw32.mp4",
+  "assignment": 32,
+  "duration_seconds": 169.05,
+  "bytes": 13614613,
+  "width": 2560,
+  "height": 1440,
+  "fps": 60.0,
+  "full_decode_exit_code": 0,
+  "audio_max_db": -91.0,
+  "sha256": "22267ebb9f27abcc1400b6d0bb91c5a4f992217b5f5e2e216ea1e6f3c799d98b",
+  "sampled_frames": [
+    {
+      "scene": "intro",
+      "seconds": 5.0
+    },
+    {
+      "scene": "diff",
+      "seconds": 17.633
+    },
+    {
+      "scene": "docs",
+      "seconds": 37.633
+    },
+    {
+      "scene": "workflow",
+      "seconds": 55.649
+    },
+    {
+      "scene": "action",
+      "seconds": 70.666
+    },
+    {
+      "scene": "rag",
+      "seconds": 90.699
+    },
+    {
+      "scene": "review",
+      "seconds": 110.699
+    },
+    {
+      "scene": "evidence",
+      "seconds": 138.766
+    },
+    {
+      "scene": "final",
+      "seconds": 161.766
+    }
+  ],
+  "encoded_frame_review": "All nine scene samples reviewed in a contact sheet; RAG and bot-review frames also reviewed at full extracted resolution. Diff, workflow trigger, completed Action, source context, finding, quotations and empty categories visible.",
+  "real_DeepSeek_calls_in_recording": 0,
+  "additional_model_cost_usd": 0,
+  "demonstrated_run": "https://github.com/eren-erdny/ai_challenge/actions/runs/38925358936",
+  "demonstrated_pr": "https://github.com/eren-erdny/ai_challenge/pull/7",
+  "presentation": "Native OBS Chromium browser_source; authentic public GitHub pages; CSS zoom/viewport positioning; separate explanatory labels; page loads paused.",
+  "fixture_responses": false,
+  "synthetic_PR_fixture": true,
+  "obs_original_scene_audio_restored": true,
+  "owned_browser_sources_shutdown_when_inactive": true,
+  "scenario": "recording-scenario.md",
+  "recording_scope": "Read-only viewing of a completed real run, explicitly labeled throughout; no fresh workflow invocation.",
+  "git": "No commit, push, merge or retag for this recording."
+}

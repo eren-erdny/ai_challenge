@@ -1,0 +1,75 @@
+name: DeepSeek PR review
+on:
+  pull_request:
+    types: [opened, synchronize, reopened, ready_for_review]
+    paths: ['projects/deepseek-client/**']
+permissions:
+  contents: read
+concurrency:
+  group: deepseek-review-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+jobs:
+  review:
+    if: >-
+      vars.AI_REVIEW_ENABLED == 'true' &&
+      (vars.AI_REVIEW_HEAD_BRANCH == '' || github.head_ref == vars.AI_REVIEW_HEAD_BRANCH) &&
+      github.event.pull_request.draft == false &&
+      github.event.pull_request.head.repo.full_name == github.repository &&
+      github.actor != 'dependabot[bot]'
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      contents: read
+      pull-requests: write
+    steps:
+      - name: Checkout trusted base
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with:
+          ref: ${{ github.event.pull_request.base.sha }}
+          fetch-depth: 0
+          persist-credentials: false
+          path: trusted
+      - name: Set up Go
+        uses: actions/setup-go@924ae3a1cded613372ab5595356fb5720e22ba16 # v6
+        with:
+          go-version-file: trusted/projects/deepseek-client/go.mod
+          cache: false
+      - name: Read PR objects and build trusted reviewer
+        working-directory: trusted
+        env:
+          PR_HEAD: ${{ github.event.pull_request.head.sha }}
+          PR_BASE: ${{ github.event.pull_request.base.sha }}
+        run: |
+          test -f projects/deepseek-client/cmd/review-pr/main.go
+          git cat-file -e "$PR_HEAD^{commit}"
+          git cat-file -e "$PR_BASE^{commit}"
+          cd projects/deepseek-client
+          go build -mod=readonly -o "$RUNNER_TEMP/review-pr" ./cmd/review-pr
+      - name: Generate validated review
+        env:
+          DEEPSEEK_API_KEY: ${{ secrets.DEEPSEEK_API_KEY }}
+          PR_HEAD: ${{ github.event.pull_request.head.sha }}
+          PR_BASE: ${{ github.event.pull_request.base.sha }}
+          REVIEW_BUDGET: ${{ vars.AI_REVIEW_BUDGET_USD || '0.02' }}
+        run: |
+          "$RUNNER_TEMP/review-pr" \
+            --repo "$GITHUB_WORKSPACE/trusted" \
+            --base "$PR_BASE" --head "$PR_HEAD" \
+            --scope projects/deepseek-client \
+            --output "$RUNNER_TEMP/ai-review" \
+            --ledger "$RUNNER_TEMP/ai-review-budget.json" \
+            --budget-usd "$REVIEW_BUDGET"
+      - name: Publish review comment
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        run: python3 trusted/scripts/ai-review/publish.py "$RUNNER_TEMP/ai-review"
+      - name: Save review and evidence
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: ai-review-${{ github.event.pull_request.number }}-${{ github.run_id }}
+          path: |
+            ${{ runner.temp }}/ai-review/
+            ${{ runner.temp }}/ai-review-budget.json
+          if-no-files-found: ignore
+          retention-days: 7
