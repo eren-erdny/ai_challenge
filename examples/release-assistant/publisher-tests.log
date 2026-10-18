@@ -1,0 +1,10 @@
+test_create (test_publish.PublicationTests.test_create) ... ok
+test_fork_rejected_without_network (test_publish.PublicationTests.test_fork_rejected_without_network) ... ok
+test_stale_before_write (test_publish.PublicationTests.test_stale_before_write) ... ok
+test_updates_only_bot (test_publish.PublicationTests.test_updates_only_bot) ... ok
+test_wrong_evidence (test_publish.PublicationTests.test_wrong_evidence) ... ok
+
+----------------------------------------------------------------------
+Ran 5 tests in 0.005s
+
+OK

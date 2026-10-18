@@ -160,6 +160,9 @@ func handleCommand(args []string, output io.Writer, errorOutput io.Writer) (bool
 	if len(args) == 0 {
 		return false, 0
 	}
+	if args[0] == "--release-assistant" {
+		return true, runReleaseAssistant(args[1:], output, errorOutput)
+	}
 	if args[0] == "--file-assistant-demo" {
 		return true, runFileAssistantDemo(args[1:], output, errorOutput)
 	}

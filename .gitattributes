@@ -2,6 +2,11 @@
 examples/** text eol=lf
 # Screenshots are binary; never normalize their bytes as text.
 examples/**/*.png binary
+
+# Release evidence contains byte-level SHA-256 manifests; preserve original bytes.
+examples/release-assistant/** -text whitespace=cr-at-eol
+# Unified diff context carries meaningful whitespace, not source formatting errors.
+examples/release-assistant/changes.diff -whitespace
 # Embedded teaching files must match saved exact-edit arguments on every OS.
 projects/deepseek-client/fileassistant/fixture/** text eol=lf
 # RFC provenance hashes describe the exact downloaded/prepared bytes.

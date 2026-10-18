@@ -35,3 +35,6 @@ __pycache__/
 
 # File-assistant isolated runs, budget and local executable
 /.file-assistant/
+
+# Local release preparation, snapshots, credentials-free logs and budget
+/.release-assistant/

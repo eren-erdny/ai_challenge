@@ -1,0 +1,23 @@
+ok  	github.com/eren-erdny/ai_challenge/projects/deepseek-client	2.016s
+ok  	github.com/eren-erdny/ai_challenge/projects/deepseek-client/agent	1.669s
+?   	github.com/eren-erdny/ai_challenge/projects/deepseek-client/cmd/git-mcp	[no test files]
+ok  	github.com/eren-erdny/ai_challenge/projects/deepseek-client/cmd/mcp-demo	0.139s
+ok  	github.com/eren-erdny/ai_challenge/projects/deepseek-client/cmd/private-llm	0.139s
+?   	github.com/eren-erdny/ai_challenge/projects/deepseek-client/cmd/review-pr	[no test files]
+?   	github.com/eren-erdny/ai_challenge/projects/deepseek-client/cmd/support-assistant	[no test files]
+ok  	github.com/eren-erdny/ai_challenge/projects/deepseek-client/fileassistant	1.154s
+ok  	github.com/eren-erdny/ai_challenge/projects/deepseek-client/filetools	0.708s
+ok  	github.com/eren-erdny/ai_challenge/projects/deepseek-client/githubmcp	0.170s
+ok  	github.com/eren-erdny/ai_challenge/projects/deepseek-client/gitmcp	5.581s
+ok  	github.com/eren-erdny/ai_challenge/projects/deepseek-client/history	1.110s
+ok  	github.com/eren-erdny/ai_challenge/projects/deepseek-client/invariants	0.183s
+ok  	github.com/eren-erdny/ai_challenge/projects/deepseek-client/knowledge	1.201s
+ok  	github.com/eren-erdny/ai_challenge/projects/deepseek-client/llm	0.490s
+ok  	github.com/eren-erdny/ai_challenge/projects/deepseek-client/mcppipeline	3.665s
+ok  	github.com/eren-erdny/ai_challenge/projects/deepseek-client/mcptools	0.108s
+ok  	github.com/eren-erdny/ai_challenge/projects/deepseek-client/memorylayers	0.198s
+ok  	github.com/eren-erdny/ai_challenge/projects/deepseek-client/prreview	2.276s
+ok  	github.com/eren-erdny/ai_challenge/projects/deepseek-client/ragtools	0.051s
+ok  	github.com/eren-erdny/ai_challenge/projects/deepseek-client/support	0.546s
+ok  	github.com/eren-erdny/ai_challenge/projects/deepseek-client/taskstates	0.617s
+ok  	github.com/eren-erdny/ai_challenge/projects/deepseek-client/userprofiles	0.295s

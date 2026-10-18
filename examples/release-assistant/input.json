@@ -1,0 +1,789 @@
+{
+  "version": "week-7-preview",
+  "base_sha": "12acaad5648fab8b45ba636544c8ef24b8987af5",
+  "head_sha": "8fa5d10eb212796cfb93c2344a3428e3290bb51b",
+  "commits": [
+    {
+      "sha": "8fa5d10eb212796cfb93c2344a3428e3290bb51b",
+      "subject": "feat: add reproducible AI project file assistant (day 34)",
+      "files": [
+        ".gitattributes",
+        ".gitignore",
+        "Start-File-Assistant.cmd",
+        "Start-File-Assistant.ps1",
+        "examples/file-assistant/README.md",
+        "examples/file-assistant/answers.json",
+        "examples/file-assistant/changes.diff",
+        "examples/file-assistant/checks.json",
+        "examples/file-assistant/files.json",
+        "examples/file-assistant/obs-recording.json",
+        "examples/file-assistant/recording-node-tests.txt",
+        "examples/file-assistant/recording-scenario.md",
+        "examples/file-assistant/result/README.md",
+        "examples/file-assistant/result/docs/export-api-map.md",
+        "examples/file-assistant/result/docs/faq.md",
+        "examples/file-assistant/result/src/api.js",
+        "examples/file-assistant/result/src/export.js",
+        "examples/file-assistant/result/src/ui.js",
+        "examples/file-assistant/result/test/export.test.js",
+        "examples/file-assistant/tool-trace.json",
+        "examples/file-assistant/verification.json",
+        "projects/deepseek-client/README.md",
+        "projects/deepseek-client/docs/file-assistant.md",
+        "projects/deepseek-client/file_assistant_demo.go",
+        "projects/deepseek-client/fileassistant/fixture/README.md",
+        "projects/deepseek-client/fileassistant/fixture/docs/faq.md",
+        "projects/deepseek-client/fileassistant/fixture/src/api.js",
+        "projects/deepseek-client/fileassistant/fixture/src/export.js",
+        "projects/deepseek-client/fileassistant/fixture/src/ui.js",
+        "projects/deepseek-client/fileassistant/fixture/test/export.test.js",
+        "projects/deepseek-client/fileassistant/session.go",
+        "projects/deepseek-client/fileassistant/session_test.go",
+        "projects/deepseek-client/main.go"
+      ]
+    },
+    {
+      "sha": "0b39a794f6e7d22192190f3e0c792f0e9af01bc3",
+      "subject": "feat: add grounded user support assistant over MCP (day 33)",
+      "files": [
+        ".gitattributes",
+        ".gitignore",
+        "Start-Support-Assistant.cmd",
+        "Start-Support-Assistant.ps1",
+        "examples/support-assistant/README.md",
+        "examples/support-assistant/crm.json",
+        "examples/support-assistant/docs/auth.md",
+        "examples/support-assistant/docs/faq.md",
+        "examples/support-assistant/docs/product.md",
+        "examples/support-assistant/obs-recording.json",
+        "examples/support-assistant/recheck.json",
+        "examples/support-assistant/recording-scenario.md",
+        "examples/support-assistant/ui-preview.png",
+        "examples/support-assistant/verification.json",
+        "projects/deepseek-client/README.md",
+        "projects/deepseek-client/cmd/support-assistant/main.go",
+        "projects/deepseek-client/docs/support-assistant.md",
+        "projects/deepseek-client/support/boundaries_test.go",
+        "projects/deepseek-client/support/budget.go",
+        "projects/deepseek-client/support/crm.go",
+        "projects/deepseek-client/support/http.go",
+        "projects/deepseek-client/support/rag.go",
+        "projects/deepseek-client/support/service.go",
+        "projects/deepseek-client/support/support_test.go",
+        "projects/deepseek-client/support/ui.html",
+        "projects/deepseek-client/support_live_integration_test.go"
+      ]
+    },
+    {
+      "sha": "8be23598c56dd2e734e7932d2a56835f55a21434",
+      "subject": "feat: automate grounded AI pull request review (day 32)",
+      "files": [
+        ".github/workflows/ai-review.yml",
+        "examples/ai-review/README.md",
+        "examples/ai-review/completion.json",
+        "examples/ai-review/github/completion.json",
+        "examples/ai-review/github/input.json",
+        "examples/ai-review/github/review.json",
+        "examples/ai-review/github/review.md",
+        "examples/ai-review/github/usage.json",
+        "examples/ai-review/github/verification.json",
+        "examples/ai-review/input.json",
+        "examples/ai-review/obs-recording.json",
+        "examples/ai-review/recording-scenario.md",
+        "examples/ai-review/review.json",
+        "examples/ai-review/review.md",
+        "examples/ai-review/usage.json",
+        "examples/ai-review/verification.json",
+        "projects/deepseek-client/README.md",
+        "projects/deepseek-client/cmd/review-pr/main.go",
+        "projects/deepseek-client/docs/ai-review.md",
+        "projects/deepseek-client/docs/review-demo.md",
+        "projects/deepseek-client/pr_review_integration_test.go",
+        "projects/deepseek-client/prreview/collect.go",
+        "projects/deepseek-client/prreview/retrieval.go",
+        "projects/deepseek-client/prreview/review.go",
+        "projects/deepseek-client/prreview/review_test.go",
+        "projects/deepseek-client/prreview/testdata/demo/user.go",
+        "scripts/ai-review/make_fixture.py",
+        "scripts/ai-review/publish.py",
+        "scripts/ai-review/test_publish.py"
+      ]
+    },
+    {
+      "sha": "896829fb3cfbaf6613491786348088dbef233c95",
+      "subject": "feat: add guarded project developer assistant (day 31)",
+      "files": [
+        ".gitignore",
+        "Start-Developer-Assistant.cmd",
+        "Start-Developer-Assistant.ps1",
+        "examples/developer-assistant/README.md",
+        "examples/developer-assistant/answers.json",
+        "examples/developer-assistant/obs-recording.json",
+        "examples/developer-assistant/recording-answers.json",
+        "examples/developer-assistant/recording-scenario.md",
+        "projects/deepseek-client/MULTI_MCP.md",
+        "projects/deepseek-client/README.md",
+        "projects/deepseek-client/TOOL_GUARD.md",
+        "projects/deepseek-client/agent/agent.go",
+        "projects/deepseek-client/agent/grounding.go",
+        "projects/deepseek-client/agent/tool_guard.go",
+        "projects/deepseek-client/agent/tool_guard_test.go",
+        "projects/deepseek-client/agent/tools.go",
+        "projects/deepseek-client/agent/types.go",
+        "projects/deepseek-client/agent_adapter.go",
+        "projects/deepseek-client/config.go",
+        "projects/deepseek-client/docs/architecture.md",
+        "projects/deepseek-client/docs/data-model.md",
+        "projects/deepseek-client/docs/developer-assistant.md",
+        "projects/deepseek-client/go.mod",
+        "projects/deepseek-client/main.go",
+        "projects/deepseek-client/mcp_commands.go",
+        "projects/deepseek-client/mcp_registry.go",
+        "projects/deepseek-client/project_assistant_integration_test.go",
+        "projects/deepseek-client/project_context_test.go",
+        "projects/deepseek-client/project_help.go",
+        "projects/deepseek-client/project_help_test.go",
+        "projects/deepseek-client/session.go",
+        "projects/deepseek-client/tui.go"
+      ]
+    }
+  ],
+  "changed_files": [
+    {
+      "status": "M",
+      "path": ".gitattributes"
+    },
+    {
+      "status": "A",
+      "path": ".github/workflows/ai-review.yml"
+    },
+    {
+      "status": "M",
+      "path": ".gitignore"
+    },
+    {
+      "status": "A",
+      "path": "Start-Developer-Assistant.cmd"
+    },
+    {
+      "status": "A",
+      "path": "Start-Developer-Assistant.ps1"
+    },
+    {
+      "status": "A",
+      "path": "Start-File-Assistant.cmd"
+    },
+    {
+      "status": "A",
+      "path": "Start-File-Assistant.ps1"
+    },
+    {
+      "status": "A",
+      "path": "Start-Support-Assistant.cmd"
+    },
+    {
+      "status": "A",
+      "path": "Start-Support-Assistant.ps1"
+    },
+    {
+      "status": "A",
+      "path": "examples/ai-review/README.md"
+    },
+    {
+      "status": "A",
+      "path": "examples/ai-review/completion.json"
+    },
+    {
+      "status": "A",
+      "path": "examples/ai-review/github/completion.json"
+    },
+    {
+      "status": "A",
+      "path": "examples/ai-review/github/input.json"
+    },
+    {
+      "status": "A",
+      "path": "examples/ai-review/github/review.json"
+    },
+    {
+      "status": "A",
+      "path": "examples/ai-review/github/review.md"
+    },
+    {
+      "status": "A",
+      "path": "examples/ai-review/github/usage.json"
+    },
+    {
+      "status": "A",
+      "path": "examples/ai-review/github/verification.json"
+    },
+    {
+      "status": "A",
+      "path": "examples/ai-review/input.json"
+    },
+    {
+      "status": "A",
+      "path": "examples/ai-review/obs-recording.json"
+    },
+    {
+      "status": "A",
+      "path": "examples/ai-review/recording-scenario.md"
+    },
+    {
+      "status": "A",
+      "path": "examples/ai-review/review.json"
+    },
+    {
+      "status": "A",
+      "path": "examples/ai-review/review.md"
+    },
+    {
+      "status": "A",
+      "path": "examples/ai-review/usage.json"
+    },
+    {
+      "status": "A",
+      "path": "examples/ai-review/verification.json"
+    },
+    {
+      "status": "A",
+      "path": "examples/developer-assistant/README.md"
+    },
+    {
+      "status": "A",
+      "path": "examples/developer-assistant/answers.json"
+    },
+    {
+      "status": "A",
+      "path": "examples/developer-assistant/obs-recording.json"
+    },
+    {
+      "status": "A",
+      "path": "examples/developer-assistant/recording-answers.json"
+    },
+    {
+      "status": "A",
+      "path": "examples/developer-assistant/recording-scenario.md"
+    },
+    {
+      "status": "A",
+      "path": "examples/file-assistant/README.md"
+    },
+    {
+      "status": "A",
+      "path": "examples/file-assistant/answers.json"
+    },
+    {
+      "status": "A",
+      "path": "examples/file-assistant/changes.diff"
+    },
+    {
+      "status": "A",
+      "path": "examples/file-assistant/checks.json"
+    },
+    {
+      "status": "A",
+      "path": "examples/file-assistant/files.json"
+    },
+    {
+      "status": "A",
+      "path": "examples/file-assistant/obs-recording.json"
+    },
+    {
+      "status": "A",
+      "path": "examples/file-assistant/recording-node-tests.txt"
+    },
+    {
+      "status": "A",
+      "path": "examples/file-assistant/recording-scenario.md"
+    },
+    {
+      "status": "A",
+      "path": "examples/file-assistant/result/README.md"
+    },
+    {
+      "status": "A",
+      "path": "examples/file-assistant/result/docs/export-api-map.md"
+    },
+    {
+      "status": "A",
+      "path": "examples/file-assistant/result/docs/faq.md"
+    },
+    {
+      "status": "A",
+      "path": "examples/file-assistant/result/src/api.js"
+    },
+    {
+      "status": "A",
+      "path": "examples/file-assistant/result/src/export.js"
+    },
+    {
+      "status": "A",
+      "path": "examples/file-assistant/result/src/ui.js"
+    },
+    {
+      "status": "A",
+      "path": "examples/file-assistant/result/test/export.test.js"
+    },
+    {
+      "status": "A",
+      "path": "examples/file-assistant/tool-trace.json"
+    },
+    {
+      "status": "A",
+      "path": "examples/file-assistant/verification.json"
+    },
+    {
+      "status": "A",
+      "path": "examples/support-assistant/README.md"
+    },
+    {
+      "status": "A",
+      "path": "examples/support-assistant/crm.json"
+    },
+    {
+      "status": "A",
+      "path": "examples/support-assistant/docs/auth.md"
+    },
+    {
+      "status": "A",
+      "path": "examples/support-assistant/docs/faq.md"
+    },
+    {
+      "status": "A",
+      "path": "examples/support-assistant/docs/product.md"
+    },
+    {
+      "status": "A",
+      "path": "examples/support-assistant/obs-recording.json"
+    },
+    {
+      "status": "A",
+      "path": "examples/support-assistant/recheck.json"
+    },
+    {
+      "status": "A",
+      "path": "examples/support-assistant/recording-scenario.md"
+    },
+    {
+      "status": "A",
+      "path": "examples/support-assistant/ui-preview.png"
+    },
+    {
+      "status": "A",
+      "path": "examples/support-assistant/verification.json"
+    },
+    {
+      "status": "M",
+      "path": "projects/deepseek-client/MULTI_MCP.md"
+    },
+    {
+      "status": "M",
+      "path": "projects/deepseek-client/README.md"
+    },
+    {
+      "status": "A",
+      "path": "projects/deepseek-client/TOOL_GUARD.md"
+    },
+    {
+      "status": "M",
+      "path": "projects/deepseek-client/agent/agent.go"
+    },
+    {
+      "status": "M",
+      "path": "projects/deepseek-client/agent/grounding.go"
+    },
+    {
+      "status": "A",
+      "path": "projects/deepseek-client/agent/tool_guard.go"
+    },
+    {
+      "status": "A",
+      "path": "projects/deepseek-client/agent/tool_guard_test.go"
+    },
+    {
+      "status": "M",
+      "path": "projects/deepseek-client/agent/tools.go"
+    },
+    {
+      "status": "M",
+      "path": "projects/deepseek-client/agent/types.go"
+    },
+    {
+      "status": "M",
+      "path": "projects/deepseek-client/agent_adapter.go"
+    },
+    {
+      "status": "A",
+      "path": "projects/deepseek-client/cmd/review-pr/main.go"
+    },
+    {
+      "status": "A",
+      "path": "projects/deepseek-client/cmd/support-assistant/main.go"
+    },
+    {
+      "status": "M",
+      "path": "projects/deepseek-client/config.go"
+    },
+    {
+      "status": "A",
+      "path": "projects/deepseek-client/docs/ai-review.md"
+    },
+    {
+      "status": "A",
+      "path": "projects/deepseek-client/docs/architecture.md"
+    },
+    {
+      "status": "A",
+      "path": "projects/deepseek-client/docs/data-model.md"
+    },
+    {
+      "status": "A",
+      "path": "projects/deepseek-client/docs/developer-assistant.md"
+    },
+    {
+      "status": "A",
+      "path": "projects/deepseek-client/docs/file-assistant.md"
+    },
+    {
+      "status": "A",
+      "path": "projects/deepseek-client/docs/review-demo.md"
+    },
+    {
+      "status": "A",
+      "path": "projects/deepseek-client/docs/support-assistant.md"
+    },
+    {
+      "status": "A",
+      "path": "projects/deepseek-client/file_assistant_demo.go"
+    },
+    {
+      "status": "A",
+      "path": "projects/deepseek-client/fileassistant/fixture/README.md"
+    },
+    {
+      "status": "A",
+      "path": "projects/deepseek-client/fileassistant/fixture/docs/faq.md"
+    },
+    {
+      "status": "A",
+      "path": "projects/deepseek-client/fileassistant/fixture/src/api.js"
+    },
+    {
+      "status": "A",
+      "path": "projects/deepseek-client/fileassistant/fixture/src/export.js"
+    },
+    {
+      "status": "A",
+      "path": "projects/deepseek-client/fileassistant/fixture/src/ui.js"
+    },
+    {
+      "status": "A",
+      "path": "projects/deepseek-client/fileassistant/fixture/test/export.test.js"
+    },
+    {
+      "status": "A",
+      "path": "projects/deepseek-client/fileassistant/session.go"
+    },
+    {
+      "status": "A",
+      "path": "projects/deepseek-client/fileassistant/session_test.go"
+    },
+    {
+      "status": "M",
+      "path": "projects/deepseek-client/go.mod"
+    },
+    {
+      "status": "M",
+      "path": "projects/deepseek-client/main.go"
+    },
+    {
+      "status": "M",
+      "path": "projects/deepseek-client/mcp_commands.go"
+    },
+    {
+      "status": "M",
+      "path": "projects/deepseek-client/mcp_registry.go"
+    },
+    {
+      "status": "A",
+      "path": "projects/deepseek-client/pr_review_integration_test.go"
+    },
+    {
+      "status": "A",
+      "path": "projects/deepseek-client/project_assistant_integration_test.go"
+    },
+    {
+      "status": "A",
+      "path": "projects/deepseek-client/project_context_test.go"
+    },
+    {
+      "status": "A",
+      "path": "projects/deepseek-client/project_help.go"
+    },
+    {
+      "status": "A",
+      "path": "projects/deepseek-client/project_help_test.go"
+    },
+    {
+      "status": "A",
+      "path": "projects/deepseek-client/prreview/collect.go"
+    },
+    {
+      "status": "A",
+      "path": "projects/deepseek-client/prreview/retrieval.go"
+    },
+    {
+      "status": "A",
+      "path": "projects/deepseek-client/prreview/review.go"
+    },
+    {
+      "status": "A",
+      "path": "projects/deepseek-client/prreview/review_test.go"
+    },
+    {
+      "status": "A",
+      "path": "projects/deepseek-client/prreview/testdata/demo/user.go"
+    },
+    {
+      "status": "M",
+      "path": "projects/deepseek-client/session.go"
+    },
+    {
+      "status": "A",
+      "path": "projects/deepseek-client/support/boundaries_test.go"
+    },
+    {
+      "status": "A",
+      "path": "projects/deepseek-client/support/budget.go"
+    },
+    {
+      "status": "A",
+      "path": "projects/deepseek-client/support/crm.go"
+    },
+    {
+      "status": "A",
+      "path": "projects/deepseek-client/support/http.go"
+    },
+    {
+      "status": "A",
+      "path": "projects/deepseek-client/support/rag.go"
+    },
+    {
+      "status": "A",
+      "path": "projects/deepseek-client/support/service.go"
+    },
+    {
+      "status": "A",
+      "path": "projects/deepseek-client/support/support_test.go"
+    },
+    {
+      "status": "A",
+      "path": "projects/deepseek-client/support/ui.html"
+    },
+    {
+      "status": "A",
+      "path": "projects/deepseek-client/support_live_integration_test.go"
+    },
+    {
+      "status": "M",
+      "path": "projects/deepseek-client/tui.go"
+    },
+    {
+      "status": "A",
+      "path": "scripts/ai-review/make_fixture.py"
+    },
+    {
+      "status": "A",
+      "path": "scripts/ai-review/publish.py"
+    },
+    {
+      "status": "A",
+      "path": "scripts/ai-review/test_publish.py"
+    }
+  ],
+  "selected_head_evidence": [
+    {
+      "id": "d1b507a8b97ee8c0b30fb8d0",
+      "path": "projects/deepseek-client/README.md",
+      "kind": "documentation",
+      "start_line": 1,
+      "end_line": 24,
+      "text": "# DeepSeek Client\n\n## Помощник по этому проекту\n\nИз корня монорепозитория запустите [Start-Developer-Assistant.cmd](../../Start-Developer-Assistant.cmd).\nЛокальный RAG индексирует этот README и [актуальную docs](docs/architecture.md).\nGit MCP по stdio читает тот же монорепозиторий. В TUI задайте\n`/help Как устроен проект?` или `/help На какой ветке мы работаем?`.\n\n[Подготовка, обновление индекса и примеры](docs/developer-assistant.md).\n\n## Защита tool calling и вопросы о проекте\n\nКоманда `/help ВОПРОС` использует выбранную базу знаний и инструменты только\nчтения. `/help` без вопроса сохраняет справку по командам. Все модельные\ntool calls проверяются по схеме аргументов до выполнения; при наличии\nинвариантов действует отдельная предисполнительная LLM-проверка.\n\n[Настройка, разрешённые инструменты и границы защиты](TOOL_GUARD.md).\n\n## Поиск по документам (RAG)\n\nДля диалога с памятью задачи используйте `/brief`: цель, ограничения,\nтермины и уточнения сохраняются отдельно для каждого чата. Выбранная база",
+      "score": 0.2140479172083667
+    },
+    {
+      "id": "0c38ee6fb8e0b9eb7b72f401",
+      "path": "projects/deepseek-client/MULTI_MCP.md",
+      "kind": "documentation",
+      "start_line": 109,
+      "end_line": 122,
+      "text": "\n## Локальный Git MCP для помощника проекта\n\nТранспорт `builtin-git` принимает абсолютный путь `repo` и запускает\nвстроенный сервер по stdio: URL и token_env для него запрещены.\nПример записи servers: `{\"name\":\"git\",\"transport\":\"builtin-git\",\"repo\":\"C:/path/to/repository\"}`.\nПроизвольный executable в конфигурации не поддерживается.\n\n[Start-Developer-Assistant.ps1](../../Start-Developer-Assistant.ps1) задаёт\nDEEPSEEK_PROJECT_ROOT, DEEPSEEK_PROJECT_STATE и DEEPSEEK_PROJECT_INDEX.\nВ таком режиме приложение само определяет Git-корень проекта и подключает\nтолько локальный сервер git. Конфликтующие MCP_SERVERS_FILE/GIT_MCP_URL запрещены.\nLauncher восстанавливает переменные окружения после завершения.\n",
+      "score": 0.19784821487477444
+    },
+    {
+      "id": "5dfd81f4c601e5489c3d8250",
+      "path": "projects/deepseek-client/project_help.go",
+      "kind": "code",
+      "start_line": 91,
+      "end_line": 105,
+      "text": "\t\t\treturn errors.New(\"selected knowledge base contains sources outside the project\")\n\t\t}\n\t\tif relative == \"README.md\" {\n\t\t\thasReadme = true\n\t\t}\n\t\tif relative == \"docs\" {\n\t\t\thasDocs = true\n\t\t}\n\t}\n\tif !hasReadme || !hasDocs {\n\t\treturn errors.New(\"select the project README + docs knowledge base\")\n\t}\n\treturn nil\n}\n",
+      "score": 0.1637002403080081
+    },
+    {
+      "id": "41521a66c326fb210f2bbe63",
+      "path": "projects/deepseek-client/docs/ai-review.md",
+      "kind": "documentation",
+      "start_line": 109,
+      "end_line": 120,
+      "text": "    python -m unittest discover -s scripts/ai-review -v\n\nОпциональный TestPRReviewLive требует отдельного текущего разрешения, бюджета,\nновой выходной папки и общего ledger; обычный go test его пропускает.\nЖивая проверка выполнена локально и на GitHub runner. [Тестовый PR №7](https://github.com/eren-erdny/ai_challenge/pull/7),\n[успешный Action](https://github.com/eren-erdny/ai_challenge/actions/runs/38925358936)\nи [комментарий бота](https://github.com/eren-erdny/ai_challenge/pull/7#issuecomment-6219003672).\n[Сохранённые артефакты](../../../examples/ai-review/github/verification.json).\nПосле проверки AI_REVIEW_ENABLED=false; secret сохранён, лимит на запуск 0.02.\nВременное ограничение тестовой ветки удалено. Для постоянной работы сначала\nобъедините реализацию в целевую базовую ветку и затем явно включите автоматизацию.\n",
+      "score": 0.22774510264577183
+    },
+    {
+      "id": "f8fd462789ec27d61560b926",
+      "path": "projects/deepseek-client/docs/ai-review.md",
+      "kind": "documentation",
+      "start_line": 1,
+      "end_line": 24,
+      "text": "# Автоматическое ревью PR через DeepSeek\n\nРеализация: [workflow](../../../.github/workflows/ai-review.yml),\n[CLI](../cmd/review-pr/main.go), [сборщик и RAG](../prreview),\n[публикация](../../../scripts/ai-review/publish.py).\n[Живой пример](../../../examples/ai-review/README.md).\n\n## Как работает\n\n1. GitHub Action реагирует на opened/synchronize/reopened/ready_for_review для\n   недрафтового PR с изменениями в projects/deepseek-client.\n2. Из точного base SHA собирается доверенный Go CLI. Head PR не checkout-ится:\n   его diff читается из Git-объектов относительно merge-base.\n3. Корпус README, docs и исходников берётся из base SHA. Разбиение: до 40 строк,\n   шаг 30. TF-IDF векторы и cosine similarity выбирают до 3 фрагментов документации\n   и 5 фрагментов кода, всего до 24000 байт. Это локальный векторный RAG,\n   без нейронных embeddings, Ollama и отдельного сервера.\n4. Один запрос deepseek-flash, JSON, thinking disabled, max_tokens=1600.\n   Модель получает diff, список файлов, строки и найденный контекст.\n5. Валидатор запрещает неизвестные/повторные JSON-поля, неверные категории,\n   неподтверждённые строки diff и отсутствующие в контексте цитаты.\n   Невалидное или оборванное ревью не публикуется; автоматических повторов нет.\n6. Фиксированный Python publisher создаёт или обновляет один комментарий бота\n   с разделами «Потенциальные баги», «Архитектурные проблемы», «Рекомендации».",
+      "score": 0.20728367640095055
+    },
+    {
+      "id": "3031da394688156d167062e9",
+      "path": "projects/deepseek-client/prreview/review.go",
+      "kind": "code",
+      "start_line": 1,
+      "end_line": 24,
+      "text": "package prreview\n\nimport (\n\t\"context\"\n\t\"encoding/json\"\n\t\"errors\"\n\t\"fmt\"\n\t\"io\"\n\t\"math\"\n\t\"os\"\n\t\"strings\"\n\n\t\"github.com/eren-erdny/ai_challenge/projects/deepseek-client/agent\"\n\t\"github.com/eren-erdny/ai_challenge/projects/deepseek-client/llm\"\n)\n\ntype Evidence struct {\n\tID    string `json:\"chunk_id\"`\n\tQuote string `json:\"quote\"`\n}\ntype Finding struct {\n\tCategory       string     `json:\"category\"`\n\tPriority       string     `json:\"priority\"`\n\tPath           string     `json:\"path\"`",
+      "score": 0.14961512987500422
+    },
+    {
+      "id": "c2bd977c6606e4e85e088775",
+      "path": "projects/deepseek-client/docs/support-assistant.md",
+      "kind": "documentation",
+      "start_line": 1,
+      "end_line": 14,
+      "text": "# Support assistant\n\n[TaskDesk support service: setup, sample CRM, FAQ and verification](../../../examples/support-assistant/README.md).\n\nЗапуск из корня: Start-Support-Assistant.cmd -BudgetUsd 0.20.\nОстановка: Start-Support-Assistant.ps1 -Stop.\n\nКоманда cmd/support-assistant запускает loopback HTTP UI и отдельный\nMCP stdio-процесс с закреплённым пользователем. Пакет support содержит JSON CRM,\nTF-IDF FAQ retrieval, HTTP API и учёт бюджета. Генерация и проверка цитат используют\nсуществующие llm и agent. Данные и история основного TUI не изменяются.\n\nПродукт TaskDesk и данные пользователей/тикетов — синтетическая демонстрация.\n",
+      "score": 0.2873347967203669
+    },
+    {
+      "id": "0d64b9309fc17eb79748e2c4",
+      "path": "projects/deepseek-client/README.md",
+      "kind": "documentation",
+      "start_line": 991,
+      "end_line": 1003,
+      "text": "\n## Ассистент поддержки\n\n[TaskDesk support](../../examples/support-assistant/README.md): локальный веб-сервис,\nFAQ RAG и контекст пользователей/тикетов через отдельный MCP stdio-процесс.\nЗапуск из корня: Start-Support-Assistant.cmd -BudgetUsd 0.20.\n\n## Ассистент для работы с файлами — домашка 34\n\nЗапуск из корня: .\\Start-File-Assistant.ps1 -BudgetUsd 0.20. Агент самостоятельно исследует учебный TaskDesk, исправляет README/FAQ и создаёт карту API. Ключ и текущий бюджет обязательны; -Verify выполняет обе цели через scripted TUI submit/update. Исходный код не меняется, результаты сохраняются как файлы, журнал и diff.\n\n[Инструкции и реальные результаты](../../examples/file-assistant/README.md), [описание](docs/file-assistant.md).\n",
+      "score": 0.20168470846082404
+    },
+    {
+      "id": "48d8ec15e8eb015699478ada",
+      "path": "projects/deepseek-client/support_live_integration_test.go",
+      "kind": "code",
+      "start_line": 55,
+      "end_line": 78,
+      "text": "\t\tt.Fatalf(\"build: %v %s\", e, data)\n\t}\n\tcrm, _ := filepath.Abs(\"../../examples/support-assistant/crm.json\")\n\tdocs, _ := filepath.Abs(\"../../examples/support-assistant/docs\")\n\tstate := filepath.Join(output, \"state\")\n\ttype row struct {\n\t\tUser     string         `json:\"user\"`\n\t\tQuestion string         `json:\"question\"`\n\t\tTicket   string         `json:\"ticket_id\"`\n\t\tHTTP     int            `json:\"http_status\"`\n\t\tReply    *support.Reply `json:\"reply,omitempty\"`\n\t}\n\treport := struct {\n\t\tKind  string        `json:\"kind\"`\n\t\tRows  []row         `json:\"rows\"`\n\t\tUsage support.Usage `json:\"usage\"`\n\t}{Kind: \"Real DeepSeek + real stdio MCP subprocess + local TF-IDF FAQ RAG + authenticated HTTP service\"}\n\tsave := func() {\n\t\tb, _ := json.MarshalIndent(report, \"\", \"  \")\n\t\tos.WriteFile(filepath.Join(output, \"report.json\"), b, 0600)\n\t}\n\tdefer save()\n\tfor _, user := range []string{\"U-100\", \"U-200\"} {\n\t\tfunc() {",
+      "score": 0.1906325877245131
+    },
+    {
+      "id": "5812670908de794982fdad88",
+      "path": "projects/deepseek-client/fileassistant/session.go",
+      "kind": "code",
+      "start_line": 325,
+      "end_line": 348,
+      "text": "\t\t}\n\t}\n\tfor _, n := range []string{\"src/export.js\", \"src/api.js\", \"src/ui.js\", \"test/export.test.js\", \"exportTasks\", \"handleExport\", \"downloadExport\"} {\n\t\tif !strings.Contains(s.After[\"docs/export-api-map.md\"], n) {\n\t\t\treturn fmt.Errorf(\"map missing %s\", n)\n\t\t}\n\t}\n\tread := map[string]bool{}\n\tsearched := false\n\twritten := map[string]bool{}\n\tfor _, e := range s.Events {\n\t\tif e.Error != \"\" {\n\t\t\tcontinue\n\t\t}\n\t\tvar a struct {\n\t\t\tPath string `json:\"path\"`\n\t\t}\n\t\t_ = json.Unmarshal(e.Arguments, \u0026a)\n\t\tswitch e.Tool {\n\t\tcase \"search_text\", \"find_files\":\n\t\t\tsearched = true\n\t\tcase \"read_file\":\n\t\t\tread[a.Path] = true\n\t\tcase \"edit_file\", \"write_file\":",
+      "score": 0.3411661251968949
+    },
+    {
+      "id": "090161330d1eab6e52599b4a",
+      "path": "projects/deepseek-client/docs/file-assistant.md",
+      "kind": "documentation",
+      "start_line": 19,
+      "end_line": 28,
+      "text": "a locked durable budget ledger. Writes are limited to the three requested\nMarkdown outputs. Original source and test files remain read-only. Real traces,\nfile hashes and a unified diff prove the effects independently of final model text.\n\nThe embedded fixture's documentation intentionally contradicts its code. The\nfixture represents export authorization and metadata; it is not a PDF renderer.\n\nSee [the complete instructions and real results](../../../examples/file-assistant/README.md)\nfor goals, artifacts, pricing assumptions, offline replay and verification limits.\n",
+      "score": 0.20659478277186166
+    },
+    {
+      "id": "057a22afd9cacec869f48569",
+      "path": "projects/deepseek-client/docs/file-assistant.md",
+      "kind": "documentation",
+      "start_line": 1,
+      "end_line": 24,
+      "text": "# Project file assistant — homework 34\n\nThe file-assistant demo reuses the existing agent, TUI and confined file tools.\nIt binds the tools to a fresh embedded TaskDesk fixture. DeepSeek chooses its\nown discovery/read/edit calls from two goal-level requests; preparation never\nperforms the documentation fixes.\n\nRun from the repository root:\n\n```powershell\n.\\Start-File-Assistant.ps1 -BudgetUsd 0.20\n```\n\nAdd `-Verify` to execute both goals through scripted TUI submit/update. This\nverification does not open a visible terminal and is not a video recording.\nThe ordinary mode opens the existing interactive TUI.\n\nEvery invocation preserves a new run under `.file-assistant/runs`. Runs share\na locked durable budget ledger. Writes are limited to the three requested\nMarkdown outputs. Original source and test files remain read-only. Real traces,\nfile hashes and a unified diff prove the effects independently of final model text.\n\nThe embedded fixture's documentation intentionally contradicts its code. The\nfixture represents export authorization and metadata; it is not a PDF renderer.",
+      "score": 0.19070968278034145
+    }
+  ],
+  "checks": [
+    {
+      "name": "go-tests",
+      "command": [
+        "go",
+        "test",
+        "./..."
+      ],
+      "status": "passed",
+      "exit_code": 0,
+      "seconds": 17.0365451,
+      "log": "go-tests.log"
+    },
+    {
+      "name": "go-vet",
+      "command": [
+        "go",
+        "vet",
+        "./..."
+      ],
+      "status": "passed",
+      "exit_code": 0,
+      "seconds": 0.9735147,
+      "log": "go-vet.log"
+    },
+    {
+      "name": "go-build",
+      "command": [
+        "go",
+        "build",
+        "-o",
+        "release-check.exe",
+        "."
+      ],
+      "status": "passed",
+      "exit_code": 0,
+      "seconds": 1.1825497,
+      "log": "go-build.log"
+    },
+    {
+      "name": "node-tests",
+      "command": [
+        "C:\\Users\\erdni\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\node\\bin\\node.exe",
+        "--test",
+        "projects/deepseek-client/fileassistant/fixture/test/export.test.js",
+        "examples/file-assistant/result/test/export.test.js"
+      ],
+      "status": "passed",
+      "exit_code": 0,
+      "seconds": 0.2143701,
+      "log": "node-tests.log"
+    },
+    {
+      "name": "publisher-tests",
+      "command": [
+        "C:\\Users\\erdni\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "scripts/ai-review",
+        "-p",
+        "test_*.py",
+        "-v"
+      ],
+      "status": "passed",
+      "exit_code": 0,
+      "seconds": 0.0756935,
+      "log": "publisher-tests.log"
+    }
+  ],
+  "corpus_files": 46,
+  "corpus_chunks": 541,
+  "scope": "All Git file changes and non-merge commits; AI evidence is a bounded selection from changed DeepSeek Client source/docs at head. Full diff stays local."
+}

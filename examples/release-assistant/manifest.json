@@ -1,0 +1,27 @@
+{
+  "base": "12acaad5648fab8b45ba636544c8ef24b8987af5",
+  "checks_passed": true,
+  "head": "8fa5d10eb212796cfb93c2344a3428e3290bb51b",
+  "manual_review_required": true,
+  "published": false,
+  "sha256": {
+    "changed-files.md": "5b206fe3c6cdad4f444c2a204a6d87e6ec7a1a11f3b8abcd90b8c18c6da49dcf",
+    "changelog-draft.md": "8710ddbf12aa4bf3cb5a76850280649ec4a529e0402e37f1116db69d2675d273",
+    "changes.diff": "5eabe5bb493c33731f3b7f4ed04198158e66958cf3f22e99c5f959b65a99ee74",
+    "checks.json": "1de0cffd029861ee8f14f6fb7af4ec8b1dd840ef5f19c0da055d57bf7ad8d933",
+    "completion.json": "04508b94ad5e8a9b656d228f4b3b4db666fb5e01990fc61bc129bd7b315c42a8",
+    "draft.json": "b855ef667fbb18051292dcad6e021b3eda358fb7e8cb2e4226e7444d1471b49d",
+    "input.json": "aeb94fc5d4f3372a61e5e31eabd028198d6b4df7c981eb941fe8a6c4bdc90368",
+    "readiness-report.md": "1b77df69d67cdf13c2e02bda4f133c1bab6878c78228965eb930eccf83a63e35",
+    "readiness.json": "d0f98d39f044e56dd2c75fb3568fa06584c0480755b145b414bb5eef68fcc4f0",
+    "release-notes.md": "52fe3a736d8474fe80c23da8a308af9aa8e4b839d5ef8500ab2d95f848fe8547",
+    "usage.json": "fc5a3a587e3823490bf6fead910b5ac5d8331ae86937c8227a8fa1a41f02dc7f"
+  },
+  "usage": {
+    "budget_usd": 0.2,
+    "reserved_usd": 0.030882599999999996,
+    "estimated_peak_usd": 0.007265568,
+    "calls": 2
+  },
+  "version": "week-7-preview"
+}

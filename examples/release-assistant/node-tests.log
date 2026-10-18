@@ -1,0 +1,22 @@
+✔ Free can export CSV (0.4237ms)
+✔ Free cannot export PDF (0.3852ms)
+✔ Pro can export CSV (0.3885ms)
+✔ Pro can export PDF (0.0641ms)
+✔ Unsupported format is a client error (0.0599ms)
+✔ API delegates plan checks (0.053ms)
+✔ UI reports API failure (0.0725ms)
+✔ Free can export CSV (0.4154ms)
+✔ Free cannot export PDF (0.3691ms)
+✔ Pro can export CSV (0.388ms)
+✔ Pro can export PDF (0.0611ms)
+✔ Unsupported format is a client error (0.0568ms)
+✔ API delegates plan checks (0.0532ms)
+✔ UI reports API failure (0.0616ms)
+ℹ tests 14
+ℹ suites 0
+ℹ pass 14
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 48.0089

@@ -1,0 +1,10 @@
+{
+  "ai_draft": "validated",
+  "base": "12acaad5648fab8b45ba636544c8ef24b8987af5",
+  "checks_passed": true,
+  "head": "8fa5d10eb212796cfb93c2344a3428e3290bb51b",
+  "manual_review_required": true,
+  "published": false,
+  "status": "manual_review_required",
+  "version": "week-7-preview"
+}

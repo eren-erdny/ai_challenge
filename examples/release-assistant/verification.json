@@ -1,0 +1,122 @@
+{
+  "verified_on": "2026-10-18",
+  "kind": "Real Git refs, exported snapshot checks, retrieved source evidence, real DeepSeek through actual scripted TUI submit/update",
+  "base_ref": "w6-hw5",
+  "head_ref": "w7-hw4",
+  "base_sha": "12acaad5648fab8b45ba636544c8ef24b8987af5",
+  "head_sha": "8fa5d10eb212796cfb93c2344a3428e3290bb51b",
+  "commits": 4,
+  "changed_files": 113,
+  "corpus_files": 46,
+  "corpus_chunks": 541,
+  "selected_evidence_chunks": 12,
+  "claims": 8,
+  "quotes": 8,
+  "artifact_hashes_verified": true,
+  "candidate_checks": [
+    {
+      "name": "go-tests",
+      "command": [
+        "go",
+        "test",
+        "./..."
+      ],
+      "status": "passed",
+      "exit_code": 0,
+      "seconds": 17.0365451,
+      "log": "go-tests.log"
+    },
+    {
+      "name": "go-vet",
+      "command": [
+        "go",
+        "vet",
+        "./..."
+      ],
+      "status": "passed",
+      "exit_code": 0,
+      "seconds": 0.9735147,
+      "log": "go-vet.log"
+    },
+    {
+      "name": "go-build",
+      "command": [
+        "go",
+        "build",
+        "-o",
+        "release-check.exe",
+        "."
+      ],
+      "status": "passed",
+      "exit_code": 0,
+      "seconds": 1.1825497,
+      "log": "go-build.log"
+    },
+    {
+      "name": "node-tests",
+      "command": [
+        "C:\\Users\\erdni\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\node\\bin\\node.exe",
+        "--test",
+        "projects/deepseek-client/fileassistant/fixture/test/export.test.js",
+        "examples/file-assistant/result/test/export.test.js"
+      ],
+      "status": "passed",
+      "exit_code": 0,
+      "seconds": 0.2143701,
+      "log": "node-tests.log"
+    },
+    {
+      "name": "publisher-tests",
+      "command": [
+        "C:\\Users\\erdni\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "scripts/ai-review",
+        "-p",
+        "test_*.py",
+        "-v"
+      ],
+      "status": "passed",
+      "exit_code": 0,
+      "seconds": 0.0756935,
+      "log": "publisher-tests.log"
+    }
+  ],
+  "node_tests": 14,
+  "python_tests": 5,
+  "assistant_final_checks": {
+    "go_test_all": "passed",
+    "go_vet_all": "passed",
+    "go_build": "passed",
+    "powershell_launcher_parse": "passed"
+  },
+  "negative_runtime_check": {
+    "missing_node": true,
+    "exit_code": 1,
+    "status": "blocked",
+    "model_called": false
+  },
+  "prior_failures": [
+    "First dry run lacked support fixtures in exported snapshot; export allowlist fixed before both successful live runs.",
+    "First live draft prompted refinement of quote completeness and stale fixture documentation wording; both real runs retained locally."
+  ],
+  "manual_semantic_review": {
+    "claims_checked_against_full_head_chunks": 8,
+    "limitation": "Short quotes q1 and q3 only partially cover the compound claim; remaining details occur in the full cited source chunk. Structural validation is not semantic proof. Source statements about PR integration describe their historical checkpoint; current merge/enablement state needs human review."
+  },
+  "usage": {
+    "budget_usd": 0.2,
+    "reserved_usd": 0.030882599999999996,
+    "estimated_peak_usd": 0.007265568,
+    "calls": 2
+  },
+  "billing": "Peak estimate, not exact provider billing",
+  "readiness": "manual_review_required",
+  "published": false,
+  "visible_tui_recording": false,
+  "new_commit_created": false,
+  "w7_hw5_tag_created": false,
+  "pushed": false
+}

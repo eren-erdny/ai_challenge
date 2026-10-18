@@ -1,0 +1,71 @@
+{
+  "source_path": "C:\\Users\\erdni\\Videos\\2026-10-18 16-31-37.mp4",
+  "duration_seconds": 156.97,
+  "bytes": 11314065,
+  "full_decode_exit_code": 0,
+  "audio_max_db": -91.0,
+  "sampled_frames": [
+    {
+      "scene": "task",
+      "seconds": 5.466,
+      "path": "C:\\Users\\erdni\\Documents\\projects\\hw1\\.release-assistant\\recording-20261018-take2\\encoded-task.png"
+    },
+    {
+      "scene": "goal",
+      "seconds": 19.383,
+      "path": "C:\\Users\\erdni\\Documents\\projects\\hw1\\.release-assistant\\recording-20261018-take2\\encoded-goal.png"
+    },
+    {
+      "scene": "git",
+      "seconds": 31.233,
+      "path": "C:\\Users\\erdni\\Documents\\projects\\hw1\\.release-assistant\\recording-20261018-take2\\encoded-git.png"
+    },
+    {
+      "scene": "checks",
+      "seconds": 49.249,
+      "path": "C:\\Users\\erdni\\Documents\\projects\\hw1\\.release-assistant\\recording-20261018-take2\\encoded-checks.png"
+    },
+    {
+      "scene": "rag",
+      "seconds": 69.299,
+      "path": "C:\\Users\\erdni\\Documents\\projects\\hw1\\.release-assistant\\recording-20261018-take2\\encoded-rag.png"
+    },
+    {
+      "scene": "ai-draft",
+      "seconds": 91.399,
+      "path": "C:\\Users\\erdni\\Documents\\projects\\hw1\\.release-assistant\\recording-20261018-take2\\encoded-ai-draft.png"
+    },
+    {
+      "scene": "artifacts",
+      "seconds": 111.449,
+      "path": "C:\\Users\\erdni\\Documents\\projects\\hw1\\.release-assistant\\recording-20261018-take2\\encoded-artifacts.png"
+    },
+    {
+      "scene": "blocked",
+      "seconds": 129.249,
+      "path": "C:\\Users\\erdni\\Documents\\projects\\hw1\\.release-assistant\\recording-20261018-take2\\encoded-blocked.png"
+    },
+    {
+      "scene": "result",
+      "seconds": 147.716,
+      "path": "C:\\Users\\erdni\\Documents\\projects\\hw1\\.release-assistant\\recording-20261018-take2\\encoded-result.png"
+    }
+  ],
+  "sha256": "3ed956c91ee48a6ef9a2733a6cc1e09fabe280e6a48f8874a858b607f6c33148",
+  "assignment": 35,
+  "real_DeepSeek_calls_in_recording": 0,
+  "source_results": "examples/release-assistant/verification.json",
+  "presentation": "Actual DeepSeek Client TUI captured from dedicated native console; saved real release result displayed; Git log and artifact hashes checked again; persistent replay label; no API calls; temporary Go build overlay only.",
+  "final_path": "C:/Users/erdni/Videos/ai_challenge_hw35.mp4",
+  "encoded_frames_manually_reviewed": true,
+  "obs_original_scene_restored": true,
+  "budget_unchanged_during_recording": true,
+  "failed_partial_take_retained": "C:/Users/erdni/Videos/2026-10-18 16-29-07.mp4",
+  "failed_partial_take_reason": "Stopped before AI scene to fix navigation into saved answer; not presented as completed homework evidence.",
+  "requirements": {
+    "real_task": "Prepare a release of the existing DeepSeek Client repository",
+    "AI_participation": "Saved actual DeepSeek output grounded in selected code/documentation chunks",
+    "real_environment": "Real Git refs and previously executed candidate checks; Git log and manifest hashes rechecked during recording",
+    "result": "Release notes, changelog draft, readiness report and evidence files; human review required"
+  }
+}

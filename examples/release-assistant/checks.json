@@ -1,0 +1,71 @@
+[
+  {
+    "name": "go-tests",
+    "command": [
+      "go",
+      "test",
+      "./..."
+    ],
+    "status": "passed",
+    "exit_code": 0,
+    "seconds": 17.0365451,
+    "log": "go-tests.log"
+  },
+  {
+    "name": "go-vet",
+    "command": [
+      "go",
+      "vet",
+      "./..."
+    ],
+    "status": "passed",
+    "exit_code": 0,
+    "seconds": 0.9735147,
+    "log": "go-vet.log"
+  },
+  {
+    "name": "go-build",
+    "command": [
+      "go",
+      "build",
+      "-o",
+      "release-check.exe",
+      "."
+    ],
+    "status": "passed",
+    "exit_code": 0,
+    "seconds": 1.1825497,
+    "log": "go-build.log"
+  },
+  {
+    "name": "node-tests",
+    "command": [
+      "C:\\Users\\erdni\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\node\\bin\\node.exe",
+      "--test",
+      "projects/deepseek-client/fileassistant/fixture/test/export.test.js",
+      "examples/file-assistant/result/test/export.test.js"
+    ],
+    "status": "passed",
+    "exit_code": 0,
+    "seconds": 0.2143701,
+    "log": "node-tests.log"
+  },
+  {
+    "name": "publisher-tests",
+    "command": [
+      "C:\\Users\\erdni\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+      "-m",
+      "unittest",
+      "discover",
+      "-s",
+      "scripts/ai-review",
+      "-p",
+      "test_*.py",
+      "-v"
+    ],
+    "status": "passed",
+    "exit_code": 0,
+    "seconds": 0.0756935,
+    "log": "publisher-tests.log"
+  }
+]
